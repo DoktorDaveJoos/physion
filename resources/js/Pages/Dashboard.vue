@@ -12,8 +12,9 @@ import Welcome from '@/Jetstream/Welcome.vue';
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                CTO DAVID DER MAESTRO JOOOOOS
+            <div class="flex flex-col">
+                <a href="/nova">Nova</a>
+                <a href="/telescope">Telescope (David only)</a>
             </div>
         </div>
     </AppLayout>
