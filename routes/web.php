@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Webhook;
 
 /*
 |--------------------------------------------------------------------------
