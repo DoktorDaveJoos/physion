@@ -19,11 +19,6 @@ defineProps({
             </Link>
 
             <template v-else>
-
-                <a href='/nova' class="text-sm text-gray-700 underline">
-                    Nova
-                </a>
-
                 <Link :href="route('login')" class="ml-4 text-sm text-gray-700 underline">
                     Log in
                 </Link>
