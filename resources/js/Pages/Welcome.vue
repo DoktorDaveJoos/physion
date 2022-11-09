@@ -24,7 +24,7 @@ defineProps({
                     Nova
                 </a>
 
-                <Link :href="route('login')" class="text-sm text-gray-700 underline">
+                <Link :href="route('login')" class="ml-4 text-sm text-gray-700 underline">
                     Log in
                 </Link>
 
