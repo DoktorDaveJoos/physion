@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,37 +15,33 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
+//            Database related
             $table->id();
             $table->timestamps();
-            $table->string('street-address');
+//            Basic building
+            $table->string('reason');
+            $table->string('street_address');
             $table->string('zip');
             $table->string('city');
-            $table->string('construction-year');
-            $table->string('construction-year-heating');
-            $table->string('living-space');
-            $table->string('housing-units');
-            $table->string('building-type');
+            $table->string('building_type');
+            $table->string('construction_year');
+            $table->string('construction_year_heating');
+            $table->string('living_space');
+            $table->string('housing_units');
             $table->string('ventilation');
-            $table->string('renewables');
-            $table->string('reason');
-            $table->string('date-range-0-start');
-            $table->string('date-range-0-end');
-            $table->string('date-range-0-consumption');
-            $table->string('date-range-1-start')->nullable();
-            $table->string('date-range-1-end')->nullable();
-            $table->string('date-range-1-consumption')->nullable();
-            $table->string('date-range-2-start')->nullable();
-            $table->string('date-range-2-end')->nullable();
-            $table->string('date-range-2-consumption')->nullable();
-            $table->string('vacancy-percentage')->nullable();
-            $table->string('vacancy-range-0-start')->nullable();
-            $table->string('vacancy-range-0-end')->nullable();
-            $table->string('vacancy-range-1-start')->nullable();
-            $table->string('vacancy-range-1-end')->nullable();
-            $table->string('vacancy-range-2-start')->nullable();
-            $table->string('vacancy-range-2-end')->nullable();
+            $table->string('cellar');
+//            Additional building
+            $table->string('renewables')->nullable();
+            $table->string('renewables_reason')->nullable();
             $table->string('cooling')->nullable();
-            $table->string('hot-water')->nullable();
+            $table->string('cooling_count')->nullable();
+            $table->date('cooling_service')->nullable();
+//            Water
+            $table->string('hot_water');
+//            Order and Customer
+            $table->foreignIdFor(Customer::class)->nullable()->constrained();
+            $table->boolean('paid')->default(false);
+            $table->string("payment_intent")->unique()->nullable()->default(NULL);
         });
     }
 
