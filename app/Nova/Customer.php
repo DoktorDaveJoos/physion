@@ -2,9 +2,13 @@
 
 namespace App\Nova;
 
+use Exception;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 
 class Customer extends Resource
 {
@@ -20,7 +24,7 @@ class Customer extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -34,20 +38,30 @@ class Customer extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  NovaRequest  $request
      * @return array
+     * @throws Exception
      */
     public function fields(NovaRequest $request)
     {
         return [
             ID::make()->sortable(),
+            Text::make('Email', 'email')->copyable(),
+            Text::make('Telefon', 'phone_number')->hideFromIndex()->copyable(),
+            new Panel('Adresse', [
+                Text::make('Straße', 'address_line_1')->hideFromIndex()->copyable(),
+                Text::make('Zusatz', 'address_line_2')->hideFromIndex()->copyable(),
+                Text::make( 'Postleitzahl', 'postal_code')->hideFromIndex()->copyable(),
+                Text::make('Stadt / Ort', 'city')->hideFromIndex()->copyable()
+            ]),
+            HasMany::make('Bestellungen', 'orders', Order::class)
         ];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  NovaRequest  $request
      * @return array
      */
     public function cards(NovaRequest $request)
@@ -58,7 +72,7 @@ class Customer extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  NovaRequest  $request
      * @return array
      */
     public function filters(NovaRequest $request)
@@ -69,7 +83,7 @@ class Customer extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  NovaRequest  $request
      * @return array
      */
     public function lenses(NovaRequest $request)
@@ -80,7 +94,7 @@ class Customer extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  NovaRequest  $request
      * @return array
      */
     public function actions(NovaRequest $request)

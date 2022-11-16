@@ -3,10 +3,12 @@
 namespace App\Nova;
 
 use Exception;
+use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
@@ -47,7 +49,17 @@ class Order extends Resource
     {
         return [
             ID::make()->sortable(),
-            Boolean::make('Bezahlt', 'paid'),
+//            Select::make('Status'),
+            Badge::make('Status')->map([
+                'open' => 'success',
+                'clarification_needed' => 'danger',
+                'done' => 'info',
+            ])->labels([
+                'open' => 'Offen',
+                'clarification_needed' => 'In Klärung',
+                'done' => 'Erledigt',
+            ]),
+            Boolean::make('Bezahlt', 'paid')->readonly(),
             BelongsTo::make('Kunde', 'customer', Customer::class),
             Text::make('Grund der Ausstellung', 'reason')->hideFromIndex(),
             new Panel('Adresse', $this->addressFields()),
@@ -56,6 +68,13 @@ class Order extends Resource
             new Panel('Kühlung', $this->coolingFields()),
             HasMany::make('Verbrauchsdaten', 'consumption', Consumption::class),
             HasMany::make('Leerstand', 'vacancy', Vacancy::class),
+
+            new Panel('Zusätzlich Informationen', [
+                KeyValue::make('Sanierungsvorschläge Abfrage', function () {
+                    return json_decode($this->suggestion_check);
+                })->rules('json'),
+            ]),
+
         ];
     }
 
@@ -113,9 +132,8 @@ class Order extends Resource
     {
         return [
             Text::make('Straße', 'street_address')->copyable(),
-            Text::make('Ort', function () {
-                return sprintf('%s %s', $this->zip, $this->city);
-            })->copyable(),
+            Text::make('Postleitzahl', 'zip')->copyable(),
+            Text::make('Stadt / Ort', 'city')->copyable(),
         ];
     }
 

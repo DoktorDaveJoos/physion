@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Consumption;
 use App\Models\Order;
 use App\Models\Vacancy;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -38,43 +40,56 @@ class OrderController extends Controller
      */
     public function store(Request $request): Response
     {
-        $order = new Order($request->all());
-        $order->save();
-
-        foreach ($request->all()['consumption_range'] as $source) {
-            foreach ($source['range'] as $range) {
-                $consumption = new Consumption([
-                    'source' => $source['source'],
-                    'start' => $range['start'],
-                    'end' => $range['end'],
-                    'consumption' => $range['consumption'],
-                    'water' => $range['water'] ?? null,
-                ]);
-
-                $consumption->order()->associate($order);
-                $consumption->save();
+        try {
+            $order = new Order($request->all());
+            $order->suggestion_check = json_encode($order->suggestion_check);
+            if (!$order->save()) {
+                ray('not reached');
+                throw new Exception(sprintf('%s: Error saving order', get_class()), 500);
             }
-        }
+ray(1);
+            foreach ($request->all()['consumption_range'] as $source) {
+                foreach ($source['range'] as $range) {
+                    $consumption = new Consumption([
+                        'source' => $source['source'],
+                        'start' => $range['start'],
+                        'end' => $range['end'],
+                        'consumption' => $range['consumption'],
+                        'water' => $range['water'] ?? null,
+                    ]);
 
-        if ($percentage = $request->all()['vacancy_percentage']) {
-            $vacancy = new Vacancy([
-                'percentage' => $percentage,
-            ]);
-            $vacancy->order()->associate($order);
-            $vacancy->save();
-        } else {
-            foreach ($request->all()['vacancy_range'] as $range) {
+                    $consumption->order()->associate($order);
+                    if (!$consumption->save()) {
+                        throw new Exception(sprintf('%s: Error saving consumption', get_class()), 500);
+                    }
+                }
+            }
+ray(2);
+            if ($percentage = $request->all()['vacancy_percentage']) {
                 $vacancy = new Vacancy([
-                    'start' => $range['start'],
-                    'end' => $range['end'],
+                    'percentage' => $percentage,
                 ]);
-
                 $vacancy->order()->associate($order);
                 $vacancy->save();
+            } else {
+                foreach ($request->all()['vacancy_range'] as $range) {
+                    $vacancy = new Vacancy([
+                        'start' => $range['start'],
+                        'end' => $range['end'],
+                    ]);
+
+                    $vacancy->order()->associate($order);
+                    if (!$vacancy->save()) {
+                        throw new Exception(sprintf('%s: Error saving vacancy', get_class()), 500);
+                    }
+                }
             }
+        } catch (Exception $e) {
+            ray($e);
+            return response($e->getMessage(), 500);
         }
 
-        return response(200);
+        return response($order->id, 200);
     }
 
     /**
