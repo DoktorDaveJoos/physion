@@ -5,23 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Order;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
+use Stripe\Stripe;
 use Stripe\Webhook;
 
 class PaymentController extends Controller
 {
-    public function index(Request $request): Response|Application|ResponseFactory
+    public function index(Request $request): Response
     {
         Log::info(sprintf('%s: Incoming Webhook', get_class()));
         $payload = $request->getContent();
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
+
+        Stripe::setApiKey(config('stripe.api_key'));
 
         try {
             $event = Webhook::constructEvent(
@@ -37,6 +38,9 @@ class PaymentController extends Controller
             // Invalid signature
             Log::error($e->getMessage());
             return response(400);
+        } catch ( Exception $e) {
+            Log::error($e->getMessage());
+            return response(500);
         }
 
         Log::info(sprintf('%s: Webhook of type [%s]', get_class(), $event->type));
