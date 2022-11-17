@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\OrderStatus;
 use Exception;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
@@ -9,6 +10,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
@@ -49,7 +51,11 @@ class Order extends Resource
     {
         return [
             ID::make()->sortable(),
-//            Select::make('Status'),
+            Select::make('Status')->options([
+                'open' => 'Offen',
+                'clarification_needed' => 'In Klärung',
+                'done' => 'Erledigt',
+            ])->onlyOnForms(),
             Badge::make('Status')->map([
                 'open' => 'success',
                 'clarification_needed' => 'danger',
@@ -97,7 +103,10 @@ class Order extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new Filters\OrderStatus,
+            new Filters\OrderPaid
+        ];
     }
 
     /**
