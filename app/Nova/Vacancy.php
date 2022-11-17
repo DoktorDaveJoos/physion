@@ -24,6 +24,9 @@ class Vacancy extends Resource
      */
     public static $title = 'id';
 
+    public static $group = 'Detail';
+
+
     /**
      * The columns that should be searched.
      *

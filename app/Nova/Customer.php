@@ -26,6 +26,8 @@ class Customer extends Resource
      */
     public static $title = 'name';
 
+    public static $group = 'Detail';
+
     /**
      * The columns that should be searched.
      *

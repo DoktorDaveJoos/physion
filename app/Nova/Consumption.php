@@ -24,6 +24,8 @@ class Consumption extends Resource
      */
     public static $title = 'source';
 
+    public static $group = 'Detail';
+
     /**
      * The columns that should be searched.
      *

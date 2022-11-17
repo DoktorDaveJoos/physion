@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Nova\Filters\OrderStatus;
+use App\Nova\Metrics\MoneyGained;
+use App\Nova\Metrics\NewOrders;
 use Exception;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
@@ -30,6 +32,8 @@ class Order extends Resource
      * @var string
      */
     public static $title = 'id';
+
+    public static $group = 'Bestellungen';
 
     /**
      * The columns that should be searched.
@@ -92,7 +96,10 @@ class Order extends Resource
      */
     public function cards(NovaRequest $request): array
     {
-        return [];
+        return [
+            new NewOrders,
+            new MoneyGained
+        ];
     }
 
     /**
