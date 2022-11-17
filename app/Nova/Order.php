@@ -80,6 +80,7 @@ class Order extends Resource
             HasMany::make('Leerstand', 'vacancy', Vacancy::class),
 
             new Panel('Zusätzlich Informationen', [
+                Text::make('Feedback', 'feedback'),
                 KeyValue::make('Sanierungsvorschläge Abfrage', function () {
                     return json_decode($this->suggestion_check);
                 })->rules('json'),
