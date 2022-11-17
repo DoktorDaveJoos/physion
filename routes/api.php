@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
