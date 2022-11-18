@@ -11,16 +11,24 @@ class TelegramController extends Controller
 {
     public function registerSubscriber(TelegramService $service, Request $request)
     {
-        TelegramSubscriber::create([
-            'name' => $request->input('message.chat.id'),
-        ]);
-        Log::info('Registered subscriber');
+        if (!TelegramSubscriber::where('name', '=', $request->input('message.chat.id'))) {
+            TelegramSubscriber::create([
+                'name' => $request->input('message.chat.id'),
+            ]);
+            Log::info('Registered subscriber');
+            $service->sendMessage(
+                $request->input('message.chat.id'),
+                sprintf(
+                    'Hallo %s! Willkommen, du hast dich für die Updates von EnergieBiz registriert.',
+                    $request->input('message.from.username')
+                )
+            );
+            return;
+        }
+
         $service->sendMessage(
             $request->input('message.chat.id'),
-            sprintf(
-                'Hallo %s! Willkommen, du hast dich für die Updates von EnergieBiz registriert.',
-                $request->input('message.from.username')
-            )
+            'Du bist schon registriert, sieh bitte von Nachrichten an den Bot ab. Danke'
         );
     }
 
