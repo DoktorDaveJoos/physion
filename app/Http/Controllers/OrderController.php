@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Consumption;
 use App\Models\Order;
 use App\Models\Vacancy;
+use App\Services\TelegramService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +33,14 @@ class OrderController extends Controller
 //    {
 //
 //    }
+    private TelegramService $telegram;
+
+    /**
+     */
+    public function __construct(TelegramService $service)
+    {
+        $this->telegram = $service;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -77,9 +87,11 @@ class OrderController extends Controller
             }
         } catch (Exception $e) {
             Log::error($e->getMessage());
+            $this->telegram->broadcast(sprintf('[%s]: Order konnte nicht angelegt werden.', app()->environment()));
             return response($e->getMessage(), 500);
         }
 
+        $this->telegram->broadcast(sprintf('[%s]: Order wurde angelegt.', app()->environment()));
         return response($order->id, 200);
     }
 

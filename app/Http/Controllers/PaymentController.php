@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Order;
+use App\Services\TelegramService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,6 +16,15 @@ use Stripe\Webhook;
 
 class PaymentController extends Controller
 {
+    private TelegramService $telegram;
+
+    /**
+     */
+    public function __construct(TelegramService $service)
+    {
+        $this->telegram = $service;
+    }
+
     public function index(Request $request): Response
     {
         Log::info(sprintf('%s: Incoming Webhook', get_class()));
@@ -93,6 +103,7 @@ class PaymentController extends Controller
 
         // TODO: Send Email -> Order created and paid
 
+        $this->telegram->broadcast(sprintf('[%s]: 1x Verbrauchsausweis verkauft', app()->environment()));
         Log::info(sprintf('%s: Successfully created customer with id [%s]', get_class(), $customer->id));
     }
 
