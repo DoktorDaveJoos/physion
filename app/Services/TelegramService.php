@@ -21,8 +21,7 @@ class TelegramService
         $this->token = config('telegram.token');
     }
 
-
-    public function sendMessage($payload)
+    public function broadcast($payload)
     {
         foreach (TelegramSubscriber::all() as $subscriber) {
             Http::post(
@@ -34,6 +33,18 @@ class TelegramService
                 )
             );
         }
+    }
+
+    public function sendMessage($chatId, $payload)
+    {
+        Http::post(
+            sprintf(
+                'https://api.telegram.org/bot%s/sendMassge?chat_id=%s&text=%s',
+                $this->token,
+                $chatId,
+                $payload
+            )
+        );
     }
 
 }
