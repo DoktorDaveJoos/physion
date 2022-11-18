@@ -83,19 +83,13 @@ class PaymentController extends Controller
         $customer->name = $data->object->customer_details->name;
         $customer->email = $data->object->customer_details->email;
         $customer->phone_number = $data->object->customer_details->phone;
-        if (!$customer->save()) {
-            throw new Exception(
-                sprintf('Could not update customer with email %s', $data->object->customer_details->email)
-            );
-        }
+        $customer->save();
 
         // Update order
         $order = Order::find($data->object->client_reference_id);
         $order->paid = true;
         $order->customer()->associate($customer);
-        if (!$order->save()) {
-            throw new Exception(sprintf('Could not update order with id %s', $order->id));
-        }
+        $order->save();
 
         // TODO: Send Email -> Order created and paid
 

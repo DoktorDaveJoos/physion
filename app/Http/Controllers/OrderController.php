@@ -43,11 +43,7 @@ class OrderController extends Controller
         try {
             $order = new Order($request->all());
             $order->suggestion_check = json_encode($order->suggestion_check);
-            if (!$order->save()) {
-                ray('not reached');
-                throw new Exception(sprintf('%s: Error saving order', get_class()), 500);
-            }
-ray(1);
+            $order->save();
             foreach ($request->all()['consumption_range'] as $source) {
                 foreach ($source['range'] as $range) {
                     $consumption = new Consumption([
@@ -59,12 +55,9 @@ ray(1);
                     ]);
 
                     $consumption->order()->associate($order);
-                    if (!$consumption->save()) {
-                        throw new Exception(sprintf('%s: Error saving consumption', get_class()), 500);
-                    }
+                    $consumption->save();
                 }
             }
-ray(2);
             if ($percentage = $request->all()['vacancy_percentage']) {
                 $vacancy = new Vacancy([
                     'percentage' => $percentage,
@@ -79,13 +72,11 @@ ray(2);
                     ]);
 
                     $vacancy->order()->associate($order);
-                    if (!$vacancy->save()) {
-                        throw new Exception(sprintf('%s: Error saving vacancy', get_class()), 500);
-                    }
+                    $vacancy->save();
                 }
             }
         } catch (Exception $e) {
-            ray($e);
+            Log::error($e->getMessage());
             return response($e->getMessage(), 500);
         }
 
