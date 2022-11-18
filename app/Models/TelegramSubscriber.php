@@ -9,5 +9,7 @@ class TelegramSubscriber extends Model
 {
     use HasFactory;
 
+    protected $table = 'telegram_channel';
+
     protected $guarded = ['id'];
 }
