@@ -27,9 +27,10 @@ class TelegramService
         foreach (TelegramSubscriber::all() as $subscriber) {
             Http::post(
                 sprintf(
-                    'https://api.telegram.org/bot%s/sendMassge?chat_id=%s&text=geisteskrank',
+                    'https://api.telegram.org/bot%s/sendMassge?chat_id=%s&text=%s',
                     $this->token,
-                    $subscriber->name
+                    $subscriber->name,
+                    $payload
                 )
             );
         }

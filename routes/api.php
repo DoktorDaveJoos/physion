@@ -24,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/order', [OrderController::class, 'store']);
 Route::post('/webhook', [PaymentController::class, 'index']);
 Route::post('/telegram', [TelegramController::class, 'registerSubscriber']);
+Route::post('/telegram/sentry', [TelegramController::class, 'handleSentry']);
