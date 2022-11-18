@@ -13,7 +13,7 @@ class TelegramController extends Controller
     public function registerSubscriber(Request $request)
     {
         TelegramSubscriber::create([
-            'name' => json_encode($request->getContent(), true)['message']['chat']['id'],
+            'name' => $request->input('message.chat.id'),
         ]);
         Log::info('Registered subscriber');
     }
