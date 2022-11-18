@@ -11,7 +11,7 @@ class TelegramController extends Controller
 {
     public function registerSubscriber(TelegramService $service, Request $request)
     {
-        if (!TelegramSubscriber::where('name', '=', $request->input('message.chat.id'))) {
+        if (empty(TelegramSubscriber::where('name', '=', $request->input('message.chat.id'))->get())) {
             TelegramSubscriber::create([
                 'name' => $request->input('message.chat.id'),
             ]);
