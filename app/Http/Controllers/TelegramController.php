@@ -35,7 +35,7 @@ class TelegramController extends Controller
     public function handleSentry(TelegramService $service, Request $request)
     {
         Log::info('Sentry webhook happened');
-        $service->broadcast(sprintf('[%s] - [Frontend] - Sentry issue created', app()->environment()));
+        $service->broadcast(sprintf('[%s] - [Frontend] - Error occured: %s', app()->environment(), $request->input('event.exception.value')));
     }
 
 }
