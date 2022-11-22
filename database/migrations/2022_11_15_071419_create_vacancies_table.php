@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Customer;
-use App\Models\User;
+use App\Models\Order;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->foreignIdFor(Customer::class)->nullable()->constrained();
-            $table->boolean('paid')->default(false);
+        Schema::create('vacancies', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignIdFor(Order::class)->constrained();
+            $table->date('start')->nullable();
+            $table->date('end')->nullable();
+            $table->string('percentage')->nullable();
         });
     }
 
@@ -28,9 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeignIdFor(Customer::class);
-            $table->dropColumn('paid');
-        });
+        Schema::dropIfExists('vacancies');
     }
 };

@@ -2,31 +2,30 @@
 
 namespace App\Nova;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Vacancy extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var string
+     * @var class-string<\App\Models\Vacancy>
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Vacancy::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
-    public static $group = 'Admin';
+    public static $group = 'Detail';
+
 
     /**
      * The columns that should be searched.
@@ -34,7 +33,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -47,23 +46,13 @@ class User extends Resource
     {
         return [
             ID::make()->sortable(),
-
-            Gravatar::make()->maxWidth(50),
-
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
+            Text::make('Prozentual', 'percentage'),
+            Text::make('Start', function() {
+                return Carbon::parse($this->start)->format('d.m.Y');
+            }),
+            Text::make('Ende', function() {
+                return Carbon::parse($this->end)->format('d.m.Y');
+            }),
         ];
     }
 
