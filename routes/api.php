@@ -22,6 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/order', [OrderController::class, 'store']);
-Route::post('/webhook', [PaymentController::class, 'index']);
+
+// Handle payments
+Route::post('/payment/stripe', [PaymentController::class, 'stripe']);
+Route::post('/payment/paypal', [PaymentController::class, 'paypal']);
+
+// Realtime logging: TODO fix
 Route::post('/telegram', [TelegramController::class, 'registerSubscriber']);
 Route::post('/telegram/sentry', [TelegramController::class, 'handleSentry']);

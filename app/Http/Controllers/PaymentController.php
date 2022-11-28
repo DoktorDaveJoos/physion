@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessPayment;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Services\Customer\PaypalCustomerService;
+use App\Services\Customer\StripeCustomerService;
 use App\Services\TelegramService;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,18 +19,27 @@ use Stripe\Webhook;
 
 class PaymentController extends Controller
 {
-    private TelegramService $telegram;
 
     /**
+     * @throws Exception
      */
-    public function __construct(TelegramService $service)
+    public function paypal(Request $request): Response
     {
-        $this->telegram = $service;
+        Log::info(sprintf('%s: Incoming PayPal Payment', get_class()));
+
+        try {
+            ProcessPayment::dispatch(app()->make(PaypalCustomerService::class), $request->all());
+            return response('Successfully captured payment');
+        } catch (Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+
     }
 
-    public function index(Request $request): Response
+    public function stripe(Request $request): Response
     {
         Log::info(sprintf('%s: Incoming Webhook', get_class()));
+
         $payload = $request->getContent();
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
@@ -43,29 +55,24 @@ class PaymentController extends Controller
         } catch (UnexpectedValueException $e) {
             // Invalid payload
             Log::error($e->getMessage());
-            return response(400);
+            return response($e->getMessage(),400);
         } catch (SignatureVerificationException $e) {
             // Invalid signature
             Log::error($e->getMessage());
-            return response(400);
+            return response($e->getMessage(),400);
         } catch ( Exception $e) {
             Log::error($e->getMessage());
-            return response(500);
+            return response($e->getMessage(),500);
         }
 
-        Log::info(sprintf('%s: Webhook of type [%s]', get_class(), $event->type));
         // Handle the event
         try {
             switch ($event->type) {
                 case 'checkout.session.completed':
-                    $this->checkoutSessionCompleted($event->data);
+                    ProcessPayment::dispatch(app()->make(StripeCustomerService::class), $event->data);
                     break;
-
-//                case 'payment_intent.succeeded':
-//                    $this->paymentIntentSucceeded($event->data);
-//                    break;
-                // ... handle other event types
                 default:
+                    Log::info('Received unknown event type '.$event->type);
                     echo 'Received unknown event type '.$event->type;
             }
         } catch (Exception $e) {
@@ -73,56 +80,7 @@ class PaymentController extends Controller
             return response($e->getMessage(), 500);
         }
 
-        return response(200);
+        return response('success');
     }
-
-
-    /**
-     * @throws Exception
-     */
-    private function checkoutSessionCompleted($data)
-    {
-        $customer = new Customer();
-        $customer->address_line_1 = $data->object->customer_details->address->line1;
-        $customer->address_line_2 = $data->object->customer_details->address->line2;
-        $customer->city = $data->object->customer_details->address->city;
-        $customer->postal_code = $data->object->customer_details->address->postal_code;
-        $customer->state = $data->object->customer_details->address->state;
-        $customer->country = $data->object->customer_details->address->country;
-
-        $customer->name = $data->object->customer_details->name;
-        $customer->email = $data->object->customer_details->email;
-        $customer->phone_number = $data->object->customer_details->phone;
-        $customer->save();
-
-        // Update order
-        $order = Order::find($data->object->client_reference_id);
-        $order->paid = true;
-        $order->customer()->associate($customer);
-        $order->save();
-
-        // TODO: Send Email -> Order created and paid
-
-        $this->telegram->broadcast(sprintf('[%s]: 1x Verbrauchsausweis verkauft', app()->environment()));
-        Log::info(sprintf('%s: Successfully created customer with id [%s]', get_class(), $customer->id));
-    }
-
-//    /**
-//     * @throws Exception
-//     */
-//    private function paymentIntentSucceeded($data): void
-//    {
-//        $order = Order::where('payment_intent', $data->object->id)->first();
-//
-//        $order->paid = true;
-//        if (!$order->save()) {
-//            throw new Exception(sprintf('Could not update order with id %s', $order->id));
-//        }
-//        // TODO: send payment successful email -> order will be processed
-//
-//
-//        Log::info(sprintf('%s: Successfully updated order with id: [%s]', get_class(), $order->id));
-//    }
-
 }
 
