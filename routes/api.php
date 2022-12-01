@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\OrderController;
@@ -21,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/order', [OrderController::class, 'store']);
+Route::post('/order', OrderController::class);
 
 // Handle payments
 Route::post('/payment/stripe', [PaymentController::class, 'stripe']);

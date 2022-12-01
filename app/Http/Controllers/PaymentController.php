@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessPayment;
-use App\Models\Customer;
-use App\Models\Order;
 use App\Services\Customer\PaypalCustomerService;
 use App\Services\Customer\StripeCustomerService;
-use App\Services\TelegramService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,7 +25,7 @@ class PaymentController extends Controller
         Log::info(sprintf('%s: Incoming PayPal Payment', get_class()));
 
         try {
-            ProcessPayment::dispatch(app()->make(PaypalCustomerService::class), $request->all());
+            ProcessPayment::dispatch($request->all());
             return response('Successfully captured payment');
         } catch (Exception $e) {
             return response($e->getMessage(), 500);

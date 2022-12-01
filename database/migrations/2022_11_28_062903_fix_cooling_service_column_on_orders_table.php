@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('cooling_service');
-            $table->dateTime('cooling_service');
+        });
+
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dateTime('cooling_service')->nullable();
         });
     }
 

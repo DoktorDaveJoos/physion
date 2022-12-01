@@ -2,38 +2,39 @@
 
 namespace App\Jobs;
 
-use App\Models\Consumption;
 use App\Models\DeadLetter;
 use App\Models\Order;
-use App\Models\Vacancy;
-use App\Services\TelegramService;
+use App\Services\Order\OrderStrategy;
+use App\Support\Telegram;
+use App\Support\TelegramPublisher;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
 
 class ProcessOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private Uuid $uuid;
+    private string $uuid;
     private mixed $payload;
-    private TelegramService $telegram;
+    private TelegramPublisher $telegram;
+    private OrderStrategy $strategy;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TelegramService $service, Uuid $uuid, mixed $payload)
+    public function __construct(string $uuid, mixed $payload, OrderStrategy $strategy)
     {
         $this->uuid = $uuid;
         $this->payload = $payload;
-        $this->telegram = $service;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -43,76 +44,49 @@ class ProcessOrder implements ShouldQueue
      */
     public function handle()
     {
-        Log::info(sprintf('%s: Trying to create order with payload %s', get_class(), $this->payload));
+        Log::info(sprintf('%s: Trying to create order', get_class()));
 
+        DB::beginTransaction();
         try {
-            $orderID = $this->createOrder();
+            $this->createOrder(
+                $this->strategy->handle($this->payload)
+            );
 
-            $this->createConsumptionRanges($orderID);
-            $this->createVacancyRanges($orderID);
+            DB::commit();
         } catch (Exception $e) {
+            DB::rollBack();
+
             Log::error($e->getMessage());
+
             $deadLetter = new DeadLetter([
                 'type' => 'order',
                 'class' => ProcessOrder::class,
                 'payload' => $this->payload,
+                'error' => $e->getMessage(),
                 'reference' => $this->uuid,
             ]);
+
             $deadLetter->save();
-            $this->telegram->broadcast('Watch-out: Order konnte nicht angelegt werden!');
+
+            Telegram::broadcast('Watch-out: Order konnte nicht angelegt werden!');
         }
 
-        $this->telegram->broadcast('Eine Order wurde angelegt.');
+        Telegram::broadcast('Eine Order wurde angelegt.');
     }
 
-    private function createOrder(): int
+    private function createOrder(array $morphTuple): int
     {
-        // Create Order with reference
-        $order = new Order(
-            array_merge(
-                $this->payload,
-                ['reference' => $this->uuid]
-            )
-        );
+        [$productID, $productClassName] = $morphTuple;
+
+        $order = new Order([
+            'reference' => $this->uuid,
+            'type' => $this->payload['type'],
+            'feedback' => $this->payload['feedback'],
+            'product_id' => $productID,
+            'product_type' => $productClassName
+        ]);
 
         $order->save();
         return $order->id;
     }
-
-    private function createConsumptionRanges($orderID)
-    {
-        foreach ($this->payload['consumption_range'] as $source) {
-            foreach ($source['range'] as $range) {
-                $consumption = new Consumption(
-                    array_merge(
-                        ['source' => $source],
-                        $range
-                    )
-                );
-
-                $consumption->order()->associate($orderID);
-                $consumption->save();
-            }
-        }
-    }
-
-    private function createVacancyRanges($orderID)
-    {
-        if ($percentage = $this->payload['vacancy_percentage']) {
-            $vacancy = new Vacancy([
-                'percentage' => $percentage,
-            ]);
-            $vacancy->order()->associate($orderID);
-            $vacancy->save();
-            return;
-        }
-
-        foreach ($this->payload['vacancy_range'] as $range) {
-            $vacancy = new Vacancy($range);
-
-            $vacancy->order()->associate($orderID);
-            $vacancy->save();
-        }
-    }
-
 }

@@ -4,7 +4,8 @@ namespace App\Jobs;
 
 use App\Models\DeadLetter;
 use App\Services\Customer\CustomerService;
-use App\Services\TelegramService;
+use App\Services\Payment\PaymentStrategy;
+use App\Support\Telegram;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,20 +18,18 @@ class ProcessPayment implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private CustomerService $service;
     private mixed $payload;
-    private TelegramService $telegram;
+    private PaymentStrategy $strategy;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(TelegramService $telegram, CustomerService $service, mixed $payload)
+    public function __construct(PaymentStrategy $strategy, mixed $payload)
     {
-        $this->service = $service;
+        $this->strategy = $strategy;
         $this->payload = $payload;
-        $this->telegram = $telegram;
     }
 
     /**
@@ -41,7 +40,7 @@ class ProcessPayment implements ShouldQueue
     public function handle()
     {
         try {
-            $this->service->handleCustomer($this->payload);
+            $this->strategy->handleCustomer($this->payload);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             $deadLetter = new DeadLetter([
@@ -51,9 +50,8 @@ class ProcessPayment implements ShouldQueue
                 'payload' => $this->payload,
             ]);
             $deadLetter->save();
-            $this->telegram->broadcast('Watch-out: Customer konnte nicht angelegt werden!');
+            Telegram::broadcast('Watch-out: Customer konnte nicht angelegt werden!');
         }
-
-        $this->telegram->broadcast('Conversion: Ein Ausweis wurde verkauft!');
+        Telegram::broadcast('Conversion: Ein Ausweis wurde verkauft!');
     }
 }

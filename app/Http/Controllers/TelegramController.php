@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\TelegramSubscriber;
-use App\Services\TelegramService;
+use App\Support\TelegramPublisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class TelegramController extends Controller
 {
-    public function registerSubscriber(TelegramService $service, Request $request)
+    public function registerSubscriber(TelegramPublisher $service, Request $request)
     {
         if (TelegramSubscriber::where('name', '=', $request->input('message.chat.id'))->get()->isEmpty()) {
             TelegramSubscriber::create([
@@ -32,7 +32,7 @@ class TelegramController extends Controller
         );
     }
 
-    public function handleSentry(TelegramService $service, Request $request)
+    public function handleSentry(TelegramPublisher $service, Request $request)
     {
         Log::info('Sentry webhook happened');
         $service->broadcast(sprintf('[%s][Frontend] - Error occurred: %s', app()->environment(), $request->input('level')));

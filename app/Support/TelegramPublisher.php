@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Support;
 
 use App\Models\TelegramSubscriber;
 use Illuminate\Support\Facades\Http;
 
-class TelegramService
+use function config;
+
+class TelegramPublisher
 {
     /**
      * @var string
      */
     private string $token;
 
-    /**
-     */
     public function __construct()
     {
         $this->token = config('telegram.token');
