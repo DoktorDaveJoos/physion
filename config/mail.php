@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'postmark'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,6 +55,7 @@ return [
 
         'postmark' => [
             'transport' => 'postmark',
+            'message_stream_id' => 'outbound'
         ],
 
         'sendmail' => [
@@ -92,8 +93,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'david@bauzertifikate.de'),
+        'name' => env('MAIL_FROM_NAME', 'David'),
     ],
 
     /*

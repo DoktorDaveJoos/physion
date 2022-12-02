@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ConsumptionCertificate;
 use App\Models\Order;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,6 +19,14 @@ return new class extends Migration
             $table->integer('product_id');
             $table->string('product_type');
         });
+
+        foreach(ConsumptionCertificate::all() as $cCertificate) {
+            $order = $cCertificate->order;
+
+            $order->product_id = $cCertificate->id;
+            $order->product_type = ConsumptionCertificate::class;
+            $order->save();
+        }
 
         Schema::table('consumption_certificates', function(Blueprint $table) {
             $table->dropForeign('generals_order_id_foreign');

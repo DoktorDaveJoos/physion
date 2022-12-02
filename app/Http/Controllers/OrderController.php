@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ProcessOrder;
 use App\Services\Order\Strategies\OrderStrategyProvider;
 use App\Support\Telegram;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -16,9 +17,9 @@ class OrderController extends Controller
      * Enqueue order from sales page
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): JsonResponse
     {
         // Create reference (for Stripe & Paypal)
         $uuid = (string)Uuid::uuid4();
@@ -29,7 +30,7 @@ class OrderController extends Controller
 
         if($validator->fails()) {
             Telegram::broadcast('Watch-out: Request failed, check telescope');
-            return response('Bad request', 400);
+            return response(null, 400)->json(['message' => 'Bad request']);
         }
 
         $content = $request->all();
@@ -37,10 +38,9 @@ class OrderController extends Controller
         // Make sure Order is accepted - handle later
         ProcessOrder::dispatch(
             $uuid,
-            $content,
-            OrderStrategyProvider::for($content['type'])
+            $content
         );
 
-        return response($uuid);
+        return response()->json(['reference' => $uuid]);
     }
 }

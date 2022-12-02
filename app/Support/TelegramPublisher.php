@@ -11,6 +11,7 @@ use function config;
 
 class TelegramPublisher
 {
+
     /**
      * @var string
      */

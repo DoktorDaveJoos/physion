@@ -6,6 +6,7 @@ use App\Jobs\ProcessOrder;
 use App\Models\ConsumptionCertificate;
 use App\Models\Order;
 use App\Services\Order\Strategies\ConsumptionStrategy;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\App;
 use Ramsey\Uuid\Uuid;
@@ -16,6 +17,25 @@ class StoreOrderTest extends TestCase
 {
     use CreatesOrderData;
     use RefreshDatabase;
+
+    public function test_certificate_can_access_order()
+    {
+        $uuid = (string)Uuid::uuid4();
+        $payload = $this->basePayload()
+            ->withAdditional()
+            ->withConsumption()
+            ->build();
+
+        $processOrder = new ProcessOrder($uuid, $payload);
+
+        App::call([$processOrder, 'handle']);
+
+        $certificate = ConsumptionCertificate::all()->first();
+
+        $this->assertDatabaseHas('orders', [
+            'id' => $certificate->order->id
+        ]);
+    }
 
     public function test_store_valid_order()
     {
@@ -158,7 +178,9 @@ class StoreOrderTest extends TestCase
             "foo" => "bar"
         ];
 
-        $processOrder = new ProcessOrder($uuid, $payload, new ConsumptionStrategy());
+        $processOrder = new ProcessOrder($uuid, $payload);
+
+        $this->expectException(Exception::class);
 
         App::call([$processOrder, 'handle']);
 

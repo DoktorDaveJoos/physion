@@ -5,22 +5,17 @@ declare(strict_types=1);
 namespace App\Services\Order;
 
 use App\Models\Order;
-use App\Services\DeadLetterService;
 use App\Services\Order\Strategies\OrderStrategyProvider;
 use App\Support\Telegram;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
-    private DeadLetterService $deadLetter;
 
-    public function __construct(DeadLetterService $deadLetterService)
-    {
-        $this->deadLetter = $deadLetterService;
-    }
-
+    /**
+     * @throws Exception
+     */
     public function process($uuid, $payload)
     {
         DB::beginTransaction();
@@ -36,16 +31,10 @@ class OrderService
             DB::commit();
             Telegram::broadcast('Eine Order wurde angelegt.');
         } catch (Exception $e) {
+            // Catching the exception, to not pollute database
             DB::rollBack();
-            Log::error($msg = $e->getMessage());
 
-            $this->deadLetter->commit(
-                $msg,
-                $payload,
-                get_class(),
-                'create_order',
-                $uuid,
-            );
+            throw $e;
         }
     }
 

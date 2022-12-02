@@ -18,21 +18,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
-        $this->app->bind(DeadLetterService::class, function() {
-            return new DeadLetterService();
-        });
-
-        $this->app->bind(PaymentService::class, function($app) {
-            return new PaymentService($app->make(DeadLetterService::class));
-        });
-
-        $this->app->bind(OrderService::class, function($app) {
-            return new OrderService($app->make(DeadLetterService::class));
-        });
-
-        $this->app->bind(CustomerService::class, function($app) {
-            return new CustomerService($app->make(DeadLetterService::class));
+        $this->app->bind(OrderService::class, function() {
+            return new OrderService();
         });
     }
 

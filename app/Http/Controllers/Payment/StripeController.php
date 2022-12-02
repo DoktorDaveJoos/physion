@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payment;
 
+use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPayment;
-use App\Services\Payment\Strategies\PaypalStrategy;
 use App\Services\Payment\Strategies\StripeStrategy;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,26 +14,18 @@ use Stripe\Exception\UnexpectedValueException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 
-class PaymentController extends Controller
+use function config;
+use function response;
+
+class StripeController extends Controller
 {
-
     /**
-     * @throws Exception
+     * Handles a stripe webhook
+     *
+     * @param  Request  $request
+     * @return Response
      */
-    public function paypal(Request $request): Response
-    {
-        Log::info(sprintf('%s: Incoming PayPal Payment', get_class()));
-
-
-        ProcessPayment::dispatch(
-            $request->all(),
-            new PaypalStrategy()
-        );
-
-        return response('Successfully captured payment');
-    }
-
-    public function stripe(Request $request): Response
+    public function __invoke(Request $request): Response
     {
         Log::info(sprintf('%s: Incoming Webhook', get_class()));
 
@@ -67,8 +59,8 @@ class PaymentController extends Controller
             switch ($event->type) {
                 case 'checkout.session.completed':
                     ProcessPayment::dispatch(
-                        $event->data,
-                        new StripeStrategy()
+                        'stripe',
+                        $event->data->object
                     );
                     break;
                 default:
