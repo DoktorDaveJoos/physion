@@ -9,15 +9,10 @@ trait CreatesOrderData
 
     protected array $payload = [];
 
-    public function basePayload($type = "verbrauchsausweis"): static
+    public function basePayload($type = "Verbrauchsausweis"): static
     {
         $this->payload["type"] = $type;
         $this->payload['feedback'] = 'this is a feedback';
-        return $this;
-    }
-
-    public function withGeneral(): static
-    {
         $this->payload["general"] = [
             "zip" => "88287",
             "city" => "Grünkraut",
@@ -31,7 +26,6 @@ trait CreatesOrderData
             "construction_year" => 1990,
             "construction_year_heating" => "2005",
         ];
-
         return $this;
     }
 

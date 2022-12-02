@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessPayment;
-use App\Services\Customer\PaypalCustomerService;
-use App\Services\Customer\StripeCustomerService;
+use App\Services\Payment\Strategies\PaypalStrategy;
+use App\Services\Payment\Strategies\StripeStrategy;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,13 +24,13 @@ class PaymentController extends Controller
     {
         Log::info(sprintf('%s: Incoming PayPal Payment', get_class()));
 
-        try {
-            ProcessPayment::dispatch($request->all());
-            return response('Successfully captured payment');
-        } catch (Exception $e) {
-            return response($e->getMessage(), 500);
-        }
 
+        ProcessPayment::dispatch(
+            $request->all(),
+            new PaypalStrategy()
+        );
+
+        return response('Successfully captured payment');
     }
 
     public function stripe(Request $request): Response
@@ -52,21 +52,24 @@ class PaymentController extends Controller
         } catch (UnexpectedValueException $e) {
             // Invalid payload
             Log::error($e->getMessage());
-            return response($e->getMessage(),400);
+            return response($e->getMessage(), 400);
         } catch (SignatureVerificationException $e) {
             // Invalid signature
             Log::error($e->getMessage());
-            return response($e->getMessage(),400);
-        } catch ( Exception $e) {
+            return response($e->getMessage(), 400);
+        } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response($e->getMessage(),500);
+            return response($e->getMessage(), 500);
         }
 
         // Handle the event
         try {
             switch ($event->type) {
                 case 'checkout.session.completed':
-                    ProcessPayment::dispatch(app()->make(StripeCustomerService::class), $event->data);
+                    ProcessPayment::dispatch(
+                        $event->data,
+                        new StripeStrategy()
+                    );
                     break;
                 default:
                     Log::info('Received unknown event type '.$event->type);

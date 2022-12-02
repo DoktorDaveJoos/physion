@@ -2,11 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\DeadLetter;
-use App\Services\Customer\CustomerService;
-use App\Services\Payment\PaymentStrategy;
-use App\Support\Telegram;
-use Exception;
+use App\Services\Payment\PaymentService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,16 +15,16 @@ class ProcessPayment implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private mixed $payload;
-    private PaymentStrategy $strategy;
+    private string $type;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(PaymentStrategy $strategy, mixed $payload)
+    public function __construct(string $type, mixed $payload)
     {
-        $this->strategy = $strategy;
+        $this->type = $type;
         $this->payload = $payload;
     }
 
@@ -37,21 +33,13 @@ class ProcessPayment implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(PaymentService $paymentService)
     {
-        try {
-            $this->strategy->handleCustomer($this->payload);
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $deadLetter = new DeadLetter([
-                'type' => 'customer',
-                'class' => ProcessPayment::class,
-                'reference' => null,
-                'payload' => $this->payload,
-            ]);
-            $deadLetter->save();
-            Telegram::broadcast('Watch-out: Customer konnte nicht angelegt werden!');
-        }
-        Telegram::broadcast('Conversion: Ein Ausweis wurde verkauft!');
+
+        Log::info(sprintf('%s: Processing payment', get_class()));
+
+        $paymentService->process($this->type, $this->payload);
     }
+
+
 }

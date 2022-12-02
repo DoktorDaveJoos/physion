@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Customer;
+namespace App\Services\Payment\Strategies;
 
 use JetBrains\PhpStorm\ArrayShape;
 
-class PaypalCustomerService extends CustomerService
+class PaypalStrategy implements PaymentStrategy
 {
-
     #[ArrayShape(['reference' => "string", 'customer' => "array"])]
-    protected function normalize(mixed $payload): array
+    public function normalize(mixed $payload): array
     {
         $customer = [];
 
@@ -30,10 +29,5 @@ class PaypalCustomerService extends CustomerService
             'reference' => (string) $payload['id'],
             'customer' => $customer
         ];
-    }
-
-    protected function reference(): string
-    {
-        return 'payment_intent';
     }
 }

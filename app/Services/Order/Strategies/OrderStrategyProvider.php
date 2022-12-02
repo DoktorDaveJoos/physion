@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Order;
+namespace App\Services\Order\Strategies;
 
 class OrderStrategyProvider
 {
-    public static function forType(string $type): string
+    public static function for(string $type): OrderStrategy
     {
         $mappings = [
             'Verbrauchsausweis' => ConsumptionStrategy::class

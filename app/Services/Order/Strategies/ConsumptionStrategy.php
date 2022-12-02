@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Order;
+namespace App\Services\Order\Strategies;
 
 use App\Models\Additional;
 use App\Models\Consumption;

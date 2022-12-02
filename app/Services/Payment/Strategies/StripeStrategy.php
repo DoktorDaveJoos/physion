@@ -2,18 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Customer;
+namespace App\Services\Payment\Strategies;
 
 use JetBrains\PhpStorm\ArrayShape;
 
-/**
- * @author Your Name <your.email@aboutyou.com>
- */
-class StripeCustomerService extends CustomerService
+class StripeStrategy implements PaymentStrategy
 {
-
     #[ArrayShape(['reference' => "string", 'customer' => "array"])]
-    protected function normalize(mixed $payload): array
+    public function normalize(mixed $payload): array
     {
         $customer = [];
 
@@ -32,10 +28,5 @@ class StripeCustomerService extends CustomerService
             'reference' => (string) $payload->object->client_reference_id,
             'customer' => $customer
         ];
-    }
-
-    protected function reference(): string
-    {
-        return 'reference';
     }
 }
