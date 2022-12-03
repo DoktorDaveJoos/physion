@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -47,6 +48,7 @@ class Consumption extends Resource
             ID::make()->sortable(),
             Text::make('Energieträger', 'source'),
             Text::make('Verbrauch', 'consumption'),
+//            DateTime::make('Start', 'start'),
             Text::make('Start', function() {
                 return Carbon::parse($this->start)->format('d.m.Y');
             }),

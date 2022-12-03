@@ -3,6 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
@@ -177,9 +180,15 @@ class ConsumptionCertificate extends Resource
     protected function coolingFields(): array
     {
         return [
-            Text::make('Kühlung', 'cooling')->copyable()->hideFromIndex(),
-            Text::make('Inspektionspflichtige Klimaanlagen', 'cooling_count')->copyable()->hideFromIndex(),
-            Text::make('Nächste Inspektion', 'cooling_service')->copyable()->hideFromIndex(),
+            Text::make('Kühlung', function() {
+                return $this->additional->cooling;
+            })->copyable()->hideFromIndex(),
+            Text::make('Inspektionspflichtige Klimaanlagen', function() {
+                return $this->additional->cooling_count;
+            })->copyable()->hideFromIndex(),
+            Text::make('Nächste Inspektion', function() {
+                return Carbon::parse($this->additional->cooling_service)->format('d.m.Y');
+            })->copyable()->hideFromIndex()
         ];
     }
 }

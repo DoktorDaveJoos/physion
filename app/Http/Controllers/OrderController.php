@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessOrder;
-use App\Services\Order\Strategies\OrderStrategyProvider;
 use App\Support\Telegram;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 
@@ -28,9 +26,9 @@ class OrderController extends Controller
             'type' => 'required',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             Telegram::broadcast('Watch-out: Request failed, check telescope');
-            return response(null, 400)->json(['message' => 'Bad request']);
+            return new JsonResponse(['message' => 'Bad request'], 400);
         }
 
         $content = $request->all();
@@ -41,6 +39,6 @@ class OrderController extends Controller
             $content
         );
 
-        return response()->json(['reference' => $uuid]);
+        return new JsonResponse(['reference' => $uuid]);
     }
 }

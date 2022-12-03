@@ -16,10 +16,7 @@ class PaypalStrategy implements PaymentStrategy
 
         // Always zero indexed
         $paypalData = $payload['purchase_units'][0];
-        Log::error($paypalData);
-
         $shipping = $paypalData['shipping'];
-        Log::error($shipping);
 
         // Address
         $customer['address_line_1'] = $shipping['address']['address_line_1'];

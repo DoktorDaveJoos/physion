@@ -3,6 +3,9 @@
 namespace App\Casts;
 
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,11 +18,12 @@ class HandleJsDate implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return mixed
+     * @return DateTime
+     * @throws Exception
      */
-    public function get($model, string $key, $value, array $attributes): mixed
+    public function get($model, string $key, $value, array $attributes): DateTime
     {
-        return $value;
+        return Carbon::parse($value)->timezone('CET');
     }
 
     /**
@@ -33,6 +37,6 @@ class HandleJsDate implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes): ?Carbon
     {
-        return $value ? Carbon::parse($value) : null;
+        return $value ? Carbon::parse($value, 'UTC')->timezone('CET'): null;
     }
 }
