@@ -28,6 +28,11 @@ class Customer extends Resource
 
     public static $group = 'Detail';
 
+    public static function label()
+    {
+        return 'Kunden';
+    }
+
     /**
      * The columns that should be searched.
      *

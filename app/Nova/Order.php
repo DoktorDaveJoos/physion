@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 
@@ -71,11 +72,13 @@ class Order extends Resource
                 'done' => 'Erledigt',
             ]),
             Boolean::make('Bezahlt', 'paid')->readonly(),
-            BelongsTo::make('Kunde', 'customer', Customer::class),
+            BelongsTo::make('Kunde', 'customer', Customer::class)->nullable(),
 
             MorphTo::make('Produkt', 'product')->types([
                 ConsumptionCertificate::class,
-            ])
+            ]),
+
+            Text::make('Feedback')->hideFromIndex()
         ];
     }
 

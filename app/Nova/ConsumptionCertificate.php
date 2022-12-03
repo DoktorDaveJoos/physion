@@ -32,9 +32,9 @@ class ConsumptionCertificate extends Resource
      */
     public static $title = 'id';
 
-    public function title(): string
+    public static function label()
     {
-        return sprintf('%s %s', $this->zip, $this->city);
+        return 'Verbrauchsausweise';
     }
 
     /**
@@ -55,7 +55,7 @@ class ConsumptionCertificate extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            MorphOne::make('Order', 'order'),
+            MorphOne::make('Order', 'order')->showOnIndex(),
 
             ID::make()->sortable(),
             Text::make('Grund der Ausstellung', 'reason')->hideFromIndex(),
@@ -65,14 +65,13 @@ class ConsumptionCertificate extends Resource
             new Panel('Erneuerbare Energien', $this->renewableFields()),
             new Panel('Kühlung', $this->coolingFields()),
 
-            HasMany::make('Verbrauchsdaten', 'consumptions', Consumption::class),
+            HasMany::make('Verbrauchsdaten', 'consumptions', Consumption::class)->readonly(),
             HasMany::make('Leerstand', 'vacancies', Vacancy::class),
 
-            new Panel('Zusätzlich Informationen', [
-                Text::make('Feedback', 'feedback'),
+            new Panel('Vorschlagsmaxtrix', [
                 KeyValue::make('Sanierungsvorschläge Abfrage', function () {
-                    return json_decode($this->suggestion_check);
-                })->rules('json'),
+                    return $this->additional->suggestion_check;
+                })->rules('array'),
             ]),
         ];
     }
@@ -166,8 +165,12 @@ class ConsumptionCertificate extends Resource
     protected function renewableFields(): array
     {
         return [
-            Text::make('Erneuerbare Energien', 'renewables')->copyable()->hideFromIndex(),
-            Text::make('Verwendung', 'renewables_reason')->copyable()->hideFromIndex(),
+            Text::make('Erneuerbare Energien', function() {
+                return $this->additional->renewables;
+            })->copyable()->hideFromIndex(),
+            Text::make('Verwendung', function() {
+                return $this->additional->renewables_reason;
+            })->copyable()->hideFromIndex(),
         ];
     }
 

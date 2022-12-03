@@ -26,6 +26,13 @@ class Vacancy extends Resource
 
     public static $group = 'Detail';
 
+    public static $clickAction = 'ignore';
+
+    public static function label()
+    {
+        return 'Leerstände';
+    }
+
 
     /**
      * The columns that should be searched.
