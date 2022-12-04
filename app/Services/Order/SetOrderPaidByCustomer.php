@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Events\CustomerCreated;
 use App\Models\Order;
+use App\Support\Telegram\Telegram;
 
 class SetOrderPaidByCustomer
 {
@@ -20,5 +21,7 @@ class SetOrderPaidByCustomer
         $order->status = 'open';
         $order->customer_id = $event->customerID;
         $order->save();
+
+        Telegram::broadcast('🚀 Kunde angelegt, Auftrag bezahlt. Patte gemacht!!!');
     }
 }

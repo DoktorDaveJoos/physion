@@ -19,9 +19,6 @@ class OrderController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
-
-        Telegram::broadcast('WAZZUP!');
-
         // Create reference (for Stripe & Paypal)
         $uuid = (string)Uuid::uuid4();
 
