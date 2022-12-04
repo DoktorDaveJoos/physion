@@ -20,10 +20,11 @@ return new class extends Migration
             $table->string('product_type');
         });
 
-        foreach(ConsumptionCertificate::all() as $cCertificate) {
-            $order = $cCertificate->order;
+        foreach(ConsumptionCertificate::all() as $c) {
 
-            $order->product_id = $cCertificate['id'];
+            $order = Order::find($c->order_id);
+
+            $order->product_id = $c->id;
             $order->product_type = ConsumptionCertificate::class;
             $order->save();
         }
