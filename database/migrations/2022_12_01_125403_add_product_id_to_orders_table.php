@@ -23,7 +23,7 @@ return new class extends Migration
         foreach(ConsumptionCertificate::all() as $cCertificate) {
             $order = $cCertificate->order;
 
-            $order->product_id = $cCertificate->id;
+            $order->product_id = $cCertificate['id'];
             $order->product_type = ConsumptionCertificate::class;
             $order->save();
         }
