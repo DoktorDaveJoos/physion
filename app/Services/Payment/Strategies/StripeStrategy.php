@@ -13,7 +13,7 @@ class StripeStrategy implements PaymentStrategy
     {
         $customer = [];
 
-        $customer['address_line_1']= $payload->customer_details->address->line1;
+        $customer['address_line_1'] = $payload->customer_details->address->line1;
         $customer['address_line_2'] = $payload->customer_details->address->line2;
         $customer['city'] = $payload->customer_details->address->city;
         $customer['postal_code'] = $payload->customer_details->address->postal_code;
@@ -24,9 +24,11 @@ class StripeStrategy implements PaymentStrategy
         $customer['email'] = $payload->customer_details->email;
         $customer['phone_number'] = $payload->customer_details->phone;
 
+        $customer['checkout'] = 'stripe';
+
         return [
             'reference' => $payload->client_reference_id,
-            'customer' => $customer
+            'customer' => $customer,
         ];
     }
 }

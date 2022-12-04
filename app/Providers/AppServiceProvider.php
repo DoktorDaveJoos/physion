@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Services\Customer\CustomerService;
-use App\Services\DeadLetterService;
 use App\Services\Order\OrderService;
-use App\Services\Payment\PaymentService;
-use Cassandra\Type\Custom;
+use App\Services\Stripe\StripeService;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,8 +18,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(OrderService::class, function() {
+        $this->app->bind(OrderService::class, function () {
             return new OrderService();
+        });
+
+        $this->app->singleton(StripeClient::class, function () {
+            Stripe::setApiKey(config('stripe.api_key'));
+            return new StripeClient(config('stripe.api_key'));
+        });
+
+        $this->app->bind(StripeService::class, function($app) {
+            return new StripeService($app->make(StripeClient::class));
         });
     }
 

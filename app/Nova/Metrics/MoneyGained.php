@@ -18,9 +18,9 @@ class MoneyGained extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->sum($request, Order::class, 'paid')->transform(function($value) {
-            return $value * 49;
-        })->currency('€');
+        return $this->sum($request, Order::class, 'paid')
+            ->transform(fn ($value) => $value * 49)
+            ->currency('€');
     }
 
     /**

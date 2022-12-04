@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\Date;
@@ -190,7 +191,7 @@ class ConsumptionCertificate extends Resource
                 return $this->additional->cooling_count;
             })->copyable()->hideFromIndex(),
             Text::make('Nächste Inspektion', function() {
-                return Carbon::parse($this->additional->cooling_service)->format('d.m.Y');
+                Return $this->additional->coolings_service ? Carbon::parse($this->additional->cooling_service)->format('d.m.Y') : null;
             })->copyable()->hideFromIndex()
         ];
     }

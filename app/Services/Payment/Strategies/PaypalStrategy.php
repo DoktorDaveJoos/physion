@@ -28,6 +28,8 @@ class PaypalStrategy implements PaymentStrategy
 
         $customer['email'] = $payload['payer']['email_address'];
 
+        $customer['checkout'] = 'paypal';
+
         return [
             'reference' => (string) $paypalData['reference_id'],
             'customer' => $customer

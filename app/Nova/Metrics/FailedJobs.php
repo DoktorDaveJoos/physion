@@ -20,8 +20,6 @@ class FailedJobs extends Value
             ->selectRaw('*')
             ->get();
 
-        ray($failed_jobs);
-
         return $this->result(count($failed_jobs));
     }
 

@@ -6,7 +6,7 @@ namespace App\Services\Order;
 
 use App\Models\Order;
 use App\Services\Order\Strategies\OrderStrategyProvider;
-use App\Support\Telegram;
+use App\Support\Telegram\Telegram;
 use Exception;
 use Illuminate\Support\Facades\DB;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Support;
+namespace App\Support\Telegram;
 
 use App\Models\TelegramSubscriber;
 use Illuminate\Support\Facades\Http;

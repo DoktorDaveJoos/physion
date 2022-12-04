@@ -26,8 +26,7 @@ class CreateOrderTest extends TestCase
         $response = $this->post('/api/order', $payload);
         $response->assertStatus(200);
 
-        $this->assertTrue(self::isUUID($response->getContent()));
-
+        $this->assertTrue(self::isUUID($response->json('reference')));
 
         Queue::assertPushed(ProcessOrder::class);
     }
@@ -39,5 +38,4 @@ class CreateOrderTest extends TestCase
                 $string
             ) === 1;
     }
-
 }

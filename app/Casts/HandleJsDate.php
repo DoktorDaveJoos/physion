@@ -18,12 +18,11 @@ class HandleJsDate implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return DateTime
-     * @throws Exception
+     * @return DateTime|null
      */
-    public function get($model, string $key, $value, array $attributes): DateTime
+    public function get($model, string $key, $value, array $attributes): DateTime | null
     {
-        return Carbon::parse($value)->timezone('CET');
+        return $value ? Carbon::parse($value)->timezone('CET') : null;
     }
 
     /**
@@ -37,6 +36,6 @@ class HandleJsDate implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes): ?Carbon
     {
-        return $value ? Carbon::parse($value, 'UTC')->timezone('CET'): null;
+        return $value ? Carbon::parse($value): null;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Support\TelegramPublisher;
+use App\Support\Telegram\TelegramPublisher;
 use Illuminate\Support\ServiceProvider;
 
 class TelegramServiceProvider extends ServiceProvider
