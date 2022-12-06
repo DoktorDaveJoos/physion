@@ -20,7 +20,10 @@ class PaypalStrategy implements PaymentStrategy
 
         // Address
         $customer['address_line_1'] = $shipping['address']['address_line_1'];
-        $customer['city'] = $shipping['address']['admin_area_1'];
+        if (!($city = $shipping['address']['admin_area_1'])) {
+            $city = $shipping['address']['admin_area_2'] ?? 'Keine Angabe';
+        }
+        $customer['city'] = $city;
         $customer['postal_code'] = $shipping['address']['postal_code'];
         $customer['country'] = $shipping['address']['country_code'];
 
