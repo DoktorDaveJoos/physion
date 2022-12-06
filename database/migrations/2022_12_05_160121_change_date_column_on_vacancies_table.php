@@ -1,12 +1,10 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('consumptions', function(Blueprint $table) {
+        Schema::table('vacancies', function (Blueprint $table) {
             $table->dateTime('start')->change();
             $table->dateTime('end')->change();
         });

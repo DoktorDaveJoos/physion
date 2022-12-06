@@ -191,7 +191,7 @@ class ConsumptionCertificate extends Resource
                 return $this->additional->cooling_count;
             })->copyable()->hideFromIndex(),
             Text::make('Nächste Inspektion', function() {
-                Return $this->additional->coolings_service ? Carbon::parse($this->additional->cooling_service)->format('d.m.Y') : null;
+                Return $this->additional->cooling_service ? Carbon::parse($this->additional->cooling_service)->format('d.m.Y') : null;
             })->copyable()->hideFromIndex()
         ];
     }

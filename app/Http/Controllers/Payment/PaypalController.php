@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPayment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -16,9 +17,9 @@ class PaypalController extends Controller
      * Handles a paypal order capture
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): JsonResponse
     {
         Log::info(sprintf('%s: Incoming PayPal Payment', get_class()));
 
@@ -27,7 +28,7 @@ class PaypalController extends Controller
             $request->all()
         );
 
-        return response('Successfully captured payment');
+        return new JsonResponse(['message' => 'Success']);
     }
 }
 
