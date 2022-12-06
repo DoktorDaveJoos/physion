@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * @property $id
  * @property string payment_intent
  */
 class Order extends Model
@@ -21,14 +23,14 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function consumption(): HasMany
+    public function consumptions(): HasMany
     {
         return $this->hasMany(Consumption::class);
     }
 
-    public function vacancy(): HasMany
+    public function product(): MorphTo
     {
-        return $this->hasMany(Vacancy::class);
+        return $this->morphTo();
     }
 
 }

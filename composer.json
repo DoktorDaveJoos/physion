@@ -19,6 +19,8 @@
     "laravel/tinker": "^2.7",
     "spatie/laravel-ray": "^1.31",
     "stripe/stripe-php": "^9.9",
+    "symfony/http-client": "^6.2",
+    "symfony/postmark-mailer": "^6.2",
     "tightenco/ziggy": "^1.0"
   },
   "require-dev": {

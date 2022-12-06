@@ -1,8 +1,12 @@
+
 <?php
 
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\Payment\PaypalController;
+use App\Http\Controllers\Payment\StripeController;
+use App\Http\Controllers\Telegram\AddSubscriberController;
+use App\Http\Controllers\Telegram\SentryWebhookController;
+use App\Http\Controllers\Telegram\TelegramController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +25,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/order', [OrderController::class, 'store']);
-Route::post('/webhook', [PaymentController::class, 'index']);
-Route::post('/telegram', [TelegramController::class, 'registerSubscriber']);
-Route::post('/telegram/sentry', [TelegramController::class, 'handleSentry']);
+// Handle order creation
+Route::post('/order', OrderController::class);
+
+// Handle payments
+Route::post('/payment/stripe', StripeController::class);
+Route::post('/payment/paypal', PaypalController::class);
+
+// Realtime logging
+// To enable the telegram bot sending messages:
+// POSTMAN: https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<URL>/api/telegram
+Route::post('/telegram/subscribe', AddSubscriberController::class );
+Route::post('/telegram/sentry', SentryWebhookController::class);

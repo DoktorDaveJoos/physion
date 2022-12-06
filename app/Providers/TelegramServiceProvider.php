@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\Telegram\TelegramPublisher;
 use Illuminate\Support\ServiceProvider;
 
 class TelegramServiceProvider extends ServiceProvider
@@ -13,7 +14,9 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton();
+        $this->app->bind('telegram', function($app) {
+            return new TelegramPublisher();
+        });
     }
 
     /**

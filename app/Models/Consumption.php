@@ -18,8 +18,8 @@ class Consumption extends Model
         'end' => HandleJsDate::class
     ];
 
-    public function order(): BelongsTo
+    public function consumptionCertificate(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(ConsumptionCertificate::class);
     }
 }

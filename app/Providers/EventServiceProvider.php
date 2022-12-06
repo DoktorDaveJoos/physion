@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\CustomerCreated;
+use App\Events\PaymentCreated;
+use App\Services\Customer\CreateCustomer;
+use App\Services\Order\SetOrderPaidByCustomer;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,6 +20,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        PaymentCreated::class => [
+            CreateCustomer::class,
+        ],
+        CustomerCreated::class => [
+            SetOrderPaidByCustomer::class,
         ],
     ];
 

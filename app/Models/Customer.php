@@ -24,6 +24,11 @@ class Customer extends Model
 
     protected $guarded = ['id'];
 
+    public function unknownToStripe(): bool
+    {
+        return $this->checkout !== 'stripe' && $this->stripe_id === null;
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

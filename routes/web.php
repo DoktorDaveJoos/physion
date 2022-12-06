@@ -19,6 +19,10 @@ use Stripe\Webhook;
 |
 */
 
+Route::get('/mail', function() {
+    return new \App\Mail\OrderCreated('David Joos');
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

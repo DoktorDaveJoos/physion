@@ -2,6 +2,7 @@
 
 namespace App\Nova\Dashboards;
 
+use App\Nova\Metrics\FailedJobs;
 use App\Nova\Metrics\MoneyGained;
 use App\Nova\Metrics\NewOrders;
 use App\Nova\Metrics\OrdersPerDay;
@@ -20,7 +21,8 @@ class Main extends Dashboard
         return [
             new NewOrders,
             new MoneyGained,
-            new OrdersPerDay
+            new OrdersPerDay,
+            new FailedJobs
         ];
     }
 

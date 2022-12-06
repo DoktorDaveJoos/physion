@@ -2,141 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Consumption;
-use App\Models\Order;
-use App\Models\Vacancy;
-use App\Services\TelegramService;
-use Exception;
+use App\Jobs\ProcessOrder;
+use App\Support\Telegram\Telegram;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Uuid;
 
 class OrderController extends Controller
 {
-
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-//    public function index(): Response
-//    {
-//        //
-//    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-//    public function create(): Response
-//    {
-//
-//    }
-    private TelegramService $telegram;
-
-    /**
-     */
-    public function __construct(TelegramService $service)
-    {
-        $this->telegram = $service;
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Enqueue order from sales page
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(Request $request): Response
+    public function __invoke(Request $request): JsonResponse
     {
-        try {
-            $order = new Order($request->all());
-            $order->suggestion_check = json_encode($order->suggestion_check);
-            $order->save();
-            foreach ($request->all()['consumption_range'] as $source) {
-                foreach ($source['range'] as $range) {
-                    $consumption = new Consumption([
-                        'source' => $source['source'],
-                        'start' => $range['start'],
-                        'end' => $range['end'],
-                        'consumption' => $range['consumption'],
-                        'water' => $range['water'] ?? null,
-                    ]);
+        // Create reference (for Stripe & Paypal)
+        $uuid = (string)Uuid::uuid4();
 
-                    $consumption->order()->associate($order);
-                    $consumption->save();
-                }
-            }
-            if ($percentage = $request->all()['vacancy_percentage']) {
-                $vacancy = new Vacancy([
-                    'percentage' => $percentage,
-                ]);
-                $vacancy->order()->associate($order);
-                $vacancy->save();
-            } else {
-                foreach ($request->all()['vacancy_range'] as $range) {
-                    $vacancy = new Vacancy([
-                        'start' => $range['start'],
-                        'end' => $range['end'],
-                    ]);
+        $validator = Validator::make($request->all(), [
+            'type' => 'required',
+        ]);
 
-                    $vacancy->order()->associate($order);
-                    $vacancy->save();
-                }
-            }
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $this->telegram->broadcast(sprintf('[%s]: Order konnte nicht angelegt werden.', app()->environment()));
-            return response($e->getMessage(), 500);
+        if ($validator->fails()) {
+            Telegram::broadcast('Watch-out: Request failed, check telescope');
+            return new JsonResponse(['message' => 'Bad request'], 400);
         }
 
-        $this->telegram->broadcast(sprintf('[%s]: Order wurde angelegt.', app()->environment()));
-        return response($order->id, 200);
+        $content = $request->all();
+
+        // Make sure Order is accepted - handle later
+        ProcessOrder::dispatch(
+            $uuid,
+            $content
+        );
+
+        return new JsonResponse(['reference' => $uuid]);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Order  $order
-     * @return Response
-     */
-//    public function show(Order $order): Response
-//    {
-//        //
-//    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Order  $order
-     * @return Response
-     */
-//    public function edit(Order $order): Response
-//    {
-//        //
-//    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Order  $order
-     * @return Response
-     */
-//    public function update(Request $request, Order $order)
-//    {
-//        //
-//    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Order  $order
-     * @return Response
-     */
-//    public function destroy(Order $order)
-//    {
-//        //
-//    }
 }
