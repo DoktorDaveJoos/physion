@@ -20,7 +20,7 @@ class AddSubscriberController extends Controller
         if (TelegramSubscriber::where('name', $request->input('message.chat.id'))->first()) {
             Telegram::sendMessage(
                 $request->input('message.chat.id'),
-                sprintf('Bre... Lass einfach gut sein %s Danke', $request->input('message.chat.id'))
+                sprintf('Bre... Lass es gut sein, %s', $request->input('message.from.username'))
             );
             return;
         }
