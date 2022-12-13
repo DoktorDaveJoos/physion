@@ -1,0 +1,10 @@
+@tailwind base;
+
+@layer base {
+    input {
+        @apply focus:ring-0 #{!important};
+    }
+}
+
+@tailwind components;
+@tailwind utilities;

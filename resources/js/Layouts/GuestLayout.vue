@@ -1,3 +1,16 @@
+<template>
+
+</template>
+
+<script>
+export default {
+    name: 'GuestLayout.vue',
+};
+</script>
+
+<style scoped>
+
+</style>
 <script setup>
 import {ref} from 'vue';
 import {Inertia} from '@inertiajs/inertia';
@@ -9,11 +22,9 @@ import NavLink from '@/Jetstream/NavLink.vue';
 import ResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
 import {Notification, NotificationGroup} from 'notiwind';
 import LightNotification from '@/Layouts/Notifications/LightNotification.vue';
-import {ChevronRightIcon} from '@heroicons/vue/24/solid';
 
 defineProps({
     title: String,
-    subtitle: String,
 });
 
 const showingNavigationDropdown = ref(false);
@@ -40,37 +51,24 @@ const logout = () => {
         <Banner />
 
         <div class="min-h-screen bg-slate-50">
-            <nav class="border-b border-gray-200 bg-white">
+            <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex py-6 justify-between">
-                        <!-- Logo -->
+                    <div class="flex h-16 justify-between">
+                        <div class="flex">
+                            <!-- Logo -->
 
-                        <NavLink href="/">
-                            <ApplicationMark />
-                            <div className="mx-4 flex items-baseline gap-1">
-                                <span className="hidden text-lg font-light uppercase text-gray-600 md:block">
+                            <NavLink href="/">
+                                <ApplicationMark />
+                            </NavLink>
+
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('bedarf.index')" :active="route().current('bedarf.*')">
                                     Energieausweis
-                                </span>
-                                <span className="text-lg font-semibold uppercase text-blue-600">
-                                    Express
-                                </span>
-
-                                <span class="text-xs text-slate-400">bauzertifikate.de</span>
+                                </NavLink>
                             </div>
-                        </NavLink>
-
-                        <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
-                            <NavLink :href="route('bedarf.index')" :active="route().current('bedarf.*')">
-                                Energieausweise
-                            </NavLink>
-
-                            <NavLink :href="route('bedarf.index')" :active="route().current('bedarf.*')">
-                                Energieausweise
-                            </NavLink>
                         </div>
-
 
                         <div v-if="$page.props.user" class="hidden sm:ml-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
@@ -196,22 +194,14 @@ const logout = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header class="sticky bg-white shadow-sm top-0 z-40">
-                <div id="header" class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-baseline">
-                        <span>{{ title }}</span>
-                        <ChevronRightIcon class="w-4 self-center h-4 mx-2" />
-                        <span class="text-sm text-gray-500">{{ subtitle }}</span>
-                    </div>
-                </div>
+            <header class="sticky top-0 z-40 bg-white shadow">
+                <div id="header" class="mx-auto flex h-20 max-w-7xl items-center px-4 sm:px-6 lg:px-8" />
             </header>
 
             <!-- Page Content -->
-            <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+            <main>
                 <slot />
             </main>
-
-
         </div>
         <NotificationGroup>
             <div class="pointer-events-none fixed inset-0 z-50 flex items-start justify-end p-6 px-4 py-6">

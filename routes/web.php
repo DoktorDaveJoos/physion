@@ -1,12 +1,9 @@
 <?php
 
+use App\Http\Controllers\BedarfController;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Stripe\Exception\SignatureVerificationException;
-use Stripe\Webhook;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +16,20 @@ use Stripe\Webhook;
 |
 */
 
-Route::get('/mail', function() {
-    return new \App\Mail\OrderCreated('David Joos');
-});
+Route::prefix('energieausweis')
+    ->group(function () {
+
+        Route::prefix('bedarf')->group(function() {
+
+            Route::get('allgemein', [BedarfController::class, 'index'])->name('bedarf.index');
+            Route::get('keller', [BedarfController::class, 'cellar'])->name('bedarf.cellar');
+            Route::get('wand', [BedarfController::class, 'wall'])->name('bedarf.wall');
+            Route::get('fenster', [BedarfController::class, 'window'])->name('bedarf.window');
+            Route::get('dach', [BedarfController::class, 'roof'])->name('bedarf.roof');
+
+        });
+
+    });
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -30,7 +38,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('start');
 
 Route::middleware([
     'auth:sanctum',
