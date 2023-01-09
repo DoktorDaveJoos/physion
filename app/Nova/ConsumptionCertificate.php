@@ -20,9 +20,9 @@ class ConsumptionCertificate extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\ConsumptionCertificate>
+     * @var class-string<\App\Models\Verbrauchsausweis>
      */
-    public static mixed $model = \App\Models\ConsumptionCertificate::class;
+    public static mixed $model = \App\Models\Verbrauchsausweis::class;
 
     public static $group = 'Detail';
 

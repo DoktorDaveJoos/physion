@@ -48,11 +48,11 @@ const logout = () => {
 
                         <NavLink href="/">
                             <ApplicationMark />
-                            <div className="mx-4 flex items-baseline gap-1">
-                                <span className="hidden text-lg font-light uppercase text-gray-600 md:block">
+                            <div class="mx-4 flex items-baseline gap-1">
+                                <span class="hidden text-lg font-light uppercase text-gray-600 md:block">
                                     Energieausweis
                                 </span>
-                                <span className="text-lg font-semibold uppercase text-blue-600">
+                                <span class="text-lg font-semibold uppercase text-blue-600">
                                     Express
                                 </span>
 
@@ -62,11 +62,7 @@ const logout = () => {
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
-                            <NavLink :href="route('bedarf.index')" :active="route().current('bedarf.*')">
-                                Energieausweise
-                            </NavLink>
-
-                            <NavLink :href="route('bedarf.index')" :active="route().current('bedarf.*')">
+                            <NavLink :href="route('create.bedarf.show')" :active="route().current('bedarf.*')">
                                 Energieausweise
                             </NavLink>
                         </div>
@@ -198,7 +194,7 @@ const logout = () => {
             <!-- Page Heading -->
             <header class="sticky bg-white shadow-sm top-0 z-40">
                 <div id="header" class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-baseline">
+                    <div class="flex items-baseline font-display">
                         <span>{{ title }}</span>
                         <ChevronRightIcon class="w-4 self-center h-4 mx-2" />
                         <span class="text-sm text-gray-500">{{ subtitle }}</span>
@@ -207,7 +203,7 @@ const logout = () => {
             </header>
 
             <!-- Page Content -->
-            <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+            <main class="mx-auto max-w-7xl sm:px-6 lg:px-8 py-8">
                 <slot />
             </main>
 

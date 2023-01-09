@@ -7,10 +7,12 @@ import {InertiaProgress} from '@inertiajs/progress';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import ElementPlus from 'element-plus';
+import de from 'element-plus/dist/locale/de';
+import 'dayjs/locale/de';
 import '../css/element-plus.scss';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText ||
-    'Laravel';
+    'Bauzertifikate';
 
 createInertiaApp({
   title: (title) => `${title} - ${appName}`,
@@ -20,7 +22,9 @@ createInertiaApp({
     return createApp({render: () => h(app, props)}).
         use(plugin).
         use(ZiggyVue, Ziggy).
-        use(ElementPlus).
+        use(ElementPlus, {
+          locale: de,
+        }).
         mount(el);
   },
 });

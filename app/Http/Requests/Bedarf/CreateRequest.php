@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Requests\Bedarf;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+            'street_address' => 'required|string',
+            'zip' => 'required|digits:5',
+            'city' => 'required|string',
+            'construction_year' => 'required|digits:4',
+            'housing_units' => 'required|integer',
+            'type' => 'required|string',
+            'additional_type' => 'required|string',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Bitte geben Sie Ihren Namen an.',
+            'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse an.',
+            'street_address.required' => 'Bitte geben Sie Ihre Straße und Hausnummer an.',
+            'zip.required' => 'Bitte geben Sie Ihre Postleitzahl an.',
+            'zip.digits' => 'Bitte geben Sie eine gültige Postleitzahl an.',
+            'city.required' => 'Bitte geben Sie Ihren Wohnort an.',
+            'construction_year.required' => 'Bitte geben Sie das Baujahr an.',
+            'construction_year.digits' => 'Bitte geben Sie ein gültiges Baujahr an.',
+            'housing_units.required' => 'Bitte geben Sie die Anzahl der Wohnungen an.',
+            'housing_units.integer' => 'Bitte geben Sie eine gültige Anzahl an Wohnungen an.',
+            'type.required' => 'Bitte geben Sie den Typ des Gebäudes an.',
+            'additional_type.required' => 'Bitte geben Sie den Zusatztyp des Gebäudes an.',
+        ];
+    }
+}

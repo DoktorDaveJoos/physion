@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\ProcessOrder;
-use App\Models\ConsumptionCertificate;
+use App\Models\Verbrauchsausweis;
 use App\Models\Order;
 use App\Services\Order\Strategies\ConsumptionStrategy;
 use Exception;
@@ -30,7 +30,7 @@ class StoreOrderTest extends TestCase
 
         App::call([$processOrder, 'handle']);
 
-        $certificate = ConsumptionCertificate::all()->first();
+        $certificate = Verbrauchsausweis::all()->first();
 
         $this->assertDatabaseHas('orders', [
             'id' => $certificate->order->id
@@ -57,7 +57,7 @@ class StoreOrderTest extends TestCase
 
         $order = Order::where('reference', $uuid)->first();
 
-        $this->assertEquals(ConsumptionCertificate::class, $order->product_type);
+        $this->assertEquals(Verbrauchsausweis::class, $order->product_type);
 
         $this->assertDatabaseHas('consumptions', [
             'consumption_certificate_id' => $order->product->id,
@@ -88,7 +88,7 @@ class StoreOrderTest extends TestCase
 
         $order = Order::where('reference', $uuid)->first();
 
-        $this->assertEquals(ConsumptionCertificate::class, $order->product_type);
+        $this->assertEquals(Verbrauchsausweis::class, $order->product_type);
 
         $this->assertDatabaseHas('consumptions', [
             'consumption_certificate_id' => $order->product->id,
@@ -123,7 +123,7 @@ class StoreOrderTest extends TestCase
 
         $order = Order::where('reference', $uuid)->first();
 
-        $this->assertEquals(ConsumptionCertificate::class, $order->product_type);
+        $this->assertEquals(Verbrauchsausweis::class, $order->product_type);
 
         $this->assertDatabaseHas('consumptions', [
             'consumption_certificate_id' => $order->product->id,
@@ -157,7 +157,7 @@ class StoreOrderTest extends TestCase
 
         $order = Order::where('reference', $uuid)->first();
 
-        $this->assertEquals(ConsumptionCertificate::class, $order->product_type);
+        $this->assertEquals(Verbrauchsausweis::class, $order->product_type);
 
         $this->assertDatabaseHas('consumptions', [
             'consumption_certificate_id' => $order->product->id,

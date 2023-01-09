@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Controllers\Verbrauch;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
+use App\Models\Bedarfsausweis;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\Verbrauchsausweis;
+use Hidehalo\Nanoid\Client;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+
+class CreateController extends Controller
+{
+    /**
+     * Handle the incoming request.
+     *
+     * @param  CreateOrUpdateRequest  $request
+     * @return RedirectResponse
+     */
+    public function __invoke(CreateOrUpdateRequest $request): RedirectResponse
+    {
+        $client = new Client();
+        $id = $client->generateId(8, Client::MODE_DYNAMIC);
+
+        $customer = Customer::firstOrCreate([
+            'email' => $request->get('email'),
+        ], [
+            'name' => $request->get('name'),
+            'phone' => $request->get('phone'),
+        ]);
+
+        $product = Verbrauchsausweis::create([
+            'street_address' => $request->get('street_address'),
+            'zip' => $request->get('zip'),
+            'city' => $request->get('city'),
+            'reason' => $request->get('reason'),
+            'type' => $request->get('type'),
+            'additional_type' => $request->get('additional_type'),
+        ]);
+
+        Order::create([
+            'id' => $id,
+            'customer_id' => $customer->id,
+            'type' => 'verbrauchsausweis',
+            'status' => 'created',
+            'paid' => false,
+            'product_id' => $product->id,
+            'product_type' => Verbrauchsausweis::class,
+            'meta' => [
+                'completed' => ['general']
+            ]
+        ]);
+
+        return Redirect::route('verbrauch.details', $id);
+    }
+}

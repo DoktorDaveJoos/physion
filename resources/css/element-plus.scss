@@ -1,29 +1,16 @@
-
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
-      'base': #3b82f6,
+      'base': #2563eb,
     ),
-    'color': (
-      'border': #d1d5db,
-    )
-  )
+  ),
+  $date-editor: (
+    'width': 100%,
+    'monthrange-width': 300px,
+    'daterange-width': 100%,
+    'datetimerange-width': 400px,
+  ),
 );
 
 @use "element-plus/theme-chalk/src/index.scss" as *;
-//
-//.el-form--default.el-form--label-top .el-form-item .el-form-item__label {
-//    margin-bottom: 3px;
-//    @apply text-gray-600;
-//}
-//
-//.el-input {
-//  border-color: #d1d5db !important;
-//  @apply shadow-sm;
-//}
-//
-//.el-input__inner {
-//  @apply placeholder-gray-400;
-//}
-
 

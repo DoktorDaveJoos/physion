@@ -1,168 +1,230 @@
 <script>
-import AppLayout from '../../Layouts/AppLayout.vue';
-import SideNavWrapper from '../../Wrappers/SideNavWrapper.vue';
 import {reactive, ref} from 'vue';
-
-const value = ref('');
-
-const options = [
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-];
+import {Switch} from '@headlessui/vue';
+import GuestLayout from '../../Layouts/GuestLayout.vue';
+import {Inertia} from '@inertiajs/inertia';
+import StepperWrapper from '../../Wrappers/StepperWrapper.vue';
 
 export default {
-    components: {SideNavWrapper},
-    // Using the shorthand
-    layout: [AppLayout],
-
+    components: {StepperWrapper, Switch},
+    layout: [GuestLayout],
     props: {
-        subtitle: Object,
+        errors: Object,
     },
-
     setup() {
-
         const form = reactive({
-            last_name: null,
+            name: null,
             email: null,
+            street_address: null,
+            zip: null,
+            city: null,
+            phone: null,
+            type: null,
+            additional_type: null,
+            construction_year: null,
+            housing_units: null,
         });
 
-        function submit() {
-            Inertia.post('/users', form);
-        }
+        const submit = () => {
+            Inertia.post(route('bedarf.create'), form);
+        };
 
-        const value = ref('');
-
-        const options = [
-            {
-                value: 'freistehend',
-                label: 'Freistehend',
-            },
-            {
-                value: 'doppelhaushälfte',
-                label: 'Doppelhaushälfte',
-            },
-            {
-                value: 'reihenmittelhaus',
-                label: 'Reihenmittelhaus',
-            },
-            {
-                value: 'reiheneckhaus',
-                label: 'Reiheneckhaus',
-            },
-        ];
-
-        return {options, value, form, submit};
+        const agreed = ref(true);
+        return {form, submit, agreed};
     },
 };
+
 </script>
-
 <template>
-    <SideNavWrapper>
 
-        <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-            <form action="#" method="POST">
-                <div class="shadow sm:overflow-hidden sm:rounded-md">
-                    <div class="space-y-6 bg-white py-6 px-4 sm:p-6">
+    <StepperWrapper>
 
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">{{ subtitle }}</h3>
 
-                        <div class="grid grid-cols-4 gap-6">
-                            <div class="sm:col-span-2">
-                                <label for="email-address"
-                                       class="block text-sm font-medium text-gray-700">Email</label>
-                                <el-input
-                                    v-model="form.email"
-                                    class="mt-1"
-                                    size="large"
-                                    placeholder="max.mustermann@email.de"
-                                />
+        <div class="overflow-hidden bg-white rounded-md px-4 py-8 sm:px-6 lg:px-8 lg:py-24">
+            <div class="relative mx-auto max-w-xl">
+
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl">Bedarfsausweis
+                        erstellen</h2>
+                    <p class="mt-4 text-lg leading-6 text-gray-500">Erstelle deinen Bedarfsausweis online mit
+                        Möglichkeit
+                        zum Pausieren und Verfolgen des Bearbeitungsstatus</p>
+                </div>
+                <form @submit.prevent="submit" class="mt-12">
+                    <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+
+                        <div class="sm:col-span-2">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <div class="mt-1">
+                                <input v-model="form.name" type="text" name="name" id="name" autocomplete="give-name"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                             </div>
+                            <div class="text-xs text-red-500" v-if="errors.name">{{ errors.name }}</div>
+                        </div>
 
-                            <div></div>
-                            <div></div>
-
-                            <div class="sm:col-span-1">
-                                <label for="email-address"
-                                       class="block text-sm font-medium text-gray-700">Haustyp</label>
-                                <el-select v-model="value" class="mt-1" placeholder="Typ" size="large">
-                                    <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    />
-                                </el-select>
+                        <div class="sm:col-span-2">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <div class="mt-1">
+                                <input v-model="form.email" id="email" name="email" type="email" autocomplete="email"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                             </div>
-                            <div class="sm:col-span-1">
-                                <label for="email-address"
-                                       class="block text-sm font-medium text-gray-700">Bauart</label>
-                                <el-select v-model="value" class="mt-1 w-full" placeholder="Art" size="large">
-                                    <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    />
-                                </el-select>
+                            <div class="text-xs text-red-500" v-if="errors.email">{{ errors.email }}</div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="phone-number" class="flex justify-between text-sm font-medium text-gray-700">Telefonnummer
+                                <span class="ml-1 text-xs text-gray-400 self-center">Optional</span>
+                            </label>
+                            <div class="relative mt-1 rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 flex items-center">
+                                    <label for="country" class="sr-only">Country</label>
+                                    <select id="country" name="country"
+                                            class="h-full rounded-md border-transparent bg-transparent py-0 pl-4 pr-8 text-gray-500 focus:border-blue-500 focus:ring-blue-500">
+                                        <option>DE</option>
+                                    </select>
+                                </div>
+                                <input v-model="form.phone" type="text" name="phone-number" id="phone-number"
+                                       autocomplete="tel"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="+49 170 2345678" />
                             </div>
+                            <div class="text-xs text-red-500" v-if="errors.phone">{{ errors.phone }}</div>
+                        </div>
 
-                            <div></div>
+                        <div class="border-b my-4 border-gray-200 sm:col-span-2"></div>
 
-                            <div class="col-span-2">
-                                <label class="block text-sm font-medium text-gray-700">Cover photo</label>
-                                <el-upload
-                                    class="upload-demo"
-                                    drag
-                                    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                                    multiple
-                                >
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
-                                         viewBox="0 0 48 48" aria-hidden="true">
-                                        <path
-                                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
+                        <div class="sm:col-span-2 text-center">
+                            <p class="text-lg leading-6 text-gray-500">Angaben zum Gebäude</p>
+                        </div>
 
-                                    <div class="el-upload__text">
-                                        Drop file here or <em>click to upload</em>
-                                    </div>
-                                    <template #tip>
-                                        <div class="el-upload__tip">
-                                            jpg/png files with a size less than 500kb
-                                        </div>
-                                    </template>
-                                </el-upload>
+                        <div class="sm:col-span-2">
+                            <label for="street_address" class="block text-sm font-medium text-gray-700">Straße &
+                                Hausnummer</label>
+                            <div class="mt-1">
+                                <input v-model="form.street_address" type="text" name="street_address"
+                                       id="street_address"
+                                       autocomplete="street_address"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            </div>
+                            <div class="text-xs text-red-500" v-if="errors.street_address">{{ errors.street_address }}
                             </div>
                         </div>
+
+                        <div>
+                            <label for="zip" class="block text-sm font-medium text-gray-700">Postleitzahl</label>
+                            <div class="mt-1">
+                                <input v-model="form.zip" type="text" name="zip" id="zip"
+                                       autocomplete="zip"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            </div>
+                            <div class="text-xs text-red-500" v-if="errors.zip">{{ errors.zip }}</div>
+                        </div>
+
+                        <div>
+                            <label for="city" class="block text-sm font-medium text-gray-700">Stadt / Gemeinde</label>
+                            <div class="mt-1">
+                                <input v-model="form.city" type="text" name="city" id="city"
+                                       autocomplete="city"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            </div>
+                            <div class="text-xs text-red-500" v-if="errors.city">{{ errors.city }}</div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="type" class="block text-sm font-medium text-gray-700">Gebäudetyp</label>
+                            <select v-model="form.type" id="type" name="type"
+                                    class="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option>Einfamilienhaus</option>
+                                <option>Mehrfamilienhaus</option>
+                                <option>Bürogebäude</option>
+                            </select>
+                            <div class="text-xs text-red-500" v-if="errors.type">{{ errors.type }}</div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="additional_type"
+                                   class="block text-sm font-medium text-gray-700">Gebäudeart</label>
+                            <select v-model="form.additional_type" id="additional_type" name="additional_type"
+                                    class="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option>Freistehend</option>
+                                <option>Doppelhaushälfte</option>
+                                <option>Reiheneckhaus</option>
+                                <option>Reihenmittelhaus</option>
+                            </select>
+                            <div class="text-xs text-red-500" v-if="errors.additional_type">
+                                {{ errors.additional_type }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="construction_year"
+                                   class="block text-sm font-medium text-gray-700">Baujahr</label>
+                            <div class="mt-1">
+                                <input v-model="form.construction_year" type="text" name="construction_year"
+                                       id="construction_year"
+                                       autocomplete="construction_year"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            </div>
+                            <div class="text-xs text-red-500" v-if="errors.construction_year">
+                                {{ errors.construction_year }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="housing_units"
+                                   class="block text-sm font-medium text-gray-700">Wohneinheiten</label>
+                            <div class="mt-1">
+                                <input v-model="form.housing_units" type="text" name="housing_units" id="housing_units"
+                                       autocomplete="housing_units"
+                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            </div>
+                            <div class="text-xs text-red-500" v-if="errors.housing_units">{{ errors.housing_units }}
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2 mt-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <Switch v-model="agreed"
+                                            :class="[agreed ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2']">
+                                        <span class="sr-only">Agree to policies</span>
+                                        <span aria-hidden="true"
+                                              :class="[agreed ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+                                    </Switch>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-base text-gray-500">
+                                        Sie stimmen zu, dass wir Sie bezüglich Ihres Energieausweises kontaktieren
+                                        dürfen und das wir
+                                        {{ ' ' }}
+                                        <a href="#" class="font-medium text-gray-700 underline">Cookies</a>
+                                        {{ ' ' }}
+                                        verwenden.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <button type="submit"
+                                    :disabled="form.processing || !agreed"
+                                    class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400">
+
+                                <span v-if="form.processing" class="animate-spin mr-3">
+                                    <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                    </svg>
+                                </span>
+                                {{ !agreed ? 'Zustimmung erforderlich' : 'Speichern & Weiter' }}
+                            </button>
+                        </div>
                     </div>
-                    <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                        <button type="submit"
-                                class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-
-
-    </SideNavWrapper>
+    </StepperWrapper>
 </template>
+
