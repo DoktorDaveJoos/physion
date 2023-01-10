@@ -45,7 +45,6 @@ export default {
                 theme: 'bg-sky-500',
                 active: true,
                 availableFrom: null,
-
             },
             'bedarfsausweis': {
                 name: 'Bedarfsausweis',

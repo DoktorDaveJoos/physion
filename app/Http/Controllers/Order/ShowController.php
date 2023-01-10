@@ -17,7 +17,8 @@ class ShowController extends Controller
     public function index(Order $order): Response
     {
         return Inertia::render('Order/Index', [
-            'order' => $order
+            'order' => $order,
+            'product' => $order->product
         ]);
     }
 }
