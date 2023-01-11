@@ -101,6 +101,13 @@ Route::prefix('order')->name('order.')->group(function () {
     });
 });
 
+Route::prefix('blog')->name('blog.')->group(function () {
+    Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
+    Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
+
+    Route::post('subscribe', [\App\Http\Controllers\Blog\SubscriptionsController::class, 'store'])->name('subscribe');
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

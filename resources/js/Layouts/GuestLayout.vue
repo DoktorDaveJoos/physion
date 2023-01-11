@@ -1,31 +1,27 @@
 <script setup>
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from '@headlessui/vue';
 import {
-    ArrowPathIcon,
     Bars3Icon,
-    ChartBarIcon,
-    CursorArrowRaysIcon,
-    DocumentChartBarIcon,
-    ShieldCheckIcon,
-    Squares2X2Icon,
-    XMarkIcon,
-    FireIcon,
     CalculatorIcon,
-    LightBulbIcon,
     CurrencyEuroIcon,
+    DocumentChartBarIcon,
+    FireIcon,
+    LightBulbIcon,
+    XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import {ChevronDownIcon} from '@heroicons/vue/20/solid';
 import NavLink from '../Jetstream/NavLink.vue';
 import ApplicationMark from '../Jetstream/ApplicationMark.vue';
 import DropdownLink from '../Jetstream/DropdownLink.vue';
 import Dropdown from '../Jetstream/Dropdown.vue';
+import {InertiaLink} from '@inertiajs/inertia-vue3';
 
 const products = [
     [
         {
             name: 'Verbrauchsausweis',
             description: 'Energieausweis, der die Energieeffizienz eines Gebäudes über den Energieverbrauch ermittelt.',
-            href: '#',
+            href: route('verbrauch.create'),
             icon: FireIcon,
             theme: 'bg-sky-500',
             active: true,
@@ -34,7 +30,7 @@ const products = [
         {
             name: 'Bedarfsausweis',
             description: 'Energieausweis, der die Energieeffizienz eines Gebäudes rechnerisch ermittelt.',
-            href: '#',
+            href: route('bedarf.create'),
             icon: CalculatorIcon,
             theme: 'bg-sky-500',
             active: true,
@@ -85,8 +81,7 @@ const resources = [
 </script>
 
 <template>
-    <div>
-        <Popover class="relative bg-white">
+        <Popover class="relative bg-white z-50 sticky top-0">
             <div class="flex border-b border-gray-100 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <NavLink href="/">
@@ -153,9 +148,9 @@ const resources = [
 
                                     </div>
                                     <div class="bg-gray-50 p-5 sm:p-8">
-                                        <a href="#" class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
+                                        <a :href="route('login')" class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
                                             <div class="flex items-center">
-                                                <div class="text-base font-medium text-gray-900">Physion</div>
+                                                <div class="text-base font-medium text-gray-900">EnergieHub</div>
                                                 <span
                                                     class="ml-3 inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-medium leading-5 text-indigo-800">Demnächst Verfügbar</span>
                                             </div>
@@ -169,7 +164,7 @@ const resources = [
                         </transition>
                     </Popover>
 
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Blog</a>
+                    <InertiaLink :href="route('blog.show')" class="text-base font-medium text-gray-500 hover:text-gray-900">Blog</InertiaLink>
                     <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Docs</a>
                     <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">FAQ</a>
 
@@ -204,7 +199,7 @@ const resources = [
                     </Popover>
                 </PopoverGroup>
                 <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-                    <InertiaLink href="{{ route('login') }}" class="whitespace-nowrap text-xs font-light underline text-gray-500 hover:text-gray-900">Log in Physion</InertiaLink>
+                    <InertiaLink href="{{ route('login') }}" class="whitespace-nowrap text-xs font-light underline text-gray-500 hover:text-gray-900">EnergieHub Anmeldung</InertiaLink>
                 </div>
             </div>
 
@@ -314,9 +309,7 @@ const resources = [
                 </PopoverPanel>
             </transition>
         </Popover>
-
         <main class="bg-white pb-12">
             <slot />
         </main>
-    </div>
 </template>
