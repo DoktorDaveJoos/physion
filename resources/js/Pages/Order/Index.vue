@@ -17,13 +17,31 @@
         <div class="mx-auto max-w-2xl pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
             <div class="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0">
                 <div class="flex sm:items-baseline sm:space-x-4">
-                    <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order {{ order.id }}</h1>
-                    <a href="#" class="hidden text-sm font-medium text-blue-600 hover:text-blue-500 sm:block">
-                        View invoice
-                        <span aria-hidden="true"> &rarr;</span>
-                    </a>
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order</h1>
+                        <span
+                            class="inline-flex ml-4 items-center rounded-md bg-blue-100 px-2.5 py-0.5 font-medium text-blue-800">
+                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            {{ order.id }}
+                        </span>
+
+                        <a href="#"
+                           class="hidden ml-4 pb-1 text-sm font-medium text-blue-600 hover:text-blue-500 sm:block self-end">
+                            Service beanspruchen
+                            <span aria-hidden="true"> &rarr;</span>
+                        </a>
+                    </div>
                 </div>
-                <p class="text-sm text-gray-600">Beantragt im <time datetime="2021-03-22" class="font-medium text-gray-900">{{ dayjs(order.created_at).locale('de').format('MMM YYYY') }}</time></p>
+                <p class="text-sm text-gray-600">Beantragt im
+                    <time datetime="2021-03-22" class="font-medium text-gray-900">{{
+                            dayjs(order.created_at).
+                                locale('de').
+                                format('MMM YYYY')
+                        }}
+                    </time>
+                </p>
                 <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500 sm:hidden">
                     View invoice
                     <span aria-hidden="true"> &rarr;</span>
@@ -32,13 +50,13 @@
 
             <!-- Products -->
             <div class="mt-6">
-                <h2 class="sr-only">Products purchased</h2>
 
                 <div class="space-y-8">
                     <div class="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
                         <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
                             <div class="sm:flex lg:col-span-7">
-                                <div class="aspect-w-1 aspect-h-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                                <div
+                                    class="aspect-w-1 aspect-h-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
                                     <div
                                         class="flex h-40 w-40 flex-shrink-0 items-center justify-center rounded-md text-white sm:h-40 sm:w-40"
                                         :class="map[order.type].theme">
@@ -51,7 +69,7 @@
                                         <a href="#">{{ order.type[0].toUpperCase() + order.type.slice(1) }}</a>
                                     </h3>
                                     <p class="mt-2 text-sm font-medium text-gray-900">€{{ product.price }}</p>
-                                    <p class="mt-3 text-sm text-gray-500">Ort</p>
+                                    <p class="mt-3 text-sm text-gray-500">{{ product.type }}</p>
                                     <p class="text-sm text-gray-500">{{ product.zip }} {{ product.city }}</p>
                                 </div>
                             </div>
@@ -59,97 +77,150 @@
                             <div class="mt-6 lg:col-span-5 lg:mt-0">
                                 <dl class="grid grid-cols-2 gap-x-6 text-sm">
                                     <div>
-                                        <dt class="font-medium text-gray-900">Gültigkeit</dt>
+                                        <dt class="font-medium text-gray-900">Rechtsgültigkeit</dt>
                                         <dd class="mt-3 text-gray-500">
-                                            <span class="block">Bis {{ dayjs(order.created_at).add(10, 'year').locale('de').format('MMM YYYY') }}</span>
-<!--                                            <span class="block">{{ product.address[1] }}</span>-->
-<!--                                            <span class="block">{{ product.address[2] }}</span>-->
+                                            <span class="block">
+                                                <CheckIcon class="inline-block mr-1 w-5 h-5 text-emerald-500"
+                                                           aria-hidden="true" />
+                                                Bis {{
+                                                    dayjs(order.created_at).
+                                                        add(10, 'year').
+                                                        locale('de').
+                                                        format('MMM YYYY')
+                                                }}</span>
+                                            <div class="flex items-center">
+                                                <div class="items-center">
+                                                    <CheckIcon class="inline-block mr-1 w-5 h-5 text-emerald-500"
+                                                               aria-hidden="true" />
+                                                    EnEV
+                                                </div>
+                                                <el-tooltip
+                                                    content="In Deutschland basiert die Rechtsgültigkeit eines Energieausweises auf der Energieeinsparverordnung (EnEV). Die EnEV ist eine Verordnung, die das Bundesministerium für Wirtschaft und Energie erlassen hat und die die Anforderungen an den Wärmeschutz von Gebäuden und die Erstellung von Energieausweisen regelt">
+                                                    <QuestionMarkCircleIcon
+                                                        class="inline-block ml-1 w-4 h-4 text-gray-400"
+                                                        aria-hidden="true" />
+
+                                                </el-tooltip>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="items-center">
+                                                    <CheckIcon class="inline-block mr-1 w-5 h-5 text-emerald-500"
+                                                               aria-hidden="true" />
+                                                    GEG Konform
+                                                </div>
+                                                <el-tooltip
+                                                    content="Im Zusammenhang mit Energieausweisen in Deutschland ist das Gebäudeenergiegesetz (GEG) von Belang. Das GEG ist ein Gesetz, das die Energieeffizienz von Gebäuden und die Erstellung von Energieausweisen regelt und das die EnEV (Energieeinsparverordnung) ergänzt und/oder ersetzt.">
+                                                    <QuestionMarkCircleIcon
+                                                        class="inline-block ml-1 w-4 h-4 text-gray-400"
+                                                        aria-hidden="true" />
+
+                                                </el-tooltip>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="items-center">
+                                                    <CheckIcon class="inline-block mr-1 w-5 h-5 text-emerald-500"
+                                                               aria-hidden="true" />
+                                                    DIBt registriert
+                                                </div>
+                                                <el-tooltip
+                                                    content="Das Deutsche Institut für Bautechnik (DIBt) ist eine deutsche Bundesoberbehörde, die im Zusammenhang mit Energieausweisen in Deutschland eine wichtige Rolle spielt.
+                                                DIBt sind für die Anerkennung von prüfenden und zertifizierenden Stellen sowie die Überwachung der Einhaltung der Anforderungen der Energieeinsparverordnung (EnEV) und des Gebäudeenergiegesetzes (GEG) zuständig.">
+                                                    <QuestionMarkCircleIcon
+                                                        class="inline-block ml-1 w-4 h-4 text-gray-400"
+                                                        aria-hidden="true" />
+
+                                                </el-tooltip>
+                                            </div>
+
+                                            <!--                                            <span class="block">{{ product.address[2] }}</span>-->
                                         </dd>
                                     </div>
                                     <div>
-                                        <dt class="font-medium text-gray-900">Kontakt</dt>
+                                        <dt class="font-medium text-gray-900">Gebuchte Services</dt>
                                         <dd class="mt-3 space-y-3 text-gray-500">
-<!--                                            <p>{{ product.email }}</p>-->
-<!--                                            <p>{{ product.phone }}</p>-->
-                                            <button type="button" class="font-medium text-blue-600 hover:text-blue-500">Edit</button>
+                                            <span v-for="upsell in order.upsells">
+                                                <ShieldCheckIcon class="inline-block mr-1 w-5 h-5 text-gray-500"
+                                                                 aria-hidden="true" />
+                                                {{ upsell.name }}</span>
                                         </dd>
                                     </div>
                                 </dl>
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
-                            <h4 class="sr-only">Status</h4>
-                            <p class="text-sm font-medium text-gray-900">
-                                {{ order.status }} seit <time>{{ order.updated_at }}</time>
-                            </p>
-<!--                            <div class="mt-6" aria-hidden="true">-->
-<!--                                <div class="overflow-hidden rounded-full bg-gray-200">-->
-<!--                                    <div class="h-2 rounded-full bg-blue-600" :style="{ width: `calc((${product.step} * 2 + 1) / 8 * 100%)` }" />-->
-<!--                                </div>-->
-<!--                                <div class="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">-->
-<!--                                    <div class="text-blue-600">Order placed</div>-->
-<!--                                    <div :class="[product.step > 0 ? 'text-blue-600' : '', 'text-center']">Processing</div>-->
-<!--                                    <div :class="[product.step > 1 ? 'text-blue-600' : '', 'text-center']">Shipped</div>-->
-<!--                                    <div :class="[product.step > 2 ? 'text-blue-600' : '', 'text-right']">Delivered</div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <template v-if="mapStatus.step !== 3">
+
+                            <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
+                                <h4 class="sr-only">Status</h4>
+                                <p class="text-sm font-medium text-gray-900">
+                                    {{ mapStatus.name }} seit dem
+                                    <time>{{ dayjs(order.updated_at).locale('de').format('DD.MM.YYYY') }}</time>
+                                </p>
+                                <div class="mt-6" aria-hidden="true">
+                                    <div class="overflow-hidden rounded-full bg-gray-200">
+                                        <div class="h-2 rounded-full bg-blue-600"
+                                             :style="{ width: `calc((${mapStatus.step} * 2 + 1) / 8 * 100%)` }" />
+                                    </div>
+                                    <div class="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
+                                        <div class="text-blue-600">Beantragt</div>
+                                        <div :class="[mapStatus.step > 0 ? 'text-blue-600' : '', 'text-center']">
+                                            Bearbeitung
+                                        </div>
+                                        <div :class="[mapStatus.step > 1 ? 'text-blue-600' : '', 'text-center']">Prüfung
+                                        </div>
+                                        <div :class="[mapStatus.step > 2 ? 'text-blue-600' : '', 'text-right']">
+                                            Abgeschlossen
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8 text-right">
+                                <a :href="route('order.download', order.id)"
+                                   class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Energieausweis
+                                    herunterladen</a>
+
+                            </div>
+                        </template>
+
                     </div>
                 </div>
             </div>
-
-            <!-- Billing -->
-<!--            <div class="mt-16">-->
-<!--                <h2 class="sr-only">Billing Summary</h2>-->
-
-<!--                <div class="bg-gray-100 py-6 px-4 sm:rounded-lg sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-8">-->
-<!--                    <dl class="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">-->
-<!--                        <div>-->
-<!--                            <dt class="font-medium text-gray-900">Billing address</dt>-->
-<!--                            <dd class="mt-3 text-gray-500">-->
-<!--                                <span class="block">Floyd Miles</span>-->
-<!--                                <span class="block">7363 Cynthia Pass</span>-->
-<!--                                <span class="block">Toronto, ON N3Y 4H8</span>-->
-<!--                            </dd>-->
-<!--                        </div>-->
-<!--                        <div>-->
-<!--                            <dt class="font-medium text-gray-900">Payment information</dt>-->
-<!--                            <dd class="-ml-4 -mt-1 flex flex-wrap">-->
-<!--                                <div class="ml-4 mt-4 flex-shrink-0">-->
-<!--                                    <svg aria-hidden="true" width="36" height="24" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg" class="h-6 w-auto">-->
-<!--                                        <rect width="36" height="24" rx="4" fill="#224DBA" />-->
-<!--                                        <path d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z" fill="#fff" />-->
-<!--                                    </svg>-->
-<!--                                    <p class="sr-only">Visa</p>-->
-<!--                                </div>-->
-<!--                                <div class="ml-4 mt-4">-->
-<!--                                    <p class="text-gray-900">Ending with 4242</p>-->
-<!--                                    <p class="text-gray-600">Expires 02 / 24</p>-->
-<!--                                </div>-->
-<!--                            </dd>-->
-<!--                        </div>-->
-<!--                    </dl>-->
-
-<!--                    <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-5 lg:mt-0">-->
-<!--                        <div class="flex items-center justify-between pb-4">-->
-<!--                            <dt class="text-gray-600">Subtotal</dt>-->
-<!--                            <dd class="font-medium text-gray-900">$72</dd>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center justify-between py-4">-->
-<!--                            <dt class="text-gray-600">Shipping</dt>-->
-<!--                            <dd class="font-medium text-gray-900">$5</dd>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center justify-between py-4">-->
-<!--                            <dt class="text-gray-600">Tax</dt>-->
-<!--                            <dd class="font-medium text-gray-900">$6.16</dd>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center justify-between pt-4">-->
-<!--                            <dt class="font-medium text-gray-900">Order total</dt>-->
-<!--                            <dd class="font-medium text-blue-600">$83.16</dd>-->
-<!--                        </div>-->
-<!--                    </dl>-->
-<!--                </div>-->
+            <div class="">
+                <div class="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <div class="flex items-center justify-between space-x-4">
+                        <h2 class="text-lg font-medium text-gray-900">Kunden kauften auch</h2>
+                    </div>
+                    <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
+                        <div v-for="product in products" :key="product.id" class="group relative">
+                            <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
+                                <div
+                                    class="flex h-48 w-58 flex-shrink-0 items-center justify-center text-white opacity-50 group-hover:opacity-100"
+                                    :class="product.theme">
+                                    <component :is="product.icon" class="h-12 w-12" aria-hidden="true" />
+                                </div>
+                                <div class="flex items-end p-4 " aria-hidden="true">
+                                    <div
+                                        class="w-full rounded-md bg-white bg-opacity-75 py-2 px-4 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter">
+                                        Produkt anschauen
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="mt-4 flex items-center justify-between space-x-8 text-base font-medium text-gray-900">
+                                <h3>
+                                    <a href="#">
+                                        <span aria-hidden="true" class="absolute inset-0" />
+                                        {{ product.name }}
+                                    </a>
+                                </h3>
+                                <p>{{ product.price }}</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">{{ product.category }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -157,12 +228,24 @@
 
 <script>
 import GuestLayout from '../../Layouts/GuestLayout.vue';
-import {CalculatorIcon, FireIcon} from '@heroicons/vue/24/outline';
+import {CalculatorIcon, FireIcon, ShieldCheckIcon, CheckIcon, CurrencyEuroIcon} from '@heroicons/vue/24/outline';
+import {QuestionMarkCircleIcon} from '@heroicons/vue/20/solid';
 import dayjs from 'dayjs';
+import {computed} from 'vue';
+import {Inertia} from '@inertiajs/inertia';
 
 export default {
     methods: {
         dayjs: dayjs,
+    },
+    components: {
+        GuestLayout,
+        CalculatorIcon,
+        FireIcon,
+        ShieldCheckIcon,
+        QuestionMarkCircleIcon,
+        CheckIcon,
+        CurrencyEuroIcon,
     },
     layout: [GuestLayout],
     props: {
@@ -175,7 +258,7 @@ export default {
             required: true,
         },
     },
-    setup() {
+    setup(props) {
         const map = {
             'verbrauchsausweis': {
                 name: 'Verbrauchsausweis',
@@ -197,32 +280,64 @@ export default {
             },
         };
 
+        const mapStatus = computed(() => {
+            if (props.order.status === 'open') {
+                return {
+                    step: 1,
+                    name: 'In Bearbeitung',
+                };
+            }
+
+            if (props.order.status === 'in_clarification') {
+                return {
+                    step: 2,
+                    name: 'Prüfung',
+                };
+            }
+
+            if (props.order.status === 'done') {
+                return {
+                    step: 3,
+                    name: 'Abgeschlossen',
+                };
+            }
+
+            return {
+                step: 0,
+                name: 'Unbekannt',
+            };
+        });
+
         const products = [
             {
                 id: 1,
-                name: 'Nomad Tumbler',
-                description:
-                    'This durable and portable insulated tumbler will keep your beverage at the perfect temperature during your next adventure.',
+                name: 'Verbrauchsausweis',
+                category: 'Zertifikat',
                 href: '#',
-                price: '35.00',
-                status: 'Preparing to ship',
-                step: 1,
-                date: 'March 24, 2021',
-                datetime: '2021-03-24',
-                address: ['Floyd Miles', '7363 Cynthia Pass', 'Toronto, ON N3Y 4H8'],
-                email: 'f•••@example.com',
-                phone: '1•••••••••40',
-                imageSrc: 'https://tailwindui.com/img/ecommerce-images/confirmation-page-03-product-01.jpg',
-                imageAlt: 'Insulated bottle with white base and black snap lid.',
-            },
+                theme: 'bg-sky-500',
+                price: '€ 149,00',
+                icon: CalculatorIcon,
 
+            },
+            {
+                id: 2,
+                name: 'Förderung von A-Z',
+                category: 'Ratgeber',
+                href: '#',
+                theme: 'bg-purple-500',
+                price: '€ 49,00',
+                icon: CurrencyEuroIcon,
+            },
             // More products...
-        ]
+        ];
+
+        const download = () => {
+            Inertia.get(route('order.download', props.order.id));
+        };
 
         return {
-            products,
-            map
-        }
-    }
-}
+            map, mapStatus, products,
+        };
+    },
+};
 </script>

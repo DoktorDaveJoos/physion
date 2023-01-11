@@ -24,7 +24,7 @@ class CreateController extends Controller
     public function __invoke(CreateOrUpdateRequest $request): RedirectResponse
     {
         $client = new Client();
-        $id = $client->generateId(8, Client::MODE_DYNAMIC);
+        $id = $client->formattedId('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 9);
 
         $customer = Customer::firstOrCreate([
             'email' => $request->get('email'),

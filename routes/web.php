@@ -9,6 +9,7 @@ use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\BedarfController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 /*
@@ -96,6 +97,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 Route::prefix('order')->name('order.')->group(function () {
     Route::prefix('{order}')->group(function () {
         Route::get('', [\App\Http\Controllers\Order\ShowController::class, 'index'])->name('show');
+        Route::get('download', \App\Http\Controllers\Order\DownloadController::class)->name('download');
     });
 });
 

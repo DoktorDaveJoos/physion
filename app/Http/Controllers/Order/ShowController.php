@@ -16,6 +16,7 @@ class ShowController extends Controller
      */
     public function index(Order $order): Response
     {
+        $order->load('upsells');
         return Inertia::render('Order/Index', [
             'order' => $order,
             'product' => $order->product
