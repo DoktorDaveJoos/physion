@@ -16,13 +16,9 @@ defineProps({
 <template>
     <GuestLayout>
 
-
-        <img src="/background-faqs.jpg" class="fixed opacity-20" alt="">
-
-
-        <div class="relative flex justify-center z-10">
-            <div class="max-w-3xl w-full grid py-16 sm:py-20">
-                <div class="flex">
+        <div class="relative flex justify-center">
+            <div class="max-w-3xl w-full grid">
+                <div class="flex mt-10">
                     <InertiaLink :href="route('blog.show')"
                                  class="text-gray-600 hover:text-gray-500 text-sm flex items-center">
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
@@ -30,7 +26,7 @@ defineProps({
                     </InertiaLink>
                 </div>
 
-                <div class="flex mt-4">
+                <div class="flex mt-10">
                     <span class="text-sm text-gray-500 font-light">{{
                             dayjs(post.published_at).
                                 locale('de').
@@ -55,13 +51,13 @@ defineProps({
                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                              alt="" />
 
-                        <div class="ml-3 py-4 flex flex-col">
-                            <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">{{
+                        <div class="ml-3 py-4">
+                            <p class="text-sm text-gray-700 group-hover:text-gray-900">{{
                                     post.user.name
-                                }}</span>
-                            <span class="text-xs font-medium text-gray-500 group-hover:text-gray-700">{{
+                                }}</p>
+                            <p class="text-xs text-gray-500 group-hover:text-gray-700">{{
                                     post.user.email
-                                }}</span>
+                                }}</p>
                         </div>
                     </div>
                 </div>

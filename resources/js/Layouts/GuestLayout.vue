@@ -83,10 +83,10 @@ const resources = [
 <template>
         <Popover class="relative bg-white z-50 sticky top-0">
             <div class="flex border-b border-gray-100 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
-                <div class="flex justify-start lg:w-0 lg:flex-1">
+                <div class="flex justify-start">
                     <NavLink href="/">
                         <ApplicationMark />
-                        <div class="ml-1 flex items-baseline">
+                        <div class="ml-1 hidden lg:flex items-baseline">
                             <span class="text-lg tracking-tight font-light text-gray-800">
                                 bauzertifikate
                             </span>
@@ -103,7 +103,10 @@ const resources = [
                         <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                     </PopoverButton>
                 </div>
-                <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
+                <PopoverGroup as="nav" class="hidden md:flex flex-1 justify-center">
+                    <div class="flex items-center space-x-10">
+
+
                     <Popover class="relative" v-slot="{ open }">
                         <PopoverButton
                             :class="[open ? 'text-gray-900 bg-blue-50' : 'text-gray-500', 'group inline-flex items-center px-2 rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none']">
@@ -164,9 +167,9 @@ const resources = [
                         </transition>
                     </Popover>
 
-                    <InertiaLink :href="route('blog.show')" class="text-base font-medium text-gray-500 hover:text-gray-900">Blog</InertiaLink>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Docs</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">FAQ</a>
+                    <InertiaLink :href="route('blog.show')" class="text-base px-2 font-medium text-gray-500 hover:text-gray-900">Blog</InertiaLink>
+                    <InertiaLink href="#" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">Docs</InertiaLink>
+                    <InertiaLink href="#" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">FAQ</InertiaLink>
 
                     <Popover class="relative" v-slot="{ open }">
                         <PopoverButton
@@ -197,9 +200,10 @@ const resources = [
                             </PopoverPanel>
                         </transition>
                     </Popover>
+            </div>
                 </PopoverGroup>
-                <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-                    <InertiaLink href="{{ route('login') }}" class="whitespace-nowrap text-xs font-light underline text-gray-500 hover:text-gray-900">EnergieHub Anmeldung</InertiaLink>
+                <div class="hidden items-center justify-end md:flex">
+                    <InertiaLink href="{{ route('login') }}" class="text-xs font-light underline text-gray-500 hover:text-gray-900">EnergieHub Anmeldung</InertiaLink>
                 </div>
             </div>
 
@@ -309,7 +313,7 @@ const resources = [
                 </PopoverPanel>
             </transition>
         </Popover>
-        <main class="bg-white pb-12">
+        <main class="bg-white pb-12 px-4">
             <slot />
         </main>
 </template>

@@ -18,7 +18,7 @@ class ShowController extends Controller
     public function index(): Response
     {
         return Inertia::render('Blog/Index', [
-            'posts' => BlogEntry::all()->sortBy('published_at'),
+            'posts' => BlogEntry::all()->sortByDesc('published_at'),
         ]);
     }
 
