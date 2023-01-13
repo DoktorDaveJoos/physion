@@ -1,6 +1,6 @@
 <template>
     <div class="overflow-hidden bg-gray-50 py-16 lg:py-24 z-10">
-        <div class="relative mx-auto max-w-xl px-6 lg:max-w-7xl lg:px-8">
+        <div class="relative mx-auto max-w-xl px-6 lg:max-w-[120rem] lg:px-8">
             <svg class="absolute left-full hidden -translate-x-1/2 -translate-y-1/4 transform lg:block" width="404" height="784" fill="none" viewBox="0 0 404 784" aria-hidden="true">
                 <defs>
                     <pattern id="b1e6e422-73f8-40a6-b5d9-c8586e37e0e7" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -15,7 +15,7 @@
                 <p class="mx-auto mt-4 max-w-6xl text-center text-xl text-gray-500">Bauzertifikate bietet eine umfassende Palette an Dienstleistungen, einschließlich des Verkaufs von Energieausweisen, Ratgebern und dem BIRN Zertifikat. Dabei legen wir größten Wert auf die Verwendung der neuesten Technologien, die Erfüllung höchster Qualitätsstandards und eine benutzerfreundliche Erfahrung für unsere Kunden.</p>
             </div>
 
-            <div class="relative mt-12 lg:mt-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
+            <div class="relative mt-12 lg:mt-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16">
                 <div class="relative">
                     <h3 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Energieausweise</h3>
                     <p class="mt-3 text-lg text-gray-500">Bauzertifikate bietet nicht nur den Verkauf von Energieausweisen an, sondern auch einen umfassenden Service dazu, einschließlich Beratung, Unterstützung und schneller Abwicklung. Wir legen Wert auf Qualität und Zufriedenheit unserer Kunden.</p>
@@ -48,7 +48,7 @@
             </svg>
 
             <div class="relative mt-12 sm:mt-16 lg:mt-24">
-                <div class="lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:items-center lg:gap-8">
+                <div class="lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:items-center lg:gap-16">
                     <div class="lg:col-start-2">
                         <h3 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Den Kunde im Blick</h3>
                         <p class="mt-3 text-lg text-gray-500">Die Erfüllung der Anforderungen an Nachweise im Baubereich kann mitunter stressig sein. Aus diesem Grund bieten wir Ihnen eine unkomplizierte Lösung, um diese Herausforderungen zu minimieren.</p>
@@ -75,7 +75,7 @@
                             </defs>
                             <rect width="784" height="404" fill="url(#e80155a9-dfde-425a-b5ea-1f6fadd20131)" />
                         </svg>
-                        <img class="relative mx-auto" width="490" src="https://tailwindui.com/img/features/feature-example-2.png" alt="" />
+                        <img class="relative mx-auto" src="/order-preview.svg" alt="" />
                     </div>
                 </div>
             </div>

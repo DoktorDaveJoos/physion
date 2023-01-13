@@ -13,14 +13,14 @@
   ```
 -->
 <template>
-    <footer class="border-t border-gray-100 z-10 bg-white" aria-labelledby="footer-heading">
+    <footer class="border-t border-gray-100 z-10 bg-slate-50" aria-labelledby="footer-heading">
         <h2 id="footer-heading" class="sr-only">Footer</h2>
         <div class="mx-auto max-w-7xl px-6 pb-8 pt-20 sm:pt-24 lg:px-8 lg:pt-32">
             <div class="xl:grid xl:grid-cols-3 xl:gap-8">
                 <div class="grid grid-cols-2 gap-8 xl:col-span-2">
                     <div class="md:grid md:grid-cols-2 md:gap-8">
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Solutions</h3>
+                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Produkte</h3>
                             <ul role="list" class="mt-6 space-y-4">
                                 <li v-for="item in navigation.solutions" :key="item.name">
                                     <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="md:grid md:grid-cols-2 md:gap-8">
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Company</h3>
+                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Unternehmen</h3>
                             <ul role="list" class="mt-6 space-y-4">
                                 <li v-for="item in navigation.company" :key="item.name">
                                     <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
@@ -46,7 +46,7 @@
                             </ul>
                         </div>
                         <div class="mt-10 md:mt-0">
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Legal</h3>
+                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Rechtliches</h3>
                             <ul role="list" class="mt-6 space-y-4">
                                 <li v-for="item in navigation.legal" :key="item.name">
                                     <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
@@ -56,25 +56,26 @@
                     </div>
                 </div>
                 <div class="mt-10 xl:mt-0">
-                    <h3 class="text-sm font-semibold leading-6 text-gray-900">Subscribe to our newsletter</h3>
-                    <p class="mt-2 text-sm leading-6 text-gray-600">The latest news, articles, and resources, sent to your inbox weekly.</p>
-                    <form class="mt-6 sm:flex sm:max-w-md">
-                        <label for="email-address" class="sr-only">Email address</label>
-                        <input type="email" name="email-address" id="email-address" autocomplete="email" required="" class="w-full min-w-0 appearance-none rounded-md border-gray-300 bg-white px-[calc(theme(spacing.3)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base leading-7 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:w-64 sm:text-sm sm:leading-6 xl:w-full" placeholder="Enter your email" />
-                        <div class="mt-4 rounded-md sm:mt-0 sm:ml-4 sm:flex-shrink-0">
-                            <button type="submit" class="flex w-full items-center justify-center rounded-md bg-indigo-600 py-1.5 px-3 text-base font-semibold leading-7 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm sm:leading-6">Subscribe</button>
-                        </div>
-                    </form>
+                    <h3 class="text-sm font-semibold leading-6 text-gray-900">Abonniere unseren Newsletter</h3>
+                    <p class="mt-2 text-sm leading-6 text-gray-600">Halten Sie sich stets auf dem aktuellsten Stand im Bereich der Sanierung, der Energieeffizienz und des nachhaltigen Bauens.</p>
+                    <el-form class="mt-6 w-full flex flex-col sm:flex-row">
+                        <el-form-item :error="form.errors.email">
+                            <el-input v-model="form.email" placeholder="E-Mail Adresse" size="large"></el-input>
+                        </el-form-item>
+                        <el-button @click="subscribe" type="primary" class="mt-3 sm:mt-0 sm:ml-3" size="large">
+                            Abonnieren
+                        </el-button>
+                    </el-form>
                 </div>
             </div>
-            <div class="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
-                <div class="flex space-x-6 md:order-2">
-                    <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">
-                        <span class="sr-only">{{ item.name }}</span>
-                        <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
-                    </a>
-                </div>
-                <p class="mt-8 text-xs leading-5 text-gray-500 md:order-1 md:mt-0">&copy; 2020 Your Company, Inc. All rights reserved.</p>
+            <div class="mt-16 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
+<!--                <div class="flex space-x-6 md:order-2">-->
+<!--                    <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">-->
+<!--                        <span class="sr-only">{{ item.name }}</span>-->
+<!--                        <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />-->
+<!--                    </a>-->
+<!--                </div>-->
+                <p class="mt-8 text-xs leading-5 text-gray-500 md:order-1 md:mt-0">&copy; 2023 bauzertifikate.de</p>
             </div>
         </div>
     </footer>
@@ -82,31 +83,48 @@
 
 <script setup>
 import { defineComponent, h } from 'vue'
+import {ElNotification} from 'element-plus';
+import {useForm} from '@inertiajs/inertia-vue3';
+
+const form = useForm({
+    email: '',
+});
+
+const subscribe = () => {
+    form.post(route('blog.subscribe'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset('email');
+            ElNotification({
+                title: 'Erfolg',
+                message: 'Du hast den Newsletter erfolgreich abonniert.',
+                type: 'success',
+            });
+        },
+    });
+};
 
 const navigation = {
     solutions: [
-        { name: 'Marketing', href: '#' },
-        { name: 'Analytics', href: '#' },
-        { name: 'Commerce', href: '#' },
-        { name: 'Insights', href: '#' },
+        { name: 'Verbrauchsausweis', href: '#' },
+        { name: 'Bedarfsausweis', href: '#' },
+        { name: 'BIRN Zertifikat', href: '#' },
+        { name: 'Ratgeber', href: '#' },
     ],
     support: [
-        { name: 'Pricing', href: '#' },
-        { name: 'Documentation', href: '#' },
-        { name: 'Guides', href: '#' },
-        { name: 'API Status', href: '#' },
+        { name: 'Find my Energieausweis', href: '#' },
+        { name: 'FAQ', href: '#' },
     ],
     company: [
         { name: 'About', href: '#' },
         { name: 'Blog', href: '#' },
-        { name: 'Jobs', href: '#' },
-        { name: 'Press', href: '#' },
-        { name: 'Partners', href: '#' },
+        { name: 'Kontakt', href: '#' },
     ],
     legal: [
-        { name: 'Claim', href: '#' },
-        { name: 'Privacy', href: '#' },
-        { name: 'Terms', href: '#' },
+        { name: 'Zertifizierung', href: '#' },
+        { name: 'Haftung', href: '#' },
+        { name: 'Datenschutz', href: '#' },
+        { name: 'Impressum', href: '#' },
     ],
     social: [
         {

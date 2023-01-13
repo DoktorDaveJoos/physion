@@ -154,7 +154,7 @@ export default {
 
             props.product.sources.forEach((source) => {
                 if (source.main) {
-                    if (getMonths(source) === 36) {
+                    if (getMonths(source) >= 36) {
                         has36Months = true;
                     }
                 }

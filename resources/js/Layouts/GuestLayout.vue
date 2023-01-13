@@ -159,7 +159,7 @@ const resources = [
 
                                         </div>
                                         <div class="bg-gray-50 p-5 sm:p-8">
-                                            <a :href="route('login')"
+                                            <InertiaLink :href="route('login')"
                                                class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
                                                 <div class="flex items-center">
                                                     <div class="text-base font-medium text-gray-900">EnergieHub</div>
@@ -171,7 +171,7 @@ const resources = [
                                                     und
                                                     -verbrauch von Gebäuden mit unserer leistungsstarken Energieberater
                                                     Software und sparen Sie Energie und Geld.</p>
-                                            </a>
+                                            </InertiaLink>
                                         </div>
                                     </div>
                                 </PopoverPanel>
@@ -219,7 +219,7 @@ const resources = [
                     </div>
                 </PopoverGroup>
                 <div class="hidden items-center justify-end md:flex">
-                    <InertiaLink href="{{ route('login') }}"
+                    <InertiaLink :href="route('login')"
                                  class="text-xs font-light underline text-gray-500 hover:text-gray-900">EnergieHub
                         Anmeldung
                     </InertiaLink>

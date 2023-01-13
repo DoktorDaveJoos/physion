@@ -112,8 +112,7 @@ Route::get('/', function () {
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'posts' => \App\Models\BlogEntry::latest()->take(3)->get(),
     ]);
 })->name('start');
 
@@ -122,7 +121,15 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+
+    Route::prefix('/hub')->name('hub.')->group(function () {
+
+        Route::get('/dashboard', function () {
+            return Inertia::render('Hub/Dashboard');
+        })->name('dashboard');
+
+        Route::get('/admin', [\App\Http\Controllers\Hub\Admin\ShowController::class, 'index'])->name('admin');
+
+        Route::get('/admin/blog',  [\App\Http\Controllers\Hub\Admin\ShowController::class, 'blog'])->name('admin.blog');
+    });
 });

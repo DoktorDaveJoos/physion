@@ -25,6 +25,7 @@
     "@headlessui/vue": "^1.7.3",
     "@heroicons/vue": "^2.0.12",
     "@paypal/paypal-js": "^5.1.4",
+    "@vueup/vue-quill": "^1.0.1",
     "element-plus": "^2.2.26",
     "notiwind": "^1.2.6"
   }

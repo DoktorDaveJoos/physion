@@ -48,23 +48,22 @@ const logout = () => {
 
                         <NavLink href="/">
                             <ApplicationMark />
-                            <div class="mx-4 flex items-baseline gap-1">
+                            <div class="mx-4 flex items-baseline">
                                 <span class="hidden text-lg font-light uppercase text-gray-600 md:block">
-                                    Energieausweis
+                                    Energie
                                 </span>
                                 <span class="text-lg font-semibold uppercase text-blue-600">
-                                    Express
+                                    Hub
                                 </span>
-
-                                <span class="text-xs text-slate-400">bauzertifikate.de</span>
+                                <span class="text-xs text-slate-400 ml-2">bauzertifikate.de</span>
                             </div>
                         </NavLink>
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
-                            <NavLink :href="route('create.bedarf.show')" :active="route().current('bedarf.*')">
-                                Energieausweise
-                            </NavLink>
+<!--                            <NavLink :href="route('create.bedarf.show')" :active="route().current('bedarf.*')">-->
+<!--                                Energieausweise-->
+<!--                            </NavLink>-->
                         </div>
 
 

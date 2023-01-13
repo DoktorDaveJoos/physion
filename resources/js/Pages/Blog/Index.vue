@@ -19,8 +19,7 @@ const form = useForm({
 const subscribe = () => {
     form.post(route('blog.subscribe'), {
         preserveScroll: true,
-        onSuccess: (response) => {
-            console.log(response);
+        onSuccess: () => {
             form.reset('email');
             ElNotification({
                 title: 'Erfolg',

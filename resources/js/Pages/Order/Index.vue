@@ -137,7 +137,7 @@
                                     </div>
                                     <div>
                                         <dt class="font-medium text-gray-900">Gebuchte Services</dt>
-                                        <dd class="mt-3 space-y-3 text-gray-500">
+                                        <dd class="mt-3 flex flex-col space-y-3 text-gray-500">
                                             <span v-for="upsell in order.upsells">
                                                 <ShieldCheckIcon class="inline-block mr-1 w-5 h-5 text-gray-500"
                                                                  aria-hidden="true" />
@@ -180,7 +180,6 @@
                                 <a :href="route('order.download', order.id)"
                                    class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Energieausweis
                                     herunterladen</a>
-
                             </div>
                         </template>
 

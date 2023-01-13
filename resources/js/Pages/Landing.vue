@@ -6,10 +6,12 @@ import Prices from '../Components/Prices.vue';
 import { ref } from 'vue';
 import EnergieausweisCheck from '../Components/EnergieausweisCheck.vue';
 import { InertiaLink } from '@inertiajs/inertia-vue3';
+import Blog from '../Components/Blog.vue';
 
 export default {
     layout: [AppLayout],
     components: {
+        Blog,
         EnergieausweisCheck,
         Prices,
         Features,
@@ -127,4 +129,5 @@ export default {
 
     <Features />
     <Prices />
+    <Blog />
 </template>
