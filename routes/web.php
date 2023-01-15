@@ -108,6 +108,18 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::post('subscribe', [\App\Http\Controllers\Blog\SubscriptionsController::class, 'store'])->name('subscribe');
 });
 
+
+Route::get('/about', function () {
+    return Inertia::render('About/About');
+})->name('about');
+
+Route::prefix('/find')->name('find.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Find\ShowController::class, 'index'])->name('show');
+
+    Route::post('/email', [\App\Http\Controllers\Find\SearchController::class, 'email'])->name('email');
+    Route::post('/id', [\App\Http\Controllers\Find\SearchController::class, 'id'])->name('id');
+});
+
 Route::get('/', function () {
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),

@@ -6,7 +6,7 @@
         <div class="relative mx-auto max-w-7xl">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Neues vom Blog</h2>
-                <p class="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">"Auf dem Laufenden bleiben bei Sanierung, Energieeffizienz und nachhaltigem Bauen, sowie BIRN-Zertifizierung und Energieausweis."</p>
+                <p class="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">Auf dem Laufenden bleiben bei Sanierung, Energieeffizienz und nachhaltigem Bauen, sowie BIRN-Zertifizierung und Energieausweis."</p>
             </div>
             <div class="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
                 <div v-for="post in entries" :key="post.slug" class="flex flex-col overflow-hidden rounded-lg shadow-lg">
@@ -25,21 +25,21 @@
                         </div>
                         <div class="mt-6 flex items-center">
                             <div class="flex-shrink-0">
-<!--                                <InertiaLink :href="post.">-->
-<!--                                    <span class="sr-only">{{ post.author.name }}</span>-->
-<!--                                    <img class="h-10 w-10 rounded-full" :src="post.author.imageUrl" alt="" />-->
-<!--                                </InertiaLink>-->
+                                <div>
+                                    <span class="sr-only">Hannes Jungert</span>
+                                    <img class="h-10 w-10 rounded-full" src="/hannes-blog.jpg" alt="" />
+                                </div>
                             </div>
-<!--                            <div class="ml-3">-->
-<!--                                <p class="text-sm font-medium text-gray-900">-->
-<!--                                    <a :href="post.author.href" class="hover:underline">{{ post.author.name }}</a>-->
-<!--                                </p>-->
-<!--                                <div class="flex space-x-1 text-sm text-gray-500">-->
-<!--                                    <time :datetime="post.datetime">{{ post.date }}</time>-->
-<!--                                    <span aria-hidden="true">&middot;</span>-->
-<!--                                    <span>{{ post.readingTime }} read</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">
+                                    <a href="#" class="hover:underline">Hannes Jungert</a>
+                                </p>
+                                <div class="flex space-x-1 text-sm text-gray-500">
+                                    <time :datetime="post.datetime">{{ dayjs(post.published_at).locale('de').format('dddd, DD MMM YYYY') }}</time>
+                                    <span aria-hidden="true">&middot;</span>
+                                    <span>2 min read</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
 <script setup>
 
 import {InertiaLink, usePage} from '@inertiajs/inertia-vue3';
+import {dayjs} from 'element-plus';
 
 const posts = usePage().props.value.posts;
 

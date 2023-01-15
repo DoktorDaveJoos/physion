@@ -23,7 +23,7 @@ class ShowController extends Controller
     public function blog(): Response
     {
         return Inertia::render('Hub/Admin/Blog', [
-            'title' => 'Blog',
+            'title' => 'Admin',
             'subtitle' => 'Blog',
         ]);
     }

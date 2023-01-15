@@ -85,9 +85,7 @@
                             {{ action.title }}
                         </a>
                     </h3>
-                    <p class="mt-2 text-sm text-gray-500">Doloribus dolores nostrum quia qui natus officia quod et
-                        dolorem.
-                        Sit repellendus qui ut at blanditiis et quo et molestiae.</p>
+                    <p class="mt-2 text-sm text-gray-500 text-wrap">{{ action.description }}</p>
                 </div>
                 <span class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-blue-500"
                       aria-hidden="true">
@@ -131,6 +129,7 @@ const actions = computed(() => {
 
     const bedarf ={
         title: 'Bedarfsausweis',
+        description: ' Ein Bedarfsausweis bezieht sich auf den theoretischen Energiebedarf des Gebäudes und wird auf Basis von Berechnungen und Simulationen erstellt.',
         href: route('bedarf.create'),
         icon: CalculatorIcon,
         iconForeground: 'text-sky-700',
@@ -139,6 +138,7 @@ const actions = computed(() => {
 
     const verbrauch = {
         title: 'Verbrauchsausweis',
+        description: 'Ein Verbrauchsausweis bezieht sich auf den tatsächlichen Energieverbrauch des Gebäudes und wird auf Basis von Messwerten erstellt.',
         href: route('verbrauch.create'),
         icon: FireIcon,
         iconForeground: 'text-sky-700',

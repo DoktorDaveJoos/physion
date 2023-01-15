@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v3.0+ -->
 <template>
-    <div class="bg-blue-600">
+    <section id="prices" class="bg-blue-600">
         <div class="relative overflow-hidden pt-32 pb-96 lg:pt-40">
             <div><img class="absolute bottom-0 left-1/2 w-[1440px] max-w-none -translate-x-1/2" src="/background-call-to-action%20Kopie.jpg" alt="" /></div>
             <div class="relative mx-auto max-w-7xl px-6 text-center lg:px-8">
@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="flow-root bg-white pb-32 lg:pb-40">
+        <div class="flow-root bg-white pb-24 lg:pb-24">
             <div class="relative -mt-80">
                 <div class="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
                     <div class="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2 lg:gap-8">
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup>

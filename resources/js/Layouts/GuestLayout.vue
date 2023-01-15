@@ -74,9 +74,8 @@ const resources = [
     {
         name: 'Find my Energieausweis',
         description: 'Link verloren? Finden Sie Ihren Energieausweis mit Ihrer E-Mail Adresse und der Postleitzahl.',
-        href: '#',
+        href: route('find.show'),
     },
-    {name: 'Über Uns', description: 'Das Team hinter bauzertifikate.de - und was uns antreibt.', href: '#'},
     {name: 'Kontakt', description: 'Sie haben ein unlösbares Problem - melden Sie sich.', href: '#'},
 ];
 </script>
@@ -181,10 +180,10 @@ const resources = [
                         <InertiaLink :href="route('blog.show')"
                                      class="text-base px-2 font-medium text-gray-500 hover:text-gray-900">Blog
                         </InertiaLink>
-                        <InertiaLink href="#" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
-                            Docs
+                        <InertiaLink :href="route('about')" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
+                            Über uns
                         </InertiaLink>
-                        <InertiaLink href="#" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">FAQ
+                        <InertiaLink :href="route('start') + '#faq'" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">FAQ
                         </InertiaLink>
 
                         <Popover class="relative" v-slot="{ open }">
