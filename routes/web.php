@@ -117,7 +117,6 @@ Route::prefix('/find')->name('find.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Find\ShowController::class, 'index'])->name('show');
 
     Route::post('/email', [\App\Http\Controllers\Find\SearchController::class, 'email'])->name('email');
-    Route::post('/id', [\App\Http\Controllers\Find\SearchController::class, 'id'])->name('id');
 });
 
 Route::get('/', function () {

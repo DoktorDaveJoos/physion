@@ -26,7 +26,7 @@
                 <div class="bg-white py-16 px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
                     <div class="mx-auto max-w-lg lg:max-w-none">
 
-                        <el-tabs v-if="false" tab-position="top">
+                        <el-tabs v-if="doSearch" tab-position="top">
                             <el-tab-pane label="Order ID" class="pt-4">
 
                                 <h2 class="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">Via Order ID</h2>
@@ -34,7 +34,7 @@
                                 <p class="mt-3 text-lg leading-6 text-gray-500">Bitte geben Sie Ihre Bestellnummer ein, die Sie bei der Bestellung erhalten haben.</p>
                                 <p class="mt-3 text-lg leading-6 text-gray-500 mb-6">Keine Email erhalten? Schauen Sie auch im Spam Ordner.</p>
                                 <el-form size="large" label-position="top">
-                                    <el-form-item label="Order ID">
+                                    <el-form-item label="Order ID" :error="orderForm.errors.order_id">
                                         <el-input v-model="orderForm.order_id" placeholder="9 Stellige Order ID" />
                                     </el-form-item>
 
@@ -70,16 +70,18 @@
 
                         <div v-else>
                             <div class="mt-6 flow-root">
+                                <InertiaLink :href="route('find.show')" class="text-blue-600 hover:text-blue-500 flex items-center mb-4">
+                                    <ChevronLeftIcon class="h-4 w-4 mr-1" aria-hidden="true" />
+                                    Zurück
+                                </InertiaLink>
                                 <h2 class="text-xl font-bold tracking-tight mb-10 text-gray-900 sm:text-2xl">Ergebnis der Suche</h2>
                                 <ul role="list" class="-my-5 divide-y divide-gray-200">
-                                    <li v-for="result in results" :key="result.id" class="py-4 border border-gray-300 rounded shadow">
+                                    <li v-for="result in orders" :key="result.id" class="py-4 border border-gray-300 rounded shadow px-6">
                                         <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0">
-                                                <!--                                                <img class="h-8 w-8 rounded-full" :src="person.imageUrl" alt="" />-->
-                                            </div>
+
                                             <div class="min-w-0 flex-1">
                                                 <p class="truncate text-sm font-medium text-gray-900">{{ result.type[0].toUpperCase() + result.type.slice(1) }}</p>
-                                                <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
+                                                <span class="inline-flex items-center rounded bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
                                                     <svg class="-ml-1 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
                                                         <circle cx="4" cy="4" r="3" />
                                                     </svg>
@@ -87,11 +89,12 @@
                                                 </span>
                                             </div>
                                             <div>
-                                                <InertiaLink :href="route('order.show', result.id)" class="inline-flex mr-8 items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">Anzeigen</InertiaLink>
+                                                <InertiaLink :href="route('order.show', result.id)" class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">Anzeigen</InertiaLink>
                                             </div>
                                         </div>
                                     </li>
                                 </ul>
+
                             </div>
                         </div>
                     </div>
@@ -102,13 +105,20 @@
 </template>
 
 <script setup>
-import {EnvelopeIcon} from '@heroicons/vue/24/outline';
+import {EnvelopeIcon, ChevronLeftIcon} from '@heroicons/vue/24/outline';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
 import {onMounted, ref} from 'vue';
 import {useForm} from '@inertiajs/inertia-vue3';
 import {InertiaLink} from '@inertiajs/inertia-vue3';
 
-defineProps(['results']);
+const props = defineProps({
+    orders: {
+        type: Array,
+        default: [],
+    },
+});
+
+const doSearch = ref(props.orders.length === 0);
 
 const orderForm = useForm({
     order_id: '',
@@ -119,22 +129,12 @@ const emailForm = useForm({
     plz: '',
 });
 
-const findOrderById = () => {
-    orderForm.post(route('find.order'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            orderForm.reset();
-        },
-    });
+const findOrderById = async () => {
+    orderForm.get(route('find.show'));
 };
 
 const findOrderByEmail = () => {
-    emailForm.post(route('find.email'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            emailForm.reset();
-        },
-    });
+    emailForm.get(route('find.show'));
 };
 
 const animated = ref('');

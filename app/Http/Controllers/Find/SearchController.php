@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Find;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Find\FindByEmailRequest;
-use App\Http\Requests\Find\FindByIdRequest;
+use App\Http\Requests\Find\FindRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,21 +24,19 @@ class SearchController extends Controller
         return redirect()->route('find.show')->with('error', 'No order found for this email address.');
     }
 
-    public function id(FindByIdRequest $request)
+    public function id(FindRequest $request)
     {
+        $id = $request->input('order_id');
 
+        $order = Order::find($id);
 
-        return Order::all();
+        if ($order) {
+            return Inertia::render('Find/Index', [
+                'orders' => [$order],
+            ]);
+        }
 
-//        $id = $request->input('id');
-//
-//        $order = Order::find($request->safe()->id);
-//
-//        if ($order) {
-//            return redirect()->route('find.show', ['order' => $order]);
-//        }
-//
-//        return redirect()->route('find.show')->with('error', 'No order found for this ID.');
+        return redirect()->route('find.show')->withErrors('error', 'No order found for this ID.');
     }
 
 }
