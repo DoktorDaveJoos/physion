@@ -4,6 +4,7 @@ import {Switch} from '@headlessui/vue';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
 import {Inertia} from '@inertiajs/inertia';
 import StepperWrapper from '../../Wrappers/StepperWrapper.vue';
+import {useForm} from '@inertiajs/inertia-vue3';
 
 export default {
     components: {StepperWrapper, Switch},
@@ -12,200 +13,235 @@ export default {
         errors: Object,
     },
     setup() {
-        const form = reactive({
+        const form = useForm({
             name: null,
             email: null,
+            reason: null,
             street_address: null,
             zip: null,
             city: null,
             phone: null,
             type: null,
             additional_type: null,
-            construction_year: null,
-            housing_units: null,
         });
 
         const submit = () => {
-            Inertia.post(route('bedarf.create'), form);
+            form.post(route('bedarf.create'));
         };
 
-        const agreed = ref(true);
-        return {form, submit, agreed};
+        const select = ref('DE');
+        const agreed = ref(false);
+        return {form, submit, agreed, select};
     },
 };
 
 </script>
 <template>
-
     <StepperWrapper>
+        <div class="overflow-hidden bg-white rounded-md px-4 sm:px-6 lg:px-8">
+            <div class="relative w-full pb-16">
 
-
-        <div class="overflow-hidden bg-white rounded-md px-4 py-8 sm:px-6 lg:px-8 lg:py-24">
-            <div class="relative mx-auto max-w-xl">
-
-                <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl">Bedarfsausweis
+                <div class="flex flex-col items-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-center text-gray-800 sm:text-3xl">
+                        Bedarfsausweis
                         erstellen</h2>
-                    <p class="mt-4 text-lg leading-6 text-gray-500">Erstelle deinen Bedarfsausweis online mit
-                        Möglichkeit
-                        zum Pausieren und Verfolgen des Bearbeitungsstatus</p>
+                    <span
+                        class="mt-1 inline-flex items-center rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800">Energieausweis</span>
+                    <p class="mt-10 text-lg leading-6 text-center text-gray-600">Erstellen Sie mit unserem
+                        <span class="font-semibold">innovativen</span> und technologisch führenden Service Ihren Verbrauchsausweis bequem
+                        online. Nutzen Sie dabei die Möglichkeit, den Bearbeitungsstatus zu <span class="font-semibold">pausieren</span> und nach Abschluss jederzeit zu
+                        verfolgen.</p>
                 </div>
-                <form @submit.prevent="submit" class="mt-12">
-                    <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
 
-                        <div class="sm:col-span-2">
-                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <div class="mt-1">
-                                <input v-model="form.name" type="text" name="name" id="name" autocomplete="give-name"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.name">{{ errors.name }}</div>
+                <el-form @submit.prevent="submit" :model="form" label-position="top" class="mt-12">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8">
+                        <div class="sm:col-span-2 mb-6">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                Auftraggeber
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Angaben zum Auftraggeber und Kontakt im Falle von Rückfragen
+                            </p>
                         </div>
 
-                        <div class="sm:col-span-2">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <div class="mt-1">
-                                <input v-model="form.email" id="email" name="email" type="email" autocomplete="email"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.email">{{ errors.email }}</div>
+                        <el-form-item
+                            label="Name"
+                            :required="true"
+                            :error="errors.name">
+                            <el-input v-model="form.name"
+                                      type="text" size="large"
+                                      name="name"
+                                      id="name"
+                                      autocomplete="give-name"
+                                      class="block w-full" />
+                        </el-form-item>
+
+                        <el-form-item
+                            label="Email"
+                            :required="true"
+                            :error="errors.email">
+                            <el-input v-model="form.email"
+                                      size="large"
+                                      id="email"
+                                      name="email"
+                                      type="email"
+                                      autocomplete="email"
+                                      class="block w-full" />
+                        </el-form-item>
+
+                        <el-form-item
+                            label="Telefonnummer"
+                            :error="errors.phone">
+                            <el-input
+                                size="large"
+                                v-model="form.phone"
+                                placeholder="172 124567"
+                                class="input-with-select"
+                            >
+                                <template #prepend>
+                                    <el-select size="large"
+                                               v-model="select"
+                                               placeholder="172 124567"
+                                               style="width: 80px">
+                                        <el-option default-first-option label="+49" value="DE" />
+                                        <el-option default-first-option label="+43" value="AT" />
+                                    </el-select>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+
+                        <el-divider class="md:col-span-2" />
+
+                        <div class="sm:col-span-2 mb-6">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                Grund für die Ausstellung
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Geben Sie den Grund für die Ausstellung des Energieausweises an
+                            </p>
                         </div>
 
-                        <div class="sm:col-span-2">
-                            <label for="phone-number" class="flex justify-between text-sm font-medium text-gray-700">Telefonnummer
-                                <span class="ml-1 text-xs text-gray-400 self-center">Optional</span>
-                            </label>
-                            <div class="relative mt-1 rounded-md shadow-sm">
-                                <div class="absolute inset-y-0 left-0 flex items-center">
-                                    <label for="country" class="sr-only">Country</label>
-                                    <select id="country" name="country"
-                                            class="h-full rounded-md border-transparent bg-transparent py-0 pl-4 pr-8 text-gray-500 focus:border-blue-500 focus:ring-blue-500">
-                                        <option>DE</option>
-                                    </select>
-                                </div>
-                                <input v-model="form.phone" type="text" name="phone-number" id="phone-number"
-                                       autocomplete="tel"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-blue-500 focus:ring-blue-500"
-                                       placeholder="+49 170 2345678" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.phone">{{ errors.phone }}</div>
+                        <el-form-item
+                            label="Ausstellungsgrund"
+                            :required="true"
+                            :error="errors.reason">
+                            <el-select v-model="form.reason"
+                                       placeholder="Bitte auswählen"
+                                       size="large"
+                                       id="type"
+                                       name="type"
+                                       class="mt-1 block w-full">
+                                <el-option default-first-option label="Modernisierung/Änderung"
+                                           value="Modernisierung/Änderung" />
+                                <el-option default-first-option label="Vermietung/Verkauf" value="Vermietung/Verkauf" />
+                                <el-option default-first-option label="Sonstiges" value="Sonstiges" />
+                            </el-select>
+                        </el-form-item>
+
+
+                        <el-divider class="md:col-span-2" />
+
+                        <div class="sm:col-span-2 mb-6">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                Angaben zum Gebäude
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Das Gebäude für den Energieausweis
+                            </p>
                         </div>
 
-                        <div class="border-b my-4 border-gray-200 sm:col-span-2"></div>
+                        <el-form-item
+                            label="Straße & Hausnummer"
+                            :required="true"
+                            :error="errors.street_address">
+                            <el-input size="large"
+                                      v-model="form.street_address"
+                                      type="text"
+                                      name="street_address"
+                                      id="street_address"
+                                      autocomplete="street_address"
+                                      class="block w-full" />
+                        </el-form-item>
 
-                        <div class="sm:col-span-2 text-center">
-                            <p class="text-lg leading-6 text-gray-500">Angaben zum Gebäude</p>
-                        </div>
+                        <!--                        Spacer-->
+                        <div class="hidden md:block"></div>
 
-                        <div class="sm:col-span-2">
-                            <label for="street_address" class="block text-sm font-medium text-gray-700">Straße &
-                                Hausnummer</label>
-                            <div class="mt-1">
-                                <input v-model="form.street_address" type="text" name="street_address"
-                                       id="street_address"
-                                       autocomplete="street_address"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.street_address">{{ errors.street_address }}
-                            </div>
-                        </div>
+                        <el-form-item label="Postleitzahl"
+                                      :required="true"
+                                      :error="errors.zip">
+                            <el-input v-model="form.zip"
+                                      size="large" type="text"
+                                      name="zip"
+                                      id="zip"
+                                      autocomplete="zip"
+                                      class="block w-full" />
+                        </el-form-item>
 
-                        <div>
-                            <label for="zip" class="block text-sm font-medium text-gray-700">Postleitzahl</label>
-                            <div class="mt-1">
-                                <input v-model="form.zip" type="text" name="zip" id="zip"
-                                       autocomplete="zip"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.zip">{{ errors.zip }}</div>
-                        </div>
+                        <el-form-item label="Stadt / Gemeinde"
+                                      :required="true"
+                                      :error="errors.city">
+                            <el-input v-model="form.city"
+                                      size="large"
+                                      type="text"
+                                      name="city"
+                                      id="city"
+                                      autocomplete="city"
+                                      class="block w-full" />
+                        </el-form-item>
 
-                        <div>
-                            <label for="city" class="block text-sm font-medium text-gray-700">Stadt / Gemeinde</label>
-                            <div class="mt-1">
-                                <input v-model="form.city" type="text" name="city" id="city"
-                                       autocomplete="city"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.city">{{ errors.city }}</div>
-                        </div>
+                        <el-form-item
+                            label="Gebäudetyp"
+                            :required="true"
+                            :error="errors.type">
+                            <el-select v-model="form.type"
+                                       placeholder="Bitte auswählen"
+                                       size="large"
+                                       id="type"
+                                       name="type"
+                                       class="mt-1 block w-full">
+                                <el-option default-first-option label="Einfamilienhaus" value="Einfamilienhaus" />
+                                <el-option default-first-option label="Mehrfamilienhaus" value="Mehrfamilienhaus" />
+                                <el-option default-first-option label="Bürogebäude" value="Bürogebäude" />
+                            </el-select>
+                        </el-form-item>
 
-                        <div class="sm:col-span-2">
-                            <label for="type" class="block text-sm font-medium text-gray-700">Gebäudetyp</label>
-                            <select v-model="form.type" id="type" name="type"
-                                    class="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option>Einfamilienhaus</option>
-                                <option>Mehrfamilienhaus</option>
-                                <option>Bürogebäude</option>
-                            </select>
-                            <div class="text-xs text-red-500" v-if="errors.type">{{ errors.type }}</div>
-                        </div>
-
-                        <div class="sm:col-span-2">
-                            <label for="additional_type"
-                                   class="block text-sm font-medium text-gray-700">Gebäudeart</label>
-                            <select v-model="form.additional_type" id="additional_type" name="additional_type"
-                                    class="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option>Freistehend</option>
-                                <option>Doppelhaushälfte</option>
-                                <option>Reiheneckhaus</option>
-                                <option>Reihenmittelhaus</option>
-                            </select>
-                            <div class="text-xs text-red-500" v-if="errors.additional_type">
-                                {{ errors.additional_type }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="construction_year"
-                                   class="block text-sm font-medium text-gray-700">Baujahr</label>
-                            <div class="mt-1">
-                                <input v-model="form.construction_year" type="text" name="construction_year"
-                                       id="construction_year"
-                                       autocomplete="construction_year"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.construction_year">
-                                {{ errors.construction_year }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="housing_units"
-                                   class="block text-sm font-medium text-gray-700">Wohneinheiten</label>
-                            <div class="mt-1">
-                                <input v-model="form.housing_units" type="text" name="housing_units" id="housing_units"
-                                       autocomplete="housing_units"
-                                       class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="text-xs text-red-500" v-if="errors.housing_units">{{ errors.housing_units }}
-                            </div>
-                        </div>
+                        <el-form-item
+                            label="Gebäudeart"
+                            :required="true"
+                            :error="errors.additional_type">
+                            <el-select v-model="form.additional_type"
+                                       placeholder="Bitte auswählen"
+                                       size="large"
+                                       id="additional_type"
+                                       name="additional_type"
+                                       class="mt-1 block w-full">
+                                <el-option default-first-option label="Freistehend" value="Freistehend" />
+                                <el-option default-first-option label="Doppelhaushälfte" value="Doppelhaushälfte" />
+                                <el-option default-first-option label="Reiheneckhaus" value="Reiheneckhaus" />
+                                <el-option default-first-option label="Reihenmittelhaus" value="Reihenmittelhaus" />
+                            </el-select>
+                        </el-form-item>
 
                         <div class="sm:col-span-2 mt-6">
                             <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <Switch v-model="agreed"
-                                            :class="[agreed ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2']">
-                                        <span class="sr-only">Agree to policies</span>
-                                        <span aria-hidden="true"
-                                              :class="[agreed ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
-                                    </Switch>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-base text-gray-500">
-                                        Sie stimmen zu, dass wir Sie bezüglich Ihres Energieausweises kontaktieren
-                                        dürfen und das wir
-                                        {{ ' ' }}
-                                        <a href="#" class="font-medium text-gray-700 underline">Cookies</a>
-                                        {{ ' ' }}
-                                        verwenden.
-                                    </p>
-                                </div>
+                                <Switch v-model="agreed"
+                                        :class="[agreed ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2']">
+                                    <span class="sr-only">Agree to policies</span>
+                                    <span aria-hidden="true"
+                                          :class="[agreed ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+                                </Switch>
+                                <span class="text-xs ml-4 text-gray-500">
+                                    Sie stimmen zu, dass wir Sie bei Rückfragen bzgl des Auftrags kontaktieren dürfen.
+                                    Sie stimmen der Nutzung von
+                                    {{ ' ' }}
+                                    <a href="#" class="font-medium text-gray-700 underline">Cookies</a>
+                                    {{ ' ' }}
+                                    zu.
+                                </span>
                             </div>
                         </div>
 
-                        <div class="sm:col-span-2">
+                        <div class="sm:col-span-2 mt-8">
                             <button type="submit"
                                     :disabled="form.processing || !agreed"
                                     class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400">
@@ -222,7 +258,7 @@ export default {
                             </button>
                         </div>
                     </div>
-                </form>
+                </el-form>
             </div>
         </div>
     </StepperWrapper>

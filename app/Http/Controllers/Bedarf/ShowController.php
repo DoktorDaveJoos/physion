@@ -16,7 +16,7 @@ class ShowController extends Controller
      * @param  Order  $order
      * @return Response
      */
-    public function __invoke(Order $order): Response
+    public function index(Order $order): Response
     {
 
         if (!$order->isBedarf()) {
@@ -26,6 +26,25 @@ class ShowController extends Controller
         return Inertia::render('Bedarf/General', [
             'title' => 'Bedarfsausweis',
             'subtitle' => 'Allgemeine Informationen',
+            'step' => 'general',
+            'context' => 'bedarf',
+            'order' => $order,
+            'product' => $order->product,
+            'customer' => $order->customer,
+        ]);
+    }
+
+    public function wall(Order $order): Response
+    {
+        if (!$order->isBedarf()) {
+            abort(404);
+        }
+
+        return Inertia::render('Bedarf/Wall', [
+            'title' => 'Bedarfsausweis',
+            'subtitle' => 'Allgemeine Informationen',
+            'step' => 'wall',
+            'context' => 'bedarf',
             'order' => $order,
             'product' => $order->product,
             'customer' => $order->customer,

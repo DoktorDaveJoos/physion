@@ -28,21 +28,18 @@
 
                         <div>
                             <div class="mt-6 flow-root">
-                                <ul role="list" class="-my-5 divide-y divide-gray-200">
-                                    <li v-for="result in results" :key="result.id" class="py-4">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0">
-<!--                                                <img class="h-8 w-8 rounded-full" :src="person.imageUrl" alt="" />-->
-                                            </div>
-                                            <div class="min-w-0 flex-1">
-                                                <p class="truncate text-sm font-medium text-gray-900">{{ result.type }}</p>
-                                                <p class="truncate text-sm text-gray-500">{{ result.id }}</p>
-                                            </div>
-                                            <div>
-                                                <a href="#" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">View</a>
-                                            </div>
-                                        </div>
-                                    </li>
+                                <ul role="list" class="divide-y divide-gray-200">
+<!--                                    <li v-for="result in results" :key="result.id" class="py-4">-->
+<!--                                        <div class="flex items-center space-x-4">-->
+<!--                                            <div class="min-w-0 flex-1">-->
+<!--                                                <p class="truncate text-sm font-medium text-gray-900">{{ result.type }}</p>-->
+<!--                                                <p class="truncate text-sm text-gray-500">{{ result.id }}</p>-->
+<!--                                            </div>-->
+<!--                                            <div>-->
+<!--                                                <a href="#" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">View</a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </li>-->
                                 </ul>
                             </div>
                             <div class="mt-6">

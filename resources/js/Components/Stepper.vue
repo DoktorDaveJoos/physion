@@ -4,40 +4,57 @@ import {usePage, Link} from '@inertiajs/inertia-vue3';
 
 const props = usePage().props.value;
 
-const steps = [
-    {
-        key: 'general',
-        name: 'Allgemein',
-        description: 'Auftragserfassung und allgemeine Daten',
-        status: 'upcoming',
-    },
-    {
-        key: 'details',
-        name: 'Gebäudedetails',
-        description: 'Spezifische Daten zum Gebäude',
-        status: 'upcoming',
-    },
-    {
-        key: 'consumption',
-        name: 'Verbrauchsdaten ',
-        description: 'Daten zum bisherigen Verbrauch des Gebäudes',
-        status: 'upcoming',
-    },
-    {
-        key: 'summary',
-        name: 'Abschluss',
-        description: 'Prüfen und schließen Sie den Auftrag ab',
-        status: 'upcoming',
-    },
-];
+const steps = {
+    verbrauch: [
+        {
+            key: 'general',
+            name: 'Allgemein',
+            description: 'Auftragserfassung und allgemeine Daten',
+            status: 'upcoming',
+        },
+        {
+            key: 'details',
+            name: 'Gebäudedetails',
+            description: 'Spezifische Daten zum Gebäude',
+            status: 'upcoming',
+        },
+        {
+            key: 'consumption',
+            name: 'Verbrauchsdaten ',
+            description: 'Daten zum bisherigen Verbrauch des Gebäudes',
+            status: 'upcoming',
+        },
+        {
+            key: 'summary',
+            name: 'Abschluss',
+            description: 'Prüfen und schließen Sie den Auftrag ab',
+            status: 'upcoming',
+        },
+    ],
+
+    bedarf: [
+        {
+            key: 'general',
+            name: 'Allgemein',
+            description: 'Auftragserfassung und allgemeine Daten',
+            status: 'upcoming',
+        },
+        {
+            key: 'wall',
+            name: 'Wände',
+            description: 'Component testing',
+            status: 'upcoming',
+        },
+    ],
+};
 
 </script>
 
 <template>
     <nav aria-label="Steps" class="pt-12">
         <ol role="list" class="overflow-hidden">
-            <li v-for="(step, stepIdx) in steps" :key="step.name"
-                :class="[stepIdx !== steps.length - 1 ? 'pb-10' : '', 'relative']">
+            <li v-for="(step, stepIdx) in steps[props.context]" :key="step.name"
+                :class="[stepIdx !== steps[props.context].length - 1 ? 'pb-10' : '', 'relative']">
                 <template v-if="props.order">
                     <template v-if="props.order.meta.completed.includes(step.key) && step.key === props.step">
                         <div v-if="stepIdx !== steps.length - 1"
@@ -118,7 +135,7 @@ const steps = [
                         <div v-if="stepIdx !== steps.length - 1"
                              class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true" />
                         <a href="#"
-                              class="group relative flex items-start" aria-current="step">
+                           class="group relative flex items-start" aria-current="step">
                             <span class="flex h-9 items-center" aria-hidden="true">
                                 <span
                                     class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white">
@@ -135,7 +152,7 @@ const steps = [
                         <div v-if="stepIdx !== steps.length - 1"
                              class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true" />
                         <a href="#"
-                              class="group relative flex items-start">
+                           class="group relative flex items-start">
                             <span class="flex h-9 items-center" aria-hidden="true">
                                 <span
                                     class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">

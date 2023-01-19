@@ -74,11 +74,11 @@ Route::prefix('bedarfsausweis')
         Route::post('erstellen', Bedarf\CreateController::class)->name('create');
 
         Route::prefix('{order}')->group(function () {
-            Route::get('allgemein', Bedarf\ShowController::class)->name('general');
-            Route::get('keller', [BedarfController::class, 'cellar'])->name('cellar');
-            Route::get('wand', [BedarfController::class, 'wall'])->name('wall');
-            Route::get('fenster', [BedarfController::class, 'window'])->name('window');
-            Route::get('dach', [BedarfController::class, 'roof'])->name('roof');
+            Route::get('allgemein', [Bedarf\ShowController::class, 'index'])->name('general');
+//            Route::get('keller', [BedarfController::class, 'cellar'])->name('cellar');
+            Route::get('wand', [Bedarf\ShowController::class, 'wall'])->name('wall');
+//            Route::get('fenster', [BedarfController::class, 'window'])->name('window');
+//            Route::get('dach', [BedarfController::class, 'roof'])->name('roof');
         });
     });
 
@@ -108,10 +108,14 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::post('subscribe', [\App\Http\Controllers\Blog\SubscriptionsController::class, 'store'])->name('subscribe');
 });
 
-
 Route::get('/about', function () {
     return Inertia::render('About/About');
 })->name('about');
+
+Route::prefix('kontakt')->name('contact.')->group(function () {
+    Route::get('', [\App\Http\Controllers\ContactController::class, 'index'])->name('show');
+    Route::post('', [\App\Http\Controllers\ContactController::class, 'store'])->name('store');
+});
 
 Route::prefix('/find')->name('find.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Find\ShowController::class, 'index'])->name('show');

@@ -1,9 +1,9 @@
 <script>
-import {reactive, ref} from 'vue';
+import {ref} from 'vue';
 import {Switch} from '@headlessui/vue';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
-import {Inertia} from '@inertiajs/inertia';
 import StepperWrapper from '../../Wrappers/StepperWrapper.vue';
+import {useForm} from '@inertiajs/inertia-vue3';
 
 export default {
     components: {StepperWrapper, Switch},
@@ -12,7 +12,7 @@ export default {
         errors: Object,
     },
     setup() {
-        const form = reactive({
+        const form = useForm({
             name: null,
             email: null,
             reason: null,
@@ -25,7 +25,7 @@ export default {
         });
 
         const submit = () => {
-            Inertia.post(route('verbrauch.create'), form);
+            form.post(route('verbrauch.create'));
         };
 
         const select = ref('DE');
@@ -38,14 +38,18 @@ export default {
 <template>
     <StepperWrapper>
         <div class="overflow-hidden bg-white rounded-md px-4 sm:px-6 lg:px-8">
-            <div class="relative w-full">
+            <div class="relative w-full pb-16">
 
-                <div>
-                    <h2 class="text-3xl font-bold tracking-tight text-center text-gray-800 sm:text-3xl">Verbrauchsausweis
+                <div class="flex flex-col items-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-center text-gray-800 sm:text-3xl">
+                        Verbrauchsausweis
                         erstellen</h2>
-                    <p class="mt-4 text-lg leading-6 text-gray-500">Erstelle deinen Bedarfsausweis online mit
-                        Möglichkeit
-                        zum Pausieren und Verfolgen des Bearbeitungsstatus</p>
+                    <span
+                        class="mt-1 inline-flex items-center rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800">Energieausweis</span>
+                    <p class="mt-10 text-lg leading-6 text-center text-gray-600">Erstellen Sie mit unserem
+                        <span class="font-semibold">innovativen</span> und technologisch führenden Service Ihren Verbrauchsausweis bequem
+                        online. Nutzen Sie dabei die Möglichkeit, den Bearbeitungsstatus zu <span class="font-semibold">pausieren</span> und nach Abschluss jederzeit zu
+                        verfolgen.</p>
                 </div>
 
                 <el-form @submit.prevent="submit" :model="form" label-position="top" class="mt-12">
@@ -61,6 +65,7 @@ export default {
 
                         <el-form-item
                             label="Name"
+                            :required="true"
                             :error="errors.name">
                             <el-input v-model="form.name"
                                       type="text" size="large"
@@ -72,6 +77,7 @@ export default {
 
                         <el-form-item
                             label="Email"
+                            :required="true"
                             :error="errors.email">
                             <el-input v-model="form.email"
                                       size="large"
@@ -116,6 +122,7 @@ export default {
 
                         <el-form-item
                             label="Ausstellungsgrund"
+                            :required="true"
                             :error="errors.reason">
                             <el-select v-model="form.reason"
                                        placeholder="Bitte auswählen"
@@ -123,7 +130,8 @@ export default {
                                        id="type"
                                        name="type"
                                        class="mt-1 block w-full">
-                                <el-option default-first-option label="Modernisierung/Änderung" value="Modernisierung/Änderung" />
+                                <el-option default-first-option label="Modernisierung/Änderung"
+                                           value="Modernisierung/Änderung" />
                                 <el-option default-first-option label="Vermietung/Verkauf" value="Vermietung/Verkauf" />
                                 <el-option default-first-option label="Sonstiges" value="Sonstiges" />
                             </el-select>
@@ -143,6 +151,7 @@ export default {
 
                         <el-form-item
                             label="Straße & Hausnummer"
+                            :required="true"
                             :error="errors.street_address">
                             <el-input size="large"
                                       v-model="form.street_address"
@@ -157,6 +166,7 @@ export default {
                         <div class="hidden md:block"></div>
 
                         <el-form-item label="Postleitzahl"
+                                      :required="true"
                                       :error="errors.zip">
                             <el-input v-model="form.zip"
                                       size="large" type="text"
@@ -167,6 +177,7 @@ export default {
                         </el-form-item>
 
                         <el-form-item label="Stadt / Gemeinde"
+                                      :required="true"
                                       :error="errors.city">
                             <el-input v-model="form.city"
                                       size="large"
@@ -179,6 +190,7 @@ export default {
 
                         <el-form-item
                             label="Gebäudetyp"
+                            :required="true"
                             :error="errors.type">
                             <el-select v-model="form.type"
                                        placeholder="Bitte auswählen"
@@ -194,6 +206,7 @@ export default {
 
                         <el-form-item
                             label="Gebäudeart"
+                            :required="true"
                             :error="errors.additional_type">
                             <el-select v-model="form.additional_type"
                                        placeholder="Bitte auswählen"
@@ -210,24 +223,20 @@ export default {
 
                         <div class="sm:col-span-2 mt-6">
                             <div class="flex items-center">
-                                <div class="flex-shrink-0">
                                     <Switch v-model="agreed"
                                             :class="[agreed ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2']">
                                         <span class="sr-only">Agree to policies</span>
                                         <span aria-hidden="true"
                                               :class="[agreed ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
                                     </Switch>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-xs text-gray-500">
-                                        Sie stimmen zu, dass wir Sie bei Rückfragen bzgl des Auftrags kontaktieren dürfen.
-                                        Sie stimmen der Nutzung von
-                                        {{ ' ' }}
-                                        <a href="#" class="font-medium text-gray-700 underline">Cookies</a>
-                                        {{ ' ' }}
-                                        zu.
-                                    </p>
-                                </div>
+                                <span class="text-xs ml-4 text-gray-500">
+                                    Sie stimmen zu, dass wir Sie bei Rückfragen bzgl des Auftrags kontaktieren dürfen.
+                                    Sie stimmen der Nutzung von
+                                    {{ ' ' }}
+                                    <a href="#" class="font-medium text-gray-700 underline">Cookies</a>
+                                    {{ ' ' }}
+                                    zu.
+                                </span>
                             </div>
                         </div>
 

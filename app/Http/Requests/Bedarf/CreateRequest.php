@@ -30,8 +30,6 @@ class CreateRequest extends FormRequest
             'street_address' => 'required|string',
             'zip' => 'required|digits:5',
             'city' => 'required|string',
-            'construction_year' => 'required|digits:4',
-            'housing_units' => 'required|integer',
             'type' => 'required|string',
             'additional_type' => 'required|string',
         ];
@@ -51,10 +49,6 @@ class CreateRequest extends FormRequest
             'zip.required' => 'Bitte geben Sie Ihre Postleitzahl an.',
             'zip.digits' => 'Bitte geben Sie eine gültige Postleitzahl an.',
             'city.required' => 'Bitte geben Sie Ihren Wohnort an.',
-            'construction_year.required' => 'Bitte geben Sie das Baujahr an.',
-            'construction_year.digits' => 'Bitte geben Sie ein gültiges Baujahr an.',
-            'housing_units.required' => 'Bitte geben Sie die Anzahl der Wohnungen an.',
-            'housing_units.integer' => 'Bitte geben Sie eine gültige Anzahl an Wohnungen an.',
             'type.required' => 'Bitte geben Sie den Typ des Gebäudes an.',
             'additional_type.required' => 'Bitte geben Sie den Zusatztyp des Gebäudes an.',
         ];

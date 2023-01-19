@@ -76,7 +76,7 @@ const resources = [
         description: 'Link verloren? Finden Sie Ihren Energieausweis mit Ihrer E-Mail Adresse und der Postleitzahl.',
         href: route('find.show'),
     },
-    {name: 'Kontakt', description: 'Sie haben ein unlösbares Problem - melden Sie sich.', href: '#'},
+    {name: 'Kontakt', description: 'Sie haben ein unlösbares Problem - melden Sie sich.', href: route('contact.show')},
 ];
 </script>
 
@@ -159,7 +159,7 @@ const resources = [
                                         </div>
                                         <div class="bg-gray-50 p-5 sm:p-8">
                                             <InertiaLink :href="route('login')"
-                                               class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
+                                                         class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
                                                 <div class="flex items-center">
                                                     <div class="text-base font-medium text-gray-900">EnergieHub</div>
                                                     <span
@@ -180,10 +180,12 @@ const resources = [
                         <InertiaLink :href="route('blog.show')"
                                      class="text-base px-2 font-medium text-gray-500 hover:text-gray-900">Blog
                         </InertiaLink>
-                        <InertiaLink :href="route('about')" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
+                        <InertiaLink :href="route('about')"
+                                     class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
                             Über uns
                         </InertiaLink>
-                        <InertiaLink :href="route('start') + '#faq'" class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">FAQ
+                        <InertiaLink :href="route('start') + '#faq'"
+                                     class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">FAQ
                         </InertiaLink>
 
                         <Popover class="relative" v-slot="{ open }">

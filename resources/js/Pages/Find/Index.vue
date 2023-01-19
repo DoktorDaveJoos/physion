@@ -75,10 +75,9 @@
                                     Zurück
                                 </InertiaLink>
                                 <h2 class="text-xl font-bold tracking-tight mb-10 text-gray-900 sm:text-2xl">Ergebnis der Suche</h2>
-                                <ul role="list" class="-my-5 divide-y divide-gray-200">
+                                <ul role="list" class="-my-5 space-y-4">
                                     <li v-for="result in orders" :key="result.id" class="py-4 border border-gray-300 rounded shadow px-6">
                                         <div class="flex items-center space-x-4">
-
                                             <div class="min-w-0 flex-1">
                                                 <p class="truncate text-sm font-medium text-gray-900">{{ result.type[0].toUpperCase() + result.type.slice(1) }}</p>
                                                 <span class="inline-flex items-center rounded bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">

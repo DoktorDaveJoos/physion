@@ -1,7 +1,7 @@
 <script>
-import AppLayout from '../../Layouts/GuestLayout.vue';
-import {reactive, ref} from 'vue';
+import GuestLayout from '../../Layouts/GuestLayout.vue';
 import StepperWrapper from '../../Wrappers/StepperWrapper.vue';
+import {reactive, ref} from 'vue';
 
 const value = ref('');
 
@@ -29,9 +29,11 @@ const options = [
 ];
 
 export default {
-    components: {StepperWrapper},
     // Using the shorthand
-    layout: [AppLayout],
+    layout: [GuestLayout],
+    components: {
+        StepperWrapper,
+    },
 
     props: {
         subtitle: Object,
@@ -75,26 +77,13 @@ export default {
 </script>
 
 <template>
+
     <StepperWrapper>
-
-        <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-            <form @submit.prevent="">
-                <div class="shadow sm:overflow-hidden sm:rounded-md">
-
-                    <div class="space-y-6 bg-white py-6 px-4 sm:p-6">
-                    Test
-                    </div>
-
-                    <div class="bg-slate-50 px-4 py-3 text-right sm:px-6">
-                        <button type="submit"
-                                class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
+        test
     </StepperWrapper>
+
+
+
+
+
 </template>

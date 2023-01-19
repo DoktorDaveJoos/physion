@@ -3,6 +3,21 @@
     'primary': (
       'base': #2563eb,
     ),
+    'success': (
+      'base': #22c55e,
+    ),
+    'warning': (
+      'base': #f97316,
+    ),
+    'danger': (
+      'base': #ef4444,
+    ),
+    'error': (
+      'base': #ef4444,
+    ),
+    'info': (
+      'base': #64748b,
+    ),
   ),
   $date-editor: (
     'width': 100%,
@@ -10,7 +25,35 @@
     'daterange-width': 100%,
     'datetimerange-width': 400px,
   ),
+  $border-color: (
+    '': #d1d5db,
+    'light': #e2e8f0,
+    'lighter': #f1f5f9,
+    'extra-light': #f8fafc,
+    'dark': #94a3b8,
+    'darker': #64748b,
+  ),
+  $text-color: (
+    'primary': #303133,
+    'regular': #606266,
+    'secondary': #6b7280,
+    'placeholder': #d1d5db,
+    'disabled': #c0c4cc,
+  ),
+  $box-shadow: (
+    '': (
+      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+    ),
+    'light': (
+      0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)
+    ),
+    'lighter': (
+      0px 0px 6px rgba(0, 0, 0, 0.12),
+    ),
+    'dark': (
+      0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)
+    ),
+  ),
 );
 
 @use "element-plus/theme-chalk/src/index.scss" as *;
-
