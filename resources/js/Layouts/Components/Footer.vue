@@ -13,78 +13,134 @@
   ```
 -->
 <template>
-    <footer class="border-t border-gray-100 z-10 bg-slate-50" aria-labelledby="footer-heading">
+    <footer
+        class="border-t border-gray-100 z-10 bg-slate-50"
+        aria-labelledby="footer-heading">
         <h2 id="footer-heading" class="sr-only">Footer</h2>
-        <div class="mx-auto max-w-7xl px-6 pb-8 pt-20 sm:pt-24 lg:px-8 lg:pt-32">
+        <div
+            class="mx-auto max-w-7xl px-6 pb-8 pt-20 sm:pt-24 lg:px-8 lg:pt-32">
             <div class="xl:grid xl:grid-cols-3 xl:gap-8">
                 <div class="grid grid-cols-2 gap-8 xl:col-span-2">
                     <div class="md:grid md:grid-cols-2 md:gap-8">
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Produkte</h3>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-gray-900">
+                                Produkte
+                            </h3>
                             <ul role="list" class="mt-6 space-y-4">
-                                <li v-for="item in navigation.solutions" :key="item.name">
-                                    <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
+                                <li
+                                    v-for="item in navigation.solutions"
+                                    :key="item.name">
+                                    <a
+                                        :href="item.href"
+                                        class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                                        >{{ item.name }}</a
+                                    >
                                 </li>
                             </ul>
                         </div>
                         <div class="mt-10 md:mt-0">
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Support</h3>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-gray-900">
+                                Support
+                            </h3>
                             <ul role="list" class="mt-6 space-y-4">
-                                <li v-for="item in navigation.support" :key="item.name">
-                                    <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
+                                <li
+                                    v-for="item in navigation.support"
+                                    :key="item.name">
+                                    <a
+                                        :href="item.href"
+                                        class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                                        >{{ item.name }}</a
+                                    >
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="md:grid md:grid-cols-2 md:gap-8">
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Unternehmen</h3>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-gray-900">
+                                Unternehmen
+                            </h3>
                             <ul role="list" class="mt-6 space-y-4">
-                                <li v-for="item in navigation.company" :key="item.name">
-                                    <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
+                                <li
+                                    v-for="item in navigation.company"
+                                    :key="item.name">
+                                    <a
+                                        :href="item.href"
+                                        class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                                        >{{ item.name }}</a
+                                    >
                                 </li>
                             </ul>
                         </div>
                         <div class="mt-10 md:mt-0">
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Rechtliches</h3>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-gray-900">
+                                Rechtliches
+                            </h3>
                             <ul role="list" class="mt-6 space-y-4">
-                                <li v-for="item in navigation.legal" :key="item.name">
-                                    <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
+                                <li
+                                    v-for="item in navigation.legal"
+                                    :key="item.name">
+                                    <a
+                                        :href="item.href"
+                                        class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                                        >{{ item.name }}</a
+                                    >
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="mt-10 xl:mt-0">
-                    <h3 class="text-sm font-semibold leading-6 text-gray-900">Abonniere unseren Newsletter</h3>
-                    <p class="mt-2 text-sm leading-6 text-gray-600">Halten Sie sich stets auf dem aktuellsten Stand im Bereich der Sanierung, der Energieeffizienz und des nachhaltigen Bauens.</p>
+                    <h3 class="text-sm font-semibold leading-6 text-gray-900">
+                        Abonniere unseren Newsletter
+                    </h3>
+                    <p class="mt-2 text-sm leading-6 text-gray-600">
+                        Halten Sie sich stets auf dem aktuellsten Stand im
+                        Bereich der Sanierung, der Energieeffizienz und des
+                        nachhaltigen Bauens.
+                    </p>
                     <el-form class="mt-6 w-full flex flex-col sm:flex-row">
                         <el-form-item :error="form.errors.email">
-                            <el-input v-model="form.email" placeholder="E-Mail Adresse" size="large"></el-input>
+                            <el-input
+                                v-model="form.email"
+                                placeholder="E-Mail Adresse"
+                                size="large"></el-input>
                         </el-form-item>
-                        <el-button @click="subscribe" type="primary" class="mt-3 sm:mt-0 sm:ml-3" size="large">
+                        <el-button
+                            @click="subscribe"
+                            type="primary"
+                            class="mt-3 sm:mt-0 sm:ml-3"
+                            size="large">
                             Abonnieren
                         </el-button>
                     </el-form>
                 </div>
             </div>
-            <div class="mt-16 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
-<!--                <div class="flex space-x-6 md:order-2">-->
-<!--                    <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">-->
-<!--                        <span class="sr-only">{{ item.name }}</span>-->
-<!--                        <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />-->
-<!--                    </a>-->
-<!--                </div>-->
-                <p class="mt-8 text-xs leading-5 text-gray-500 md:order-1 md:mt-0">&copy; 2023 bauzertifikate.de</p>
+            <div
+                class="mt-16 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
+                <!--                <div class="flex space-x-6 md:order-2">-->
+                <!--                    <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">-->
+                <!--                        <span class="sr-only">{{ item.name }}</span>-->
+                <!--                        <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />-->
+                <!--                    </a>-->
+                <!--                </div>-->
+                <p
+                    class="mt-8 text-xs leading-5 text-gray-500 md:order-1 md:mt-0">
+                    &copy; 2023 bauzertifikate.de
+                </p>
             </div>
         </div>
     </footer>
 </template>
 
 <script setup>
-import { defineComponent, h } from 'vue'
-import {ElNotification} from 'element-plus';
-import {useForm} from '@inertiajs/inertia-vue3';
+import { defineComponent, h } from 'vue';
+import { ElNotification } from 'element-plus';
+import { useForm } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
     email: '',
@@ -196,5 +252,5 @@ const navigation = {
             }),
         },
     ],
-}
+};
 </script>

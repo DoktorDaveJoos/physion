@@ -36,16 +36,12 @@ const options = [
 const cascaderProps = {
     checkStrictly: true,
 };
-
-
 </script>
 
 <template>
     <GuestLayout>
         <StepperWrapper>
-
             <div class="flex flex-col space-y-4">
-
                 <div>
                     <h3 class="text-lg font-medium leading-6 text-gray-900">
                         Wandaufbau
@@ -56,34 +52,45 @@ const cascaderProps = {
                 </div>
 
                 <div class="flex">
-
-                    <div class="h-[150px] w-[150px] rounded bg-gray-200 relative">
-<!--                        <div class="absolute inset-0 text-xs text-gray-400 uppercase flex items-center justify-center">-->
-<!--                            vorschau-->
-<!--                        </div>-->
+                    <div
+                        class="h-[150px] w-[150px] rounded bg-gray-200 relative">
+                        <!--                        <div class="absolute inset-0 text-xs text-gray-400 uppercase flex items-center justify-center">-->
+                        <!--                            vorschau-->
+                        <!--                        </div>-->
                         <div class="absolute inset-0 flex justify-center">
-                            <div class="h-full bg-rose-300 shadow-lg ziegel border-r-2 border-l-2 border-rose-400">
-                            </div>
+                            <div
+                                class="h-full bg-rose-300 shadow-lg ziegel border-r-2 border-l-2 border-rose-400"></div>
                         </div>
                     </div>
                     <div class="flex-1 ml-4">
-
-                        <el-form label-position="top" class="grid sm:grid-cols-2 gap-4">
-
+                        <el-form
+                            label-position="top"
+                            class="grid sm:grid-cols-2 gap-4">
                             <el-form-item label="Material" :required="true">
-                                <el-cascader class="w-full" size="large" :options="options" :props="cascaderProps" placeholder="Material" clearable />
+                                <el-cascader
+                                    class="w-full"
+                                    size="large"
+                                    :options="options"
+                                    :props="cascaderProps"
+                                    placeholder="Material"
+                                    clearable />
                             </el-form-item>
-                            <el-form-item label="Stärke in Zentimeter" :required="true">
-                                <el-input-number class="w-full" :precision="2" :step="0.1" :max="500" :min="0" size="large" placeholder="Materialstärke" />
+                            <el-form-item
+                                label="Stärke in Zentimeter"
+                                :required="true">
+                                <el-input-number
+                                    class="w-full"
+                                    :precision="2"
+                                    :step="0.1"
+                                    :max="500"
+                                    :min="0"
+                                    size="large"
+                                    placeholder="Materialstärke" />
                             </el-form-item>
-
                         </el-form>
                     </div>
-
                 </div>
-
             </div>
-
         </StepperWrapper>
     </GuestLayout>
 </template>

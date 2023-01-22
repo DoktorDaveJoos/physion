@@ -45,8 +45,7 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autofocus
-                />
+                    autofocus />
             </div>
 
             <div class="mt-4">
@@ -57,24 +56,26 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="new-password"
-                />
+                    autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
+                <JetLabel
+                    for="password_confirmation"
+                    value="Confirm Password" />
                 <JetInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="new-password"
-                />
+                    autocomplete="new-password" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <JetButton
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing">
                     Reset Password
                 </JetButton>
             </div>

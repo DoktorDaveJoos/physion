@@ -28,8 +28,7 @@ const close = () => {
         :show="show"
         :max-width="maxWidth"
         :closeable="closeable"
-        @close="close"
-    >
+        @close="close">
         <div class="px-6 py-4">
             <div class="text-lg">
                 <slot name="title" />

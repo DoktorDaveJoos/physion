@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('street_address');
             $table->string('zip');
             $table->string('city');
+            $table->string('place_id')->nullable();
 
             $table->string('type');
             $table->string('additional_type');

@@ -1,15 +1,15 @@
 <script setup>
-import {ref} from 'vue';
-import {Inertia} from '@inertiajs/inertia';
+import { ref } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 import ApplicationMark from '@/Jetstream/ApplicationMark.vue';
 import Banner from '@/Jetstream/Banner.vue';
 import Dropdown from '@/Jetstream/Dropdown.vue';
 import DropdownLink from '@/Jetstream/DropdownLink.vue';
 import NavLink from '@/Jetstream/NavLink.vue';
 import ResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
-import {Notification, NotificationGroup} from 'notiwind';
+import { Notification, NotificationGroup } from 'notiwind';
 import LightNotification from '@/Layouts/Notifications/LightNotification.vue';
-import {ChevronRightIcon} from '@heroicons/vue/24/solid';
+import { ChevronRightIcon } from '@heroicons/vue/24/solid';
 
 defineProps({
     title: String,
@@ -26,7 +26,7 @@ const switchToTeam = (team) => {
         },
         {
             preserveState: false,
-        },
+        }
     );
 };
 
@@ -49,35 +49,47 @@ const logout = () => {
                         <NavLink href="/">
                             <ApplicationMark />
                             <div class="mx-4 flex items-baseline">
-                                <span class="hidden text-lg font-light uppercase text-gray-600 md:block">
+                                <span
+                                    class="hidden text-lg font-light uppercase text-gray-600 md:block">
                                     Energie
                                 </span>
-                                <span class="text-lg font-semibold uppercase text-blue-600">
+                                <span
+                                    class="text-lg font-semibold uppercase text-blue-600">
                                     Hub
                                 </span>
-                                <span class="text-xs text-slate-400 ml-2">bauzertifikate.de</span>
+                                <span class="text-xs text-slate-400 ml-2"
+                                    >bauzertifikate.de</span
+                                >
                             </div>
                         </NavLink>
 
                         <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
-<!--                            <NavLink :href="route('create.bedarf.show')" :active="route().current('bedarf.*')">-->
-<!--                                Energieausweise-->
-<!--                            </NavLink>-->
+                        <div
+                            class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
+                            <!--                            <NavLink :href="route('create.bedarf.show')" :active="route().current('bedarf.*')">-->
+                            <!--                                Energieausweise-->
+                            <!--                            </NavLink>-->
                         </div>
 
-
-                        <div v-if="$page.props.user" class="hidden sm:ml-6 sm:flex sm:items-center">
+                        <div
+                            v-if="$page.props.user"
+                            class="hidden sm:ml-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
                             <div class="relative ml-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button
-                                            v-if="$page.props.jetstream.managesProfilePhotos"
+                                            v-if="
+                                                $page.props.jetstream
+                                                    .managesProfilePhotos
+                                            "
                                             class="flex rounded-full border-2 border-transparent text-sm transition focus:border-gray-300 focus:outline-none">
                                             <img
                                                 class="h-8 w-8 rounded-full object-cover"
-                                                :src="$page.props.user.profile_photo_url"
+                                                :src="
+                                                    $page.props.user
+                                                        .profile_photo_url
+                                                "
                                                 :alt="$page.props.user.name" />
                                         </button>
 
@@ -87,8 +99,11 @@ const logout = () => {
                                                 class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition hover:text-gray-700 focus:outline-none">
                                                 {{ $page.props.user.name }}
 
-                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                                     viewBox="0 0 20 20" fill="currentColor">
+                                                <svg
+                                                    class="ml-2 -mr-0.5 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor">
                                                     <path
                                                         fill-rule="evenodd"
                                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -100,19 +115,32 @@ const logout = () => {
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">Manage Account</div>
+                                        <div
+                                            class="block px-4 py-2 text-xs text-gray-400">
+                                            Manage Account
+                                        </div>
 
-                                        <DropdownLink :href="route('profile.show')"> Profile</DropdownLink>
+                                        <DropdownLink
+                                            :href="route('profile.show')">
+                                            Profile</DropdownLink
+                                        >
 
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
-                                                      :href="route('api-tokens.index')"> API Tokens
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.jetstream
+                                                    .hasApiFeatures
+                                            "
+                                            :href="route('api-tokens.index')">
+                                            API Tokens
                                         </DropdownLink>
 
                                         <div class="border-t border-gray-100" />
 
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
-                                            <DropdownLink as="button"> Log Out</DropdownLink>
+                                            <DropdownLink as="button">
+                                                Log Out</DropdownLink
+                                            >
                                         </form>
                                     </template>
                                 </Dropdown>
@@ -123,16 +151,31 @@ const logout = () => {
                         <div class="-mr-2 flex items-center sm:hidden">
                             <button
                                 class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                                @click="showingNavigationDropdown = !showingNavigationDropdown">
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                @click="
+                                    showingNavigationDropdown =
+                                        !showingNavigationDropdown
+                                ">
+                                <svg
+                                    class="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
-                                        :class="{ hidden: showingNavigationDropdown, 'inline-flex': !showingNavigationDropdown }"
+                                        :class="{
+                                            hidden: showingNavigationDropdown,
+                                            'inline-flex':
+                                                !showingNavigationDropdown,
+                                        }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
                                         d="M4 6h16M4 12h16M4 18h16" />
                                     <path
-                                        :class="{ hidden: !showingNavigationDropdown, 'inline-flex': showingNavigationDropdown }"
+                                        :class="{
+                                            hidden: !showingNavigationDropdown,
+                                            'inline-flex':
+                                                showingNavigationDropdown,
+                                        }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
@@ -144,23 +187,39 @@ const logout = () => {
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                     class="sm:hidden">
+                <div
+                    :class="{
+                        block: showingNavigationDropdown,
+                        hidden: !showingNavigationDropdown,
+                    }"
+                    class="sm:hidden">
                     <div class="space-y-1 pt-2 pb-3">
-                        <ResponsiveNavLink :href="route('start')" :active="route().current('start')"> Items
+                        <ResponsiveNavLink
+                            :href="route('start')"
+                            :active="route().current('start')">
+                            Items
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div v-if="$page.props.user" class="border-t border-gray-200 pt-4 pb-1">
+                    <div
+                        v-if="$page.props.user"
+                        class="border-t border-gray-200 pt-4 pb-1">
                         <div class="flex items-center px-4">
-                            <div v-if="$page.props.jetstream.managesProfilePhotos" class="mr-3 shrink-0">
-                                <img class="h-10 w-10 rounded-full object-cover"
-                                     :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
+                            <div
+                                v-if="
+                                    $page.props.jetstream.managesProfilePhotos
+                                "
+                                class="mr-3 shrink-0">
+                                <img
+                                    class="h-10 w-10 rounded-full object-cover"
+                                    :src="$page.props.user.profile_photo_url"
+                                    :alt="$page.props.user.name" />
                             </div>
 
                             <div>
-                                <div class="text-base font-medium text-gray-800">
+                                <div
+                                    class="text-base font-medium text-gray-800">
                                     {{ $page.props.user.name }}
                                 </div>
                                 <div class="text-sm font-medium text-gray-500">
@@ -170,7 +229,9 @@ const logout = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
+                            <ResponsiveNavLink
+                                :href="route('profile.show')"
+                                :active="route().current('profile.show')">
                                 Profile
                             </ResponsiveNavLink>
 
@@ -183,7 +244,9 @@ const logout = () => {
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
-                                <ResponsiveNavLink as="button"> Log Out</ResponsiveNavLink>
+                                <ResponsiveNavLink as="button">
+                                    Log Out</ResponsiveNavLink
+                                >
                             </form>
                         </div>
                     </div>
@@ -192,11 +255,15 @@ const logout = () => {
 
             <!-- Page Heading -->
             <header class="sticky bg-white shadow-sm top-0 z-40">
-                <div id="header" class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+                <div
+                    id="header"
+                    class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                     <div class="flex items-baseline font-display">
                         <span>{{ title }}</span>
                         <ChevronRightIcon class="w-4 self-center h-4 mx-2" />
-                        <span class="text-sm text-gray-500">{{ subtitle }}</span>
+                        <span class="text-sm text-gray-500">{{
+                            subtitle
+                        }}</span>
                     </div>
                 </div>
             </header>
@@ -205,11 +272,10 @@ const logout = () => {
             <main class="mx-auto max-w-7xl sm:px-6 lg:px-8 py-8">
                 <slot />
             </main>
-
-
         </div>
         <NotificationGroup>
-            <div class="pointer-events-none fixed inset-0 z-50 flex items-start justify-end p-6 px-4 py-6">
+            <div
+                class="pointer-events-none fixed inset-0 z-50 flex items-start justify-end p-6 px-4 py-6">
                 <div class="w-full max-w-sm">
                     <Notification
                         v-slot="{ notifications, close }"
@@ -221,8 +287,11 @@ const logout = () => {
                         leave-to="opacity-0"
                         move="transition duration-300"
                         move-delay="delay-300">
-                        <LightNotification v-for="notification in notifications" :key="notification.id"
-                                           :notification="notification" :close="close" />
+                        <LightNotification
+                            v-for="notification in notifications"
+                            :key="notification.id"
+                            :notification="notification"
+                            :close="close" />
                     </Notification>
                 </div>
             </div>

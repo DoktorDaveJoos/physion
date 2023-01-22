@@ -37,6 +37,7 @@ class CreateController extends Controller
             'street_address' => $request->get('street_address'),
             'zip' => $request->get('zip'),
             'city' => $request->get('city'),
+            'place_id' => $request->get('place_id'),
             'reason' => $request->get('reason'),
             'type' => $request->get('type'),
             'additional_type' => $request->get('additional_type'),

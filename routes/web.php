@@ -75,6 +75,17 @@ Route::prefix('bedarfsausweis')
 
         Route::prefix('{order}')->group(function () {
             Route::get('allgemein', [Bedarf\ShowController::class, 'index'])->name('general');
+            Route::put('allgemein', Bedarf\GeneralController::class)->name('general.update');
+
+            // Details
+            Route::get('details', [Bedarf\ShowController::class, 'details'])->name('details');
+            Route::put('details', Bedarf\DetailsController::class)->name('details.update');
+
+            // Position
+            Route::get('position', [Bedarf\ShowController::class, 'position'])->name('position');
+            Route::put('position', [Bedarf\PositionController::class, 'update'])->name('position.update');
+            Route::put('position/maps', [Bedarf\PositionController::class, 'setMaps'])->name('position.maps.update');
+
 //            Route::get('keller', [BedarfController::class, 'cellar'])->name('cellar');
             Route::get('wand', [Bedarf\ShowController::class, 'wall'])->name('wall');
 //            Route::get('fenster', [BedarfController::class, 'window'])->name('window');

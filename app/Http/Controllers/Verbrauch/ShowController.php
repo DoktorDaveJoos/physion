@@ -21,6 +21,7 @@ class ShowController extends Controller
     {
         return Inertia::render('Verbrauch/Index', [
             'title' => 'Verbrauchsausweis',
+            'context' => 'verbrauch',
             'subtitle' => 'Anlegen',
             'step' => 'general'
         ]);

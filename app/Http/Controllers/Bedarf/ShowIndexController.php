@@ -13,6 +13,7 @@ class ShowIndexController extends Controller
     {
         return Inertia::render('Bedarf/Index', [
             'title' => 'Bedarfsausweis',
+            'context' => 'bedarf',
             'subtitle' => 'Anlegen',
             'step' => 'general'
         ]);

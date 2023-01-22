@@ -1,7 +1,5 @@
 <template>
-<SideNavWrapper>
-    Window
-</SideNavWrapper>
+    <SideNavWrapper> Window </SideNavWrapper>
 </template>
 
 <script>
@@ -11,10 +9,8 @@ import AppLayout from '../../Layouts/AppLayout.vue';
 export default {
     name: 'Window',
     layout: [AppLayout],
-    components: {SideNavWrapper},
+    components: { SideNavWrapper },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

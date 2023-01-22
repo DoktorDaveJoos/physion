@@ -24,9 +24,34 @@ class ShowController extends Controller
         }
 
         return Inertia::render('Bedarf/General', [
-            'title' => 'Bedarfsausweis',
-            'subtitle' => 'Allgemeine Informationen',
             'step' => 'general',
+            'context' => 'bedarf',
+            'order' => $order->load('product', 'customer'),
+        ]);
+    }
+
+    public function details(Order $order): Response
+    {
+        if (!$order->isBedarf()) {
+            abort(404);
+        }
+
+        return Inertia::render('Bedarf/Details', [
+            'step' => 'details',
+            'context' => 'bedarf',
+            'order' => $order->load('product', 'customer'),
+        ]);
+    }
+
+    public function position(Order $order): Response
+    {
+        if (!$order->isBedarf()) {
+            abort(404);
+        }
+
+        return Inertia::render('Bedarf/Position', [
+            'title' => 'Bedarfsausweis',
+            'step' => 'position',
             'context' => 'bedarf',
             'order' => $order,
             'product' => $order->product,

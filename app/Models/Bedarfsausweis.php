@@ -10,5 +10,10 @@ class Bedarfsausweis extends Model
     use HasFactory;
 
     protected $table = 'bedarfsausweise';
+
+    protected $casts = [
+        'cooling_service' => 'datetime',
+    ];
     protected $guarded = ['id'];
+
 }
