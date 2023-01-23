@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
@@ -8,7 +9,6 @@ import JetConfirmationModal from '@/Jetstream/ConfirmationModal.vue';
 import JetDangerButton from '@/Jetstream/DangerButton.vue';
 import JetDialogModal from '@/Jetstream/DialogModal.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
-import JetInput from '@/Jetstream/Input.vue';
 import JetCheckbox from '@/Jetstream/Checkbox.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
 import JetLabel from '@/Jetstream/Label.vue';
@@ -93,10 +93,11 @@ const deleteApiToken = () => {
                 <!-- Token Name -->
                 <div class="col-span-6 sm:col-span-4">
                     <JetLabel for="name" value="Name" />
-                    <JetInput
+                    <el-input
                         id="name"
                         v-model="createApiTokenForm.name"
                         type="text"
+                        size='large'
                         class="mt-1 block w-full"
                         autofocus />
                     <JetInputError
