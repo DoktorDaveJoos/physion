@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   title: String,
@@ -10,10 +10,11 @@ const props = defineProps({
   },
 });
 
+const value = ref(props.switcher);
 const emit = defineEmits(['update:switcher']);
 
 watch(
-  () => props.switcher,
+  value,
   (value) => {
     emit('update:switcher', value);
   },
@@ -29,7 +30,7 @@ watch(
         {{ title }}
       </h3>
       <template v-if='switcher !== undefined'>
-        <el-switch v-model='switcher' class='ml-2' size='default' />
+        <el-switch v-model='value' class='ml-2' size='default' />
       </template>
 
     </div>

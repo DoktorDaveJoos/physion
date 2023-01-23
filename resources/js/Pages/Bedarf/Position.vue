@@ -2,7 +2,7 @@
 import { CheckCircleIcon } from '@heroicons/vue/24/outline';
 import { InformationCircleIcon } from '@heroicons/vue/20/solid';
 import { RadioGroup, RadioGroupDescription, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { ElNotification } from 'element-plus';
 import { Inertia } from '@inertiajs/inertia';
@@ -99,8 +99,6 @@ if (!props.order.product.place_id && props.order.product.maps === 'initial') {
 
   <guest-layout>
     <stepper-wrapper>
-
-
 
       <el-form class='grid sm:grid-cols-2 sm:gap-x-8 mb-16' label-position='top' size='large'>
 
