@@ -1,10 +1,10 @@
+
 <script setup>
 import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
 import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
 import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
 import JetLabel from '@/Jetstream/Label.vue';
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
 
@@ -43,13 +43,13 @@ const submit = () => {
         <form @submit.prevent="submit">
             <div>
                 <JetLabel for="password" value="Password" />
-                <JetInput
+                <el-input
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    required
+                    :required='true'
                     autocomplete="current-password"
                     autofocus />
             </div>
