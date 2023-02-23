@@ -26,7 +26,7 @@ class FindRequest extends FormRequest
         return [
             'order_id' => 'nullable|exists:orders,id',
             'email' => 'nullable|email|exists:customers,email',
-            'zip' => 'nullable|numeric|length:5',
+            'zip' => 'nullable|numeric|digits:5',
         ];
     }
 
@@ -39,7 +39,7 @@ class FindRequest extends FormRequest
             'order_id.exists' => 'Diese Bestellnummer existiert nicht.',
             'email.exists' => 'Diese Email-Adresse ist bei uns nicht registriert.',
             'email.email' => 'Bitte gib eine gültige Email-Adresse ein.',
-            'zip.length' => 'Die Postleitzahl muss 5 Stellen lang sein.',
+            'zip.digits' => 'Die Postleitzahl muss 5 Stellen lang sein.',
             'zip.numeric' => 'Die Postleitzahl darf nur aus Zahlen bestehen.',
         ];
     }

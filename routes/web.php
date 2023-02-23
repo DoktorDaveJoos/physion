@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\Bedarf;
+use App\Http\Controllers\Blog\SubscriptionsController;
 use App\Http\Controllers\Checkout\AddUpsellController;
 use App\Http\Controllers\Checkout\DeleteUpsellController;
 use App\Http\Controllers\Checkout\ShowController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Find\SearchController;
+use App\Http\Controllers\Order\DownloadController;
 use App\Http\Controllers\Verbrauch;
 use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\BedarfController;
+use App\Models\BlogEntry;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -89,7 +94,9 @@ Route::prefix('bedarfsausweis')
 //            Route::get('keller', [BedarfController::class, 'cellar'])->name('cellar');
             Route::get('wand', [Bedarf\ShowController::class, 'wall'])->name('wall');
 //            Route::get('fenster', [BedarfController::class, 'window'])->name('window');
-//            Route::get('dach', [BedarfController::class, 'roof'])->name('roof');
+
+            // Handle roof related requests
+            Route::put('roof', [Bedarf\RoofController::class, 'update'])->name('roof.update');
         });
     });
 
@@ -108,7 +115,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 Route::prefix('order')->name('order.')->group(function () {
     Route::prefix('{order}')->group(function () {
         Route::get('', [\App\Http\Controllers\Order\ShowController::class, 'index'])->name('show');
-        Route::get('download', \App\Http\Controllers\Order\DownloadController::class)->name('download');
+        Route::get('download', DownloadController::class)->name('download');
     });
 });
 
@@ -116,7 +123,7 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
     Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
 
-    Route::post('subscribe', [\App\Http\Controllers\Blog\SubscriptionsController::class, 'store'])->name('subscribe');
+    Route::post('subscribe', [SubscriptionsController::class, 'store'])->name('subscribe');
 });
 
 Route::get('/about', function () {
@@ -124,21 +131,21 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::prefix('kontakt')->name('contact.')->group(function () {
-    Route::get('', [\App\Http\Controllers\ContactController::class, 'index'])->name('show');
-    Route::post('', [\App\Http\Controllers\ContactController::class, 'store'])->name('store');
+    Route::get('', [ContactController::class, 'index'])->name('show');
+    Route::post('', [ContactController::class, 'store'])->name('store');
 });
 
 Route::prefix('/find')->name('find.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Find\ShowController::class, 'index'])->name('show');
 
-    Route::post('/email', [\App\Http\Controllers\Find\SearchController::class, 'email'])->name('email');
+    Route::post('/email', [SearchController::class, 'email'])->name('email');
 });
 
 Route::get('/', function () {
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'posts' => \App\Models\BlogEntry::latest()->take(3)->get(),
+        'posts' => BlogEntry::latest()->take(3)->get(),
     ]);
 })->name('start');
 

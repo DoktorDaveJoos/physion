@@ -1,0 +1,10 @@
+{
+    # cert_issuer acme
+    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+https://bauzertifikate.de {
+	reverse_proxy /blog* http://ghost:8080
+
+	reverse_proxy * http://10.114.32.2:80
+}

@@ -59,6 +59,11 @@ class Order extends Model
         return $this->type === 'verbrauchsausweis';
     }
 
+    public function isDone(): bool
+    {
+        return $this->status === 'done';
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

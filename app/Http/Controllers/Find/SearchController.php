@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Find\FindByEmailRequest;
 use App\Http\Requests\Find\FindRequest;
 use App\Models\Order;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SearchController extends Controller
 {
@@ -24,7 +25,7 @@ class SearchController extends Controller
         return redirect()->route('find.show')->with('error', 'No order found for this email address.');
     }
 
-    public function id(FindRequest $request)
+    public function id(FindRequest $request): Response|RedirectResponse
     {
         $id = $request->input('order_id');
 

@@ -102,7 +102,7 @@
 
                                     <el-form-item label="Postleitzahl">
                                         <el-input
-                                            v-model="emailForm.plz"
+                                            v-model="emailForm.zip"
                                             placeholder="PLZ" />
                                     </el-form-item>
 
@@ -206,11 +206,13 @@ const orderForm = useForm({
 
 const emailForm = useForm({
     email: '',
-    plz: '',
+    zip: '',
 });
 
 const findOrderById = async () => {
-    orderForm.get(route('find.show'));
+    orderForm.get(route('find.show'), {
+        preserveState: true,
+    });
 };
 
 const findOrderByEmail = () => {
