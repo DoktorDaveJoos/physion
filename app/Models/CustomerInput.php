@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Product extends Model
+class CustomerInput extends Model
 {
     use HasFactory;
 
@@ -15,4 +16,8 @@ class Product extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function data(): MorphTo
+    {
+        return $this->morphTo();
+    }
 }

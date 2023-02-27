@@ -18,15 +18,12 @@ return new class extends Migration
             $table->string('id')->unique()->primary();
             $table->foreignIdFor(Customer::class)->constrained();
 
-            $table->enum('type', ['verbrauchsausweis', 'bedarfsausweis']);
             $table->enum('status', ['created', 'open', 'done', 'cancelled', 'in_clarification']);
 
             $table->boolean('paid')->default(false);
 
             $table->integer('product_id');
             $table->string('product_type');
-
-            $table->json('meta')->nullable();
 
             $table->timestamps();
         });

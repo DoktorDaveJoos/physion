@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Order\OrderService;
 use App\Services\Stripe\StripeService;
+use Hidehalo\Nanoid\Client;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Stripe\Stripe;
@@ -29,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(StripeService::class, function($app) {
             return new StripeService($app->make(StripeClient::class));
+        });
+
+        $this->app->bind(Client::class, function () {
+            return new Client();
         });
     }
 

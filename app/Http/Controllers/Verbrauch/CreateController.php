@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Verbrauch;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
-use App\Models\Bedarfsausweis;
+use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\Verbrauchsausweis;
+use App\Models\Vbrc;
 use Hidehalo\Nanoid\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class CreateController extends Controller
             'phone' => $request->get('phone'),
         ]);
 
-        $product = Verbrauchsausweis::create([
+        $product = Vbrc::create([
             'street_address' => $request->get('street_address'),
             'zip' => $request->get('zip'),
             'city' => $request->get('city'),
@@ -50,7 +50,7 @@ class CreateController extends Controller
             'status' => 'created',
             'paid' => false,
             'product_id' => $product->id,
-            'product_type' => Verbrauchsausweis::class,
+            'product_type' => Vbrc::class,
             'meta' => [
                 'completed' => ['general']
             ]

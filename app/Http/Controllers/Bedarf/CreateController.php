@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Bedarf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bedarf\CreateRequest;
 use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
-use App\Models\Bedarfsausweis;
+use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +22,7 @@ class CreateController extends Controller
     public function __invoke(CreateOrUpdateRequest $request): RedirectResponse
     {
         $client = new Client();
+
         $id = $client->formattedId('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 9);
 
         $customer = Customer::firstOrCreate([
@@ -31,7 +32,7 @@ class CreateController extends Controller
             'phone' => $request->get('phone'),
         ]);
 
-        $product = Bedarfsausweis::create([
+        $product = Bdrf::create([
             'street_address' => $request->get('street_address'),
             'zip' => $request->get('zip'),
             'city' => $request->get('city'),
@@ -48,7 +49,7 @@ class CreateController extends Controller
             'status' => 'created',
             'paid' => false,
             'product_id' => $product->id,
-            'product_type' => Bedarfsausweis::class,
+            'product_type' => Bdrf::class,
             'meta' => [
                 'completed' => ['general']
             ]

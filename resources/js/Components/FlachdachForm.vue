@@ -1,27 +1,24 @@
 <script setup>
 
-import { onMounted, ref } from 'vue';
-
-const safe = () => {
-  alert('Flachdach');
-};
-
-const showButton = ref(false);
-
-onMounted(() => {
-  showButton.value = true;
-})
+const props = defineProps({
+  form: Object,
+});
 
 </script>
 
 
 <template>
-
-
-  <Teleport v-if='showButton' to='#roof-button-container'>
-
-    <el-button size='large' type='primary' @click='safe'>Speichern</el-button>
-
-  </Teleport>
-
+  <el-form class='p-4 grid sm:grid-cols-2 gap-4' label-position='top' size='large'>
+    <el-form-item
+      :label='`Stärke ${ form.dachform.title === "Satteldach" ? "Zwischendecke" : "Decke/Flachdach" } (falls bekannt)`'>
+      <el-input-number v-model='form.zwischendecke' :max='200' :min='0' :step='1' placeholder='0' />
+    </el-form-item>
+  </el-form>
 </template>
+
+
+<style scoped>
+.el-input-number {
+  width: 100%;
+}
+</style>

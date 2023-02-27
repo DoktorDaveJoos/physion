@@ -53,8 +53,8 @@ const steps = {
     },
     {
       key: 'wall',
-      name: 'Wände',
-      description: 'Component testing',
+      name: 'Thermische Hülle',
+      description: 'Außenwand, Dach und Keller',
       status: 'upcoming',
     },
   ],

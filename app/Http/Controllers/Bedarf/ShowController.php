@@ -65,14 +65,14 @@ class ShowController extends Controller
             abort(404);
         }
 
+        $order->product->load('roof', 'wall', 'roof.windows', 'roof.dormers', 'roof.insulations');
+
         return Inertia::render('Bedarf/Wall', [
             'title' => 'Bedarfsausweis',
             'subtitle' => 'Allgemeine Informationen',
             'step' => 'wall',
             'context' => 'bedarf',
             'order' => $order,
-            'product' => $order->product,
-            'customer' => $order->customer,
         ]);
     }
 

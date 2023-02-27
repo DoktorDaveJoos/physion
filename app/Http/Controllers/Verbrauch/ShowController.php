@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Verbrauch;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\Verbrauchsausweis;
+use App\Models\Vbrc;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -85,7 +85,7 @@ class ShowController extends Controller
             abort(404);
         }
 
-        $product = Verbrauchsausweis::with(['sources.periods', 'vacancies'])->find($order->product->id);
+        $product = Vbrc::with(['sources.periods', 'vacancies'])->find($order->product->id);
 
         return Inertia::render('Verbrauch/Consumption', [
             'title' => 'Verbrauchsausweis',
@@ -109,7 +109,7 @@ class ShowController extends Controller
             abort(404);
         }
 
-        $product = Verbrauchsausweis::with(['sources.periods', 'vacancies'])->find($order->product->id);
+        $product = Vbrc::with(['sources.periods', 'vacancies'])->find($order->product->id);
 
         return Inertia::render('Verbrauch/Summary', [
             'title' => 'Verbrauchsausweis',

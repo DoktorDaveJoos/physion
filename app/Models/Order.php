@@ -27,13 +27,10 @@ class Order extends Model
     protected $fillable = [
         'id',
         'customer_id',
-        'type',
         'status',
         'paid',
-        'payment_intent',
         'product_id',
         'product_type',
-        'meta'
     ];
 
     protected $casts = [

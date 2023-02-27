@@ -21,7 +21,7 @@ class EnergySource extends Model
 
     public function consumptionCertificate(): BelongsTo
     {
-        return $this->belongsTo(Verbrauchsausweis::class);
+        return $this->belongsTo(Vbrc::class);
     }
 
     public function periods(): HasMany

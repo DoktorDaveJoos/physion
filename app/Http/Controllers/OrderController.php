@@ -2,43 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProcessOrder;
-use App\Support\Telegram\Telegram;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Ramsey\Uuid\Uuid;
+use App\Actions\CreateCertificate;
+use App\Actions\CreateCustomer;
+use App\Actions\CreateOrder;
+use App\Enums\Category;
+use App\Http\Requests\CreateOrderRequest;
+use App\Models\Order;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Pipeline\Pipeline;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class OrderController extends Controller
 {
-    /**
-     * Enqueue order from sales page
-     *
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function __invoke(Request $request): JsonResponse
-    {
-        // Create reference (for Stripe & Paypal)
-        $uuid = (string)Uuid::uuid4();
 
-        $validator = Validator::make($request->all(), [
-            'type' => 'required',
+    public function show(Order $order): Response
+    {
+        return Inertia::render('Order/Index', [
+            'order' => $order,
+        ]);
+    }
+
+    public function create(Category $category): Response
+    {
+        return Inertia::render('Order/Create', [
+            'category' => $category->value,
+        ]);
+    }
+
+    public function store(Category $category, CreateOrderRequest $request): RedirectResponse
+    {
+        $data = array_merge($request->validated(), [
+            'category' => $category,
         ]);
 
-        if ($validator->fails()) {
-            Telegram::broadcast('Watch-out: Request failed, check telescope');
-            return new JsonResponse(['message' => 'Bad request'], 400);
-        }
+        $data = app(Pipeline::class)
+            ->send($data)
+            ->through([
+                CreateCustomer::class,
+                CreateCertificate::class,
+                CreateOrder::class,
+            ])
+            ->via('pipeable')
+            ->then(fn($data) => $data);
 
-        $content = $request->all();
-
-        // Make sure Order is accepted - handle later
-        ProcessOrder::dispatch(
-            $uuid,
-            $content
-        );
-
-        return new JsonResponse(['reference' => $uuid]);
+        return redirect()->route('certificate.show', [
+            'category' => $category->value,
+            'id' => $data['certificate_id'],
+        ]);
     }
+
 }
