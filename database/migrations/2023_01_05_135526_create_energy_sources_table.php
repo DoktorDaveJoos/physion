@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Vrbr;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,8 +17,7 @@ return new class extends Migration
         Schema::create('energy_sources', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('verbrauchsausweis_id');
-            $table->foreign('verbrauchsausweis_id')->references('id')->on('verbrauchsausweise');
+            $table->foreignIdFor(Vrbr::class)->constrained();
 
             $table->string('source');
             $table->string('water');

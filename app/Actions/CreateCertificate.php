@@ -2,29 +2,47 @@
 
 namespace App\Actions;
 
+use App\Enums\Category;
+use App\Models\Customer;
+use App\Services\NanoIdCore;
+use App\Shared\Transferable;
 use Closure;
 use Hidehalo\Nanoid\Client;
+use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CreateCertificate
 {
     use AsAction;
 
-    public function handle(mixed $data)
-    {
-
-        $handler = $data['category']->getHandler();
-
-        return $handler::create($data);
-
+    public function __construct(
+        private readonly Client $nanoClient,
+    ) {
     }
 
-    public function pipeable(mixed $data, Closure $next): mixed
+    /**
+     * @param  Category  $category
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
+    public function handle(Category $category, mixed $data): mixed
     {
-        $certificate = self::run($data);
+        return $category->getModel()::create($data);
+    }
 
-        return $next(array_merge($data, [
-            'certificate_id' => $certificate->id,
-        ]));
+    public function pipeable(Transferable $transferable, Closure $next): mixed
+    {
+        $certificate = self::run(
+            $transferable->getCategory(),
+            $transferable->getData()
+        );
+
+        return $next(Transferable::make(
+            $transferable->getData(),
+            $transferable->getCategory(),
+            $transferable->getCustomer(),
+            null,
+            $certificate
+        ));
     }
 }

@@ -5,24 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Vbrc extends Model
+class Vrbr extends Model
 {
     use HasFactory;
-
-    protected $table = 'verbrauchsausweise';
 
     protected $casts = [
         'cooling_service' => 'datetime',
     ];
 
     protected $guarded = ['id'];
-
     public function order(): MorphOne
     {
-        return $this->morphOne(Order::class, 'product');
+        return $this->morphOne(Order::class, 'certificate');
     }
 
     public function sources(): HasMany
@@ -34,4 +30,5 @@ class Vbrc extends Model
     {
         return $this->hasMany(Vacancy::class);
     }
+
 }

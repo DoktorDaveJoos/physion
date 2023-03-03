@@ -11,13 +11,18 @@ class Bdrf extends Model
 {
     use HasFactory;
 
-    protected $table = 'bedarfsausweise';
+    protected $table = 'bdrfs';
+
+    protected $guarded = ['id'];
 
     protected $casts = [
         'cooling_service' => 'datetime',
     ];
 
-    protected $guarded = ['id'];
+    public function order(): MorphOne
+    {
+        return $this->morphOne(Order::class, 'certificate');
+    }
 
     public function roof(): HasOne
     {

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\Vbrc;
+use App\Models\Vrbr;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
@@ -25,7 +25,7 @@ class UpdateGeneralController extends Controller
             $request->safe()->only('name', 'email', 'phone')
         );
 
-        Vbrc::where('id', $order->product_id)->update(
+        Vrbr::where('id', $order->product_id)->update(
             $request->safe()->only('street_address', 'zip', 'city', 'reason', 'type', 'additional_type')
         );
 

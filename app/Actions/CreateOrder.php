@@ -2,8 +2,12 @@
 
 namespace App\Actions;
 
+use App\Models\Bdrf;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Vrbr;
 use App\Services\NanoIdCore;
+use App\Shared\Transferable;
 use Closure;
 use Hidehalo\Nanoid\Client;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -17,25 +21,36 @@ class CreateOrder
     ) {
     }
 
-    public function handle(mixed $data)
+    public function handle(Bdrf|Vrbr $certificate, Customer $customer, mixed $data)
     {
+        $slug = $this->nanoClient->formattedId(
+            NanoIdCore::CUSTOM_SYMBOLS,
+            NanoIdCore::ID_LENGTH
+        );
+
         return Order::create(
             array_merge($data, [
-                'id' => $this->nanoClient->formattedId(NanoIdCore::CUSTOM_SYMBOLS, NanoIdCore::ID_LENGTH),
-                'product_id' => $data['certificate_id'],
-                'product_type' => $data['category']->getHandler(),
+                'slug' => $slug,
+                'customer_id' => $customer->id,
+                'certificate_id' => $certificate->id,
+                'certificate_type' => $certificate::class,
             ])
         );
     }
 
-    public function pipeable(mixed $data, Closure $next): mixed
+    /**
+     * @param  Transferable  $transferable
+     * @param  Closure  $next
+     * @return mixed
+     */
+    public function pipeable(Transferable $transferable, Closure $next): mixed
     {
-        $order = self::run($data);
-
-        return $next(
-            array_merge($data, [
-                'order_id' => $order->id,
-            ])
+        $order = self::run(
+            $transferable->getCertificate(),
+            $transferable->getCustomer(),
+            $transferable->getData()
         );
+
+        return $next($order);
     }
 }

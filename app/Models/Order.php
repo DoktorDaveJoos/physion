@@ -24,18 +24,9 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'id',
-        'customer_id',
-        'status',
-        'paid',
-        'product_id',
-        'product_type',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
-        'paid' => 'boolean',
-        'meta' => 'json',
         'id' => 'string'
     ];
 
@@ -44,16 +35,6 @@ class Order extends Model
             'paid' => true,
             'status' => 'open'
         ]);
-    }
-
-    public function isBedarf(): bool
-    {
-        return $this->type === 'bedarfsausweis';
-    }
-
-    public function isVerbrauch(): bool
-    {
-        return $this->type === 'verbrauchsausweis';
     }
 
     public function isDone(): bool
@@ -66,14 +47,9 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function product(): MorphTo
+    public function certificate(): MorphTo
     {
         return $this->morphTo();
-    }
-
-    public function upsells(): BelongsToMany
-    {
-        return $this->belongsToMany(Upsell::class);
     }
 
 }

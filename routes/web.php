@@ -10,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\SearchController;
 use App\Http\Controllers\Order\DownloadController;
 use App\Http\Controllers\OrderController;
+use App\Http\Middleware\CategoryPageIsValid;
 use App\Models\BlogEntry;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -46,11 +47,12 @@ use Inertia\Inertia;
  * Due to different kind of products, the link to show the product itself is
  * contained in the product itself
  *
- * GET      certificate/{category}/{certificate}
- * PUT      certificate/{category}/{certificate}
- * GET      certificate/{category}/{certificate}/{page}
+ * GET      certificates/{category}/{certificate}
+ * PUT      certificates/{category}/{certificate}
+ * GET      certificates/{category}/{certificate}/{page}
  *
- * eg:      certificate/bdrf/41nX7umHQ/general
+ * eg:      certificates/bdrf/41nX7umHQ/general
+ * eg:      orders/1/certificate/general?signature=1823213v1231237v2131ff3sdf7sdf8s612
  *
  * Resources will be handled by a dedicated route
  *
@@ -100,16 +102,37 @@ use Inertia\Inertia;
 
 
 Route::prefix('orders')->group(function () {
-    Route::get('/{order}', [OrderController::class, 'show'])->name('order.show');
-
     Route::get('/create/{category}', [OrderController::class, 'create'])->name('order.create');
     Route::post('/create/{category}', [OrderController::class, 'store'])->name('order.store');
+
+    Route::get('/{order:slug}', [OrderController::class, 'show'])->name('order.show');
+
+    Route::prefix('{order:slug}/certificate')->middleware(['signed', 'category.page', 'certificate'])->group(function () {
+        Route::get('/', [CertificateController::class, 'show'])->name('certificate.show');
+
+        Route::middleware(CategoryPageIsValid::class)->group(function () {
+            Route::get('/{page}', [CertificateController::class, 'showPage'])
+                ->name('certificate.show.page');
+
+            Route::put('/{page}', [CertificateController::class, 'updatePage'])
+                ->name('certificate.update.page');
+        });
+    });
 });
 
-
-Route::prefix('certificate')->group(function () {
-    Route::get('/{category}/{id}', [CertificateController::class, 'show'])->name('certificate.show');
-});
+//
+//Route::prefix('certificate')->middleware(['signed'])->group(
+//    function () {
+//        Route::get('/{order}', [CertificateController::class, 'show'])
+//            ->name('certificate.show');
+//
+//        Route::get('/{order}/{page}', [CertificateController::class, 'showPage'])
+//            ->name('certificate.show.page');
+//
+//        Route::put('/{order}/{page}', [CertificateController::class, 'updatePage'])
+//            ->name('certificate.update.page');
+//    }
+//);
 
 //
 //Route::prefix('verbrauchsausweis')

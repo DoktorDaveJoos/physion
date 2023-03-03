@@ -7,7 +7,7 @@ use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
 use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\Vbrc;
+use App\Models\Vrbr;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;

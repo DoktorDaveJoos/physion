@@ -18,11 +18,6 @@ class ShowController extends Controller
      */
     public function index(Order $order): Response
     {
-
-        if (!$order->isBedarf()) {
-            abort(404);
-        }
-
         return Inertia::render('Bedarf/General', [
             'step' => 'general',
             'context' => 'bedarf',
@@ -32,9 +27,6 @@ class ShowController extends Controller
 
     public function details(Order $order): Response
     {
-        if (!$order->isBedarf()) {
-            abort(404);
-        }
 
         return Inertia::render('Bedarf/Details', [
             'step' => 'details',
@@ -45,9 +37,6 @@ class ShowController extends Controller
 
     public function position(Order $order): Response
     {
-        if (!$order->isBedarf()) {
-            abort(404);
-        }
 
         return Inertia::render('Bedarf/Position', [
             'title' => 'Bedarfsausweis',
@@ -61,9 +50,6 @@ class ShowController extends Controller
 
     public function wall(Order $order): Response
     {
-        if (!$order->isBedarf()) {
-            abort(404);
-        }
 
         $order->product->load('roof', 'wall', 'roof.windows', 'roof.dormers', 'roof.insulations');
 

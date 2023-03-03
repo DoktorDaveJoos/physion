@@ -23,7 +23,7 @@ class CustomerFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'address_line_1' => $this->faker->streetAddress,
             'address_line_2' => null,
-            'postal_code' => $this->faker->postcode,
+            'zip' => $this->faker->postcode,
             'city' => $this->faker->city,
             'state' => null,
             'country' => null,

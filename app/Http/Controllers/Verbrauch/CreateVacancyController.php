@@ -24,10 +24,6 @@ class CreateVacancyController extends Controller
     public function __invoke(Order $order, CreateVacancyRequest $request): RedirectResponse
     {
 
-        if (!$order->isVerbrauch()) {
-            abort(404);
-        }
-
         if ($order->product->sources->count() === 0) {
             return redirect()->route('verbrauch.consumption', $order->id)->withErrors(['vacancy.error' => 'Bitte legen Sie zuerst einen Energieträger inklusive der Abrechnungszeiträume an.']);
         }

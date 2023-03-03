@@ -11,15 +11,17 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('verbrauchsausweise', function (Blueprint $table) {
+        Schema::create('vrbrs', function (Blueprint $table) {
+
             $table->id();
 
             $table->string('reason');
             $table->string('street_address');
             $table->string('zip');
             $table->string('city');
+
             $table->string('place_id')->nullable();
 
             $table->string('type');
@@ -43,8 +45,6 @@ return new class extends Migration
 
             $table->json('suggestion_check')->nullable();
 
-            $table->decimal('price', 10)->default(79.90);
-
             $table->timestamps();
         });
     }
@@ -54,8 +54,8 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('verbrauchsausweise');
+        Schema::dropIfExists('vrbrs');
     }
 };

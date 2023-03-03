@@ -7,7 +7,7 @@ use App\Http\Requests\Verbrauch\CreateOrUpdateRequest;
 use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\Vbrc;
+use App\Models\Vrbr;
 use Hidehalo\Nanoid\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class CreateController extends Controller
             'phone' => $request->get('phone'),
         ]);
 
-        $product = Vbrc::create([
+        $product = Vrbr::create([
             'street_address' => $request->get('street_address'),
             'zip' => $request->get('zip'),
             'city' => $request->get('city'),
@@ -50,7 +50,7 @@ class CreateController extends Controller
             'status' => 'created',
             'paid' => false,
             'product_id' => $product->id,
-            'product_type' => Vbrc::class,
+            'product_type' => Vrbr::class,
             'meta' => [
                 'completed' => ['general']
             ]

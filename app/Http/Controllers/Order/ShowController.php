@@ -27,14 +27,6 @@ class ShowController extends Controller
             ]);
         }
 
-        if ($order->isBedarf()) {
-            return Redirect::route('bedarf.general', ['order' => $order]);
-        }
-
-        if ($order->isVerbrauch()) {
-            return Redirect::route('verbrauch.general', ['order' => $order]);
-        }
-
         throw new RuntimeException('Order type not found.');
     }
 }

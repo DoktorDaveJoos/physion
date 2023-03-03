@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CreateCertificate;
 use App\Actions\CreateCustomer;
 use App\Actions\CreateOrder;
+use App\Actions\CreateOrderWithProduct;
 use App\Enums\Category;
 use App\Http\Requests\CreateOrderRequest;
 use App\Models\Order;
@@ -32,23 +33,13 @@ class OrderController extends Controller
 
     public function store(Category $category, CreateOrderRequest $request): RedirectResponse
     {
-        $data = array_merge($request->validated(), [
-            'category' => $category,
-        ]);
-
-        $data = app(Pipeline::class)
-            ->send($data)
-            ->through([
-                CreateCustomer::class,
-                CreateCertificate::class,
-                CreateOrder::class,
-            ])
-            ->via('pipeable')
-            ->then(fn($data) => $data);
+        $order = CreateOrderWithProduct::run(
+            $category,
+            $request->validated()
+        );
 
         return redirect()->route('certificate.show', [
-            'category' => $category->value,
-            'id' => $data['certificate_id'],
+            'order' => $order->slug,
         ]);
     }
 

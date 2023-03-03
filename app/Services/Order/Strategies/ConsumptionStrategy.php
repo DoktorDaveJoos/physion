@@ -6,7 +6,7 @@ namespace App\Services\Order\Strategies;
 
 use App\Models\Additional;
 use App\Models\Consumption;
-use App\Models\Vbrc;
+use App\Models\Vrbr;
 use App\Models\Vacancy;
 
 class ConsumptionStrategy implements OrderStrategy
@@ -14,7 +14,7 @@ class ConsumptionStrategy implements OrderStrategy
 
     public function handle($payload): array
     {
-        $certificate = new Vbrc($payload['general']);
+        $certificate = new Vrbr($payload['general']);
         $certificate->save();
 
         $additional = new Additional($payload['additional']);
@@ -59,6 +59,6 @@ class ConsumptionStrategy implements OrderStrategy
             }
         }
 
-        return [$certificate->id, Vbrc::class];
+        return [$certificate->id, Vrbr::class];
     }
 }

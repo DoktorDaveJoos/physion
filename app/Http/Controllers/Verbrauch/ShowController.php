@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Verbrauch;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\Vbrc;
+use App\Models\Vrbr;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,9 +35,6 @@ class ShowController extends Controller
      */
     public function general(Order $order): Response
     {
-        if (!$order->isVerbrauch()) {
-            abort(404);
-        }
 
         return Inertia::render('Verbrauch/General', [
             'title' => 'Verbrauchsausweis',
@@ -58,10 +55,6 @@ class ShowController extends Controller
      */
     public function details(Order $order): Response
     {
-        if (!$order->isVerbrauch()) {
-            abort(404);
-        }
-
         return Inertia::render('Verbrauch/Details', [
             'title' => 'Verbrauchsausweis',
             'subtitle' => 'Allgemeine Informationen',
@@ -81,11 +74,8 @@ class ShowController extends Controller
      */
     public function consumption(Order $order): Response
     {
-        if (!$order->isVerbrauch()) {
-            abort(404);
-        }
 
-        $product = Vbrc::with(['sources.periods', 'vacancies'])->find($order->product->id);
+        $product = Vrbr::with(['sources.periods', 'vacancies'])->find($order->product->id);
 
         return Inertia::render('Verbrauch/Consumption', [
             'title' => 'Verbrauchsausweis',
@@ -105,11 +95,8 @@ class ShowController extends Controller
      */
     public function summary(Order $order): Response
     {
-        if (!$order->isVerbrauch()) {
-            abort(404);
-        }
 
-        $product = Vbrc::with(['sources.periods', 'vacancies'])->find($order->product->id);
+        $product = Vrbr::with(['sources.periods', 'vacancies'])->find($order->product->id);
 
         return Inertia::render('Verbrauch/Summary', [
             'title' => 'Verbrauchsausweis',
