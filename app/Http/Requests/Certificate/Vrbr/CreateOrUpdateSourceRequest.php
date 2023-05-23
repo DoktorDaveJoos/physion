@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Verbrauch;
+namespace App\Http\Requests\Certificate\Vrbr;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,6 +26,7 @@ class CreateOrUpdateSourceRequest extends FormRequest
         return [
             'source' => 'required|string',
             'water' => 'required|string',
+            'signature' => 'required|string',
         ];
     }
 

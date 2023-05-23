@@ -28,7 +28,7 @@ const products = [
             name: 'Verbrauchsausweis',
             description:
                 'Energieausweis, der die Energieeffizienz eines Gebäudes über den Energieverbrauch ermittelt.',
-            href: route('verbrauch.create'),
+            href: route('order.create', 'vrbr'),
             icon: FireIcon,
             theme: 'bg-sky-500',
             active: true,
@@ -38,7 +38,7 @@ const products = [
             name: 'Bedarfsausweis',
             description:
                 'Energieausweis, der die Energieeffizienz eines Gebäudes rechnerisch ermittelt.',
-            href: route('bedarf.create'),
+            href: route('order.create', 'bdrf'),
             icon: CalculatorIcon,
             theme: 'bg-sky-500',
             active: true,

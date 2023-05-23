@@ -36,7 +36,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('product_order', function (Blueprint $table) {
+        Schema::create('order_product', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('product_id')->constrained();
@@ -52,7 +52,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('product_product');
-        Schema::dropIfExists('product_order');
+        Schema::dropIfExists('order_product');
         Schema::dropIfExists('products');
     }
 };

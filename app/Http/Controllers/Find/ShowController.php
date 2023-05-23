@@ -23,8 +23,8 @@ class ShowController extends Controller
         try {
             $validated = $request->validated();
 
-            $orders = $request->has('order_id') ?
-                FindCertificate::handle($validated['order_id']) :
+            $orders = $request->has('order') ?
+                FindCertificate::handle($validated['order']) :
                 FindCertificate::handle($validated['email'], $validated['zip']);
         } catch (Throwable $e) {
             Log::debug($e->getMessage());

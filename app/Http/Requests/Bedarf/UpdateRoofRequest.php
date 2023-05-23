@@ -25,17 +25,17 @@ class UpdateRoofRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'beheizt' => 'required|boolean',
-            'dachform' => 'required|string',
-            'bauweise' => 'required|string',
-            'u_wert' => 'nullable|numeric|between:0.01,10.0',
-            'dachneigung' => [
+            'heated' => 'required|boolean',
+            'roof_shape' => 'required|string',
+            'construction' => 'required|string',
+            'u_value' => 'nullable|numeric|between:0.01,10.0',
+            'pitch' => [
                 'nullable',
                 'integer',
-                Rule::requiredIf(fn() => $this->get('dachform') !== 'Flachdach' && $this->get('beheizt') === true),
+                Rule::requiredIf(fn() => $this->get('roof_shape') !== 'Flachdach' && $this->get('heated') === true),
             ],
-            'kniestock' => 'nullable|integer',
-            'zwischendecke' => 'nullable|integer',
+            'knee_wall' => 'nullable|integer',
+            'ceiling' => 'nullable|integer',
         ];
     }
 
@@ -47,16 +47,16 @@ class UpdateRoofRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'dachneigung.integer' => 'Die Dachneigung muss eine ganze Zahl sein.',
-            'dachneigung.required' => 'Die Dachneigung ist erforderlich.',
-            'kniestock.integer' => 'Der Kniestock muss eine ganze Zahl sein.',
-            'zwischendecke.integer' => 'Die Zwischendecke muss eine ganze Zahl sein.',
-            'u_wert.between' => 'Der U-Wert muss zwischen 0.01 und 10.0 liegen.',
-            'u_wert.numeric' => 'Der U-Wert muss eine Zahl sein.',
-            'dachform.required' => 'Die Dachform ist erforderlich.',
-            'dachform.string' => 'Die Dachform muss ein String sein.',
-            'bauweise.required' => 'Die Bauweise ist erforderlich.',
-            'bauweise.string' => 'Die Bauweise muss ein String sein.',
+            'pitch.integer' => 'Die Dachneigung muss eine ganze Zahl sein.',
+            'pitch.required' => 'Die Dachneigung ist erforderlich.',
+            'knee_wall.integer' => 'Der Kniestock muss eine ganze Zahl sein.',
+            'ceiling.integer' => 'Die Zwischendecke muss eine ganze Zahl sein.',
+            'u_value.between' => 'Der U-Wert muss zwischen 0.01 und 10.0 liegen.',
+            'u_value.numeric' => 'Der U-Wert muss eine Zahl sein.',
+            'roof_shape.required' => 'Die Dachform ist erforderlich.',
+            'roof_shape.string' => 'Die Dachform muss ein String sein.',
+            'construction.required' => 'Die Bauweise ist erforderlich.',
+            'construction.string' => 'Die Bauweise muss ein String sein.',
         ];
     }
 }

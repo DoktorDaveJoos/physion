@@ -43,7 +43,7 @@
                 <div
                     class="bg-white py-16 px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
                     <div class="mx-auto max-w-lg lg:max-w-none">
-                        <el-tabs v-if="doSearch" tab-position="top">
+                        <el-tabs v-if="orders.length === 0" tab-position="top">
                             <el-tab-pane label="Order ID" class="pt-4">
                                 <h2
                                     class="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
@@ -62,9 +62,9 @@
                                 <el-form size="large" label-position="top">
                                     <el-form-item
                                         label="Order ID"
-                                        :error="orderForm.errors.order_id">
+                                        :error="orderForm.errors.order">
                                         <el-input
-                                            v-model="orderForm.order_id"
+                                            v-model="orderForm.order"
                                             placeholder="9 Stellige Order ID" />
                                     </el-form-item>
 
@@ -140,11 +140,8 @@
                                             class="flex items-center space-x-4">
                                             <div class="min-w-0 flex-1">
                                                 <p
-                                                    class="truncate text-sm font-medium text-gray-900">
-                                                    {{
-                                                        result.type[0].toUpperCase() +
-                                                        result.type.slice(1)
-                                                    }}
+                                                    class="truncate text-xs text-gray-300 tracking-wider uppercase font-bold">
+                                                    found
                                                 </p>
                                                 <span
                                                     class="inline-flex items-center rounded bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
@@ -157,7 +154,7 @@
                                                             cy="4"
                                                             r="3" />
                                                     </svg>
-                                                    {{ result.id }}
+                                                    {{ result.slug }}
                                                 </span>
                                             </div>
                                             <div>
@@ -165,7 +162,7 @@
                                                     :href="
                                                         route(
                                                             'order.show',
-                                                            result.id
+                                                            result.slug
                                                         )
                                                     "
                                                     class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
@@ -201,7 +198,7 @@ const props = defineProps({
 const doSearch = ref(props.orders.length === 0);
 
 const orderForm = useForm({
-    order_id: '',
+    order: '',
 });
 
 const emailForm = useForm({

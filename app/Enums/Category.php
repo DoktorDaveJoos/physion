@@ -5,7 +5,10 @@ namespace App\Enums;
 use App\Actions\UpdateCertificate;
 use App\Actions\UpdateGeneral;
 use App\Http\Requests\Certificate\Bdrf\UpdateDetailsRequest;
+use App\Http\Requests\Certificate\Bdrf\UpdatePositionRequest;
+use App\Http\Requests\Certificate\Shared\SummaryRequest;
 use App\Http\Requests\Certificate\Shared\UpdateGeneralRequest;
+use App\Http\Requests\Certificate\Vrbr\MarkDoneConsumptionRequest;
 use App\Models\Bdrf;
 use App\Models\Page;
 use App\Models\Vrbr;
@@ -162,7 +165,8 @@ enum Category: string
                     'Lage',
                     'Lage des Gebäudes',
                     'Certificate/Bdrf/Position',
-                    UpdateDetailsRequest::class,
+                    UpdatePositionRequest::class,
+                    UpdateCertificate::class
                 ),
                 'thermal' => Page::make(
                     'Thermische Hülle',
@@ -185,21 +189,29 @@ enum Category: string
                     'Allgemein',
                     'Allgemeine Angaben zum Gebäude',
                     'Certificate/Shared/General',
+                    UpdateGeneralRequest::class,
+                    UpdateGeneral::class
                 ),
                 'details' => Page::make(
                     'Details',
                     'Details zum Gebäude',
                     'Certificate/Shared/Details',
+                    UpdateDetailsRequest::class,
+                    UpdateCertificate::class
                 ),
                 'consumption' => Page::make(
                     'Verbrauch',
                     'Verbrauch des Gebäudes',
                     'Certificate/Vrbr/Consumption',
+                    MarkDoneConsumptionRequest::class,
+                    UpdateCertificate::class
                 ),
                 'summary' => Page::make(
                     'Zusammenfassung',
                     'Abschluss und Checkout',
-                    'Certificate/Shared/Summary',
+                    'Certificate/Vrbr/Summary',
+                    SummaryRequest::class,
+                    UpdateCertificate::class
                 ),
             ],
         };

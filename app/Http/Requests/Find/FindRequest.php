@@ -24,7 +24,7 @@ class FindRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id' => 'nullable|exists:orders,id',
+            'order' => 'nullable|exists:orders,slug',
             'email' => 'nullable|email|exists:customers,email',
             'zip' => 'nullable|numeric|digits:5',
         ];

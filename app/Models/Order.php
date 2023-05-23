@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property $paid
  * @property $product_id
  * @property $product_type
+ * @property $certificate_type
  * @property $created_at
  * @property $updated_at
  */
@@ -27,13 +28,24 @@ class Order extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
+        'meta' => 'json',
     ];
 
-    public function capture() {
+    public function capture(): void
+    {
         $this->update([
             'paid' => true,
-            'status' => 'open'
+            'status' => 'open',
+        ]);
+    }
+
+    public function setStep(string $step): void
+    {
+        $this->update([
+            'meta' => [
+                'steps' => collect($this->meta['steps'])->add($step)->unique()->values()->toArray(),
+            ],
         ]);
     }
 
@@ -50,6 +62,11 @@ class Order extends Model
     public function certificate(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
     }
 
 }

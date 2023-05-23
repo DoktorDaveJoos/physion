@@ -3,12 +3,9 @@
 namespace App\Actions;
 
 use App\Enums\Category;
-use App\Models\Customer;
-use App\Services\NanoIdCore;
 use App\Shared\Transferable;
 use Closure;
 use Hidehalo\Nanoid\Client;
-use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CreateCertificate
@@ -37,12 +34,14 @@ class CreateCertificate
             $transferable->getData()
         );
 
-        return $next(Transferable::make(
-            $transferable->getData(),
-            $transferable->getCategory(),
-            $transferable->getCustomer(),
-            null,
-            $certificate
-        ));
+        return $next(
+            Transferable::make(
+                $transferable->getData(),
+                $transferable->getCategory(),
+                $transferable->getCustomer(),
+                null,
+                $certificate
+            )
+        );
     }
 }

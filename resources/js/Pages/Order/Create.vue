@@ -2,8 +2,20 @@
 import StepperWrapper from '../../Wrappers/StepperWrapper.vue';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
 import OrderBaseData from '../../Components/OrderBaseData.vue';
+import { computed } from 'vue';
 
-defineProps(['context']);
+const props = defineProps(['category'])
+
+const certificate = computed(() => {
+  switch (props.category) {
+    case 'bdrf':
+      return 'Bedarfsausweis'
+    case 'vrbr':
+      return 'Verbrauchsausweis'
+    default:
+      return 'Energieausweis'
+  }
+})
 
 </script>
 
@@ -13,7 +25,7 @@ defineProps(['context']);
       <div class='flex flex-col items-center'>
         <h2
           class='text-3xl font-bold tracking-tight text-center text-gray-800 sm:text-3xl'>
-          Bedarfsausweis erstellen
+          {{ certificate }} erstellen
         </h2>
         <span
           class='mt-1 inline-flex items-center rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800'
@@ -30,7 +42,7 @@ defineProps(['context']);
       </div>
 
       <Suspense>
-        <order-base-data :context='context' :is-creation='true' />
+        <order-base-data :category='category' />
       </Suspense>
 
     </stepper-wrapper>

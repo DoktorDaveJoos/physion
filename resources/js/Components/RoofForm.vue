@@ -1,640 +1,862 @@
 <script setup>
-import { RadioGroup, RadioGroupDescription, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
-import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
+import {
+    RadioGroup,
+    RadioGroupDescription,
+    RadioGroupLabel,
+    RadioGroupOption,
+} from '@headlessui/vue';
+import {
+    CheckCircleIcon,
+    ExclamationTriangleIcon,
+} from '@heroicons/vue/20/solid';
 import SatteldachForm from './SatteldachForm.vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 import { computed, reactive, watch } from 'vue';
 import FlachdachForm from './FlachdachForm.vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { Inertia } from '@inertiajs/inertia';
 import PultdachForm from './PultdachForm.vue';
-import { BuildingStorefrontIcon, PlusIcon, Square3Stack3DIcon, SunIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import {
+    BuildingStorefrontIcon,
+    PlusIcon,
+    Square3Stack3DIcon,
+    SunIcon,
+    TrashIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
-  order: Object,
+    order: Object,
 });
 
 const options = {
-  'satteldach': [
-    {
-      value: 'kalt',
-      label: 'Kalt',
-      children: [
+    satteldach: [
         {
-          value: 'massiv',
-          label: 'Zwischendecke Massiv',
+            value: 'kalt',
+            label: 'Kalt',
+            children: [
+                {
+                    value: 'massiv',
+                    label: 'Zwischendecke Massiv',
+                },
+                {
+                    value: 'holzbalken',
+                    label: 'Zwischendecke Holzbalkendecke',
+                },
+                {
+                    value: 'vollholz',
+                    label: 'Zwischendecke Vollholz',
+                },
+            ],
         },
         {
-          value: 'holzbalken',
-          label: 'Zwischendecke Holzbalkendecke',
+            value: 'beheizt',
+            label: 'Beheizt',
+            children: [
+                {
+                    value: 'holz',
+                    label: 'Holz Dachstuhl',
+                },
+            ],
         },
+    ],
+    flachdach: [
         {
-          value: 'vollholz',
-          label: 'Zwischendecke Vollholz',
+            value: 'beheizt',
+            label: 'Beheizt',
+            children: [
+                {
+                    value: 'massiv',
+                    label: 'Decke Massiv',
+                },
+                {
+                    value: 'vollholz',
+                    label: 'Decke Vollholz',
+                },
+            ],
         },
-      ],
-    },
-    {
-      value: 'beheizt',
-      label: 'Beheizt',
-      children: [
+    ],
+    pultdach: [
         {
-          value: 'holz',
-          label: 'Holz Dachstuhl',
+            value: 'beheizt',
+            label: 'Beheizt',
+            children: [
+                {
+                    value: 'massiv',
+                    label: 'Decke Massiv',
+                },
+                {
+                    value: 'vollholz',
+                    label: 'Decke Vollholz',
+                },
+                {
+                    value: 'gefach',
+                    label: 'Decke Gefach',
+                },
+            ],
         },
-      ],
-    },
-  ],
-  'flachdach': [
-    {
-      value: 'beheizt',
-      label: 'Beheizt',
-      children: [
-        {
-          value: 'massiv',
-          label: 'Decke Massiv',
-        },
-        {
-          value: 'vollholz',
-          label: 'Decke Vollholz',
-        },
-      ],
-    },
-  ],
-  'pultdach': [
-    {
-      value: 'beheizt',
-      label: 'Beheizt',
-      children: [
-        {
-          value: 'massiv',
-          label: 'Decke Massiv',
-        },
-        {
-          value: 'vollholz',
-          label: 'Decke Vollholz',
-        },
-        {
-          value: 'gefach',
-          label: 'Decke Gefach',
-        },
-      ],
-    },
-  ],
+    ],
 };
 
 const cascaderProps = {
-  expandTrigger: 'hover',
+    expandTrigger: 'hover',
 };
 
 const roofForms = [
-  {
-    id: 1,
-    title: 'Satteldach',
-    description: 'Inklusive (Krüppel-)Walmdach, Mansardendach & Zeltdach',
-    image: '/satteldach.svg',
-  },
-  {
-    id: 2,
-    title: 'Flachdach',
-    description: 'Auch für andere Dachformen mit Kaltdach geeignet.',
-    image: '/flachdach.svg',
-  },
-  {
-    id: 3,
-    title: 'Pultdach',
-    description: 'Gängig bei Bürogebäuden, Industrie- und Gewerbebauten.',
-    image: '/pultdach.svg',
-  },
+    {
+        id: 1,
+        title: 'Satteldach',
+        description: 'Inklusive (Krüppel-)Walmdach, Mansardendach & Zeltdach',
+        image: '/satteldach.svg',
+    },
+    {
+        id: 2,
+        title: 'Flachdach',
+        description: 'Auch für andere Dachformen mit Kaltdach geeignet.',
+        image: '/flachdach.svg',
+    },
+    {
+        id: 3,
+        title: 'Pultdach',
+        description: 'Gängig bei Bürogebäuden, Industrie- und Gewerbebauten.',
+        image: '/pultdach.svg',
+    },
 ];
 
-const getForTitle = title => roofForms.find(roofForm => roofForm.title === title);
+const getForTitle = (title) =>
+    roofForms.find((roofForm) => roofForm.title === title);
 
-const roof = computed(() => props.order.product.roof);
+const roof = computed(() => props.order.certificate?.roof);
+
 const form = useForm({
-  dachform: roof.dachform ? getForTitle(roof.dachform) : null,
-  beheizt: null,
-  bauweise: roof ? [`${roof.beheizt ? 'beheizt' : 'kalt'}`, roof.bauweise] : [],
-  u_wert: roof.u_wert ?? null,
-  kniestock: roof.kniestock ?? null,
-  dachneigung: roof.dachneigung ?? null,
-  zwischendecke: roof.zwischendecke ?? null,
+    roof_shape: roof.value?.roof_shape
+        ? getForTitle(roof.value?.roof_shape)
+        : null,
+    heated: null,
+    construction: roof.value?.heated
+        ? [
+              `${roof.value?.heated ? 'beheizt' : 'kalt'}`,
+              roof.value?.construction,
+          ]
+        : [],
+    u_value: roof.value?.u_value ?? null,
+    knee_wall: roof.value?.knee_wall ?? null,
+    pitch: roof.value?.pitch ?? null,
+    ceiling: roof.value?.ceiling ?? null,
 });
 
-watch(() => form.dachform, async (value, oldValue) => {
+watch(
+    () => form.roof_shape,
+    async (value, oldValue) => {
+        // Changing to a roof type where dormers are not allowed
+        if (
+            (value.title === 'Flachdach' || value.title === 'Pultdach') &&
+            props.order.certificate.roof?.dormers?.length > 0
+        ) {
+            ElMessageBox.confirm(
+                `Für diese Dachform sind keine Gauben vorgesehen. Bestehende (${props.order.certificate.roof.dormers?.length}) Gauben werden gelöscht. Fortfahren?`,
+                'Achtung',
+                {
+                    confirmButtonText: 'Weiter',
+                    cancelButtonText: 'Abbrechen',
+                    type: 'warning',
+                }
+            )
+                .then(() => {
+                    props.order.certificate.roof.dormers?.forEach((dormer) => {
+                        Inertia.delete(
+                            route(
+                                'bdrf.dormer.delete',
+                                {
+                                    order: props.order.id,
+                                    dormer: dormer.id,
+                                },
+                                {
+                                    preserveScroll: true,
+                                }
+                            )
+                        );
+                    });
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: 'Abgebrochen',
+                    });
 
-  // Changing to a roof type where dormers are not allowed
-  if ((value.title === 'Flachdach' || value.title === 'Pultdach') && props.order.product.roof?.dormers?.length > 0) {
-    ElMessageBox.confirm(
-      `Für diese Dachform sind keine Gauben vorgesehen. Bestehende (${props.order.product.roof.dormers.length}) Gauben werden gelöscht. Fortfahren?`,
-      'Achtung',
-      {
-        confirmButtonText: 'Weiter',
-        cancelButtonText: 'Abbrechen',
-        type: 'warning',
-      },
-    ).then(() => {
-      props.order.product.roof.dormers.forEach(dormer => {
-        Inertia.delete(route('bedarf.dormer.delete', {
-          order: props.order.id,
-          dormer: dormer.id,
-        }, {
-          preserveScroll: true,
-        }));
-      });
+                    form.roof_shape = oldValue;
+                });
+        }
 
-    }).catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Abgebrochen',
-      });
+        if (value.title === props.order.certificate.roof?.roof_shape) {
+            form.reset(
+                'heated',
+                'construction',
+                'u_value',
+                'knee_wall',
+                'pitch',
+                'ceiling'
+            );
+            return;
+        }
 
-      form.dachform = oldValue;
-    });
-  }
-
-  if (value.title === props.order.product.roof?.dachform) {
-    form.reset('beheizt', 'bauweise', 'u_wert', 'kniestock', 'dachneigung', 'zwischendecke');
-    return;
-  }
-
-  form.bauweise = [];
-  form.beheizt = null;
-  form.u_wert = null;
-  form.kniestock = null;
-  form.dachneigung = null;
-  form.zwischendecke = null;
-}, { deep: true });
+        form.construction = [];
+        form.heating = null;
+        form.u_value = null;
+        form.knee_wall = null;
+        form.pitch = null;
+        form.ceiling = null;
+    },
+    { deep: true }
+);
 
 const resetChildren = (value) => {
+    if (value.length > 0 && value[1] === roof.value?.construction) {
+        form.reset('heated', 'u_value', 'knee_wall', 'pitch', 'ceiling');
+        return;
+    }
 
-  if (value.length > 0 && value[1] === roof.bauweise) {
-    form.reset('beheizt', 'u_wert', 'kniestock', 'dachneigung', 'zwischendecke');
-    return;
-  }
-
-  form.beheizt = null;
-  form.u_wert = null;
-  form.kniestock = null;
-  form.dachneigung = null;
-  form.zwischendecke = null;
+    form.heated = null;
+    form.u_value = null;
+    form.knee_wall = null;
+    form.pitch = null;
+    form.ceiling = null;
 };
 
 const skylightForm = useForm({
-  count: null,
-  height: null,
-  width: null,
-  verglasung: null,
+    count: null,
+    height: null,
+    width: null,
+    verglasung: null,
 });
 
 const insulationForm = useForm({
-  type: null,
-  thickness: null,
+    type: null,
+    thickness: null,
 });
 
 const dormerForm = useForm({
-  count: null,
-  form: null,
-  height: null,
-  width: null,
+    count: null,
+    form: null,
+    height: null,
+    width: null,
 });
 
 const state = reactive({
-  insulation: false,
-  skylight: false,
-  dormer: false,
-  isOpen: false,
+    insulation: false,
+    skylight: false,
+    dormer: false,
+    isOpen: false,
 });
 
-const prepareForm = form => form.transform(data => ({
-  ...data,
-  dachform: data.dachform?.title,
-  beheizt: data.bauweise[0] === 'beheizt',
-  bauweise: data.bauweise[1],
-}));
+const prepareForm = (form) =>
+    form.transform((data) => ({
+        ...data,
+        roof_shape: data?.roof_shape?.title,
+        heated: data.construction[0] === 'heated',
+        construction: data.construction[1],
+    }));
 
 const safe = () => {
-  prepareForm(form).put(route('bedarf.roof.update', props.order.id), {
-    preserveScroll: true,
-    onSuccess: () => {
-      ElNotification({
-        title: 'Gespeichert',
-        message: 'Dach erfolgreich gespeichert',
-        type: 'success',
-      });
-    },
-  });
+    prepareForm(form).put(
+        route('bdrf.roof', {
+            bdrf: props.order.certificate.id,
+            signature: usePage().props.value.signature,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                ElNotification({
+                    title: 'Gespeichert',
+                    message: 'Dach erfolgreich gespeichert',
+                    type: 'success',
+                });
+            },
+        }
+    );
 };
 
 const addInsulation = () => {
-
-  insulationForm.put(route('bedarf.insulation.update', props.order.id), {
-    preserveScroll: true,
-    onSuccess: () => {
-      insulationForm.reset();
-      state.insulation = false;
-    },
-  });
-
+    insulationForm.put(route('bdrf.roof.insulation', props.order.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            insulationForm.reset();
+            state.insulation = false;
+        },
+    });
 };
 
 const addSkylight = () => {
-
-  skylightForm.put(route('bedarf.skylight.update', props.order.id), {
-    preserveScroll: true,
-    onSuccess: () => {
-      skylightForm.reset();
-      state.skylight = false;
-    },
-  });
-
+    skylightForm.put(route('bdrf.roof.skylight', props.order.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            skylightForm.reset();
+            state.skylight = false;
+        },
+    });
 };
 
 const addDormer = () => {
-
-  dormerForm.put(route('bedarf.dormer.update', props.order.id), {
-    preserveScroll: true,
-    onSuccess: () => {
-      dormerForm.reset();
-      state.dormer = false;
-    },
-  });
-
+    dormerForm.put(route('bdrf.roof.dormer', props.order.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            dormerForm.reset();
+            state.dormer = false;
+        },
+    });
 };
 
 const deleteInsulation = (id) => {
-
-  Inertia.delete(route('bedarf.insulation.delete', {
-    'order': props.order.id,
-    'insulation': id,
-  }), {
-    preserveScroll: true,
-  });
-
+    Inertia.delete(
+        route('bdrf.roof.insulation.delete', {
+            order: props.order.id,
+            insulation: id,
+        }),
+        {
+            preserveScroll: true,
+        }
+    );
 };
 
 const deleteSkylight = (id) => {
-
-  Inertia.delete(route('bedarf.skylight.delete', {
-    'order': props.order.id,
-    'skylight': id,
-  }), {
-    preserveScroll: true,
-  });
-
+    Inertia.delete(
+        route('bdrf.roof.skylight.delete', {
+            order: props.order.id,
+            skylight: id,
+        }),
+        {
+            preserveScroll: true,
+        }
+    );
 };
 
 const deleteDormer = (id) => {
-
-  Inertia.delete(route('bedarf.dormer.delete', {
-    'order': props.order.id,
-    'dormer': id,
-  }), {
-    preserveScroll: true,
-  });
-
+    Inertia.delete(
+        route('bdrf.roof.dormer.delete', {
+            order: props.order.id,
+            dormer: id,
+        }),
+        {
+            preserveScroll: true,
+        }
+    );
 };
 
 const openDrawer = async (drawer) => {
-
-  if (!props.order.product.roof || form.isDirty) {
-    prepareForm(form).put(route('bedarf.roof.update', props.order.id), {
-      preserveScroll: true,
-      onSuccess: () => {
-        state[drawer] = true;
-      },
-      onError: () => {
-        ElNotification({
-          title: 'Fehler',
-          message: 'Behebe bitte zuerst alle Fehler.',
-          type: 'error',
+    if (!props.order.certificate.roof || form.isDirty) {
+        prepareForm(form).put(route('bdrf.roof', props.order.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                state[drawer] = true;
+            },
+            onError: () => {
+                ElNotification({
+                    title: 'Fehler',
+                    message: 'Behebe bitte zuerst alle Fehler.',
+                    type: 'error',
+                });
+            },
         });
-      },
-    });
 
-    return;
-  }
+        return;
+    }
 
-  state[drawer] = true;
+    state[drawer] = true;
 };
 
 const hasAdditional = computed(() => {
-  return props.order.product.roof?.insulations.length > 0 ||
-    props.order.product.roof?.skylights.length > 0 ||
-    props.order.product.roof?.dormers.length > 0;
+    return (
+        props.order.certificate.roof?.insulations?.length > 0 ||
+        props.order.certificate.roof?.skylights?.length > 0 ||
+        props.order.certificate.roof?.dormers?.length > 0
+    );
 });
-
 </script>
 
 <template>
-  <el-card :body-style="{ padding: '0px' }" shadow='never'>
-    <template #header>
-      <div class='flex justify-between items-center'>
-
-        <div class='text-gray-800'>{{ form.dachform?.title ? form.dachform.title : 'Dach' }}</div>
-
-        <div v-if='form.isDirty' class='text-xs text-gray-500 flex items-center'>
-          <ExclamationTriangleIcon class='h-4 w-4 mr-1 text-yellow-500' />
-          es gibt nicht gespeicherte Änderungen
-        </div>
-        <div v-else class='text-xs text-gray-500 flex items-center'>
-          <CheckCircleIcon class='h-4 w-4 mr-1 text-emerald-500' />
-          alles gespeichert
-        </div>
-      </div>
-    </template>
-
-    <div class='flex p-4'>
-
-      <RadioGroup v-model='form.dachform' class='w-full'>
-        <div class='grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4'>
-
-          <RadioGroupOption
-            v-for='roof in roofForms'
-            :key='roof.id'
-            v-slot='{ checked, active }'
-            :value='roof'
-            as='template'>
-            <div
-              :class="[checked ? 'border-transparent'
-                                  : 'border-gray-300',
-                              active
-                                  ? 'border-blue-500 ring-2 ring-blue-500'
-                                  : '',
-                              'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none',
-                          ]">
-              <span class='flex flex-1'>
-                <span class='flex flex-col'>
-                  <RadioGroupLabel
-                    as='span'
-                    class='block text-sm font-medium text-gray-900'>
-                    {{ roof.title }}
-                  </RadioGroupLabel>
-                  <RadioGroupDescription
-                    as='span'
-                    class='mt-1 flex items-center text-xs text-gray-500'>
-                    {{ roof.description }}
-                  </RadioGroupDescription>
-                  <RadioGroupDescription
-                    as='div'
-                    class='mt-6 flex text-sm font-medium text-gray-900'>
-                    <img :alt='roof.title' :src='roof.image' class='h-8 w-8' />
-                  </RadioGroupDescription>
-                </span>
-              </span>
-              <CheckCircleIcon
-                :class="[!checked ? 'invisible' : '','h-5 w-5 text-blue-600']"
-                aria-hidden='true' />
-              <span
-                :class="[active ? 'border' : 'border-2',
-                  checked ? 'border-blue-500'
-                          : 'border-transparent',
-                      'pointer-events-none absolute -inset-px rounded-lg',
-                  ]"
-                aria-hidden='true' />
-            </div>
-          </RadioGroupOption>
-        </div>
-      </RadioGroup>
-    </div>
-
-    <template v-if='form.dachform'>
-
-      <!--   Homemade divider   -->
-      <div class='border-t border-gray-300 flex mb-5'></div>
-
-      <el-form class='grid sm:grid-cols-2 gap-4 px-4' label-position='top' size='large'>
-
-        <el-form-item :error='form.errors.beheizt || form.errors.bauweise' label='Dachstock' required>
-          <el-cascader
-            v-model='form.bauweise'
-            :options='options[form.dachform.title.toLowerCase()]'
-            :props='cascaderProps'
-            class='w-full'
-            placeholder='Bitte wählen Sie eine Option aus'
-            @change='resetChildren'
-          />
-        </el-form-item>
-
-        <el-form-item :error='form.errors.u_wert' label='U-Wert (falls bekannt)'>
-          <el-input-number v-model='form.u_wert' :max='10' :min='0.08' :precision='2' :step='0.01' placeholder='0' />
-        </el-form-item>
-
-      </el-form>
-
-      <satteldach-form v-if='form.dachform.title === "Satteldach" && form.bauweise[0] === "beheizt"' :form='form'
-                       :order='order' />
-      <flachdach-form v-else-if='form.dachform.title === "Satteldach" && form.bauweise[0] === "kalt"' :form='form'
-                      :order='order' />
-      <flachdach-form v-else-if='form.dachform.title === "Flachdach" && form.bauweise[0]' :form='form' :order='order' />
-      <pultdach-form v-else-if='form.dachform.title === "Pultdach" && form.bauweise[0]' :form='form' :order='order' />
-
-      <template v-if='hasAdditional'>
-        <div class='border-t border-gray-200 p-6 space-y-2 bg-gray-50'>
-
-          <div v-for='insulation in order.product.roof?.insulations'
-               class='flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm'>
-
-            <div class='h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center'>
-              <Square3Stack3DIcon class='h-6 w-6 text-gray-300' />
-            </div>
-
-            <div class='flex-1'>
-              <h3 class='text-gray-800 text-sm'>{{ insulation.type }}</h3>
-              <p class='text-xs text-gray-500'>{{ insulation.thickness }} cm</p>
-            </div>
-            <div class='flex-shrink-0'>
-              <el-button size='small' text @click='deleteInsulation(insulation.id)'>
-                <trash-icon class='h-4 w-4' />
-              </el-button>
-            </div>
-          </div>
-
-          <div v-for='skylight in order.product.roof?.skylights'
-               class='flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm'>
-
-            <div class='h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center'>
-              <SunIcon class='h-6 w-6 text-gray-300' />
-            </div>
-
-            <div class='flex-1'>
-              <h3 class='text-gray-800 text-sm'>Dachfenster - {{ skylight.verglasung }}</h3>
-              <div class='flex'>
-                <span class='text-xs text-gray-500 mr-2'>{{ skylight.count }} Stück</span>
-                <span class='text-xs text-gray-500 mr-2'>{{ skylight.height }}cm x {{ skylight.width }}cm</span>
-              </div>
-            </div>
-            <div class='flex-shrink-0'>
-              <el-button size='small' text @click='deleteSkylight(skylight.id)'>
-                <trash-icon class='h-4 w-4' />
-              </el-button>
-            </div>
-
-          </div>
-          <div v-for='dormer in order.product.roof?.dormers'
-               class='flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm'>
-
-            <div class='h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center'>
-              <BuildingStorefrontIcon class='h-6 w-6 text-gray-300' />
-            </div>
-
-            <div class='flex-1'>
-              <h3 class='text-gray-800 text-sm'>Gaube - {{ dormer.form }}</h3>
-              <div class='flex'>
-                <span class='text-xs text-gray-500 mr-2'>{{ dormer.count }} Stück</span>
-                <span class='text-xs text-gray-500 mr-2'>{{ dormer.height }}cm x {{ dormer.width }}cm</span>
-              </div>
-            </div>
-            <div class='flex-shrink-0'>
-              <el-button size='small' text @click='deleteDormer(dormer.id)'>
-                <trash-icon class='h-4 w-4' />
-              </el-button>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <div class='p-4 flex justify-end border-t border-gray-200'>
-        <el-button bg size='large' text @click='openDrawer("insulation")'>
-          <plus-icon class='h-4 w-4 mr-1' />
-          Dämmung hinzufügen
-        </el-button>
-        <el-button bg size='large' text @click='openDrawer("skylight")'>
-          <plus-icon class='h-4 w-4 mr-1' />
-          Dachfenster hinzufügen
-        </el-button>
-        <el-button v-if='form.dachform.title === "Satteldach"' bg size='large' text @click='openDrawer("dormer")'>
-          <plus-icon class='h-4 w-4 mr-1' />
-          Gaube hinzufügen
-        </el-button>
-      </div>
-
-      <el-drawer v-model='state.skylight'>
+    <el-card :body-style="{ padding: '0px' }" shadow="never">
         <template #header>
-          <h2>Dachfenster hinzufügen</h2>
+            <div class="flex justify-between items-center">
+                <div class="text-gray-800">
+                    {{
+                        form.roof_shape?.title ? form.roof_shape.title : 'Dach'
+                    }}
+                </div>
+
+                <div
+                    v-if="form.isDirty"
+                    class="text-xs text-gray-500 flex items-center">
+                    <ExclamationTriangleIcon
+                        class="h-4 w-4 mr-1 text-yellow-500" />
+                    es gibt nicht gespeicherte Änderungen
+                </div>
+                <div v-else class="text-xs text-gray-500 flex items-center">
+                    <CheckCircleIcon class="h-4 w-4 mr-1 text-emerald-500" />
+                    alles gespeichert
+                </div>
+            </div>
         </template>
 
-        <el-form label-position='top' size='large'>
+        <div class="flex p-4">
+            <RadioGroup v-model="form.roof_shape" class="w-full">
+                <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+                    <RadioGroupOption
+                        v-for="roof in roofForms"
+                        :key="roof.id"
+                        v-slot="{ checked, active }"
+                        :value="roof"
+                        as="template">
+                        <div
+                            :class="[
+                                checked
+                                    ? 'border-transparent'
+                                    : 'border-gray-300',
+                                active
+                                    ? 'border-blue-500 ring-2 ring-blue-500'
+                                    : '',
+                                'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none',
+                            ]">
+                            <span class="flex flex-1">
+                                <span class="flex flex-col">
+                                    <RadioGroupLabel
+                                        as="span"
+                                        class="block text-sm font-medium text-gray-900">
+                                        {{ roof.title }}
+                                    </RadioGroupLabel>
+                                    <RadioGroupDescription
+                                        as="span"
+                                        class="mt-1 flex items-center text-xs text-gray-500">
+                                        {{ roof.description }}
+                                    </RadioGroupDescription>
+                                    <RadioGroupDescription
+                                        as="div"
+                                        class="mt-6 flex text-sm font-medium text-gray-900">
+                                        <img
+                                            :alt="roof.title"
+                                            :src="roof.image"
+                                            class="h-8 w-8" />
+                                    </RadioGroupDescription>
+                                </span>
+                            </span>
+                            <CheckCircleIcon
+                                :class="[
+                                    !checked ? 'invisible' : '',
+                                    'h-5 w-5 text-blue-600',
+                                ]"
+                                aria-hidden="true" />
+                            <span
+                                :class="[
+                                    active ? 'border' : 'border-2',
+                                    checked
+                                        ? 'border-blue-500'
+                                        : 'border-transparent',
+                                    'pointer-events-none absolute -inset-px rounded-lg',
+                                ]"
+                                aria-hidden="true" />
+                        </div>
+                    </RadioGroupOption>
+                </div>
+            </RadioGroup>
+        </div>
 
-          <el-form-item label='Anzahl'>
-            <el-input-number v-model='skylightForm.count' :max='20' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
+        <template v-if="form.roof_shape">
+            <!--   Homemade divider   -->
+            <div class="border-t border-gray-300 flex mb-5"></div>
 
-          <el-form-item label='Höhe in cm'>
-            <el-input-number v-model='skylightForm.height' :max='500' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
+            <el-form
+                class="grid sm:grid-cols-2 gap-4 px-4"
+                label-position="top"
+                size="large">
+                <el-form-item
+                    :error="form.errors.heated || form.errors.construction"
+                    label="Dachstock"
+                    required>
+                    <el-cascader
+                        v-model="form.construction"
+                        :options="options[form.roof_shape.title.toLowerCase()]"
+                        :props="cascaderProps"
+                        class="w-full"
+                        placeholder="Bitte wählen Sie eine Option aus"
+                        @change="resetChildren" />
+                </el-form-item>
 
-          <el-form-item label='Breite in cm'>
-            <el-input-number v-model='skylightForm.width' :max='500' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
+                <el-form-item
+                    :error="form.errors.u_value"
+                    label="U-Wert (falls bekannt)">
+                    <el-input-number
+                        v-model="form.u_value"
+                        :max="10"
+                        :min="0.08"
+                        :precision="2"
+                        :step="0.01"
+                        placeholder="0" />
+                </el-form-item>
+            </el-form>
 
-          <el-form-item label='Verglasung'>
-            <el-select v-model='skylightForm.verglasung' class='w-full' placeholder='Bitte auswählen'>
-              <el-option label='Nicht bekannt' value='Nicht bekannt'></el-option>
-              <el-option label='Einfach verglast' value='Einfach verglast'></el-option>
-              <el-option label='Doppelt verglast' value='Doppelt verglast'></el-option>
-              <el-option label='Dreifach verglast' value='Dreifach verglast'></el-option>
-            </el-select>
-          </el-form-item>
+            <satteldach-form
+                v-if="
+                    form.roof_shape.title === 'Satteldach' &&
+                    form.construction[0] === 'beheizt'
+                "
+                :form="form"
+                :order="order" />
+            <flachdach-form
+                v-else-if="
+                    form.roof_shape.title === 'Satteldach' &&
+                    form.construction[0] === 'kalt'
+                "
+                :form="form"
+                :order="order" />
+            <flachdach-form
+                v-else-if="
+                    form.roof_shape.title === 'Flachdach' &&
+                    form.construction[0]
+                "
+                :form="form"
+                :order="order" />
+            <pultdach-form
+                v-else-if="
+                    form.roof_shape.title === 'Pultdach' && form.construction[0]
+                "
+                :form="form"
+                :order="order" />
 
-          <div class='flex justify-end mt-5'>
-            <el-button type='primary' @click='addSkylight'>Hinzufügen</el-button>
-          </div>
-        </el-form>
+            <template v-if="hasAdditional">
+                <div class="border-t border-gray-200 p-6 space-y-2 bg-gray-50">
+                    <div
+                        v-for="insulation in order.certificate.roof
+                            ?.insulations"
+                        class="flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm">
+                        <div
+                            class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
+                            <Square3Stack3DIcon class="h-6 w-6 text-gray-300" />
+                        </div>
 
-      </el-drawer>
+                        <div class="flex-1">
+                            <h3 class="text-gray-800 text-sm">
+                                {{ insulation.type }}
+                            </h3>
+                            <p class="text-xs text-gray-500">
+                                {{ insulation.thickness }} cm
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <el-button
+                                size="small"
+                                text
+                                @click="deleteInsulation(insulation.id)">
+                                <trash-icon class="h-4 w-4" />
+                            </el-button>
+                        </div>
+                    </div>
 
-      <el-drawer v-model='state.dormer'>
-        <template #header>
-          <h2>Gaube hinzufügen</h2>
+                    <div
+                        v-for="skylight in order.certificate.roof?.skylights"
+                        class="flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm">
+                        <div
+                            class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
+                            <SunIcon class="h-6 w-6 text-gray-300" />
+                        </div>
+
+                        <div class="flex-1">
+                            <h3 class="text-gray-800 text-sm">
+                                Dachfenster - {{ skylight.verglasung }}
+                            </h3>
+                            <div class="flex">
+                                <span class="text-xs text-gray-500 mr-2"
+                                    >{{ skylight.count }} Stück</span
+                                >
+                                <span class="text-xs text-gray-500 mr-2"
+                                    >{{ skylight.height }}cm x
+                                    {{ skylight.width }}cm</span
+                                >
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <el-button
+                                size="small"
+                                text
+                                @click="deleteSkylight(skylight.id)">
+                                <trash-icon class="h-4 w-4" />
+                            </el-button>
+                        </div>
+                    </div>
+                    <div
+                        v-for="dormer in order.certificate.roof?.dormers"
+                        class="flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm">
+                        <div
+                            class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
+                            <BuildingStorefrontIcon
+                                class="h-6 w-6 text-gray-300" />
+                        </div>
+
+                        <div class="flex-1">
+                            <h3 class="text-gray-800 text-sm">
+                                Gaube - {{ dormer.form }}
+                            </h3>
+                            <div class="flex">
+                                <span class="text-xs text-gray-500 mr-2"
+                                    >{{ dormer.count }} Stück</span
+                                >
+                                <span class="text-xs text-gray-500 mr-2"
+                                    >{{ dormer.height }}cm x
+                                    {{ dormer.width }}cm</span
+                                >
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <el-button
+                                size="small"
+                                text
+                                @click="deleteDormer(dormer.id)">
+                                <trash-icon class="h-4 w-4" />
+                            </el-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div class="p-4 flex justify-end border-t border-gray-200">
+                <el-button
+                    bg
+                    size="large"
+                    text
+                    @click="openDrawer('insulation')">
+                    <plus-icon class="h-4 w-4 mr-1" />
+                    Dämmung hinzufügen
+                </el-button>
+                <el-button bg size="large" text @click="openDrawer('skylight')">
+                    <plus-icon class="h-4 w-4 mr-1" />
+                    Dachfenster hinzufügen
+                </el-button>
+                <el-button
+                    v-if="form.roof_shape.title === 'Satteldach'"
+                    bg
+                    size="large"
+                    text
+                    @click="openDrawer('dormer')">
+                    <plus-icon class="h-4 w-4 mr-1" />
+                    Gaube hinzufügen
+                </el-button>
+            </div>
+
+            <el-drawer v-model="state.skylight">
+                <template #header>
+                    <h2>Dachfenster hinzufügen</h2>
+                </template>
+
+                <el-form label-position="top" size="large">
+                    <el-form-item label="Anzahl">
+                        <el-input-number
+                            v-model="skylightForm.count"
+                            :max="20"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item label="Höhe in cm">
+                        <el-input-number
+                            v-model="skylightForm.height"
+                            :max="500"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item label="Breite in cm">
+                        <el-input-number
+                            v-model="skylightForm.width"
+                            :max="500"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item label="Verglasung">
+                        <el-select
+                            v-model="skylightForm.verglasung"
+                            class="w-full"
+                            placeholder="Bitte auswählen">
+                            <el-option
+                                label="Nicht bekannt"
+                                value="Nicht bekannt"></el-option>
+                            <el-option
+                                label="Einfach verglast"
+                                value="Einfach verglast"></el-option>
+                            <el-option
+                                label="Doppelt verglast"
+                                value="Doppelt verglast"></el-option>
+                            <el-option
+                                label="Dreifach verglast"
+                                value="Dreifach verglast"></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <div class="flex justify-end mt-5">
+                        <el-button type="primary" @click="addSkylight"
+                            >Hinzufügen</el-button
+                        >
+                    </div>
+                </el-form>
+            </el-drawer>
+
+            <el-drawer v-model="state.dormer">
+                <template #header>
+                    <h2>Gaube hinzufügen</h2>
+                </template>
+
+                <el-form label-position="top" size="large">
+                    <el-form-item
+                        :error="dormerForm.errors.form"
+                        label="Bauweise">
+                        <el-select
+                            v-model="dormerForm.form"
+                            class="w-full"
+                            placeholder="Bitte auswählen">
+                            <el-option
+                                label="Schleppgaube"
+                                value="Schleppgaube"></el-option>
+                            <el-option
+                                label="Giebelgaube"
+                                value="Giebelgaube"></el-option>
+                            <el-option
+                                label="Dachgiebel"
+                                value="Dachgiebel"></el-option>
+                            <el-option
+                                label="Fledermausgaube"
+                                value="Fledermausgaube"></el-option>
+                            <el-option
+                                label="Tonnendachgiebelgaube"
+                                value="Tonnendachgiebelgaube"></el-option>
+                            <el-option
+                                label="Rundgaube"
+                                value="Rundgaube"></el-option>
+                            <el-option
+                                label="Spitzgaube"
+                                value="Spitzgaube"></el-option>
+                            <el-option
+                                label="Sonstige"
+                                value="Sonstige"></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item
+                        :error="dormerForm.errors.count"
+                        label="Anzahl">
+                        <el-input-number
+                            v-model="dormerForm.count"
+                            :max="20"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item
+                        :error="dormerForm.errors.height"
+                        label="Stirnseitige Höhe in cm">
+                        <el-input-number
+                            v-model="dormerForm.height"
+                            :max="500"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item
+                        :error="dormerForm.errors.width"
+                        label="Stirnseitige Breite in cm">
+                        <el-input-number
+                            v-model="dormerForm.width"
+                            :max="500"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <el-alert
+                        show-icon
+                        title="Höhe und Breite müssen nicht Zentimeter genau angegeben werden."
+                        type="info" />
+
+                    <div class="flex justify-end mt-5">
+                        <el-button type="primary" @click="addDormer"
+                            >Hinzufügen</el-button
+                        >
+                    </div>
+                </el-form>
+            </el-drawer>
+
+            <el-drawer v-model="state.insulation">
+                <template #header>
+                    <h2>Dämmung hinzufügen</h2>
+                </template>
+
+                <el-form label-position="top" size="large">
+                    <el-form-item
+                        :error="insulationForm.errors.type"
+                        label="Form der Dämmung">
+                        <el-select
+                            v-model="insulationForm.type"
+                            class="w-full"
+                            placeholder="Bitte auswählen">
+                            <el-option
+                                label="Nicht bekannt"
+                                value="nicht bekannt"></el-option>
+                            <el-option
+                                label="Aufdachdämmung"
+                                value="Aufdachdämmung"></el-option>
+                            <el-option
+                                label="Gefachdämmung"
+                                value="Gefachdämmung"></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item
+                        :error="insulationForm.errors.thickness"
+                        label="Stärke in cm">
+                        <el-input-number
+                            v-model="insulationForm.thickness"
+                            :max="500"
+                            :min="0"
+                            :step="1"
+                            placeholder="0"></el-input-number>
+                    </el-form-item>
+
+                    <div class="flex justify-end mt-5">
+                        <el-button type="primary" @click="addInsulation"
+                            >Hinzufügen</el-button
+                        >
+                    </div>
+                </el-form>
+            </el-drawer>
         </template>
 
-        <el-form label-position='top' size='large'>
-
-          <el-form-item :error='dormerForm.errors.form' label='Bauweise'>
-            <el-select v-model='dormerForm.form' class='w-full' placeholder='Bitte auswählen'>
-              <el-option label='Schleppgaube' value='Schleppgaube'></el-option>
-              <el-option label='Giebelgaube' value='Giebelgaube'></el-option>
-              <el-option label='Dachgiebel' value='Dachgiebel'></el-option>
-              <el-option label='Fledermausgaube' value='Fledermausgaube'></el-option>
-              <el-option label='Tonnendachgiebelgaube' value='Tonnendachgiebelgaube'></el-option>
-              <el-option label='Rundgaube' value='Rundgaube'></el-option>
-              <el-option label='Spitzgaube' value='Spitzgaube'></el-option>
-              <el-option label='Sonstige' value='Sonstige'></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item :error='dormerForm.errors.count' label='Anzahl'>
-            <el-input-number v-model='dormerForm.count' :max='20' :min='0' :step='1' placeholder='0'></el-input-number>
-          </el-form-item>
-
-          <el-form-item :error='dormerForm.errors.height' label='Stirnseitige Höhe in cm'>
-            <el-input-number v-model='dormerForm.height' :max='500' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
-
-          <el-form-item :error='dormerForm.errors.width' label='Stirnseitige Breite in cm'>
-            <el-input-number v-model='dormerForm.width' :max='500' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
-
-          <el-alert
-            show-icon
-            title='Höhe und Breite müssen nicht Zentimeter genau angegeben werden.'
-            type='info' />
-
-
-          <div class='flex justify-end mt-5'>
-            <el-button type='primary' @click='addDormer'>Hinzufügen</el-button>
-          </div>
-        </el-form>
-
-      </el-drawer>
-
-      <el-drawer v-model='state.insulation'>
-        <template #header>
-          <h2>Dämmung hinzufügen</h2>
-        </template>
-
-        <el-form label-position='top' size='large'>
-
-          <el-form-item :error='insulationForm.errors.type' label='Form der Dämmung'>
-            <el-select v-model='insulationForm.type' class='w-full' placeholder='Bitte auswählen'>
-              <el-option label='Nicht bekannt' value='nicht bekannt'></el-option>
-              <el-option label='Aufdachdämmung' value='Aufdachdämmung'></el-option>
-              <el-option label='Gefachdämmung' value='Gefachdämmung'></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item :error='insulationForm.errors.thickness' label='Stärke in cm'>
-            <el-input-number v-model='insulationForm.thickness' :max='500' :min='0' :step='1'
-                             placeholder='0'></el-input-number>
-          </el-form-item>
-
-          <div class='flex justify-end mt-5'>
-            <el-button type='primary' @click='addInsulation'>Hinzufügen</el-button>
-          </div>
-        </el-form>
-
-      </el-drawer>
-
-    </template>
-
-
-    <div id='roof-button-container' class='w-full flex justify-end p-5 border-t border-gray-200'>
-      <el-button :disabled='form.processing || !form.isDirty || form.bauweise.length !== 2' size='large' type='primary'
-                 @click='safe'>
-        {{ form.isDirty ? form.bauweise.length < 2 ? 'Nicht genug Daten' : 'Speichern' : 'Bereits gespeichert' }}
-      </el-button>
-    </div>
-  </el-card>
+        <div
+            id="roof-button-container"
+            class="w-full flex justify-end p-5 border-t border-gray-200">
+            <el-button
+                :disabled="
+                    form.processing ||
+                    !form.isDirty ||
+                    form.construction.length !== 2
+                "
+                size="large"
+                type="primary"
+                @click="safe">
+                {{
+                    form.isDirty
+                        ? form.construction.length < 2
+                            ? 'Nicht genug Daten'
+                            : 'Speichern'
+                        : 'Bereits gespeichert'
+                }}
+            </el-button>
+        </div>
+    </el-card>
 </template>
 
 <style scoped>
 .el-input-number {
-  width: 100%;
+    width: 100%;
 }
 </style>

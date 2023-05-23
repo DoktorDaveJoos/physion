@@ -23,13 +23,14 @@ class UpdateGeneralRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'nullable|phone:DE',
+            'phone' => 'nullable|string',
             'reason' => 'required|string',
             'street_address' => 'required|string',
             'zip' => 'required|digits:5',
             'city' => 'required|string',
             'type' => 'required|string',
             'additional_type' => 'required|string',
+            'page' => 'required|string'
         ];
     }
 
@@ -45,7 +46,6 @@ class UpdateGeneralRequest extends FormRequest
             'name.required' => 'Bitte geben Sie Ihren Namen an.',
             'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse an.',
             'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
-            'phone.phone' => 'Bitte geben Sie eine gültige Telefonnummer an.',
             'reason.required' => 'Bitte geben Sie einen Grund an.',
             'street_address.required' => 'Bitte geben Sie die Straße und Hausnummer des Gebäudes an.',
             'zip.required' => 'Bitte geben Sie die Postleitzahl des Gebäudes an.',

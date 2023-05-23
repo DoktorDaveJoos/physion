@@ -99,7 +99,11 @@ const checkTool = ref(false);
 
                                 <div class="flex justify-center">
                                     <InertiaLink
-                                        :href="route('verbrauch.create')"
+                                        :href="
+                                            route('order.create', {
+                                                category: 'vrbr',
+                                            })
+                                        "
                                         class="bg-slate-100 w-full max-w-sm flex items-center rounded-lg px-4 py-1 hover:bg-slate-200 cursor-pointer">
                                         <FireIcon
                                             class="h-6 w-6 mx-1 text-gray-900"
@@ -119,7 +123,11 @@ const checkTool = ref(false);
 
                                 <div class="flex justify-center">
                                     <InertiaLink
-                                        :href="route('bedarf.create')"
+                                        :href="
+                                            route('order.create', {
+                                                category: 'bdrf',
+                                            })
+                                        "
                                         class="bg-slate-100 w-full max-w-sm flex items-center rounded-lg px-4 py-1 hover:bg-slate-200 cursor-pointer">
                                         <CalculatorIcon
                                             class="h-6 w-6 mx-1 text-gray-900"

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Verbrauch;
+namespace App\Http\Requests\Certificate\Vrbr;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateVacancyRequest extends FormRequest
+class MarkDoneConsumptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,21 @@ class CreateVacancyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'period' => 'required|array|size:2',
-            'period.0' => 'required|date',
-            'period.1' => 'required|date',
+            'vacancy_percentage' => 'nullable|numeric|min:0|max:30',
+            'page' => 'required|string'
         ];
     }
 
     /**
-     * Get the error messages for the defined validation rules.
+     * Get the validation messages that apply to the request.
      *
      * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'period.required' => 'Bitte geben Sie einen Zeitraum an.',
+            'percentage.min' => 'Der Wert muss zwischen 0 und max 30 liegen.',
+            'percentage.max' => 'Der Wert muss zwischen 0 und max 30 liegen.',
         ];
     }
 }

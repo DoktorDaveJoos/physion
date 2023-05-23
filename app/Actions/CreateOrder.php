@@ -34,6 +34,7 @@ class CreateOrder
                 'customer_id' => $customer->id,
                 'certificate_id' => $certificate->id,
                 'certificate_type' => $certificate::class,
+                'meta' => ['steps' => ['general']],
             ])
         );
     }

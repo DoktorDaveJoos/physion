@@ -20,5 +20,6 @@ class UpdateCertificate
     public function handle(Order $order, mixed $data): void
     {
         $order->certificate->update($data);
+        $order->setStep($data['page']);
     }
 }

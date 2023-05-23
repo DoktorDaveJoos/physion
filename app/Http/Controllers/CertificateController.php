@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Category;
-use App\Models\Bdrf;
 use App\Models\Order;
-use App\Models\Vrbr;
-use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,32 +12,50 @@ use Throwable;
 
 class CertificateController extends Controller
 {
-    public function show(Order $order): RedirectResponse
-    {
-        return redirect()->route('certificate.show.page', [
-            'order' => $order->slug,
-            'page' => 'general',
-        ]);
-    }
-
     /**
      * @throws Throwable
      */
-    public function showPage(Order $order, string $page): Response
+    public function show(Order $order, Request $request): Response
     {
         $category = Category::fromModel($order->certificate_type);
+
+        if ($category->value === 'bdrf') {
+            $order->load(
+                'customer',
+                'certificate',
+                'certificate.wall',
+                'certificate.wall.insulations',
+                'certificate.wall.windows',
+                'certificate.roof'
+            );
+        }
+
+        if ($category->value === 'vrbr') {
+            $order->load(
+                'customer',
+                'certificate',
+                'certificate.sources',
+                'certificate.sources.periods',
+                'certificate.vacancies'
+            );
+        }
+
+        $page = $request->get('page', 'details');
 
         return Inertia::render($category->getVueComponent($page), [
-            'certificate' => $order->certificate,
+            'order' => $order,
+            'category' => $category->value,
+            'page' => $page,
         ]);
     }
 
     /**
      * @throws Throwable
      */
-    public function updatePage(Order $order, string $page, Request $request): RedirectResponse
+    public function update(Order $order, Request $request): RedirectResponse
     {
         $category = Category::fromModel($order->certificate_type);
+        $page = $request->get('page');
 
         // Validate the request using the FormRequest
         $validated = $request->validate(
@@ -60,9 +75,10 @@ class CertificateController extends Controller
         }
 
         // Redirect to the next page
-        return redirect()->route('certificate.show.page', [
+        return redirect()->route('certificate.show', [
             'order' => $order->slug,
             'page' => $nextPage,
+            'signature' => $request->get('signature'),
         ]);
     }
 }

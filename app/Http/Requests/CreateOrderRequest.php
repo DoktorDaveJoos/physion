@@ -25,7 +25,7 @@ class CreateOrderRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'nullable|phone:DE',
+            'phone' => 'nullable|string',
             'reason' => 'required|string',
             'street_address' => 'required|string',
             'zip' => 'required|digits:5',
@@ -34,7 +34,6 @@ class CreateOrderRequest extends FormRequest
             'additional_type' => 'required|string',
         ];
     }
-
 
     /**
      * Get the error messages for the defined validation rules.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Bedarf;
+namespace App\Http\Controllers\Bdrf;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Verbrauch;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Verbrauch\MarkDoneConsumptionRequest;
+use App\Http\Requests\Certificate\Vrbr\MarkDoneConsumptionRequest;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class MarkDoneConsumptionController extends Controller
 {

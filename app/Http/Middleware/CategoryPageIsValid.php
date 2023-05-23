@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\Category;
+use App\Models\Order;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,14 @@ class CategoryPageIsValid
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $category = Category::fromModel($request->route('order')->certificate_type);
+
+        $order = $request->route('order');
+
+        if (!($order instanceof Order)) {
+            $order = Order::where('slug', $order)->firstOrFail();
+        }
+
+        $category = Category::fromModel($order->certificate_type);
 
         if (($page = $request->route('page')) === null) {
             return $next($request);

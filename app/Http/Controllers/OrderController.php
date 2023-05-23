@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateCertificate;
-use App\Actions\CreateCustomer;
-use App\Actions\CreateOrder;
 use App\Actions\CreateOrderWithProduct;
 use App\Enums\Category;
 use App\Http\Requests\CreateOrderRequest;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,6 +16,9 @@ class OrderController extends Controller
 
     public function show(Order $order): Response
     {
+
+        $order->load('products');
+
         return Inertia::render('Order/Index', [
             'order' => $order,
         ]);
@@ -38,9 +38,11 @@ class OrderController extends Controller
             $request->validated()
         );
 
-        return redirect()->route('certificate.show', [
+        $url = URL::signedRoute('certificate.show', [
             'order' => $order->slug,
         ]);
+
+        return redirect()->to($url);
     }
 
 }

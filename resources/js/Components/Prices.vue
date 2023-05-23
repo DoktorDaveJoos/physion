@@ -123,7 +123,7 @@ const tiers = [
     {
         id: 'tier-hobby',
         name: 'Verbrauchsausweis',
-        href: route('verbrauch.create'),
+        href: route('order.create', { category: 'vrbr' }),
         priceMonthly: '79,90',
         description:
             'Energieausweis, der auf Basis der Verbrauchswerte erstellt wird.',
@@ -137,7 +137,7 @@ const tiers = [
     {
         id: 'tier-team',
         name: 'Bedarfsausweis',
-        href: route('bedarf.create'),
+        href: route('order.create', { category: 'bdrf' }),
         priceMonthly: '149,90',
         description:
             'Energieausweis, der den Energiebedarf des Gebäudes rechnerisch ermittelt.',

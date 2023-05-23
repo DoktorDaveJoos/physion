@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->integer('certificate_id');
             $table->string('certificate_type');
 
+            $table->json('meta')->nullable();
+
             $table->timestamps();
         });
     }

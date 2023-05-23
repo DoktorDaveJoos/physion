@@ -29,8 +29,10 @@ return new class extends Migration
             $table->integer('floor_area')->nullable();
             $table->integer('housing_units')->nullable();
             $table->string('construction_year')->nullable();
+            $table->string('construction_year_heating')->nullable();
 
             $table->string('ventilation')->nullable();
+            $table->string('cellar')->nullable();
 
             $table->string('cooling')->nullable();
             $table->string('cooling_count')->nullable();

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Bdrf\PositionController;
+use App\Http\Controllers\Bdrf\RoofController;
+use App\Http\Controllers\Bdrf\WallController;
 use App\Http\Controllers\Blog\SubscriptionsController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\Checkout\AddUpsellController;
@@ -8,9 +11,10 @@ use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\SearchController;
-use App\Http\Controllers\Order\DownloadController;
 use App\Http\Controllers\OrderController;
-use App\Http\Middleware\CategoryPageIsValid;
+use App\Http\Controllers\Vrbr\PeriodsController;
+use App\Http\Controllers\Vrbr\SourcesController;
+use App\Http\Controllers\Vrbr\VacanciesController;
 use App\Models\BlogEntry;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -100,39 +104,73 @@ use Inertia\Inertia;
 //
 //});
 
-
 Route::prefix('orders')->group(function () {
     Route::get('/create/{category}', [OrderController::class, 'create'])->name('order.create');
     Route::post('/create/{category}', [OrderController::class, 'store'])->name('order.store');
 
     Route::get('/{order:slug}', [OrderController::class, 'show'])->name('order.show');
 
-    Route::prefix('{order:slug}/certificate')->middleware(['signed', 'category.page', 'certificate'])->group(function () {
-        Route::get('/', [CertificateController::class, 'show'])->name('certificate.show');
-
-        Route::middleware(CategoryPageIsValid::class)->group(function () {
-            Route::get('/{page}', [CertificateController::class, 'showPage'])
-                ->name('certificate.show.page');
-
-            Route::put('/{page}', [CertificateController::class, 'updatePage'])
-                ->name('certificate.update.page');
-        });
-    });
+    Route::prefix('{order:slug}/certificate')->middleware(['signed'])->group(
+        function () {
+            Route::get('/', [CertificateController::class, 'show'])->name('certificate.show');
+            Route::put('/', [CertificateController::class, 'update'])->name('certificate.update');
+        }
+    );
 });
 
-//
-//Route::prefix('certificate')->middleware(['signed'])->group(
-//    function () {
-//        Route::get('/{order}', [CertificateController::class, 'show'])
-//            ->name('certificate.show');
-//
-//        Route::get('/{order}/{page}', [CertificateController::class, 'showPage'])
-//            ->name('certificate.show.page');
-//
-//        Route::put('/{order}/{page}', [CertificateController::class, 'updatePage'])
-//            ->name('certificate.update.page');
-//    }
-//);
+Route::prefix('bdrf/{bdrf}')->group(function () {
+    // roof
+    Route::put('/roof', RoofController::class)->name('bdrf.roof');
+    Route::put('/roof/insulation', [RoofController::class, 'insulation'])->name('bdrf.roof.insulation');
+    Route::delete('/roof/insulation/{insulation}', [RoofController::class, 'deleteInsulation'])
+        ->name('bdrf.roof.insulation.delete');
+    Route::put('/roof/skylight', [RoofController::class, 'skylight'])->name('bdrf.roof.skylight');
+    Route::delete('/roof/skylight/{skylight}', [RoofController::class, 'deleteSkylight'])
+        ->name('bdrf.roof.skylight.delete');
+
+    // dormer
+    Route::put('/dormer', [PositionController::class, 'dormer'])->name('bdrf.roof.dormer');
+    Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'] )->name('bdrf.roof.dormer.delete');
+
+
+    Route::put('/dormer/insulation', [PositionController::class, 'dormerInsulation'])->name('bdrf.roof.dormer.insulation');
+    Route::delete('/dormer/insulation/{insulation}', [PositionController::class, 'deleteDormerInsulation'])
+        ->name('bdrf.roof.dormer.insulation.delete');
+    Route::put('/dormer/window', [PositionController::class, 'dormerWindow'])->name('bdrf.roof.dormer.window');
+    Route::delete('/dormer/window/{window}', [PositionController::class, 'deleteDormerWindow'])
+        ->name('bdrf.roof.dormer.window.delete');
+
+
+    // wall
+    Route::put('/wall', WallController::class)->name('bdrf.wall');
+    Route::put('/wall/insulation', [WallController::class, 'insulation'])->name('bdrf.wall.insulation');
+    Route::delete('/wall/insulation/{insulation}', [WallController::class, 'deleteInsulation'])
+        ->name('bdrf.wall.insulation.delete');
+    Route::put('/wall/window', [WallController::class, 'window'])->name('bdrf.wall.window');
+    Route::delete('/wall/window/{window}', [WallController::class, 'deleteWindow'])
+        ->name('bdrf.wall.window.delete');
+
+    Route::put('/maps', [PositionController::class, 'maps'])->name('bdrf.maps');
+    Route::put('/position', [PositionController::class, 'position'])->name('bdrf.position');
+
+});
+
+Route::prefix('vrbr/{vrbr}')->group(function () {
+
+    Route::post('/sources', [SourcesController::class, 'store'])->name('vrbr.sources');
+    Route::delete('/sources/{source}', [SourcesController::class, 'destroy'])->name('vrbr.sources.destroy');
+
+    Route::post('/sources/{source}/periods', [PeriodsController::class, 'store'])->name('vrbr.periods');
+    Route::delete('/periods/{period}', [PeriodsController::class, 'destroy'])->name('vrbr.periods.destroy');
+
+    Route::post('/vacancies', [VacanciesController::class, 'store'])->name('vrbr.vacancies');
+    Route::delete('/vacancies/{vacancy}', [VacanciesController::class, 'destroy'])->name('vrbr.vacancies.destroy');
+
+//    Route::put('/general', [VerbrauchController::class, 'general'])->name('vrbr.general');
+//    Route::put('/details', [VerbrauchController::class, 'details'])->name('vrbr.details');
+//    Route::put('/consumption', [VerbrauchController::class, 'consumption'])->name('vrbr.consumption');
+});
+
 
 //
 //Route::prefix('verbrauchsausweis')
@@ -241,12 +279,12 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
     });
 });
 
-Route::prefix('order')->name('order.')->group(function () {
-    Route::prefix('{order}')->group(function () {
-        Route::get('', [\App\Http\Controllers\Order\ShowController::class, 'index'])->name('show');
-        Route::get('download', DownloadController::class)->name('download');
-    });
-});
+//Route::prefix('order')->name('order.')->group(function () {
+//    Route::prefix('{order}')->group(function () {
+//        Route::get('', [\App\Http\Controllers\Order\ShowController::class, 'index'])->name('show');
+//        Route::get('download', DownloadController::class)->name('download');
+//    });
+//});
 
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
@@ -274,7 +312,6 @@ Route::get('/', function () {
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'posts' => BlogEntry::latest()->take(3)->get(),
     ]);
 })->name('start');
 

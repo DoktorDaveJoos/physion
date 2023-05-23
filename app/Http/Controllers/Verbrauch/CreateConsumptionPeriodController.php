@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Verbrauch;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Verbrauch\CreateConsumptionPeriodRequest;
+use App\Http\Requests\Certificate\Vrbr\CreateConsumptionPeriodRequest;
 use App\Models\ConsumptionPeriod;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 

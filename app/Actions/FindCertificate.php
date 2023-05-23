@@ -43,9 +43,9 @@ class FindCertificate implements Action
         return [];
     }
 
-    private static function handleByOrderId(string $order_id): array
+    private static function handleByOrderId(string $order): array
     {
-        $order = Order::find($order_id);
+        $order = Order::where('slug', $order)->first();
 
         if ($order) {
             return [$order];
