@@ -41,7 +41,7 @@ const products = [
             href: route('order.create', 'bdrf'),
             icon: CalculatorIcon,
             theme: 'bg-sky-500',
-            active: true,
+            active: false,
             availableFrom: null,
         },
     ],
@@ -96,7 +96,7 @@ const resources = [
 </script>
 
 <template>
-    <div id='argh' class="min-h-screen flex flex-col">
+    <div id="argh" class="min-h-screen flex flex-col">
         <Popover class="relative bg-white z-50 sticky top-0">
             <div
                 class="flex border-b border-gray-100 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
