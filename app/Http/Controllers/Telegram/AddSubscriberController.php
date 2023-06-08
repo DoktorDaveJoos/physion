@@ -17,7 +17,7 @@ class AddSubscriberController extends Controller
      */
     public function __invoke(Request $request): void
     {
-        if (TelegramSubscriber::where('name', $request->input('message.chat.id'))->first()) {
+        if (TelegramSubscriber::where('username', $request->input('message.from.username'))->first()) {
             Telegram::sendMessage(
                 $request->input('message.chat.id'),
                 sprintf('Bre... Lass es gut sein, %s', $request->input('message.from.username'))
