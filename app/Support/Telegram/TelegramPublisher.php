@@ -25,14 +25,7 @@ class TelegramPublisher
     public function broadcast($payload): void
     {
         foreach (TelegramSubscriber::all() as $subscriber) {
-            Http::post(
-                sprintf(
-                    'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s',
-                    $this->token,
-                    $subscriber->username,
-                    $payload
-                )
-            );
+            $this->sendMessage($subscriber->chat_id, $payload);
         }
     }
 

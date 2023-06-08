@@ -26,7 +26,11 @@ class AddSubscriberController extends Controller
         }
 
         TelegramSubscriber::create([
-            'name' => $request->input('message.chat.id'),
+            'user_telegram_id' => $request->input('message.from.id'),
+            'chat_id' => $request->input('message.chat.id'),
+            'first_name' => $request->input('message.from.first_name'),
+            'last_name' => $request->input('message.from.last_name'),
+            'username' => $request->input('message.from.username'),
         ]);
 
         Telegram::sendMessage(

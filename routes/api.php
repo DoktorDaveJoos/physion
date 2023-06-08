@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Payment\StripeController;
+use App\Http\Controllers\Telegram\AddSubscriberController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::post('/stripe/webhook', StripeController::class);
+
+    Route::post('/telegram/subscribe', AddSubscriberController::class);
 });
 
 

@@ -30,17 +30,17 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('testtest'),
         ]);
 
-//        Product::create(
-//            [
-//                'type' => 'certificate',
-//                'name' => 'Verbrauchsausweis',
-//                'short_name' => 'vrbr',
-//                'description' => 'Verbrauchsorientierter Energieausweis',
-//                'price' => 79.90,
-//                'image' => null,
-//                'image_alt' => null,
-//            ]
-//        );
+        Product::create(
+            [
+                'type' => 'certificate',
+                'name' => 'Verbrauchsausweis',
+                'short_name' => 'vrbr',
+                'description' => 'Verbrauchsorientierter Energieausweis',
+                'price' => 79.90,
+                'image' => null,
+                'image_alt' => null,
+            ]
+        );
 
     }
 }
