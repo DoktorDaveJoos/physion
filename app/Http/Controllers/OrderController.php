@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CreateOrderWithProduct;
 use App\Enums\Category;
 use App\Http\Requests\CreateOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\URL;
@@ -16,11 +17,8 @@ class OrderController extends Controller
 
     public function show(Order $order): Response
     {
-
-        $order->load('products');
-
         return Inertia::render('Order/Index', [
-            'order' => $order,
+            'order' => OrderResource::make($order)
         ]);
     }
 

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string id
+ * @property string stripe_customer_id
  * @property string name
  * @property string email
- * @property string phone_number
+ * @property string phone
  * @property string address_line_1
  * @property string address_line_2
  * @property string postal_code
@@ -23,11 +24,6 @@ class Customer extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-
-    public function unknownToStripe(): bool
-    {
-        return $this->checkout !== 'stripe' && $this->stripe_id === null;
-    }
 
     public function orders(): HasMany
     {

@@ -2,15 +2,18 @@
 
 namespace App\Actions;
 
+use App\Enums\Category;
 use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Vrbr;
 use App\Services\NanoIdCore;
 use App\Shared\Transferable;
 use Closure;
 use Hidehalo\Nanoid\Client;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Throwable;
 
 class CreateOrder
 {
@@ -21,14 +24,19 @@ class CreateOrder
     ) {
     }
 
+    /**
+     * @throws Throwable
+     */
     public function handle(Bdrf|Vrbr $certificate, Customer $customer, mixed $data)
     {
+        // Create slug
         $slug = $this->nanoClient->formattedId(
             NanoIdCore::CUSTOM_SYMBOLS,
             NanoIdCore::ID_LENGTH
         );
 
-        return Order::create(
+        // Create Order
+        $order = Order::create(
             array_merge($data, [
                 'slug' => $slug,
                 'customer_id' => $customer->id,
@@ -37,6 +45,17 @@ class CreateOrder
                 'meta' => ['steps' => ['general']],
             ])
         );
+
+        $product = Product::whereCategory(Category::fromModel($certificate::class)->value)->first();
+
+        if (!$product) {
+            abort(500, 'Product not found');
+        }
+
+        // Attach Product of Certificate
+        $order->products()->attach($product);
+
+        return $order;
     }
 
     /**

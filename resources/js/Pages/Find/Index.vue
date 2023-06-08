@@ -43,7 +43,7 @@
                 <div
                     class="bg-white py-16 px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
                     <div class="mx-auto max-w-lg lg:max-w-none">
-                        <el-tabs v-if="orders.length === 0" tab-position="top">
+                        <el-tabs tab-position="top">
                             <el-tab-pane label="Order ID" class="pt-4">
                                 <h2
                                     class="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
@@ -62,9 +62,9 @@
                                 <el-form size="large" label-position="top">
                                     <el-form-item
                                         label="Order ID"
-                                        :error="orderForm.errors.order">
+                                        :error="orderForm.errors.slug">
                                         <el-input
-                                            v-model="orderForm.order"
+                                            v-model="orderForm.slug"
                                             placeholder="9 Stellige Order ID" />
                                     </el-form-item>
 
@@ -116,64 +116,6 @@
                                 </el-form>
                             </el-tab-pane>
                         </el-tabs>
-
-                        <div v-else>
-                            <div class="mt-6 flow-root">
-                                <InertiaLink
-                                    :href="route('find.show')"
-                                    class="text-blue-600 hover:text-blue-500 flex items-center mb-4">
-                                    <ChevronLeftIcon
-                                        class="h-4 w-4 mr-1"
-                                        aria-hidden="true" />
-                                    Zurück
-                                </InertiaLink>
-                                <h2
-                                    class="text-xl font-bold tracking-tight mb-10 text-gray-900 sm:text-2xl">
-                                    Ergebnis der Suche
-                                </h2>
-                                <ul role="list" class="-my-5 space-y-4">
-                                    <li
-                                        v-for="result in orders"
-                                        :key="result.id"
-                                        class="py-4 border border-gray-300 rounded shadow px-6">
-                                        <div
-                                            class="flex items-center space-x-4">
-                                            <div class="min-w-0 flex-1">
-                                                <p
-                                                    class="truncate text-xs text-gray-300 tracking-wider uppercase font-bold">
-                                                    found
-                                                </p>
-                                                <span
-                                                    class="inline-flex items-center rounded bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
-                                                    <svg
-                                                        class="-ml-1 mr-1.5 h-2 w-2 text-blue-400"
-                                                        fill="currentColor"
-                                                        viewBox="0 0 8 8">
-                                                        <circle
-                                                            cx="4"
-                                                            cy="4"
-                                                            r="3" />
-                                                    </svg>
-                                                    {{ result.slug }}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <InertiaLink
-                                                    :href="
-                                                        route(
-                                                            'order.show',
-                                                            result.slug
-                                                        )
-                                                    "
-                                                    class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
-                                                    >Anzeigen</InertiaLink
-                                                >
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -188,17 +130,8 @@ import { onMounted, ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { InertiaLink } from '@inertiajs/inertia-vue3';
 
-const props = defineProps({
-    orders: {
-        type: Array,
-        default: [],
-    },
-});
-
-const doSearch = ref(props.orders.length === 0);
-
 const orderForm = useForm({
-    order: '',
+    slug: '',
 });
 
 const emailForm = useForm({
@@ -207,9 +140,7 @@ const emailForm = useForm({
 });
 
 const findOrderById = async () => {
-    orderForm.get(route('find.show'), {
-        preserveState: true,
-    });
+    orderForm.get(route('find.slug'));
 };
 
 const findOrderByEmail = () => {

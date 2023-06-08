@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use App\Events\CustomerCreated;
 use App\Events\PaymentCreated;
+use App\Models\Customer;
+use App\Models\Product;
+use App\Observers\CustomerObserver;
+use App\Observers\ProductObserver;
 use App\Services\Customer\CreateCustomer;
 use App\Services\Order\SetOrderPaidByCustomer;
 use Illuminate\Auth\Events\Registered;
@@ -27,6 +31,15 @@ class EventServiceProvider extends ServiceProvider
         CustomerCreated::class => [
             SetOrderPaidByCustomer::class,
         ],
+    ];
+
+    protected $observers = [
+        Product::class => [
+            ProductObserver::class,
+        ],
+        Customer::class => [
+            CustomerObserver::class,
+        ]
     ];
 
     /**

@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\PaymentCreated;
 use App\Services\Payment\PaymentService;
 use App\Services\Payment\Strategies\PaymentStrategyProvider;
+use App\Services\Payment\Strategies\StripeStrategy;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,8 +17,6 @@ use Illuminate\Support\Facades\Log;
 class ProcessPayment implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    private string $type;
     private mixed $payload;
 
     /**
@@ -25,9 +24,8 @@ class ProcessPayment implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $type, mixed $payload)
+    public function __construct(mixed $payload)
     {
-        $this->type = $type;
         $this->payload = $payload;
     }
 
@@ -37,13 +35,12 @@ class ProcessPayment implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::info(sprintf('%s: Processing payment for %s', get_class(), $this->type));
 
-        $normalized = PaymentStrategyProvider::for($this->type)->normalize($this->payload);
 
-        PaymentCreated::dispatch($normalized);
+        PaymentCreated::dispatch(StripeStrategy::normalize($this->payload));
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Payment;
 
+use App\Events\PaymentCreated;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPayment;
 use App\Services\Payment\Strategies\StripeStrategy;
@@ -11,7 +12,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
-use Stripe\Stripe;
 use Stripe\Webhook;
 
 use function config;
@@ -56,10 +56,7 @@ class StripeController extends Controller
         try {
             switch ($event->type) {
                 case 'checkout.session.completed':
-                    ProcessPayment::dispatch(
-                        'stripe',
-                        $event->data->object
-                    );
+                    PaymentCreated::dispatch(StripeStrategy::normalize($event->data->object));
                     break;
                 default:
                     Log::info('Received unknown event type '.$event->type);

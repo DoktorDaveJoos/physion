@@ -22,21 +22,21 @@ class TelegramPublisher
         $this->token = config('telegram.token');
     }
 
-    public function broadcast($payload)
+    public function broadcast($payload): void
     {
         foreach (TelegramSubscriber::all() as $subscriber) {
             Http::post(
                 sprintf(
                     'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s',
                     $this->token,
-                    $subscriber->name,
+                    $subscriber->username,
                     $payload
                 )
             );
         }
     }
 
-    public function sendMessage($chatId, $payload)
+    public function sendMessage($chatId, $payload): void
     {
         Http::post(
             sprintf(

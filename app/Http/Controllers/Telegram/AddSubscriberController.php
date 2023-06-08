@@ -15,7 +15,7 @@ class AddSubscriberController extends Controller
      * @param  Request  $request
      * @return void
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): void
     {
         if (TelegramSubscriber::where('name', $request->input('message.chat.id'))->first()) {
             Telegram::sendMessage(

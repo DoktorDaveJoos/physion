@@ -6,22 +6,15 @@ use App\Events\CustomerCreated;
 use App\Events\PaymentCreated;
 use App\Mail\OrderCreated;
 use App\Models\Customer;
-use App\Services\Stripe\StripeService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\ItemNotFoundException;
+use RuntimeException;
 use Stripe\Exception\ApiErrorException;
+use Throwable;
 
 class CreateCustomer
 {
-    private StripeService $stripe;
-
-    public function __construct(StripeService $stripe)
-    {
-        $this->stripe = $stripe;
-    }
-
 
     /**
      * Handle the event.
@@ -29,29 +22,21 @@ class CreateCustomer
      * @param  PaymentCreated  $event
      * @return void
      * @throws ApiErrorException
+     * @throws Throwable
      */
-    public function handle(PaymentCreated $event)
+    public function handle(PaymentCreated $event): void
     {
-        try {
-            $customer = Customer::where('email', $event->payload['customer']['email'])
-                ->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            Log::info(sprintf('%s: Create new Customer', $e->getMessage()));
-            $customer = new Customer(
+        throw_if(
+            !Customer::updateOrInsert(
+                ['email' => $event->payload['customer']['email']],
                 $event->payload['customer']
-            );
-            $customer->save();
-        }
+            ),
+            new RuntimeException('Customer not created')
+        );
+
+        $customer = Customer::where('email', $event->payload['customer']['email'])->first();
 
         Mail::to($customer->email)->send(new OrderCreated($customer->name));
-
-        if ($customer->unknownToStripe()) {
-            $this->stripe->syncWithStripe($customer);
-        }
-
-        if ($customer->checkout !== 'stripe') {
-            $this->stripe->createInvoice($customer);
-        }
 
         CustomerCreated::dispatch($customer->id, $event->payload['reference']);
     }

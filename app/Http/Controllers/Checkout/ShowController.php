@@ -17,9 +17,13 @@ class ShowController extends Controller
      */
     public function index(Order $order): Response
     {
+
+        $order->load('products');
+
+
+
         return Inertia::render('Checkout/Index', [
             'order' => $order,
-            'product' => $order->product,
 //            'addedUpsells' => $order->upsells,
 //            'upsells' => Upsell::whereDoesntHave('orders', function ($query) use ($order) {
 //                $query->where('order_id', $order->id);

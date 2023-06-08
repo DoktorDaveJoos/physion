@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
 
+            $table->string('stripe_product_id')->nullable();
+
             $table->enum('type', ['certificate', 'guide', 'service']);
 
             $table->string('name');

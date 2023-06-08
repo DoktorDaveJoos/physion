@@ -6,10 +6,12 @@ use App\Http\Controllers\Bdrf\WallController;
 use App\Http\Controllers\Blog\SubscriptionsController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\Checkout\AddUpsellController;
+use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\Checkout\DeleteUpsellController;
 use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Find\FindByController;
 use App\Http\Controllers\Find\SearchController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
@@ -108,7 +110,7 @@ Route::prefix('orders')->group(function () {
     Route::get('/create/{category}', [OrderController::class, 'create'])->name('order.create');
     Route::post('/create/{category}', [OrderController::class, 'store'])->name('order.store');
 
-    Route::get('/{order:slug}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/{order:slug}', [OrderController::class, 'show'])->middleware(['signed'])->name('order.show');
 
     Route::prefix('{order:slug}/certificate')->middleware(['signed'])->group(
         function () {
@@ -165,126 +167,23 @@ Route::prefix('vrbr/{vrbr}')->group(function () {
 
     Route::post('/vacancies', [VacanciesController::class, 'store'])->name('vrbr.vacancies');
     Route::delete('/vacancies/{vacancy}', [VacanciesController::class, 'destroy'])->name('vrbr.vacancies.destroy');
-
-//    Route::put('/general', [VerbrauchController::class, 'general'])->name('vrbr.general');
-//    Route::put('/details', [VerbrauchController::class, 'details'])->name('vrbr.details');
-//    Route::put('/consumption', [VerbrauchController::class, 'consumption'])->name('vrbr.consumption');
 });
 
-
-//
-//Route::prefix('verbrauchsausweis')
-//    ->name('verbrauch.')
-//    ->group(function () {
-//        Route::get('erstellen', [Verbrauch\ShowController::class, 'index'])->name('show.index');
-//        Route::post('erstellen', Verbrauch\CreateController::class)->name('create');
-//
-//        Route::prefix('{order}')->group(function () {
-//            // General
-//            Route::get('allgemein', [Verbrauch\ShowController::class, 'general'])->name('general');
-//            Route::put('allgemein', Verbrauch\UpdateGeneralController::class)->name('general.update');
-//
-//            // Details
-//            Route::get('details', [Verbrauch\ShowController::class, 'details'])->name('details');
-//            Route::put('details', Verbrauch\CreateOrUpdateDetailsController::class)->name('details.update');
-//
-//            // Consumption
-//            Route::get('verbrauch', [Verbrauch\ShowController::class, 'consumption'])->name('consumption');
-//            Route::put('verbrauch', Verbrauch\MarkDoneConsumptionController::class)->name('consumption.done');
-//
-//            // Energy source
-//            Route::put('source', Verbrauch\CreateOrUpdateSourceController::class)->name('consumption.source.update');
-//            Route::delete('source/{source}', Verbrauch\DeleteSourceController::class)->name(
-//                'consumption.source.delete'
-//            );
-//
-//            // Consumption Periods
-//            Route::post('source/{source}/period', Verbrauch\CreateConsumptionPeriodController::class)->name(
-//                'consumption.period.create'
-//            );
-//            Route::delete('source/{source}/period/{period}', Verbrauch\DeletePeriodController::class)->name(
-//                'consumption.period.delete'
-//            );
-//
-//            // Vacancies
-//            Route::post('vacancy', Verbrauch\CreateVacancyController::class)->name('consumption.vacancy.create');
-//            Route::delete('vacancy/{vacancy}', Verbrauch\DeleteVacancyController::class)->name(
-//                'consumption.vacancy.delete'
-//            );
-//
-//            // Summary
-//            Route::get('zusammenfassung', [Verbrauch\ShowController::class, 'summary'])->name('summary');
-//        });
-//    });
-//
-//Route::prefix('bedarfsausweis')
-//    ->name('bedarf.')
-//    ->group(function () {
-//        Route::get('erstellen', Bedarf\ShowIndexController::class)->name('show.index');
-//        Route::post('erstellen', Bedarf\CreateController::class)->name('create');
-//
-//        Route::prefix('{order}')->group(function () {
-//            Route::get('allgemein', [Bedarf\ShowController::class, 'index'])->name('general');
-//            Route::put('allgemein', Bedarf\GeneralController::class)->name('general.update');
-//
-//            // Details
-//            Route::get('details', [Bedarf\ShowController::class, 'details'])->name('details');
-//            Route::put('details', Bedarf\DetailsController::class)->name('details.update');
-//
-//            // Position
-//            Route::get('position', [Bedarf\ShowController::class, 'position'])->name('position');
-//            Route::put('position', [Bedarf\PositionController::class, 'update'])->name('position.update');
-//            Route::put('position/maps', [Bedarf\PositionController::class, 'setMaps'])->name('position.maps.update');
-//
-//            // Insulation
-//            Route::put('insulation', [Bedarf\RoofController::class, 'addInsulation'])->name('insulation.update');
-//            Route::delete('insulation/{insulation}', [Bedarf\RoofController::class, 'deleteInsulation'])->name(
-//                'insulation.delete'
-//            );
-//
-////            Route::get('keller', [BedarfController::class, 'cellar'])->name('cellar');
-//            Route::get('therm', [Bedarf\ShowController::class, 'wall'])->name('wall');
-//
-//            Route::put('wand', Bedarf\WallController::class)->name('wall.update');
-////            Route::get('fenster', [BedarfController::class, 'window'])->name('window');
-//            Route::put('dach', [Bedarf\RoofController::class, 'update'])->name('roof.update');
-//
-//            // Handle roof related requests
-//            Route::put('fenster', [Bedarf\WindowController::class, 'store'])->name('skylight.update');
-//            Route::delete('dachfenster/{skylight}', [Bedarf\RoofController::class, 'deleteSkylight'])->name(
-//                'skylight.delete'
-//            );
-//            Route::put('gaube', [Bedarf\RoofController::class, 'addDormer'])->name('dormer.update');
-//            Route::delete('dormer/{dormer}', [Bedarf\RoofController::class, 'deleteDormer'])->name('dormer.delete');
-//        });
-//    });
-
-
-//Route::post('roof/{roof}/windows', [Roof\Controller::class, 'windows'])->name('roof.window.store');
-//Route::post('roof/{roof}/dormers', [Roof\Controller::class, 'dormer'])->name('roof.dormer.store');
-//Route::post('roof/{roof}/insulations', [Roof\Controller::class, 'addInsulation'])->name('roof.insulation.store');
-//
-//Route::post('wall/{wall}/windows', [Bedarf\WindowController::class, 'store'])->name('wall.window.store');
-
-
 Route::prefix('checkout')->name('checkout.')->group(function () {
+
     Route::prefix('{order}')->group(function () {
+
+        Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
+
         Route::get('/', [ShowController::class, 'index'])->name('show');
         Route::post('upsell/{upsell}', AddUpsellController::class)->name('upsell.add');
         Route::delete('upsell/{upsell}', DeleteUpsellController::class)->name('upsell.delete');
 
         Route::post('paypal', PayPal\CaptureOrderController::class)->name('paypal.capture');
 
-        Route::get('danke', [ShowController::class, 'thankyou'])->name('thankyou');
+        Route::get('danke', [ShowController::class, 'thankyou'])->name('success');
     });
 });
-
-//Route::prefix('order')->name('order.')->group(function () {
-//    Route::prefix('{order}')->group(function () {
-//        Route::get('', [\App\Http\Controllers\Order\ShowController::class, 'index'])->name('show');
-//        Route::get('download', DownloadController::class)->name('download');
-//    });
-//});
 
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
@@ -303,9 +202,9 @@ Route::prefix('kontakt')->name('contact.')->group(function () {
 });
 
 Route::prefix('/find')->name('find.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Find\ShowController::class, 'index'])->name('show');
+    Route::get('/', [FindByController::class, 'index'])->name('show');
 
-    Route::post('/email', [SearchController::class, 'email'])->name('email');
+    Route::get('/slug', [FindByController::class, 'bySlug'])->name('slug');
 });
 
 Route::get('/', function () {
