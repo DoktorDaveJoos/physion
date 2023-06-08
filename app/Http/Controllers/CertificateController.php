@@ -69,6 +69,11 @@ class CertificateController extends Controller
         // Check if there is a next page
         // If there is no next page, redirect to the checkout page
         if (!($nextPage = $category->getNextPageAfter($page))) {
+
+            $order->update([
+                'status' => 'finalized'
+            ]);
+
             return redirect()->route('checkout.show', [
                 'order' => $order->slug,
             ]);

@@ -13,6 +13,7 @@ const props = defineProps({
         default: 'primary',
     },
     plain: Boolean,
+    class: String,
 });
 
 const getClass = computed(() => {
@@ -42,6 +43,8 @@ const getClass = computed(() => {
             'text-white'
         );
     }
+
+    classes.push(props.class);
 
     return classes.join(' ');
 });

@@ -19,7 +19,7 @@ return new class extends Migration {
 
             $table->string('name');
             $table->string('short_name');
-            $table->string('description');
+            $table->text('description');
 
             $table->decimal('price', 10);
 
@@ -33,7 +33,7 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('product_id')->constrained();
-            $table->foreignId('related_product_id')->constrained('products');
+            $table->foreignId('upsell_id')->constrained('products');
 
             $table->timestamps();
         });

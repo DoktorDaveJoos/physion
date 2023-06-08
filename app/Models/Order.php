@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 
 /**
  * @property $id
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property $certificate_id
  * @property $certificate_type
  * @property Customer $customer
+ * @property Collection $upsells
  * @property $created_at
  * @property $updated_at
  */
@@ -73,6 +75,11 @@ class Order extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    public function upsells(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class)->where('type', 'service');
     }
 
 }

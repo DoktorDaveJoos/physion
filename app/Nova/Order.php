@@ -3,29 +3,25 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\File;
-use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Product extends Resource
+class Order extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Product>
+     * @var class-string<\App\Models\Order>
      */
-    public static $model = \App\Models\Product::class;
+    public static $model = \App\Models\Order::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -46,21 +42,7 @@ class Product extends Resource
     {
         return [
             ID::make()->sortable(),
-            Hidden::make('stripe_product_id')->default(''),
-            Text::make('Name'),
-            Select::make('Type')->options([
-                'certificate' => 'Certificate',
-                'guide' => 'Guide',
-                'service' => 'Service',
-            ]),
-            Text::make('Short Name'),
-            Text::make('Description'),
-            Text::make('Price'),
-            File::make('Image'),
-
-            BelongsToMany::make('Related Products', 'relatedProducts', Product::class),
-
-            BelongsToMany::make('Upsells', 'upsells', Product::class),
+            Text::make('Slug'),
         ];
     }
 

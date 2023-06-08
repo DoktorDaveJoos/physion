@@ -5,6 +5,7 @@ import {
     CheckIcon,
     CurrencyEuroIcon,
     PhotoIcon,
+    ShieldCheckIcon,
 } from '@heroicons/vue/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import dayjs from 'dayjs';
@@ -234,40 +235,79 @@ const download = () => {
                                                             class="inline-block ml-1 w-4 h-4 text-gray-400" />
                                                     </el-tooltip>
                                                 </div>
-
-                                                <!--                                            <span class="block">{{ product.address[2] }}</span>-->
                                             </dd>
                                         </div>
-                                        <div
-                                            v-if="
-                                                order.data.status === 'created'
-                                            ">
+                                        <div>
+                                            <template
+                                                v-if="
+                                                    order.data.status ===
+                                                    'created'
+                                                ">
+                                                <dt
+                                                    class="font-medium text-gray-900">
+                                                    Aktionen
+                                                </dt>
+                                                <dd>
+                                                    <div class="mt-2">
+                                                        <bz-button
+                                                            :href="
+                                                                order.links
+                                                                    .certificate
+                                                            "
+                                                            as="link">
+                                                            Auftrag
+                                                            fertigstellen
+                                                        </bz-button>
+                                                    </div>
+                                                </dd>
+                                            </template>
+                                            <template
+                                                v-else-if="
+                                                    order.data.status ===
+                                                    'finalized'
+                                                ">
+                                                <dt
+                                                    class="font-medium text-gray-900">
+                                                    Aktionen
+                                                </dt>
+                                                <dd>
+                                                    <div class="mt-2">
+                                                        <bz-button
+                                                            :href="
+                                                                order.links
+                                                                    .checkout
+                                                            "
+                                                            as="link">
+                                                            Auftrag bezahlen und
+                                                            abschließen
+                                                        </bz-button>
+                                                    </div>
+                                                </dd>
+                                            </template>
                                             <dt
                                                 class="font-medium text-gray-900">
-                                                Aktionen
+                                                Versicherungen
                                             </dt>
-                                            <dd>
-                                                <div class="mt-2">
-                                                    <bz-button
-                                                        :href="
-                                                            order.links
-                                                                .certificate
-                                                        "
-                                                        as="link">
-                                                        Auftrag fertigstellen
-                                                    </bz-button>
-                                                </div>
+                                            <dd
+                                                class="mt-3 flex flex-col space-y-3 text-gray-500">
+                                                <span
+                                                    v-for="upsell in order.data
+                                                        .upsells">
+                                                    <ShieldCheckIcon
+                                                        class="inline-block mr-1 w-5 h-5 text-gray-500"
+                                                        aria-hidden="true" />
+                                                    {{ upsell.name }}</span
+                                                >
+                                                <span
+                                                    v-if="
+                                                        order.data.upsells
+                                                            .length === 0
+                                                    "
+                                                    class="text-gray-400 text-xs font-italic">
+                                                    Keine Versicherungen
+                                                    ausgewählt
+                                                </span>
                                             </dd>
-                                            <!--                                            <dd-->
-                                            <!--                                                class="mt-3 flex flex-col space-y-3 text-gray-500">-->
-                                            <!--                                                <span-->
-                                            <!--                                                    v-for="upsell in order.upsells">-->
-                                            <!--                                                    <ShieldCheckIcon-->
-                                            <!--                                                        class="inline-block mr-1 w-5 h-5 text-gray-500"-->
-                                            <!--                                                        aria-hidden="true" />-->
-                                            <!--                                                    {{ upsell.name }}</span-->
-                                            <!--                                                >-->
-                                            <!--                                            </dd>-->
                                         </div>
                                     </dl>
                                 </div>

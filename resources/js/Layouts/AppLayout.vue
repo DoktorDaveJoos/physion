@@ -50,11 +50,11 @@ const logout = () => {
                             <ApplicationMark />
                             <div class="mx-4 flex items-baseline">
                                 <span
-                                    class="hidden text-lg font-light uppercase text-gray-600 md:block">
+                                    class="hidden text-lg uppercase text-gray-600 md:block">
                                     Energie
                                 </span>
                                 <span
-                                    class="text-lg font-semibold uppercase text-blue-600">
+                                    class="text-lg font-bold uppercase text-blue-600">
                                     Hub
                                 </span>
                                 <span class="text-xs text-slate-400 ml-2"
@@ -254,13 +254,13 @@ const logout = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header class="sticky bg-white shadow-sm top-0 z-40">
+            <header class="sticky border-b border-gray-200 bg-white top-0 z-40">
                 <div
                     id="header"
                     class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                     <div class="flex items-baseline font-display">
                         <span>{{ title }}</span>
-                        <ChevronRightIcon class="w-4 self-center h-4 mx-2" />
+                        <ChevronRightIcon class="w-3 self-center h-3 mx-2" />
                         <span class="text-sm text-gray-500">{{
                             subtitle
                         }}</span>

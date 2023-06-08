@@ -9,19 +9,30 @@
                     Auftrag in Bearbeitung!
                 </p>
                 <p class="mt-2 text-base text-gray-500">
-                    Wir haben deinen Auftrag erfolgreich erhalten
+                    Wir haben deinen Auftrag erfolgreich erhalten.
                 </p>
 
-                <dl class="mt-12 text-sm font-medium">
-                    <dt class="text-gray-900">Energieausweis ID</dt>
-                    <dd class="mt-2 text-blue-600">{{ order.slug }}</dd>
-                </dl>
+                <p class="mt-10 text-base text-gray-900 font-semibold">
+                    Wie gehts weiter?
+                </p>
+                <p class="mt-1 text-gray-600">
+                    In Kürze erhältst du zwei wichtige E-Mails von uns: eine
+                    Auftragsbestätigung sowie einen Zahlungsbeleg. Zusätzlich
+                    hast du jederzeit Zugriff auf den aktuellen
+                    Bearbeitungsstand deines Ausweises. Um deinen Ausweis
+                    mühelos wiederzufinden, haben wir dir bereits eine E-Mail
+                    mit einem Link zu deinem Ausweis und der Ausweis-ID
+                    zugesendet. Darüber hinaus kannst du jederzeit unseren "Find
+                    my Ausweis"-Service nutzen, indem du einfach deine
+                    E-Mail-Adresse eingibst. Wir senden dir dann sämtliche Links
+                    zu deinen erstellten Ausweisen. Wir freuen uns sehr, dass du
+                    dich für unsere Dienstleistungen entschieden hast und heißen
+                    dich herzlich als unseren geschätzten Kunden willkommen!
+                </p>
             </div>
 
             <div class="mt-10 border-t border-gray-200 py-6 flex justify-end">
-                <bz-button as="link" :href="route('order.show', order.slug)">
-                    Auftrag anzeigen
-                </bz-button>
+                <bz-button as="link" :href="link"> Auftrag anzeigen </bz-button>
             </div>
         </div>
     </div>
@@ -31,9 +42,6 @@
 import BzButton from '../../Components/BzButton.vue';
 
 defineProps({
-    order: {
-        type: Object,
-        required: true,
-    },
+    link: String,
 });
 </script>
