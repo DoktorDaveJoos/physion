@@ -12,14 +12,27 @@ use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
-use App\Http\Controllers\Find\SearchController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
 use App\Http\Controllers\Vrbr\VacanciesController;
-use App\Models\BlogEntry;
+use App\Mail\OrderInitialized;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Notifications\OrderCreated;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+Route::get('/mailable', function () {
+
+
+    $order = Order::first();
+    $customer = Customer::first();
+
+    $customer->notify((new OrderCreated($order, 'Harald Lesch'))->locale('de'));
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -132,10 +145,12 @@ Route::prefix('bdrf/{bdrf}')->group(function () {
 
     // dormer
     Route::put('/dormer', [PositionController::class, 'dormer'])->name('bdrf.roof.dormer');
-    Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'] )->name('bdrf.roof.dormer.delete');
+    Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'])->name('bdrf.roof.dormer.delete');
 
 
-    Route::put('/dormer/insulation', [PositionController::class, 'dormerInsulation'])->name('bdrf.roof.dormer.insulation');
+    Route::put('/dormer/insulation', [PositionController::class, 'dormerInsulation'])->name(
+        'bdrf.roof.dormer.insulation'
+    );
     Route::delete('/dormer/insulation/{insulation}', [PositionController::class, 'deleteDormerInsulation'])
         ->name('bdrf.roof.dormer.insulation.delete');
     Route::put('/dormer/window', [PositionController::class, 'dormerWindow'])->name('bdrf.roof.dormer.window');
@@ -154,11 +169,9 @@ Route::prefix('bdrf/{bdrf}')->group(function () {
 
     Route::put('/maps', [PositionController::class, 'maps'])->name('bdrf.maps');
     Route::put('/position', [PositionController::class, 'position'])->name('bdrf.position');
-
 });
 
 Route::prefix('vrbr/{vrbr}')->group(function () {
-
     Route::post('/sources', [SourcesController::class, 'store'])->name('vrbr.sources');
     Route::delete('/sources/{source}', [SourcesController::class, 'destroy'])->name('vrbr.sources.destroy');
 
@@ -170,9 +183,7 @@ Route::prefix('vrbr/{vrbr}')->group(function () {
 });
 
 Route::prefix('checkout')->name('checkout.')->group(function () {
-
     Route::prefix('{order}')->group(function () {
-
         Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
 
         Route::get('/', [ShowController::class, 'index'])->name('show');

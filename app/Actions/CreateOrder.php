@@ -8,10 +8,16 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Vrbr;
+use App\Notifications\OrderCreated;
 use App\Services\NanoIdCore;
 use App\Shared\Transferable;
 use Closure;
 use Hidehalo\Nanoid\Client;
+use Illuminate\Mail\Mailable;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
 
@@ -49,11 +55,14 @@ class CreateOrder
         $product = Product::whereCategory(Category::fromModel($certificate::class)->value)->first();
 
         if (!$product) {
-            abort(500, 'Product not found');
+            abort(404, 'Product not found');
         }
 
         // Attach Product of Certificate
         $order->products()->attach($product);
+
+        // Notify Customer
+        $customer->notify((new OrderCreated($order, $customer->name))->locale('de'));
 
         return $order;
     }

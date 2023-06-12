@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Upsell;
+use App\Notifications\OrderPaid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
@@ -33,6 +34,9 @@ class ShowController extends Controller
 
     public function thankyou(Order $order): Response
     {
+
+        $order->customer->notify(new OrderPaid($order, $order->customer->name));
+
         return Inertia::render('Checkout/ThankYou', [
             'link' => URL::temporarySignedRoute(
                 'order.show',

@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Events\CustomerCreated;
+use App\Events\CustomerUpdatedFromStripe;
 use App\Events\PaymentCreated;
+use App\Listeners\HandleCustomerFromStripe;
+use App\Listeners\HandleOrderPaid;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Observers\CustomerObserver;
 use App\Observers\ProductObserver;
-use App\Services\Customer\CreateCustomer;
-use App\Services\Order\SetOrderPaidByCustomer;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,10 +26,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         PaymentCreated::class => [
-            CreateCustomer::class,
+            HandleCustomerFromStripe::class,
         ],
-        CustomerCreated::class => [
-            SetOrderPaidByCustomer::class,
+        CustomerUpdatedFromStripe::class => [
+            HandleOrderPaid::class,
         ],
     ];
 

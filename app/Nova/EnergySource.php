@@ -4,29 +4,28 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Badge;
-use Laravel\Nova\Fields\Email;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 
-class Order extends Resource
+class EnergySource extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Order>
+     * @var class-string<\App\Models\EnergySource>
      */
-    public static $model = \App\Models\Order::class;
+    public static $model = \App\Models\EnergySource::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'slug';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -34,7 +33,7 @@ class Order extends Resource
      * @var array
      */
     public static $search = [
-        'slug',
+        'id',
     ];
 
     /**
@@ -46,17 +45,20 @@ class Order extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make(),
-            Text::make('Slug'),
-            Badge::make('Status')->map([
-                'created' => 'info',
-                'finalized' => 'info',
-                'open' => 'success',
-                'shipped' => 'info',
-                'in_clarification' => 'warning',
+            ID::make()->sortable(),
+
+            BelongsTo::make('Vrbr'),
+
+            Text::make('Name', 'source'),
+            Badge::make('', function() {
+                return $this->main ? 'Hauptenergieträger' : 'Nebenenergieträger';
+            })->map([
+                'Hauptenergieträger' => 'success',
+                'Nebenenergieträger' => 'info',
             ]),
-            Email::make('Email', 'customer.email'),
-            MorphTo::make('Certificate')
+            Text::make('Wasser', 'water'),
+
+            HasMany::make('Periods', 'periods', ConsumptionPeriod::class),
         ];
     }
 

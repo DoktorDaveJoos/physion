@@ -3,30 +3,27 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Badge;
-use Laravel\Nova\Fields\Email;
+use Laravel\Nova\Exceptions\HelperNotSupported;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Order extends Resource
+class ConsumptionPeriod extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Order>
+     * @var class-string<\App\Models\ConsumptionPeriod>
      */
-    public static $model = \App\Models\Order::class;
+    public static $model = \App\Models\ConsumptionPeriod::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'slug';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -34,7 +31,7 @@ class Order extends Resource
      * @var array
      */
     public static $search = [
-        'slug',
+        'id',
     ];
 
     /**
@@ -42,21 +39,17 @@ class Order extends Resource
      *
      * @param  NovaRequest  $request
      * @return array
+     * @throws HelperNotSupported
      */
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make(),
-            Text::make('Slug'),
-            Badge::make('Status')->map([
-                'created' => 'info',
-                'finalized' => 'info',
-                'open' => 'success',
-                'shipped' => 'info',
-                'in_clarification' => 'warning',
-            ]),
-            Email::make('Email', 'customer.email'),
-            MorphTo::make('Certificate')
+            ID::make()->sortable(),
+
+            Date::make('Start', 'start'),
+            Date::make('End', 'end'),
+            Text::make('Consumption', 'consumption')->copyable(),
+            Text::make('Water', 'water')->copyable(),
         ];
     }
 

@@ -18,7 +18,7 @@ class Vacancy extends Model
         'end' => HandleJsDate::class
     ];
 
-    public function consumptionCertificate(): BelongsTo
+    public function vrbr(): BelongsTo
     {
         return $this->belongsTo(Vrbr::class);
     }
