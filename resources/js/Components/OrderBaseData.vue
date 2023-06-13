@@ -4,6 +4,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import FormHeader from './FormHeader.vue';
 import { onMounted, ref } from 'vue';
 import { ElNotification } from 'element-plus';
+import BzButton from './BzButton.vue';
 
 const props = defineProps({
     category: {
@@ -323,10 +324,11 @@ const submit = () => {
         <template v-else>
             <el-divider class="sm:col-span-2" />
 
-            <div class="flex sm:col-span-2 w-full justify-end">
-                <el-button type="primary" @click="submit"
+            <div
+                class="flex flex-col sm:flex-row sm:col-span-2 w-full justify-end">
+                <bz-button class="" type="primary" @click="submit"
                     >Speichern & Weiter
-                </el-button>
+                </bz-button>
             </div>
         </template>
     </el-form>

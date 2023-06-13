@@ -70,7 +70,7 @@ const to = (page) => {
 </script>
 
 <template>
-    <nav aria-label="Steps" class="z-0">
+    <nav aria-label="Steps" class="z-0 hidden md:block">
         <el-affix :offset="135" class="pb-10" target="#stepper-container">
             <ol class="overflow-hidden" role="list">
                 <li

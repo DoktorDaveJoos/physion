@@ -8,6 +8,7 @@ import { ElDrawer, ElMessageBox } from 'element-plus';
 import dayjs from 'dayjs';
 import { useForm } from '@inertiajs/inertia-vue3';
 import GuestLayout from '../../../Layouts/GuestLayout.vue';
+import BzButton from '../../../Components/BzButton.vue';
 
 const props = defineProps({
     order: Object,
@@ -830,18 +831,35 @@ const markDone = () => {
 
                 <el-divider class="sm:col-span-2"></el-divider>
 
-                <div class="sm:col-span-2 flex justify-end">
-                    <el-button
-                        type="primary"
-                        size="large"
-                        @click="markDone"
-                        :disabled="!mainSourceHas36Months">
-                        {{
-                            !mainSourceHas36Months
-                                ? 'Nicht genügend Daten'
-                                : 'Speichern & Weiter'
-                        }}
-                    </el-button>
+                <div
+                    class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
+                    <div class="grid sm:block">
+                        <bz-button
+                            as="link"
+                            type="secondary"
+                            :href="
+                                route('certificate.show', {
+                                    signature: route().params.signature,
+                                    order: order.slug,
+                                    page: 'details',
+                                })
+                            ">
+                            Zurück
+                        </bz-button>
+                    </div>
+                    <div class="grid sm:block">
+                        <bz-button
+                            as="button"
+                            type="primary"
+                            @click="markDone"
+                            :disabled="!mainSourceHas36Months">
+                            {{
+                                !mainSourceHas36Months
+                                    ? 'Nicht genügend Daten'
+                                    : 'Speichern & Weiter'
+                            }}
+                        </bz-button>
+                    </div>
                 </div>
             </el-form>
         </stepper-wrapper>

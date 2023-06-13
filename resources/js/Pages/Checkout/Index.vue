@@ -417,7 +417,7 @@ const total = computed(() => {
                         </dl>
 
                         <div class="mt-6">
-                            <div class="flex">
+                            <div class="grid">
                                 <bz-button
                                     as="a"
                                     :href="

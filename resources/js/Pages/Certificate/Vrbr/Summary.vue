@@ -1,10 +1,18 @@
 <script setup>
 import StepperWrapper from '../../../Wrappers/StepperWrapper.vue';
 import GuestLayout from '../../../Layouts/GuestLayout.vue';
-import { PaperClipIcon } from '@heroicons/vue/24/outline';
+import {
+    ChevronRightIcon,
+    ClipboardIcon,
+    DocumentMagnifyingGlassIcon,
+    ChartBarIcon,
+} from '@heroicons/vue/24/outline';
+
+import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import dayjs from 'dayjs';
-import PaypalButton from '../../../Components/PaypalButton.vue';
+import BzButton from '../../../Components/BzButton.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     order: Object,
@@ -14,6 +22,55 @@ const props = defineProps({
 
 const feedbackForm = useForm({
     feedback: null,
+});
+
+const showSummary = computed(() => {
+    return props.order.meta.steps.length === 3;
+});
+
+const allItems = [
+    {
+        name: 'Allgemeine Daten',
+        description: 'Auftragserfassung und allgemeine Daten.',
+        tag: 'general',
+        href: route('certificate.show', {
+            signature: route().params.signature,
+            order: props.order.slug,
+            page: 'general',
+        }),
+        iconColor: 'bg-sky-500',
+        icon: ClipboardIcon,
+    },
+    {
+        name: 'Gebäudedetails',
+        description: 'Spezifische Daten zum Gebäude.',
+        tag: 'details',
+        href: route('certificate.show', {
+            signature: route().params.signature,
+            order: props.order.slug,
+            page: 'details',
+        }),
+        iconColor: 'bg-blue-500',
+        icon: DocumentMagnifyingGlassIcon,
+    },
+    {
+        name: 'Verbrauchsdaten',
+        description: 'Daten zum bisherigen Verbauch des Gebäudes.',
+        tag: 'consumption',
+        href: route('certificate.show', {
+            signature: route().params.signature,
+            order: props.order.slug,
+            page: 'consumption',
+        }),
+        iconColor: 'bg-indigo-500',
+        icon: ChartBarIcon,
+    },
+];
+
+const items = computed(() => {
+    return allItems.filter((item) => {
+        return !props.order.meta.steps.includes(item.tag);
+    });
 });
 </script>
 
@@ -30,7 +87,7 @@ const feedbackForm = useForm({
                     möchten
                 </p>
             </div>
-            <div class="mt-5 border-t border-gray-200">
+            <div v-if="showSummary" class="mt-5 border-t border-gray-200">
                 <div class="divide-y divide-gray-200">
                     <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                         <dt class="text-sm font-medium text-gray-500">
@@ -307,35 +364,98 @@ const feedbackForm = useForm({
                 </div>
             </div>
 
-            <el-divider />
-
-            <div class="flex flex-col">
-                <span class="text-sm text-gray-500">
-                    Zahlung per
-                    <strong> Kreditkarte,</strong>
-                    <strong> Rechnung (Klarna),</strong>
-                    <strong> Giropay,</strong>
-                    <strong> ApplePay,</strong>
-                    <strong> GooglePay</strong> wählen Sie
-                    <strong> Zur Kasse</strong>
-                </span>
-                <span class="mt-4 text-sm text-gray-500 sm:mt-0">
-                    Zahlung per
-                    <strong> PayPal</strong> wählen Sie
-                    <strong> Mit PayPal</strong>
-                </span>
+            <div v-else class="w-full my-6">
+                <div class="rounded-md bg-yellow-50 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <ExclamationTriangleIcon
+                                class="h-5 w-5 mt-0.5 text-yellow-400"
+                                aria-hidden="true" />
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">
+                                Datenerfassung nicht abgeschlossen
+                            </h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p>
+                                    Bitte stellen Sie sicher, dass Sie die
+                                    Datenerfassung vollständig abgeschlossen
+                                    haben, bevor Sie fortfahren. Es wurden die
+                                    untenstehende Punkte noch nicht ausgefüllt.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul role="list" class="divide-y divide-gray-200">
+                    <li v-for="(item, itemIdx) in items" :key="itemIdx">
+                        <div
+                            class="group relative flex items-start space-x-3 py-4">
+                            <div class="flex-shrink-0">
+                                <span
+                                    :class="[
+                                        item.iconColor,
+                                        'inline-flex h-10 w-10 items-center justify-center rounded-lg',
+                                    ]">
+                                    <component
+                                        :is="item.icon"
+                                        class="h-6 w-6 text-white"
+                                        aria-hidden="true" />
+                                </span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="text-sm font-medium text-gray-900">
+                                    <a :href="item.href">
+                                        <span
+                                            class="absolute inset-0"
+                                            aria-hidden="true" />
+                                        {{ item.name }}
+                                    </a>
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    {{ item.description }}
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0 self-center">
+                                <ChevronRightIcon
+                                    class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                    aria-hidden="true" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
 
             <el-divider />
 
-            <Link :href="route('checkout.show', order.id)">
-                <el-button
-                    type="primary"
-                    size="large"
-                    class="rounded-md bg-blue-600 font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Bestellung abschließen
-                </el-button>
-            </Link>
+            <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
+                <div class="grid sm:block">
+                    <bz-button
+                        as="link"
+                        type="secondary"
+                        :href="
+                            route('certificate.show', {
+                                signature: route().params.signature,
+                                order: order.slug,
+                                page: 'consumption',
+                            })
+                        ">
+                        Zurück
+                    </bz-button>
+                </div>
+                <div class="grid sm:block">
+                    <bz-button
+                        v-if="showSummary"
+                        as="link"
+                        type="primary"
+                        :href="route('checkout.show', order.id)">
+                        Bestellung abschließen
+                    </bz-button>
+                    <bz-button v-else type="primary" disabled @click="">
+                        Bestellung abschließen
+                    </bz-button>
+                </div>
+            </div>
         </stepper-wrapper>
     </guest-layout>
 </template>
