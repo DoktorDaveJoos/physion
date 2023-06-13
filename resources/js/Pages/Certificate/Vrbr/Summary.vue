@@ -47,7 +47,7 @@ const feedbackForm = useForm({
                                     <span>{{ order.customer.name }}</span>
                                     <span>{{ order.customer.email }}</span>
                                     <span v-if="order.customer.phone">{{
-                                        customer.phone
+                                        order.customer.phone
                                     }}</span>
 
                                     <span

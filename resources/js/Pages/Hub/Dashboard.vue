@@ -1,6 +1,5 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { InertiaLink } from '@inertiajs/inertia-vue3';
 import SideNavWrapper from './Components/SideNavWrapper.vue';
 </script>
 

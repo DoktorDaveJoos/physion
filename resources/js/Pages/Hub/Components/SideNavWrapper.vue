@@ -11,6 +11,7 @@ import {
     UsersIcon,
     PencilSquareIcon,
     AdjustmentsHorizontalIcon,
+    LightBulbIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -25,6 +26,12 @@ const navigation = [
         name: 'Nova',
         href: route('nova.pages.home'),
         icon: AdjustmentsHorizontalIcon,
+        current: false,
+    },
+    {
+        name: 'Telescope',
+        href: route('telescope'),
+        icon: LightBulbIcon,
         current: false,
     },
     // { name: 'Team', href: '#', icon: UsersIcon, current: false },
