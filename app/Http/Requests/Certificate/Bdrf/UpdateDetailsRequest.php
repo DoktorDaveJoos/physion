@@ -48,8 +48,12 @@ class UpdateDetailsRequest extends FormRequest
         return [
             'construction_year.required' => 'Bitte geben Sie das Baujahr des Gebäudes an.',
             'construction_year.integer' => 'Bitte geben Sie das Baujahr des Gebäudes als Zahl an.',
-            'construction_year.min' => 'Das Baujahr muss größer 1900 sein.',
+            'construction_year.min' => 'Das Baujahr muss größer 1978 sein.',
             'construction_year.max' => 'Das Baujahr darf nicht in der Zukunft liegen.',
+            'construction_year_heating.required' => 'Bitte geben Sie das Baujahr der Heizung an.',
+            'construction_year_heating.integer' => 'Bitte geben Sie das Baujahr der Heizung als Zahl an.',
+            'construction_year_heating.min' => 'Das Baujahr der Heizung muss größer 1978 sein.',
+            'construction_year_heating.max' => 'Das Baujahr der Heizung darf nicht in der Zukunft liegen.',
             'floor_area.required' => 'Bitte geben Sie die Wohnfläche des Gebäudes an.',
             'floor_area.numeric' => 'Bitte geben Sie die Wohnfläche des Gebäudes als Zahl an.',
             'floor_area.min' => 'Bitte geben Sie die Wohnfläche des Gebäudes als Zahl an.',
