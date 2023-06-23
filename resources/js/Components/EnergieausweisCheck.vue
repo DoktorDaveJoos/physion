@@ -132,30 +132,18 @@
         </div>
     </template>
     <template v-else>
-        <p class="text-lg font-semibold text-gray-900">Ergebnis</p>
-
         <div
-            class="overflow-hidden rounded-lg sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            class="overflow-hidden rounded-lg sm:grid sm:grid-cols-2 sm:gap-2 sm:divide-y-0">
             <div
                 v-for="(action, actionIdx) in actions"
                 :key="action.title"
-                :class="[
-                    actionIdx === 0
-                        ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none'
-                        : '',
-                    actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
-                    actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '',
-                    actionIdx === actions.length - 1
-                        ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none'
-                        : '',
-                    'relative group bg-gray-50 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500',
-                ]">
+                class="relative group bg-gray-50 hover:bg-gray-100 rounded-lg p-6">
                 <div>
                     <span
                         :class="[
                             action.iconBackground,
                             action.iconForeground,
-                            'rounded-lg inline-flex p-3 ring-4 ring-white group-hover:ring-blue-500',
+                            'rounded-lg inline-flex p-3 ring-4 ring-white group-hover:ring-blue-500 transition duration-150',
                         ]">
                         <component
                             :is="action.icon"
@@ -178,7 +166,7 @@
                     </p>
                 </div>
                 <span
-                    class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-blue-500"
+                    class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-blue-500 transition duration-150"
                     aria-hidden="true">
                     <svg
                         class="h-6 w-6"
@@ -203,7 +191,7 @@
                 >Beenden</el-button
             >
             <el-button type="primary" size="large" @click="previousStep"
-                >Noch einmal</el-button
+                >Zurück</el-button
             >
         </div>
     </template>
@@ -251,7 +239,7 @@ const actions = computed(() => {
         title: 'Bedarfsausweis',
         description:
             ' Ein Bedarfsausweis bezieht sich auf den theoretischen Energiebedarf des Gebäudes und wird auf Basis von Berechnungen und Simulationen erstellt.',
-        href: route('bedarf.create'),
+        href: route('order.create', { category: 'bdrf' }),
         icon: CalculatorIcon,
         iconForeground: 'text-sky-700',
         iconBackground: 'bg-sky-50',
@@ -261,7 +249,7 @@ const actions = computed(() => {
         title: 'Verbrauchsausweis',
         description:
             'Ein Verbrauchsausweis bezieht sich auf den tatsächlichen Energieverbrauch des Gebäudes und wird auf Basis von Messwerten erstellt.',
-        href: route('verbrauch.create'),
+        href: route('order.create', { category: 'vrbr' }),
         icon: FireIcon,
         iconForeground: 'text-sky-700',
         iconBackground: 'bg-sky-50',
