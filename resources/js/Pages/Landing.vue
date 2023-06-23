@@ -14,6 +14,7 @@ import EnergieausweisCheck from '../Components/EnergieausweisCheck.vue';
 import { InertiaLink } from '@inertiajs/inertia-vue3';
 import Blog from '../Components/Blog.vue';
 import Faq from '../Components/Faq.vue';
+import LogoCarousel from '../Components/LogoCarousel.vue';
 
 const checkTool = ref(false);
 </script>
@@ -149,9 +150,9 @@ const checkTool = ref(false);
                 </div>
             </div>
         </div>
-
+        <logo-carousel />
         <Features />
-        <Prices />
+        <Prices @open-modal="checkTool = true" />
         <Blog />
         <Faq />
     </GuestLayout>

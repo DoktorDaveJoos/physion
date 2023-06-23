@@ -22,6 +22,10 @@ class Product extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'meta' => 'array',
+    ];
+
     public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class);

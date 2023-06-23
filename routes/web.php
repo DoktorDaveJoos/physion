@@ -12,6 +12,7 @@ use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
@@ -23,15 +24,6 @@ use App\Notifications\OrderCreated;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-Route::get('/mailable', function () {
-
-
-    $order = Order::first();
-    $customer = Customer::first();
-
-    $customer->notify((new OrderCreated($order, 'Harald Lesch'))->locale('de'));
-});
 
 
 /*
@@ -218,12 +210,7 @@ Route::prefix('/find')->name('find.')->group(function () {
     Route::get('/slug', [FindByController::class, 'bySlug'])->name('slug');
 });
 
-Route::get('/', function () {
-    return Inertia::render('Landing', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('start');
+Route::get('/', LandingController::class)->name('start');
 
 Route::middleware([
     'auth:sanctum',

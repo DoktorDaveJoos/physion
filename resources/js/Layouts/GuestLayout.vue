@@ -22,6 +22,14 @@ import Dropdown from '../Jetstream/Dropdown.vue';
 import { InertiaLink } from '@inertiajs/inertia-vue3';
 import Footer from './Components/Footer.vue';
 
+defineProps({
+    showMenu: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+});
+
 const products = [
     [
         {
@@ -42,19 +50,19 @@ const products = [
             icon: CalculatorIcon,
             theme: 'bg-sky-500',
             active: false,
-            availableFrom: null,
+            availableFrom: 'Juli 2023',
         },
     ],
     [
         {
-            name: 'BIRN Zertifikat',
+            name: 'QNG Zertifikat',
             description:
                 'Bescheinigung über die Einhaltung von Niedrigenergiehaus-Anforderungen.',
             href: '#',
             icon: DocumentChartBarIcon,
             theme: 'bg-teal-500',
             active: false,
-            availableFrom: '01.03.2023',
+            availableFrom: 'November 2023',
         },
     ],
     [
@@ -66,7 +74,7 @@ const products = [
             icon: LightBulbIcon,
             theme: 'bg-violet-500',
             active: false,
-            availableFrom: '01.02.2023',
+            availableFrom: 'Ende 2023',
         },
         {
             name: 'Förderung A-Z',
@@ -76,7 +84,7 @@ const products = [
             icon: CurrencyEuroIcon,
             theme: 'bg-violet-500',
             active: false,
-            availableFrom: '01.02.2023',
+            availableFrom: 'Demnächst',
         },
     ],
 ];
@@ -97,9 +105,9 @@ const resources = [
 
 <template>
     <div id="argh" class="min-h-screen flex flex-col">
-        <Popover class="relative bg-white z-50 sticky top-0">
+        <Popover class="relative bg-white z-20 sticky top-0">
             <div
-                class="flex border-b border-gray-100 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
+                class="flex border-b border-gray-200 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start">
                     <NavLink href="/">
                         <ApplicationMark />
@@ -123,6 +131,7 @@ const resources = [
                     </PopoverButton>
                 </div>
                 <PopoverGroup
+                    v-if="showMenu"
                     as="nav"
                     class="hidden md:flex flex-1 justify-center">
                     <div class="flex items-center space-x-10">
@@ -238,11 +247,11 @@ const resources = [
                             </transition>
                         </Popover>
 
-                        <InertiaLink
+                        <a
                             :href="route('blog.show')"
                             class="text-base px-2 font-medium text-gray-500 hover:text-gray-900"
                             >Blog
-                        </InertiaLink>
+                        </a>
                         <InertiaLink
                             :href="route('about')"
                             class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
@@ -307,7 +316,9 @@ const resources = [
                         </Popover>
                     </div>
                 </PopoverGroup>
-                <div class="hidden items-center justify-end md:flex">
+                <div
+                    v-if="showMenu"
+                    class="hidden items-center justify-end md:flex">
                     <InertiaLink
                         :href="route('login')"
                         class="text-xs font-light underline text-gray-500 hover:text-gray-900"

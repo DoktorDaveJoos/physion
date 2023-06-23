@@ -47,7 +47,7 @@ const faqs = [
     },
     {
         question: 'Wie kann ich bezahlen?',
-        answer: 'Sie können auf verschiedene Weise bezahlen: PayPal, Kreditkarte, Apple & Google Pay, SOFORT Überweisung, Giropay und Klarna.',
+        answer: 'Sie können auf verschiedene Weise bezahlen: PayPal, Kreditkarte, Apple Pay, Google Pay und Klarna.',
     },
     {
         question: 'Erhalte ich eine Rechnung?',

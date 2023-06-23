@@ -273,28 +273,5 @@ const logout = () => {
                 <slot />
             </main>
         </div>
-        <NotificationGroup>
-            <div
-                class="pointer-events-none fixed inset-0 z-50 flex items-start justify-end p-6 px-4 py-6">
-                <div class="w-full max-w-sm">
-                    <Notification
-                        v-slot="{ notifications, close }"
-                        enter="ease-out duration-300 transition"
-                        enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
-                        enter-to="translate-y-0 opacity-100 sm:translate-x-0"
-                        leave="transition ease-in duration-300"
-                        leave-from="opacity-100"
-                        leave-to="opacity-0"
-                        move="transition duration-300"
-                        move-delay="delay-300">
-                        <LightNotification
-                            v-for="notification in notifications"
-                            :key="notification.id"
-                            :notification="notification"
-                            :close="close" />
-                    </Notification>
-                </div>
-            </div>
-        </NotificationGroup>
     </div>
 </template>

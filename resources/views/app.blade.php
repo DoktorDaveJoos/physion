@@ -20,4 +20,5 @@
     <body class="font-sans antialiased min-h-screen">
         @inertia
     </body>
+    @include('cookie-consent::index')
 </html>

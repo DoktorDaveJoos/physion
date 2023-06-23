@@ -50,7 +50,7 @@ const allItems = [
             order: props.order.slug,
             page: 'details',
         }),
-        iconColor: 'bg-blue-500',
+        iconColor: 'bg-blue-300',
         icon: DocumentMagnifyingGlassIcon,
     },
     {
@@ -62,7 +62,7 @@ const allItems = [
             order: props.order.slug,
             page: 'consumption',
         }),
-        iconColor: 'bg-indigo-500',
+        iconColor: 'bg-blue-300',
         icon: ChartBarIcon,
     },
 ];
@@ -365,7 +365,8 @@ const items = computed(() => {
             </div>
 
             <div v-else class="w-full my-6">
-                <div class="rounded-md bg-yellow-50 p-4 mb-6">
+                <div
+                    class="rounded-md bg-yellow-50 border border-yellow-200 p-4 mb-6">
                     <div class="flex">
                         <div class="flex-shrink-0">
                             <ExclamationTriangleIcon

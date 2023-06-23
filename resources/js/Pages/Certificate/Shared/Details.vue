@@ -4,19 +4,16 @@ import StepperWrapper from '../../../Wrappers/StepperWrapper.vue';
 import BuildingDetail from '../../../Components/BuildingDetail.vue';
 
 defineProps({
-  order: {
-    type: Object,
-  },
+    order: {
+        type: Object,
+    },
 });
-
 </script>
 
 <template>
-  <guest-layout>
-    <stepper-wrapper>
-      <building-detail :order='order' />
-    </stepper-wrapper>
-  </guest-layout>
-
+    <guest-layout>
+        <stepper-wrapper>
+            <building-detail :order="order" />
+        </stepper-wrapper>
+    </guest-layout>
 </template>
-

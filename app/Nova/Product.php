@@ -4,6 +4,8 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
@@ -57,6 +59,9 @@ class Product extends Resource
             Text::make('Description'),
             Text::make('Price'),
             File::make('Image'),
+
+            Boolean::make('Active'),
+            Code::make('Meta')->json(),
 
             BelongsToMany::make('Related Products', 'relatedProducts', Product::class),
 

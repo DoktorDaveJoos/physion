@@ -275,15 +275,8 @@ const submit = () => {
                 <div class="flex items-center">
                     <el-switch v-model="agreed" />
                     <span class="text-xs ml-4 text-gray-500">
-                        Sie stimmen zu, dass wir Sie bei Rückfragen bzgl des
-                        Auftrags kontaktieren dürfen. Sie stimmen der Nutzung
-                        von
-                        {{ ' ' }}
-                        <a class="font-medium text-gray-700 underline" href="#"
-                            >Cookies</a
-                        >
-                        {{ ' ' }}
-                        zu.
+                        Sie stimmen zu, dass wir Sie bezüglich Ihrer Anfrage
+                        kontaktieren dürfen.
                     </span>
                 </div>
             </div>

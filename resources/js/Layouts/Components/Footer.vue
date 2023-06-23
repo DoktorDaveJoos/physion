@@ -14,7 +14,7 @@
 -->
 <template>
     <footer
-        class="border-t border-gray-100 z-10 bg-slate-50"
+        class="border-t border-gray-100 bg-slate-50"
         aria-labelledby="footer-heading">
         <h2 id="footer-heading" class="sr-only">Footer</h2>
         <div
