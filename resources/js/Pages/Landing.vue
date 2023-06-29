@@ -136,7 +136,7 @@ const checkTool = ref(false);
                                         <div class="block ml-4">
                                             <p
                                                 class="text-sm font-medium text-gray-900">
-                                                Energieausweis
+                                                Bedarfsausweis
                                             </p>
                                             <p class="text-sm text-gray-800">
                                                 Jetzt Bedarfsausweis erstellen
