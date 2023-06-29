@@ -36,11 +36,11 @@
             <div class="relative">
                 <h2
                     class="text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
-                    Was Bauzertifikate besser kann
+                    Was bauzertifikate.de besser kann
                 </h2>
                 <p
                     class="mx-auto mt-4 max-w-6xl text-center text-xl text-gray-500">
-                    Bauzertifikate bietet eine umfassende Palette an
+                    bauzertifikate.de bietet eine umfassende Palette an
                     Dienstleistungen, einschließlich des Verkaufs von
                     Energieausweisen, Ratgebern und dem BIRN Zertifikat. Dabei
                     legen wir größten Wert auf die Verwendung der neuesten
@@ -57,7 +57,7 @@
                         Energieausweise
                     </h3>
                     <p class="mt-3 text-lg text-gray-500">
-                        Bauzertifikate bietet nicht nur den Verkauf von
+                        bauzertifikate.de bietet nicht nur den Verkauf von
                         Energieausweisen an, sondern auch einen umfassenden
                         Service dazu, einschließlich Beratung, Unterstützung und
                         schneller Abwicklung. Wir legen Wert auf Qualität und
