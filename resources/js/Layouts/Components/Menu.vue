@@ -181,7 +181,7 @@ const resources = [
                                     class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                     <div
                                         class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                                        <a
+                                        <Link
                                             v-for="resource in resources"
                                             :key="resource.name"
                                             :href="resource.href"
@@ -194,7 +194,7 @@ const resources = [
                                                 class="mt-1 text-sm text-gray-500">
                                                 {{ resource.description }}
                                             </p>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </PopoverPanel>

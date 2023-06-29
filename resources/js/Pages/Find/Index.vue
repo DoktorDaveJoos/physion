@@ -1,8 +1,8 @@
 <template>
     <blinking-wrapper>
         <div
-            class="bg-white py-16 px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
-            <div class="mx-auto max-w-lg lg:max-w-none">
+            class="bg-white flex md:justify-start md:w-7/12 py-16 px-6 lg:py-24 lg:px-8 xl:pl-12">
+            <div class="w-full max-w-2xl">
                 <el-tabs tab-position="top">
                     <el-tab-pane class="pt-4" label="Order ID">
                         <h2
@@ -34,15 +34,14 @@
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <el-tab-pane class="pt-4" label="Ohne">
+                    <el-tab-pane class="pt-4" label="Email">
                         <h2
                             class="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-                            Ohne Order ID
+                            Via Email
                         </h2>
 
                         <p class="mt-3 text-lg leading-6 text-gray-500">
-                            Bitte geben Sie Ihre Email Adresse und die
-                            Postleitzahl des Gebäudes an.
+                            Bitte geben Sie Ihre Email Adresse an.
                         </p>
                         <p class="mt-3 text-lg leading-6 text-gray-500 mb-6">
                             Beachten Sie, die Email Adresse anzugeben, mit der

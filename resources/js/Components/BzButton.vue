@@ -25,6 +25,8 @@ const getClass = computed(() => {
         'justify-center',
     ];
 
+    classes.push(props.class);
+
     if (props.type === 'primary') {
         if (props.plain) {
             classes.push(
