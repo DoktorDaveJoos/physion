@@ -260,7 +260,7 @@ const communicationFeatures = [
         id: 2,
         name: 'Einfache Bezahlung',
         description:
-            'Wir bieten Ihnen eine Reihe von Zahlungsmöglichkeiten, um Ihren Bedürfnissen gerecht zu werden. Sie können zwischen Kreditkarte, Lastschrift, PayPal, Sofortüberweisung und Klarna (Rechnung) wählen.',
+            'Wir bieten Ihnen eine Reihe von Zahlungsmöglichkeiten, um Ihren Bedürfnissen gerecht zu werden. Sie können zwischen Kreditkarte, PayPal und Klarna (Rechnung) wählen.',
         icon: CreditCardIcon,
     },
 ];
