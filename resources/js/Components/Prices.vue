@@ -4,9 +4,9 @@
         <div class="relative overflow-hidden pt-32 pb-96 lg:pt-40">
             <div>
                 <img
+                    alt=""
                     class="absolute bottom-0 left-1/2 w-[1440px] max-w-none -translate-x-1/2"
-                    src="/background-call-to-action%20Kopie.jpg"
-                    alt="" />
+                    src="/background-call-to-action%20Kopie.jpg" />
             </div>
             <div class="relative mx-auto max-w-7xl px-6 text-center lg:px-8">
                 <div class="mx-auto max-w-2xl lg:max-w-4xl">
@@ -37,8 +37,8 @@
                             class="flex flex-col rounded-3xl bg-white shadow-xl ring-1 ring-black/10">
                             <div class="p-8 sm:p-10">
                                 <h3
-                                    class="text-lg font-semibold leading-8 tracking-tight text-blue-600"
-                                    :id="tier.data.id">
+                                    :id="tier.data.id"
+                                    class="text-lg font-semibold leading-8 tracking-tight text-blue-600">
                                     {{ tier.data.name }}
                                 </h3>
                                 <div
@@ -56,7 +56,7 @@
                             <div class="flex flex-1 flex-col p-2">
                                 <div
                                     class="flex flex-1 flex-col justify-between rounded-2xl bg-gray-50 p-6 sm:p-8">
-                                    <ul role="list" class="space-y-6">
+                                    <ul class="space-y-6" role="list">
                                         <li
                                             v-for="feature in tier.data
                                                 .features"
@@ -64,8 +64,8 @@
                                             class="flex items-start">
                                             <div class="flex-shrink-0">
                                                 <CheckIcon
-                                                    class="h-6 w-6 text-blue-600"
-                                                    aria-hidden="true" />
+                                                    aria-hidden="true"
+                                                    class="h-6 w-6 text-blue-600" />
                                             </div>
                                             <p
                                                 class="ml-3 text-sm leading-6 text-gray-600">
@@ -74,12 +74,12 @@
                                         </li>
                                     </ul>
                                     <div class="mt-8">
-                                        <a
-                                            :href="tier.href"
-                                            class="inline-block w-full rounded-lg bg-blue-600 px-4 py-4 text-center text-sm font-semibold leading-5 text-white shadow-md hover:bg-blue-700"
-                                            :aria-describedby="tier.id"
-                                            >Jetzt erstellen</a
-                                        >
+                                        <Link
+                                            :aria-describedby="tier.data.id"
+                                            :href="tier.links.self"
+                                            class="inline-block w-full rounded-lg bg-blue-600 px-4 py-4 text-center text-sm font-semibold cursor-pointer leading-5 text-white shadow-md hover:bg-blue-700"
+                                            >Jetzt erstellen
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -104,8 +104,8 @@
                         </div>
                         <div>
                             <button
-                                @click="$emit('openModal')"
-                                class="inline-block rounded-lg bg-blue-50 px-4 py-2.5 text-center text-sm font-semibold leading-5 text-blue-700 hover:bg-blue-100">
+                                class="inline-block rounded-lg bg-blue-50 px-4 py-2.5 text-center text-sm font-semibold leading-5 text-blue-700 hover:bg-blue-100"
+                                @click="$emit('openModal')">
                                 Energieausweis-Check
                                 <span aria-hidden="true">&rarr;</span>
                             </button>
@@ -119,7 +119,7 @@
 
 <script setup>
 import { CheckIcon } from '@heroicons/vue/24/outline';
-import { usePage } from '@inertiajs/inertia-vue3';
+import { Link, usePage } from '@inertiajs/inertia-vue3';
 
 const { tiers } = usePage().props.value;
 

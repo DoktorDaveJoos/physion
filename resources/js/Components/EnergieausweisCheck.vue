@@ -153,13 +153,13 @@
                 </div>
                 <div class="mt-8">
                     <h3 class="text-lg font-medium">
-                        <a :href="action.href" class="focus:outline-none">
+                        <Link :href="action.href" class="focus:outline-none">
                             <!-- Extend touch target to entire panel -->
                             <span
                                 class="absolute inset-0 hover:text-blue-500"
                                 aria-hidden="true" />
                             {{ action.title }}
-                        </a>
+                        </Link>
                     </h3>
                     <p class="mt-2 text-sm text-gray-500 text-wrap">
                         {{ action.description }}
@@ -206,6 +206,7 @@ import {
     RadioGroupOption,
 } from '@headlessui/vue';
 import { FireIcon, CalculatorIcon } from '@heroicons/vue/24/outline';
+import { Link } from '@inertiajs/inertia-vue3';
 
 const settingsConstructionYear = [
     {
