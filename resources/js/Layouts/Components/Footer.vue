@@ -162,25 +162,26 @@ const subscribe = () => {
 
 const navigation = {
     solutions: [
-        { name: 'Verbrauchsausweis', href: '#' },
-        { name: 'Bedarfsausweis', href: '#' },
-        { name: 'BIRN Zertifikat', href: '#' },
-        { name: 'Ratgeber', href: '#' },
+        {
+            name: 'Verbrauchsausweis',
+            href: route('order.create', { category: 'vrbr' }),
+        },
+        // { name: 'Bedarfsausweis', href: '#' },
+        // { name: 'BIRN Zertifikat', href: '#' },
+        // { name: 'Ratgeber', href: '#' },
     ],
     support: [
-        { name: 'Find my Energieausweis', href: '#' },
-        { name: 'FAQ', href: '#' },
+        { name: 'Find my Energieausweis', href: route('find.show') },
+        { name: 'FAQ', href: '/#faq' },
     ],
     company: [
-        { name: 'About', href: '#' },
-        { name: 'Blog', href: '#' },
-        { name: 'Kontakt', href: '#' },
+        { name: 'About', href: route('about') },
+        { name: 'Blog', href: route('blog.show') },
+        { name: 'Kontakt', href: route('contact.show') },
     ],
     legal: [
-        { name: 'Zertifizierung', href: '#' },
-        { name: 'Haftung', href: '#' },
-        { name: 'Datenschutz', href: '#' },
-        { name: 'Impressum', href: '#' },
+        { name: 'Datenschutz', href: route('datenschutz') },
+        { name: 'Impressum', href: route('impressum') },
     ],
     social: [
         {

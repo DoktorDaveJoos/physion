@@ -77,7 +77,7 @@ const checkTool = ref(false);
                                     <CursorArrowRaysIcon
                                         class="h-6 w-6 text-gray-500" />
                                 </div>
-                                <div class="flex justify-center">
+                                <div class="flex justify-center px-2 sm:px-0">
                                     <a
                                         @click="checkTool = true"
                                         type="button"
@@ -98,7 +98,7 @@ const checkTool = ref(false);
                                     </a>
                                 </div>
 
-                                <div class="flex justify-center">
+                                <div class="flex justify-center px-2 sm:px-0">
                                     <InertiaLink
                                         :href="
                                             route('order.create', {
@@ -122,7 +122,7 @@ const checkTool = ref(false);
                                     </InertiaLink>
                                 </div>
 
-                                <div class="flex justify-center">
+                                <div class="flex justify-center px-2 sm:px-0">
                                     <InertiaLink
                                         :href="
                                             route('order.create', {

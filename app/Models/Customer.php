@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 /**
  * @property string id
@@ -19,6 +20,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string city
  * @property string state
  * @property string country
+ * @property Collection<Order> orders
  */
 class Customer extends Model
 {

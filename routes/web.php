@@ -111,6 +111,14 @@ use Inertia\Inertia;
 //
 //});
 
+Route::get('/impressum', function () {
+    return Inertia::render('Imprint');
+})->name('impressum');
+
+Route::get('/datenschutz', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('datenschutz');
+
 Route::prefix('orders')->group(function () {
     Route::get('/create/{category}', [OrderController::class, 'create'])->name('order.create');
     Route::post('/create/{category}', [OrderController::class, 'store'])->name('order.store');
@@ -208,6 +216,7 @@ Route::prefix('/find')->name('find.')->group(function () {
     Route::get('/', [FindByController::class, 'index'])->name('show');
 
     Route::get('/slug', [FindByController::class, 'bySlug'])->name('slug');
+    Route::get('/email', [FindByController::class, 'byEmail'])->name('email');
 });
 
 Route::get('/', LandingController::class)->name('start');
