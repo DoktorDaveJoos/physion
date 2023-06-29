@@ -17,11 +17,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
 use App\Http\Controllers\Vrbr\VacanciesController;
-use App\Mail\OrderInitialized;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Notifications\OrderCreated;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -203,9 +198,16 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::post('subscribe', [SubscriptionsController::class, 'store'])->name('subscribe');
 });
 
+Route::post('/newsletter', [SubscriptionsController::class, 'store'])->name('newsletter.store');
+
 Route::get('/about', function () {
     return Inertia::render('About/About');
 })->name('about');
+
+Route::get('/energiehub', function () {
+    return Inertia::render('Feature/EnergieHub');
+})->name('energiehub');
+
 
 Route::prefix('kontakt')->name('contact.')->group(function () {
     Route::get('', [ContactController::class, 'index'])->name('show');
