@@ -102,7 +102,7 @@ defineProps({
                     </div>
                     <div class="bg-gray-50 p-5 sm:p-8">
                         <Link
-                            :href="route('login')"
+                            :href="route('energiehub')"
                             class="-m-3 flow-root rounded-md p-3 hover:bg-gray-100">
                             <div class="flex items-center">
                                 <div

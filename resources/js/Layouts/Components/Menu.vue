@@ -268,7 +268,7 @@ const resources = [
                                     >Find my
                                 </Link>
                                 <Link
-                                    :href="route('start') + '#faq'"
+                                    :href="route('energiehub')"
                                     class="text-base font-medium px-2 text-gray-500 hover:text-gray-900"
                                     >EnergieHub
                                 </Link>

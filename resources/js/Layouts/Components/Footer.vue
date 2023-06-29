@@ -147,7 +147,7 @@ const form = useForm({
 });
 
 const subscribe = () => {
-    form.post(route('blog.subscribe'), {
+    form.post(route('newsletter.store'), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset('email');
