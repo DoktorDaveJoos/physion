@@ -119,6 +119,12 @@ class WallController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
+        if (!$bdrf->wall) {
+            return Redirect::back()->withErrors([
+                'wall' => 'Noch keine Außenwand angelegt.',
+            ]);
+        }
+
         $bdrf->wall->windows()->create(
             $validator->validated()
         );

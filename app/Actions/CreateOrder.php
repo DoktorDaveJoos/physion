@@ -11,6 +11,7 @@ use App\Models\Vrbr;
 use App\Notifications\OrderCreated;
 use App\Services\NanoIdCore;
 use App\Shared\Transferable;
+use App\Support\Telegram\Telegram;
 use Closure;
 use Hidehalo\Nanoid\Client;
 use Illuminate\Mail\Mailable;
@@ -63,6 +64,9 @@ class CreateOrder
 
         // Notify Customer
         $customer->notify((new OrderCreated($order, $customer->name))->locale('de'));
+
+        // Notify Bauzertifikate Team - @todo make async
+        Telegram::broadcast("[Order created] $customer->name: $order->certificate_type");
 
         return $order;
     }

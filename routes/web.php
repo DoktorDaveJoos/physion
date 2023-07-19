@@ -135,11 +135,11 @@ Route::prefix('bdrf/{bdrf}')->group(function () {
     Route::delete('/roof/insulation/{insulation}', [RoofController::class, 'deleteInsulation'])
         ->name('bdrf.roof.insulation.delete');
     Route::put('/roof/skylight', [RoofController::class, 'skylight'])->name('bdrf.roof.skylight');
-    Route::delete('/roof/skylight/{skylight}', [RoofController::class, 'deleteSkylight'])
+    Route::delete('/roof/skylight/{window}', [RoofController::class, 'deleteSkylight'])
         ->name('bdrf.roof.skylight.delete');
 
     // dormer
-    Route::put('/dormer', [PositionController::class, 'dormer'])->name('bdrf.roof.dormer');
+    Route::put('/roof/dormer', [RoofController::class, 'dormer'])->name('bdrf.roof.dormer');
     Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'])->name('bdrf.roof.dormer.delete');
 
 
