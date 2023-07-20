@@ -31,9 +31,7 @@ class ShowController extends Controller
         return Inertia::render('Checkout/Index', [
             'order' => $order,
             'addedUpsells' => $order->upsells,
-            'upsells' => Product::whereDoesntHave('orders', function ($query) use ($order) {
-                $query->where('order_id', $order->id);
-            })->get()
+            'upsells' => Product::whereNot('type', 'certificate')->get(),
         ]);
     }
 
