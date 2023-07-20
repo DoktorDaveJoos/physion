@@ -6,6 +6,7 @@ use App\Actions\UpdateCertificate;
 use App\Actions\UpdateGeneral;
 use App\Http\Requests\Certificate\Bdrf\UpdateDetailsRequest;
 use App\Http\Requests\Certificate\Bdrf\UpdatePositionRequest;
+use App\Http\Requests\Certificate\Bdrf\UpdateThermalRequest;
 use App\Http\Requests\Certificate\Shared\SummaryRequest;
 use App\Http\Requests\Certificate\Shared\UpdateGeneralRequest;
 use App\Http\Requests\Certificate\Vrbr\MarkDoneConsumptionRequest;
@@ -172,11 +173,15 @@ enum Category: string
                     'Thermische Hülle',
                     'Thermische Hülle des Gebäudes',
                     'Certificate/Bdrf/Thermal',
+                    UpdateThermalRequest::class,
+                    UpdateCertificate::class
                 ),
-                'heating' => Page::make(
-                    'Heizung',
-                    'Heizung des Gebäudes',
-                    'Certificate/Bdrf/Heating',
+                'energy' => Page::make(
+                    'Energie',
+                    'Heizung und Energiegewinnung des Gebäudes',
+                    'Certificate/Bdrf/Energy',
+                    UpdateThermalRequest::class,
+                    UpdateCertificate::class
                 ),
                 'summary' => Page::make(
                     'Zusammenfassung',

@@ -57,6 +57,18 @@ const steps = {
             description: 'Außenwand, Dach und Keller',
             status: 'upcoming',
         },
+        {
+            key: 'energy',
+            name: 'Energie',
+            description: 'Heizung, Warmwasser und Energiegewinnung',
+            status: 'upcoming',
+        },
+        {
+            key: 'summary',
+            name: 'Abschluss',
+            description: 'Prüfen und schließen Sie den Auftrag ab',
+            status: 'upcoming',
+        },
     ],
 };
 

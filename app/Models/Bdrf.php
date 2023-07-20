@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Bdrf extends Model
@@ -33,4 +36,20 @@ class Bdrf extends Model
     {
         return $this->hasOne(Wall::class);
     }
+
+    public function cellar(): HasOne
+    {
+        return $this->hasOne(Cellar::class);
+    }
+
+    public function heatingSystems(): HasMany
+    {
+        return $this->hasMany(HeatingSystem::class);
+    }
+
+    public function renewableEnergyInstallations(): HasMany
+    {
+        return $this->hasMany(RenewableEnergyInstallation::class);
+    }
+
 }

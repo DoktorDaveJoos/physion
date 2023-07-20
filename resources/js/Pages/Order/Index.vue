@@ -284,30 +284,38 @@ const download = () => {
                                                     </div>
                                                 </dd>
                                             </template>
-                                            <dt
-                                                class="font-medium text-gray-900">
-                                                Versicherungen
-                                            </dt>
-                                            <dd
-                                                class="mt-3 flex flex-col space-y-3 text-gray-500">
-                                                <span
-                                                    v-for="upsell in order.data
-                                                        .upsells">
-                                                    <ShieldCheckIcon
-                                                        class="inline-block mr-1 w-5 h-5 text-gray-500"
-                                                        aria-hidden="true" />
-                                                    {{ upsell.name }}</span
-                                                >
-                                                <span
-                                                    v-if="
-                                                        order.data.upsells
-                                                            .length === 0
-                                                    "
-                                                    class="text-gray-400 text-xs font-italic">
-                                                    Keine Versicherungen
-                                                    ausgewählt
-                                                </span>
-                                            </dd>
+                                            <template
+                                                v-if="
+                                                    order.data.status !==
+                                                        'created' &&
+                                                    order.data.status !==
+                                                        'finalized'
+                                                ">
+                                                <dt
+                                                    class="font-medium text-gray-900">
+                                                    Versicherungen
+                                                </dt>
+                                                <dd
+                                                    class="mt-3 flex flex-col space-y-3 text-gray-500">
+                                                    <span
+                                                        v-for="upsell in order
+                                                            .data.upsells">
+                                                        <ShieldCheckIcon
+                                                            class="inline-block mr-1 w-5 h-5 text-gray-500"
+                                                            aria-hidden="true" />
+                                                        {{ upsell.name }}</span
+                                                    >
+                                                    <span
+                                                        v-if="
+                                                            order.data.upsells
+                                                                .length === 0
+                                                        "
+                                                        class="text-gray-400 text-xs font-italic">
+                                                        Keine Versicherungen
+                                                        ausgewählt
+                                                    </span>
+                                                </dd>
+                                            </template>
                                         </div>
                                     </dl>
                                 </div>

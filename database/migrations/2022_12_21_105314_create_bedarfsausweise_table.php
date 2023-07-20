@@ -32,7 +32,6 @@ return new class extends Migration
             $table->string('construction_year_heating')->nullable();
 
             $table->string('ventilation')->nullable();
-            $table->string('cellar')->nullable();
 
             $table->string('cooling')->nullable();
             $table->string('cooling_count')->nullable();

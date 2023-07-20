@@ -11,12 +11,27 @@ import InformationBox from '../../../Components/InformationBox.vue';
 import Badge from '../../../Components/Badge.vue';
 import { ref } from 'vue';
 import RoofForm from '../../../Components/RoofForm.vue';
+import CellarForm from '../../../Components/CellarForm.vue';
+import BzButton from '../../../Components/BzButton.vue';
+import { useForm } from '@inertiajs/inertia-vue3';
 
-defineProps({
+const props = defineProps({
     order: Object,
 });
 
 const active = ref('wall');
+
+const form = useForm({});
+
+const submit = () => {
+    form.put(
+        route('certificate.update', {
+            order: props.order.slug,
+            page: 'thermal',
+            signature: route().params.signature,
+        })
+    );
+};
 </script>
 
 <template>
@@ -62,15 +77,36 @@ const active = ref('wall');
                         </template>
                         <roof-form :order="order" />
                     </el-collapse-item>
-                    <!--          <el-collapse-item>-->
-                    <!--            <template #title>-->
-                    <!--              <CheckCircleIcon v-if='order.certificate.cellar?.id' class='h-5 w-5 text-emerald-500 mr-4' />-->
-                    <!--              <ExclamationTriangleIcon v-else class='h-5 w-5 text-orange-400 mr-4' />-->
-                    <!--              Keller-->
-                    <!--            </template>-->
-                    <!--            <cellar-form />-->
-                    <!--          </el-collapse-item>-->
+                    <el-collapse-item>
+                        <template #title>
+                            <CheckCircleIcon
+                                v-if="order.certificate.cellar?.id"
+                                class="h-5 w-5 text-emerald-500 mr-4" />
+                            <ExclamationTriangleIcon
+                                v-else
+                                class="h-5 w-5 text-orange-400 mr-4" />
+                            Keller
+                        </template>
+                        <cellar-form :order="order" />
+                    </el-collapse-item>
                 </el-collapse>
+                <div class="flex sm:col-span-2 justify-end pt-6">
+                    <bz-button
+                        :disabled="
+                            !order.certificate.wall?.id &&
+                            !order.certificate.roof?.id &&
+                            !order.certificate.cellar?.id
+                        "
+                        @click="submit"
+                        >{{
+                            order.certificate.wall?.id ||
+                            order.certificate.roof?.id ||
+                            order.certificate.cellar?.id
+                                ? 'Speichern & Weiter'
+                                : 'Bitte erst ausfüllen'
+                        }}</bz-button
+                    >
+                </div>
             </div>
         </stepper-wrapper>
     </guest-layout>

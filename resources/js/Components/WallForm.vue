@@ -13,6 +13,7 @@ import {
 import { computed, onMounted, reactive } from 'vue';
 import { ElNotification } from 'element-plus';
 import { Inertia } from '@inertiajs/inertia';
+import BzButton from './BzButton.vue';
 
 const props = defineProps({
     order: Object,
@@ -75,7 +76,7 @@ const safe = () => {
             onSuccess: () => {
                 ElNotification({
                     title: 'Gespeichert',
-                    message: 'Dach erfolgreich gespeichert',
+                    message: 'Wand erfolgreich gespeichert',
                     type: 'success',
                 });
             },
@@ -197,9 +198,9 @@ const options = [
 const openDrawer = (drawer) => (state[drawer] = true);
 
 const hasAdditional = computed(() => {
-    console.log(wall.value);
-
-    return wall?.value?.insulations?.length > 0 || wall?.windows?.length > 0;
+    return (
+        wall?.value?.insulations?.length > 0 || wall?.value?.windows?.length > 0
+    );
 });
 </script>
 <template>
@@ -331,15 +332,15 @@ const hasAdditional = computed(() => {
             </div>
         </template>
 
-        <div class="p-4 flex justify-end border-t border-gray-200">
-            <el-button bg text @click="openDrawer('window')">
+        <div v-if="wall" class="p-4 flex justify-end border-t border-gray-200">
+            <bz-button plain @click="openDrawer('window')">
                 <plus-icon class="h-4 w-4 mr-1" />
                 <span class="text-xs">Fenster hinzufügen</span>
-            </el-button>
-            <el-button bg text @click="openDrawer('insulation')">
+            </bz-button>
+            <bz-button plain @click="openDrawer('insulation')">
                 <plus-icon class="h-4 w-4 mr-1" />
                 <span class="text-xs">Dämmung hinzufügen</span>
-            </el-button>
+            </bz-button>
         </div>
 
         <el-drawer v-model="state.window">
@@ -453,7 +454,13 @@ const hasAdditional = computed(() => {
                 size="large"
                 type="primary"
                 @click="safe">
-                Speichern
+                {{
+                    form.isDirty
+                        ? form.construction.length < 2
+                            ? 'Nicht genug Daten'
+                            : 'Speichern'
+                        : 'Bereits gespeichert'
+                }}
             </el-button>
         </div>
     </el-card>

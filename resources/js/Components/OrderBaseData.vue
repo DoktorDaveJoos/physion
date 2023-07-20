@@ -125,7 +125,10 @@ const submit = () => {
             subtitle="Angaben zum Auftraggeber und Kontakt im Falle von Rückfragen."
             title="Auftraggeber" />
 
-        <el-form-item :error="form.errors.name" :required="true" label="Name">
+        <el-form-item
+            :error="form.errors.name"
+            :required="true"
+            label="Vorname">
             <el-input v-model="form.name" autocomplete="give-name" />
         </el-form-item>
 

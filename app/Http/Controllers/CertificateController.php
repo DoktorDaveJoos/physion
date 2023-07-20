@@ -26,7 +26,14 @@ class CertificateController extends Controller
                 'certificate.wall',
                 'certificate.wall.insulations',
                 'certificate.wall.windows',
-                'certificate.roof'
+                'certificate.roof',
+                'certificate.roof.insulations',
+                'certificate.roof.windows',
+                'certificate.roof.dormers',
+                'certificate.cellar',
+                'certificate.cellar.insulations',
+                'certificate.heatingSystems',
+                'certificate.renewableEnergyInstallations',
             );
         }
 

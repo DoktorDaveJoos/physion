@@ -35,9 +35,15 @@ const props = defineProps({
 
 // const products = [props.product];
 
+const nameMap = {
+    'App\\Models\\Bdrf': 'Bedarfsausweis',
+    'App\\Models\\Vrbr': 'Verbrauchsausweis',
+};
+
 const map = {
     verbrauchsausweis: {
         name: 'Verbrauchsausweis',
+        short: 'vrbr',
         description:
             'Energieausweis, der die Energieeffizienz eines Gebäudes über den Energieverbrauch ermittelt.',
         href: '#',
@@ -48,6 +54,7 @@ const map = {
     },
     bedarfsausweis: {
         name: 'Bedarfsausweis',
+        short: 'bdrf',
         description:
             'Energieausweis, der die Energieeffizienz eines Gebäudes rechnerisch ermittelt.',
         href: '#',
@@ -332,7 +339,7 @@ const total = computed(() => {
                         <dl class="mt-6 space-y-4">
                             <div class="flex items-center justify-between">
                                 <dt class="text-sm text-gray-600">
-                                    Verbrauchsausweis
+                                    {{ order.products[0].name }}
                                 </dt>
                                 <dd class="text-sm font-medium text-gray-900">
                                     {{

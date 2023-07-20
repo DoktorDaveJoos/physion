@@ -134,6 +134,7 @@ class RoofController extends Controller
         ], [
             'count.required' => 'Bitte geben Sie eine Anzahl an.',
             'count.numeric' => 'Bitte geben Sie eine gültige Anzahl an.',
+            'glazing.string' => 'Bitte wählen Sie eine Verglasung aus.',
             'glazing.required' => 'Bitte wählen Sie eine Verglasung aus.',
             'height.required' => 'Bitte geben Sie eine Höhe an.',
             'height.numeric' => 'Bitte geben Sie eine gültige Höhe an.',
@@ -149,8 +150,9 @@ class RoofController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->roof->skylights()->create(
+        $bdrf->roof->windows()->create(
             $validator->validated()
+            + ['type' => 'dachfenster']
         );
 
         return Redirect::route('certificate.show', [
@@ -162,6 +164,8 @@ class RoofController extends Controller
 
     public function deleteSkylight(Bdrf $bdrf, Window $window, Request $request): RedirectResponse
     {
+        ray($window);
+
         $window->delete();
 
         return Redirect::route('certificate.show', [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bdrf;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bdrf;
+use App\Models\Cellar;
 use App\Models\Insulation;
 use App\Models\Wall;
 use App\Models\Window;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class WallController extends Controller
+class CellarController extends Controller
 {
 
     // invokable method
@@ -24,21 +25,19 @@ class WallController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'u_value' => 'numeric|nullable',
-            'construction' => 'string|required',
-            'variant' => 'string|required',
-            'thickness' => 'numeric|nullable',
+            'type' => 'string|required',
+            'ceiling' => 'numeric|nullable',
         ], [
             'u_wert.numeric' => 'Bitte geben Sie einen gültigen U-Wert an.',
-            'construction.required' => 'Bitte wählen Sie eine Konstruktion aus.',
-            'variant.required' => 'Bitte wählen Sie eine Variante aus.',
-            'thickness.numeric' => 'Bitte geben Sie eine gültige Stärke an.',
+            'heated.required' => 'Bitte geben Sie an, ob der Keller beheizt ist.',
+            'ceiling.numeric' => 'Bitte geben Sie eine gültige Deckenhöhe an.',
         ]);
 
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
 
-        Wall::updateOrCreate(
+        Cellar::updateOrCreate(
             ['bdrf_id' => $bdrf->id],
             $validator->validated()
         );
@@ -67,11 +66,11 @@ class WallController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        if (!$bdrf->wall) {
-            abort(400, 'Noch keine Außenwand angelegt.');
+        if (!$bdrf->cellar) {
+            abort(400, 'Noch keinen Keller angelegt.');
         }
 
-        $bdrf->wall->insulations()->create($validator->validated());
+        $bdrf->cellar->insulations()->create($validator->validated());
 
         return Redirect::route('certificate.show', [
             'order' => $bdrf->order->slug,

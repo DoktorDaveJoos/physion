@@ -23,6 +23,7 @@ import {
     SunIcon,
     TrashIcon,
 } from '@heroicons/vue/24/outline';
+import BzButton from './BzButton.vue';
 
 const props = defineProps({
     order: Object,
@@ -131,13 +132,14 @@ const form = useForm({
     roof_shape: roof.value?.roof_shape
         ? getForTitle(roof.value?.roof_shape)
         : null,
-    heated: null,
-    construction: roof.value?.heated
-        ? [
-              `${roof.value?.heated ? 'beheizt' : 'kalt'}`,
-              roof.value?.construction,
-          ]
-        : [],
+    heated: roof.value?.heated ?? null,
+    construction:
+        roof.value?.heated !== null
+            ? [
+                  `${roof.value?.heated ? 'beheizt' : 'kalt'}`,
+                  roof.value?.construction,
+              ]
+            : [],
     u_value: roof.value?.u_value ?? null,
     knee_wall: roof.value?.knee_wall ?? null,
     pitch: roof.value?.pitch ?? null,
@@ -165,10 +167,11 @@ watch(
                     props.order.certificate.roof.dormers?.forEach((dormer) => {
                         Inertia.delete(
                             route(
-                                'bdrf.dormer.delete',
+                                'bdrf.roof.dormer.delete',
                                 {
-                                    order: props.order.id,
+                                    bdrf: props.order.certificate.id,
                                     dormer: dormer.id,
+                                    signature: usePage().props.value.signature,
                                 },
                                 {
                                     preserveScroll: true,
@@ -226,7 +229,7 @@ const skylightForm = useForm({
     count: null,
     height: null,
     width: null,
-    verglasung: null,
+    glazing: null,
 });
 
 const insulationForm = useForm({
@@ -252,7 +255,7 @@ const prepareForm = (form) =>
     form.transform((data) => ({
         ...data,
         roof_shape: data?.roof_shape?.title,
-        heated: data.construction[0] === 'heated',
+        heated: data.construction[0] === 'beheizt',
         construction: data.construction[1],
     }));
 
@@ -276,40 +279,59 @@ const safe = () => {
 };
 
 const addInsulation = () => {
-    insulationForm.put(route('bdrf.roof.insulation', props.order.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            insulationForm.reset();
-            state.insulation = false;
-        },
-    });
+    insulationForm.put(
+        route('bdrf.roof.insulation', {
+            bdrf: props.order.certificate.id,
+            signature: usePage().props.value.signature,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                insulationForm.reset();
+                state.insulation = false;
+            },
+        }
+    );
 };
 
 const addSkylight = () => {
-    skylightForm.put(route('bdrf.roof.skylight', props.order.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            skylightForm.reset();
-            state.skylight = false;
-        },
-    });
+    skylightForm.put(
+        route('bdrf.roof.skylight', {
+            bdrf: props.order.certificate.id,
+            signature: usePage().props.value.signature,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                skylightForm.reset();
+                state.skylight = false;
+            },
+        }
+    );
 };
 
 const addDormer = () => {
-    dormerForm.put(route('bdrf.roof.dormer', props.order.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            dormerForm.reset();
-            state.dormer = false;
-        },
-    });
+    dormerForm.put(
+        route('bdrf.roof.dormer', {
+            bdrf: props.order.certificate.id,
+            signature: usePage().props.value.signature,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                dormerForm.reset();
+                state.dormer = false;
+            },
+        }
+    );
 };
 
 const deleteInsulation = (id) => {
     Inertia.delete(
         route('bdrf.roof.insulation.delete', {
-            order: props.order.id,
+            bdrf: props.order.certificate.id,
             insulation: id,
+            signature: usePage().props.value.signature,
         }),
         {
             preserveScroll: true,
@@ -320,8 +342,9 @@ const deleteInsulation = (id) => {
 const deleteSkylight = (id) => {
     Inertia.delete(
         route('bdrf.roof.skylight.delete', {
-            order: props.order.id,
-            skylight: id,
+            bdrf: props.order.certificate.id,
+            window: id,
+            signature: usePage().props.value.signature,
         }),
         {
             preserveScroll: true,
@@ -332,8 +355,9 @@ const deleteSkylight = (id) => {
 const deleteDormer = (id) => {
     Inertia.delete(
         route('bdrf.roof.dormer.delete', {
-            order: props.order.id,
+            bdrf: props.order.certificate.id,
             dormer: id,
+            signature: usePage().props.value.signature,
         }),
         {
             preserveScroll: true,
@@ -366,10 +390,12 @@ const openDrawer = async (drawer) => {
 const hasAdditional = computed(() => {
     return (
         props.order.certificate.roof?.insulations?.length > 0 ||
-        props.order.certificate.roof?.skylights?.length > 0 ||
+        props.order.certificate.roof?.windows?.length > 0 ||
         props.order.certificate.roof?.dormers?.length > 0
     );
 });
+
+console.log(form.construction);
 </script>
 
 <template>
@@ -521,7 +547,14 @@ const hasAdditional = computed(() => {
                 :order="order" />
 
             <template v-if="hasAdditional">
-                <div class="border-t border-gray-200 p-6 space-y-2 bg-gray-50">
+                <div
+                    class="border-t border-gray-200 px-6 pb-6 space-y-2 bg-gray-50">
+                    <div v-if="roof?.insulations?.length > 0" class="pt-4">
+                        <span class="text-xs text-gray-500"
+                            >Dämmung und Isolierung</span
+                        >
+                    </div>
+
                     <div
                         v-for="insulation in order.certificate.roof
                             ?.insulations"
@@ -549,8 +582,12 @@ const hasAdditional = computed(() => {
                         </div>
                     </div>
 
+                    <div v-if="roof?.windows?.length > 0" class="pt-4">
+                        <span class="text-xs text-gray-500">Dachfenster</span>
+                    </div>
+
                     <div
-                        v-for="skylight in order.certificate.roof?.skylights"
+                        v-for="skylight in order.certificate.roof?.windows"
                         class="flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm">
                         <div
                             class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
@@ -559,7 +596,7 @@ const hasAdditional = computed(() => {
 
                         <div class="flex-1">
                             <h3 class="text-gray-800 text-sm">
-                                Dachfenster - {{ skylight.verglasung }}
+                                Dachfenster - Verglasung: {{ skylight.glazing }}
                             </h3>
                             <div class="flex">
                                 <span class="text-xs text-gray-500 mr-2"
@@ -580,6 +617,11 @@ const hasAdditional = computed(() => {
                             </el-button>
                         </div>
                     </div>
+
+                    <div v-if="roof?.dormers?.length > 0" class="pt-4">
+                        <span class="text-xs text-gray-500">Gauben</span>
+                    </div>
+
                     <div
                         v-for="dormer in order.certificate.roof?.dormers"
                         class="flex rounded-md bg-white border border-gray-200 p-2 items-center shadow-sm">
@@ -615,28 +657,24 @@ const hasAdditional = computed(() => {
                 </div>
             </template>
 
-            <div class="p-4 flex justify-end border-t border-gray-200">
-                <el-button
-                    bg
-                    size="large"
-                    text
-                    @click="openDrawer('insulation')">
+            <div
+                v-if="roof"
+                class="p-4 flex justify-end border-t border-gray-200">
+                <bz-button plain @click="openDrawer('insulation')">
                     <plus-icon class="h-4 w-4 mr-1" />
-                    Dämmung hinzufügen
-                </el-button>
-                <el-button bg size="large" text @click="openDrawer('skylight')">
+                    <span class="text-xs">Dämmung hinzufügen</span>
+                </bz-button>
+                <bz-button plain @click="openDrawer('skylight')">
                     <plus-icon class="h-4 w-4 mr-1" />
-                    Dachfenster hinzufügen
-                </el-button>
-                <el-button
+                    <span class="text-xs">Dachfenster hinzufügen</span>
+                </bz-button>
+                <bz-button
                     v-if="form.roof_shape.title === 'Satteldach'"
-                    bg
-                    size="large"
-                    text
+                    plain
                     @click="openDrawer('dormer')">
                     <plus-icon class="h-4 w-4 mr-1" />
-                    Gaube hinzufügen
-                </el-button>
+                    <span class="text-xs">Gaube hinzufügen</span>
+                </bz-button>
             </div>
 
             <el-drawer v-model="state.skylight">
@@ -645,7 +683,9 @@ const hasAdditional = computed(() => {
                 </template>
 
                 <el-form label-position="top" size="large">
-                    <el-form-item label="Anzahl">
+                    <el-form-item
+                        label="Anzahl"
+                        :error="skylightForm.errors.count">
                         <el-input-number
                             v-model="skylightForm.count"
                             :max="20"
@@ -654,7 +694,9 @@ const hasAdditional = computed(() => {
                             placeholder="0"></el-input-number>
                     </el-form-item>
 
-                    <el-form-item label="Höhe in cm">
+                    <el-form-item
+                        label="Höhe in cm"
+                        :error="skylightForm.errors.height">
                         <el-input-number
                             v-model="skylightForm.height"
                             :max="500"
@@ -663,7 +705,9 @@ const hasAdditional = computed(() => {
                             placeholder="0"></el-input-number>
                     </el-form-item>
 
-                    <el-form-item label="Breite in cm">
+                    <el-form-item
+                        label="Breite in cm"
+                        :error="skylightForm.errors.width">
                         <el-input-number
                             v-model="skylightForm.width"
                             :max="500"
@@ -672,9 +716,11 @@ const hasAdditional = computed(() => {
                             placeholder="0"></el-input-number>
                     </el-form-item>
 
-                    <el-form-item label="Verglasung">
+                    <el-form-item
+                        label="Verglasung"
+                        :error="skylightForm.errors.glazing">
                         <el-select
-                            v-model="skylightForm.verglasung"
+                            v-model="skylightForm.glazing"
                             class="w-full"
                             placeholder="Bitte auswählen">
                             <el-option
@@ -693,8 +739,8 @@ const hasAdditional = computed(() => {
                     </el-form-item>
 
                     <div class="flex justify-end mt-5">
-                        <el-button type="primary" @click="addSkylight"
-                            >Hinzufügen</el-button
+                        <bz-button type="primary" @click="addSkylight"
+                            >Hinzufügen</bz-button
                         >
                     </div>
                 </el-form>

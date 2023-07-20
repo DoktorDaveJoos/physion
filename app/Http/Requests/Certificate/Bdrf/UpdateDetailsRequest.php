@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Certificate\Bdrf;
 
+use App\Enums\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Throwable;
 
 class UpdateDetailsRequest extends FormRequest
 {
@@ -20,6 +22,7 @@ class UpdateDetailsRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
+     * @throws Throwable
      */
     public function rules(): array
     {
@@ -29,8 +32,8 @@ class UpdateDetailsRequest extends FormRequest
             'floor_area' => 'required|numeric|min:1|max:10000',
             'housing_units' => 'required|integer|min:1|max:1000',
             'ventilation' => 'required|string',
-            'cellar' => 'required|string',
             'cooling' => 'nullable|string',
+            'cellar' => 'nullable|string',
             'cooling_count' => 'nullable|integer|min:0|max:1000',
             'cooling_service' => 'nullable|date',
             'suggestion_check' => 'present',
