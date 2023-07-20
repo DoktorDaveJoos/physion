@@ -48,8 +48,7 @@ const products = [
             href: route('order.create', 'bdrf'),
             icon: CalculatorIcon,
             theme: 'bg-sky-500',
-            active: false,
-            availableFrom: 'Juli 2023',
+            active: true,
         },
     ],
     [
