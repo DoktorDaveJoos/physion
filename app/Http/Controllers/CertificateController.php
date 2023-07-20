@@ -30,6 +30,10 @@ class CertificateController extends Controller
                 'certificate.roof.insulations',
                 'certificate.roof.windows',
                 'certificate.roof.dormers',
+                'certificate.cellar',
+                'certificate.cellar.insulations',
+                'certificate.heatingSystems',
+                'certificate.renewableEnergyInstallations',
             );
         }
 

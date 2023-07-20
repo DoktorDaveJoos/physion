@@ -167,10 +167,11 @@ watch(
                     props.order.certificate.roof.dormers?.forEach((dormer) => {
                         Inertia.delete(
                             route(
-                                'bdrf.dormer.delete',
+                                'bdrf.roof.dormer.delete',
                                 {
-                                    order: props.order.id,
+                                    bdrf: props.order.certificate.id,
                                     dormer: dormer.id,
+                                    signature: usePage().props.value.signature,
                                 },
                                 {
                                     preserveScroll: true,

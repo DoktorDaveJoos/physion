@@ -42,7 +42,7 @@ if (props.order) {
     form.floor_area = certificate.floor_area;
     form.housing_units = parseInt(certificate.housing_units);
     form.ventilation = certificate.ventilation;
-    form.cellar = certificate.cellar;
+    form.cellar = certificate.cellar ?? 'Kein Keller';
     form.renewables = certificate.renewables;
     form.renewables_reason = certificate.renewables_reason;
     form.cooling = certificate.cooling;
@@ -140,25 +140,28 @@ watch(hasRenewables, (value) => {
             </el-select>
         </el-form-item>
 
-        <el-form-item :error="form.errors.cellar" label="Keller">
-            <el-select
-                v-model="form.cellar"
-                class="w-full"
-                placeholder="Bitte auswählen">
-                <el-option
-                    default-first-option
-                    label="Kein Keller"
-                    value="Kein Keller" />
-                <el-option
-                    default-first-option
-                    label="Beheizter Keller"
-                    value="Beheizter Keller" />
-                <el-option
-                    default-first-option
-                    label="Unbeheizter Keller"
-                    value="Unbeheizter Keller" />
-            </el-select>
-        </el-form-item>
+        <template v-if="order.certificate_type?.includes('Vrbr')">
+            <el-form-item :error="form.errors.cellar" label="Keller">
+                <el-select
+                    v-model="form.cellar"
+                    class="w-full"
+                    placeholder="Bitte auswählen"
+                    :default-first-option="true">
+                    <el-option
+                        default-first-option
+                        label="Kein Keller"
+                        value="Kein Keller" />
+                    <el-option
+                        default-first-option
+                        label="Beheizter Keller"
+                        value="Beheizter Keller" />
+                    <el-option
+                        default-first-option
+                        label="Unbeheizter Keller"
+                        value="Unbeheizter Keller" />
+                </el-select>
+            </el-form-item>
+        </template>
 
         <template v-if="renewables">
             <el-divider class="sm:col-span-2" />

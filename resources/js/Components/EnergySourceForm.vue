@@ -22,14 +22,14 @@ const props = defineProps({
 const cellar = computed(() => props.order.certificate?.cellar);
 
 const form = useForm({
-    type: null,
+    heated: null,
     u_value: null,
     ceiling: null,
 });
 
 onMounted(() => {
     form.defaults({
-        type: cellar?.value?.type ?? null,
+        heated: cellar?.value?.heated ?? null,
         u_value: cellar?.value?.u_value ?? null,
         ceiling: cellar?.value?.ceiling ?? null,
     });
@@ -131,16 +131,15 @@ const hasAdditional = computed(() => {
             class="grid sm:grid-cols-2 sm:gap-4 p-4"
             label-position="top"
             size="large">
-            <el-form-item label="Keller" required :error="form.errors.type">
+            <el-form-item label="Keller" required :error="form.errors.heated">
                 <el-select
-                    v-model="form.type"
+                    v-model="form.heated"
                     class="w-full"
                     placeholder="Bitte wählen">
                     <el-option
                         v-for="item in [
-                            { label: 'Beheizt', value: 'Beheizt' },
-                            { label: 'Kalt', value: 'Kalt' },
-                            { label: 'Kein Keller', value: 'Kein Keller' },
+                            { label: 'Beheizt', value: true },
+                            { label: 'Kalt', value: false },
                         ]"
                         :key="item.value"
                         :label="item.label"
@@ -211,7 +210,7 @@ const hasAdditional = computed(() => {
         </template>
 
         <div
-            v-if="cellar && cellar.type !== 'Kein Keller'"
+            v-if="cellar"
             class="p-4 flex justify-end border-t border-gray-200">
             <bz-button plain @click="openDrawer('insulation')">
                 <plus-icon class="h-4 w-4 mr-1" />
@@ -262,14 +261,14 @@ const hasAdditional = computed(() => {
         <div class="w-full flex justify-end p-4 border-t border-gray-200">
             <el-button
                 :disabled="
-                    form.processing || !form.isDirty || form.type === null
+                    form.processing || !form.isDirty || form.heated === null
                 "
                 size="large"
                 type="primary"
                 @click="safe">
                 {{
                     form.isDirty
-                        ? form.type === null
+                        ? form.heated === null
                             ? 'Nicht genug Daten'
                             : 'Speichern'
                         : cellar

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Checkout;
 
+use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
@@ -21,7 +22,11 @@ class ShowController extends Controller
     public function index(Order $order): Response
     {
 
-        $order->load('products');
+        $order->load('products', 'certificate');
+
+        $order->update([
+            'status' => 'finalized'
+        ]);
 
         return Inertia::render('Checkout/Index', [
             'order' => $order,
@@ -34,6 +39,10 @@ class ShowController extends Controller
 
     public function thankyou(Order $order): Response
     {
+
+        $order->update([
+            'status' => 'open'
+        ]);
 
         $order->customer->notify(new OrderPaid($order, $order->customer->name));
 

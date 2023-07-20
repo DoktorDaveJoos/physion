@@ -42,5 +42,17 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        Product::create(
+            [
+                'type' => 'certificate',
+                'name' => 'Bedarfsausweis',
+                'short_name' => 'bdrf',
+                'description' => 'Bedarfsorientierter Energieausweis',
+                'price' => 119.00,
+                'image' => null,
+                'image_alt' => null,
+            ]
+        );
+
     }
 }

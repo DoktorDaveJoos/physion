@@ -33,7 +33,7 @@ const statuses = {
                         <ul role="list" class="divide-y divide-gray-100">
                             <li
                                 class="flex items-center justify-between gap-x-6 py-5">
-                                <div class="min-w-0">
+                                <div class="min-w-full">
                                     <div class="flex items-start gap-x-3">
                                         <p
                                             class="text-sm font-semibold leading-6 text-gray-900">
@@ -58,7 +58,7 @@ const statuses = {
                                     </div>
                                 </div>
                                 <div
-                                    class="flex flex-none items-center gap-x-4">
+                                    class="flex flex-none items-center gap-x-4 z-50">
                                     <bz-button
                                         type="secondary"
                                         as="link"
