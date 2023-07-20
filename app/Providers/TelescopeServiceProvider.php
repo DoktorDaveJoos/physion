@@ -21,9 +21,14 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
-            if (!$this->app->environment('production')) {
-                return true;
+
+            if (config('telescope.enabled') === false) {
+                return false;
             }
+
+//            if (!$this->app->environment('production')) {
+//                return true;
+//            }
 
             return $entry->isReportableException() ||
                    $entry->isFailedRequest() ||
@@ -40,7 +45,11 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function hideSensitiveRequestDetails()
     {
-        if (!$this->app->environment('production')) {
+//        if (!$this->app->environment('production')) {
+//            return;
+//        }
+
+        if (config('telescope.enabled') === false) {
             return;
         }
 

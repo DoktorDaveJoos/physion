@@ -45,7 +45,7 @@ const navigation = [
     <app-layout :title="title" :subtitle="subtitle">
         <div class="grid grid-cols-6 gap-10">
             <nav class="space-y-1 col-span-1" aria-label="Sidebar">
-                <InertiaLink
+                <a
                     v-for="item in navigation"
                     :key="item.name"
                     :href="item.href"
@@ -66,7 +66,7 @@ const navigation = [
                         ]"
                         aria-hidden="true" />
                     <span class="truncate">{{ item.name }}</span>
-                </InertiaLink>
+                </a>
             </nav>
 
             <div class="col-span-5">
