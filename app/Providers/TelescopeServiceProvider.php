@@ -22,8 +22,8 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         Telescope::filter(function (IncomingEntry $entry) {
 
-            if (config('telescope.enabled') === false) {
-                return false;
+            if (config('telescope.enabled') === true) {
+                return true;
             }
 
 //            if (!$this->app->environment('production')) {
@@ -49,7 +49,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 //            return;
 //        }
 
-        if (config('telescope.enabled') === false) {
+        if (config('telescope.enabled') === true) {
             return;
         }
 

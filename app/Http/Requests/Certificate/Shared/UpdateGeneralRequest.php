@@ -21,7 +21,8 @@ class UpdateGeneralRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'nullable|string',
             'reason' => 'required|string',
@@ -43,7 +44,8 @@ class UpdateGeneralRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Bitte geben Sie Ihren Namen an.',
+            'first_name.required' => 'Bitte geben Sie Ihren Namen an.',
+            'last_name.required' => 'Bitte geben Sie Ihren Nachnamen an.',
             'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse an.',
             'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
             'reason.required' => 'Bitte geben Sie einen Grund an.',
