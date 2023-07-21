@@ -11,6 +11,8 @@ use Illuminate\Support\Collection;
 /**
  * @property string id
  * @property string stripe_customer_id
+ * @property string first_name
+ * @property string last_name
  * @property string name
  * @property string email
  * @property string phone
@@ -28,6 +30,11 @@ class Customer extends Model
     use Notifiable;
 
     protected $guarded = ['id'];
+
+    public function getNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
     public function orders(): HasMany
     {

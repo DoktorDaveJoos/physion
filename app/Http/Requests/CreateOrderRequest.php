@@ -23,8 +23,10 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|email|regex:/^[^@]+@(?:[^@]+\.)+[a-z]{2,}$/i',
+            'place_id' => 'nullable|string',
             'phone' => 'nullable|string',
             'reason' => 'required|string',
             'street_address' => 'required|string',
@@ -43,7 +45,8 @@ class CreateOrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Bitte geben Sie Ihren Namen an.',
+            'first_name.required' => 'Bitte geben Sie Ihren Namen an.',
+            'last_name.required' => 'Bitte geben Sie Ihren Nachnamen an.',
             'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse an.',
             'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
             'email.regex' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.',

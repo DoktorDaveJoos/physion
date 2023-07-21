@@ -4,9 +4,7 @@ namespace App\Listeners;
 
 use App\Events\CustomerUpdatedFromStripe;
 use App\Events\PaymentCreated;
-use App\Mail\OrderCreated;
-use App\Models\Customer;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Order;
 use RuntimeException;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
@@ -24,10 +22,13 @@ class HandleCustomerFromStripe
      */
     public function handle(PaymentCreated $event): void
     {
+        $order = Order::find($event->payload['reference']);
 
-        $customer = Customer::where('email', $event->payload['customer']['email'])->first();
+        if (!$order) {
+            throw new RuntimeException('Order not found for customer: '.$event->payload['customer']['email']);
+        }
 
-        throw_if(!$customer, new RuntimeException('Customer not created'));
+        $customer = $order->customer;
 
         $customer->update($event->payload['customer']);
 

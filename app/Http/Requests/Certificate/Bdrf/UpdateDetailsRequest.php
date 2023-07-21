@@ -28,12 +28,10 @@ class UpdateDetailsRequest extends FormRequest
     {
         return [
             'construction_year' => 'required|integer|min:1978|max:'.(date('Y')),
-            'construction_year_heating' => 'required|integer|min:1978|max:'.(date('Y')),
             'floor_area' => 'required|numeric|min:1|max:10000',
             'housing_units' => 'required|integer|min:1|max:1000',
             'ventilation' => 'required|string',
             'cooling' => 'nullable|string',
-            'cellar' => 'nullable|string',
             'cooling_count' => 'nullable|integer|min:0|max:1000',
             'cooling_service' => 'nullable|date',
             'suggestion_check' => 'present',

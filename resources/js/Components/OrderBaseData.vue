@@ -18,7 +18,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-    name: null,
+    first_name: null,
+    last_name: null,
     email: null,
     phone: null,
     street_address: null,
@@ -33,7 +34,8 @@ const form = useForm({
 if (props.order) {
     const { certificate, customer } = props.order;
 
-    form.name = customer.name;
+    form.first_name = customer.first_name;
+    form.last_name = customer.last_name;
     form.email = customer.email;
     form.phone = customer.phone;
 
@@ -126,10 +128,17 @@ const submit = () => {
             title="Auftraggeber" />
 
         <el-form-item
-            :error="form.errors.name"
+            :error="form.errors.first_name"
             :required="true"
             label="Vorname">
-            <el-input v-model="form.name" autocomplete="give-name" />
+            <el-input v-model="form.first_name" autocomplete="give-name" />
+        </el-form-item>
+
+        <el-form-item
+            :error="form.errors.last_name"
+            :required="true"
+            label="Nachname">
+            <el-input v-model="form.last_name" autocomplete="family-name" />
         </el-form-item>
 
         <el-form-item :error="form.errors.email" :required="true" label="Email">
