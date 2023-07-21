@@ -5,7 +5,6 @@ namespace App\Nova\Actions;
 use App\Models\Order;
 use App\Notifications\AttachmentUploaded;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +12,6 @@ use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\File;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -50,8 +48,15 @@ class UploadCertificate extends Action
             'published' => $fields->publish,
         ]);
 
+        if ($fields->type == 'certificate') {
+            $order->update([
+                'status' => 'shipped',
+            ]);
+        }
 
-        $order->customer->notify(new AttachmentUploaded($order, $order->customer->name, $path, $fields->attachment->getClientOriginalName()));
+        $order->customer->notify(
+            new AttachmentUploaded($order, $order->customer->name, $path, $fields->attachment->getClientOriginalName())
+        );
 
         return Action::message('Attachment uploaded!');
     }
@@ -71,7 +76,7 @@ class UploadCertificate extends Action
                 'guide' => 'Guide',
             ]),
             Boolean::make('Publish'),
-            File::make('Attachment')
+            File::make('Attachment'),
         ];
     }
 }
