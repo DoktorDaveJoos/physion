@@ -45,6 +45,7 @@ class UploadCertificate extends Action
         $order->attachments()->create([
             'path' => $path,
             'type' => $fields->type,
+            'name' => $fields->attachment->getClientOriginalName(),
             'published' => $fields->publish,
         ]);
 
