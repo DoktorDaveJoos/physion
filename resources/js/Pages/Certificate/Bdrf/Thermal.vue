@@ -93,17 +93,17 @@ const submit = () => {
                 <div class="flex sm:col-span-2 justify-end pt-6">
                     <bz-button
                         :disabled="
-                            !order.certificate.wall?.id &&
-                            !order.certificate.roof?.id &&
+                            !order.certificate.wall?.id ||
+                            !order.certificate.roof?.id ||
                             !order.certificate.cellar?.id
                         "
                         @click="submit"
                         >{{
-                            order.certificate.wall?.id ||
-                            order.certificate.roof?.id ||
+                            order.certificate.wall?.id &&
+                            order.certificate.roof?.id &&
                             order.certificate.cellar?.id
                                 ? 'Speichern & Weiter'
-                                : 'Bitte erst ausfüllen'
+                                : 'Nicht genügend Daten'
                         }}</bz-button
                     >
                 </div>

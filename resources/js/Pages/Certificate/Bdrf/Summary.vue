@@ -5,7 +5,9 @@ import {
     ChevronRightIcon,
     ClipboardIcon,
     DocumentMagnifyingGlassIcon,
-    ChartBarIcon,
+    GlobeAltIcon,
+    HomeModernIcon,
+    BoltIcon,
 } from '@heroicons/vue/24/outline';
 
 import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
@@ -38,7 +40,7 @@ const allItems = [
             order: props.order.slug,
             page: 'general',
         }),
-        iconColor: 'bg-sky-500',
+        iconColor: 'bg-cyan-500',
         icon: ClipboardIcon,
     },
     {
@@ -50,20 +52,44 @@ const allItems = [
             order: props.order.slug,
             page: 'details',
         }),
-        iconColor: 'bg-blue-300',
+        iconColor: 'bg-sky-300',
         icon: DocumentMagnifyingGlassIcon,
     },
     {
-        name: 'Verbrauchsdaten',
-        description: 'Daten zum bisherigen Verbauch des Gebäudes.',
-        tag: 'consumption',
+        name: 'Lage & Grundriss',
+        description: 'Angaben zur Bemaßung und Lage des Gebäudes.',
+        tag: 'position',
         href: route('certificate.show', {
             signature: route().params.signature,
             order: props.order.slug,
-            page: 'consumption',
+            page: 'position',
         }),
         iconColor: 'bg-blue-300',
-        icon: ChartBarIcon,
+        icon: GlobeAltIcon,
+    },
+    {
+        name: 'Thermische Hülle',
+        description: 'Angaben zur thermischen Hülle des Gebäudes.',
+        tag: 'thermal',
+        href: route('certificate.show', {
+            signature: route().params.signature,
+            order: props.order.slug,
+            page: 'thermal',
+        }),
+        iconColor: 'bg-indigo-300',
+        icon: HomeModernIcon,
+    },
+    {
+        name: 'Energie',
+        description: 'Angaben zur Heizanlage und erneuerbaren Energien.',
+        tag: 'energy',
+        href: route('certificate.show', {
+            signature: route().params.signature,
+            order: props.order.slug,
+            page: 'energy',
+        }),
+        iconColor: 'bg-violet-300',
+        icon: BoltIcon,
     },
 ];
 

@@ -201,7 +201,7 @@ enum Category: string
                     'Details',
                     'Details zum Gebäude',
                     'Certificate/Shared/Details',
-                    UpdateDetailsRequest::class,
+                    \App\Http\Requests\Certificate\Vrbr\UpdateDetailsRequest::class,
                     UpdateCertificate::class
                 ),
                 'consumption' => Page::make(

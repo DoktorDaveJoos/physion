@@ -94,29 +94,39 @@ watch(hasRenewables, (value) => {
             subtitle="Detaillierte Informationen zum Gebäude"
             title="Gebäude" />
 
-        <el-form-item :error="form.errors.construction_year" label="Baujahr">
+        <el-form-item
+            :error="form.errors.construction_year"
+            label="Baujahr"
+            required>
             <el-input v-model="form.construction_year"></el-input>
         </el-form-item>
 
-        <el-form-item
-            :error="form.errors.construction_year_heating"
-            label="Baujahr Wärmeerzeuger">
-            <el-input v-model="form.construction_year_heating"></el-input>
-        </el-form-item>
+        <template v-if="order.certificate_type?.includes('Vrbr')">
+            <el-form-item
+                required
+                :error="form.errors.construction_year_heating"
+                label="Baujahr Wärmeerzeuger">
+                <el-input v-model="form.construction_year_heating"></el-input>
+            </el-form-item>
+        </template>
 
-        <el-form-item :error="form.errors.floor_area" label="Wohnfläche">
+        <el-form-item
+            :error="form.errors.floor_area"
+            label="Wohnfläche"
+            required>
             <el-input v-model="form.floor_area">
                 <template #append>m²</template>
             </el-input>
         </el-form-item>
 
         <el-form-item
+            required
             :error="form.errors.housing_units"
             label="Anzahl Wohneinheiten">
             <el-input-number v-model="form.housing_units"></el-input-number>
         </el-form-item>
 
-        <el-form-item :error="form.errors.ventilation" label="Lüftung">
+        <el-form-item :error="form.errors.ventilation" label="Lüftung" required>
             <el-select
                 v-model="form.ventilation"
                 class="w-full"
