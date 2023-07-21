@@ -27,11 +27,18 @@ class HandleOrderPaid
 
         $order->update([
             'meta' => $order->meta + [
-                'paid' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
+                    'paid' => Carbon::now()->format('Y-m-d H:i:s'),
+                ],
             'status' => 'open',
         ]);
 
-        Telegram::broadcast('🚀 Patte gemacht: ' .  $order->products->reduce(fn ($carry, Product $product) => $carry + $product->price, 0) . '0 €');
+        $price = $order->products->reduce(function (float $carry, Product $product) {
+            return $carry + $product->price;
+        }, 0.0);
+
+        Telegram::broadcast(
+            '🚀 Patte gemacht: '.$price.'€ bezahlt von '.$order->customer->email.' für '.$order->products->count(
+            ).' Produkte.'
+        );
     }
 }

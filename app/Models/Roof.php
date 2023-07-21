@@ -26,7 +26,7 @@ class Roof extends Model
 
     public function bedarfsausweis(): BelongsTo
     {
-        return $this->belongsTo(Bdrf::class);
+        return $this->belongsTo(Bdrf::class, 'bdrf_id');
     }
 
     public function windows(): MorphMany

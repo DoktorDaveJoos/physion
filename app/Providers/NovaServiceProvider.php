@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Nova\Bdrf;
+use App\Nova\Customer;
 use App\Nova\Dashboards\Main;
 use App\Nova\Order;
 use App\Nova\Product;
@@ -31,7 +33,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                 MenuSection::make('Bestellungen', [
                     MenuItem::resource(Order::class),
-                    MenuItem::resource(Vrbr::class)
+                    MenuItem::resource(Vrbr::class),
+                    MenuItem::resource(Bdrf::class),
+                    MenuItem::resource(Customer::class),
+
                 ])->collapsable(),
 
                 MenuSection::make('Admin', [
