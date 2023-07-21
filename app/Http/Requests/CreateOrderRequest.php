@@ -26,6 +26,7 @@ class CreateOrderRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|regex:/^[^@]+@(?:[^@]+\.)+[a-z]{2,}$/i',
+            'place_id' => 'nullable|string',
             'phone' => 'nullable|string',
             'reason' => 'required|string',
             'street_address' => 'required|string',
