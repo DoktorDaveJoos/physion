@@ -43,7 +43,7 @@ const mapStatus = computed(() => {
         };
     }
 
-    if (props.order.data.status === 'done') {
+    if (props.order.data.status === 'shipped') {
         return {
             step: 3,
             name: 'Abgeschlossen',
