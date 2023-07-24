@@ -280,8 +280,7 @@ const download = () => {
                                                                     .checkout
                                                             "
                                                             as="link">
-                                                            Auftrag bezahlen und
-                                                            abschließen
+                                                            Auftrag abschließen
                                                         </bz-button>
                                                     </div>
                                                 </dd>

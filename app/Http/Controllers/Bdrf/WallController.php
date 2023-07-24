@@ -57,10 +57,12 @@ class WallController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'type' => 'string|required',
-            'thickness' => 'numeric|nullable',
+            'thickness' => 'numeric|required',
         ], [
             'type.required' => 'Bitte wählen Sie eine Dämmung aus.',
+            'type.string' => 'Bitte wählen Sie eine gültige Dämmung aus.',
             'thickness.numeric' => 'Bitte geben Sie eine gültige Dicke an.',
+            'thickness.required' => 'Bitte geben Sie eine Dicke an.',
         ]);
 
         if ($validator->fails()) {
@@ -105,6 +107,7 @@ class WallController extends Controller
             'count.required' => 'Bitte geben Sie eine Anzahl an.',
             'count.numeric' => 'Bitte geben Sie eine gültige Anzahl an.',
             'glazing.required' => 'Bitte wählen Sie eine Verglasung aus.',
+            'glazing.string' => 'Bitte wählen Sie eine gültige Verglasung aus.',
             'height.required' => 'Bitte geben Sie eine Höhe an.',
             'height.numeric' => 'Bitte geben Sie eine gültige Höhe an.',
             'height.min' => 'Bitte geben Sie eine gültige Höhe an.',

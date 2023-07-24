@@ -192,10 +192,10 @@ Route::prefix('vrbr/{vrbr}')->group(function () {
 });
 
 Route::prefix('checkout')->name('checkout.')->group(function () {
-    Route::prefix('{order}')->group(function () {
+    Route::prefix('{order:slug}')->group(function () {
         Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
 
-        Route::get('/', [ShowController::class, 'index'])->name('show');
+        Route::get('/', [ShowController::class, 'index'])->middleware('signed')->name('show');
         Route::post('upsell/{upsell}', AddUpsellController::class)->name('upsell.add');
         Route::delete('upsell/{upsell}', DeleteUpsellController::class)->name('upsell.delete');
 

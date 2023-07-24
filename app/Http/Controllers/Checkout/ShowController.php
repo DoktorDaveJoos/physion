@@ -24,8 +24,14 @@ class ShowController extends Controller
             'status' => 'finalized',
         ]);
 
+        $certificateUrl = URL::signedRoute(
+                'certificate.show',
+                ['order' => $order->slug]
+            ).'&page=summary';
+
         return Inertia::render('Checkout/Index', [
             'order' => $order,
+            'certificateUrl' => $certificateUrl,
             'addedUpsells' => $order->upsells,
             'upsells' => Product::whereNot('type', 'certificate')->whereDoesntHave(
                 'orders',

@@ -1,28 +1,23 @@
 <script setup>
 import GuestLayout from '../../Layouts/GuestLayout.vue';
 import {
-    CheckIcon,
-    ClockIcon,
     QuestionMarkCircleIcon,
     XMarkIcon,
+    ArrowSmallLeftIcon,
 } from '@heroicons/vue/20/solid';
-import PaypalButton from '../../Components/PaypalButton.vue';
 import {
     CalculatorIcon,
     FireIcon,
     ShieldCheckIcon,
     LockClosedIcon,
 } from '@heroicons/vue/24/outline';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
-import { CheckCircleIcon } from '@heroicons/vue/20/solid';
 import { Inertia } from '@inertiajs/inertia';
 import { computed } from 'vue';
 import BzButton from '../../Components/BzButton.vue';
-import axios from 'axios';
 
 const props = defineProps({
     order: Object,
+    certificateUrl: String,
     upsells: {
         type: Array,
         default: () => [],
@@ -32,8 +27,6 @@ const props = defineProps({
         default: () => [],
     },
 });
-
-// const products = [props.product];
 
 const nameMap = {
     'App\\Models\\Bdrf': 'Bedarfsausweis',
@@ -68,8 +61,9 @@ const map = {
 const addUpsell = (upsell) => {
     Inertia.post(
         route('checkout.upsell.add', {
-            order: props.order.id,
+            order: props.order.slug,
             upsell: upsell,
+            signature: route().params.signature,
         })
     );
 };
@@ -77,16 +71,11 @@ const addUpsell = (upsell) => {
 const removeUpsell = (upsell) => {
     Inertia.delete(
         route('checkout.upsell.delete', {
-            order: props.order.id,
+            order: props.order.slug,
             upsell: upsell,
+            signature: route().params.signature,
         })
     );
-};
-
-const startPayment = () => {
-    axios.get(route('checkout.session', { order: props.order.id }));
-
-    // Inertia.get(route('checkout.session', { order: props.order.id }));
 };
 
 // Total price
@@ -100,10 +89,14 @@ const total = computed(() => {
 </script>
 
 <template>
-    <guest-layout>
+    <guest-layout :show-menu="false">
         <div class="bg-white">
             <div
                 class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+                <bz-button plain as="link" :href="certificateUrl">
+                    <ArrowSmallLeftIcon class="h-5 w-5" />
+                    Bearbeiten</bz-button
+                >
                 <div class="flex items-center">
                     <h1
                         class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -429,11 +422,11 @@ const total = computed(() => {
                                     as="a"
                                     :href="
                                         route('checkout.session', {
-                                            order: props.order.id,
+                                            order: order.slug,
+                                            signature: route().params.signature,
                                         })
                                     "
-                                    class="w-full justify-center"
-                                    @click="startPayment">
+                                    class="w-full justify-center">
                                     <lock-closed-icon class="h-4 w-4 mr-1" />
                                     Bezahlen und abschließen
                                 </bz-button>

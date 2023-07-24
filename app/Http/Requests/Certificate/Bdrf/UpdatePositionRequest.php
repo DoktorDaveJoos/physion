@@ -26,7 +26,7 @@ class UpdatePositionRequest extends FormRequest
         return [
             'side_a' => 'required|numeric|min:0|max:100',
             'side_b' => 'required|numeric|min:0|max:100',
-            'orientation' => 'required|string',
+            'orientation' => 'required_unless:maps,agreed',
             'page' => 'required|string'
         ];
     }

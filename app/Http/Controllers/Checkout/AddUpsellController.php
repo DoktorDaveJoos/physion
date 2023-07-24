@@ -11,10 +11,13 @@ use Illuminate\Http\Request;
 
 class AddUpsellController extends Controller
 {
-    public function __invoke(Order $order, Product $upsell): RedirectResponse
+    public function __invoke(Order $order, Product $upsell, Request $request): RedirectResponse
     {
         $order->upsells()->attach($upsell);
 
-        return redirect()->route('checkout.show', $order->id);
+        return redirect()->route('checkout.show', [
+            'order' => $order->slug,
+            'signature' => $request->get('signature'),
+        ]);
     }
 }

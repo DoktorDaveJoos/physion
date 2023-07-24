@@ -23,6 +23,7 @@ const getClass = computed(() => {
         'inline-flex',
         'items-center',
         'justify-center',
+        'py-1.5',
     ];
 
     classes.push(props.class);

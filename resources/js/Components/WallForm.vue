@@ -96,13 +96,6 @@ const addInsulation = () => {
                 insulationForm.reset();
                 state.insulation = false;
             },
-            onError: (err) => {
-                ElNotification({
-                    title: 'Fehler',
-                    message: err.message,
-                    type: 'error',
-                });
-            },
         }
     );
 };
@@ -118,13 +111,6 @@ const addWindow = () => {
             onSuccess: () => {
                 windowForm.reset();
                 state.window = false;
-            },
-            onError: (err) => {
-                ElNotification({
-                    title: 'Fehler',
-                    message: err.message,
-                    type: 'error',
-                });
             },
         }
     );
@@ -227,7 +213,10 @@ const hasAdditional = computed(() => {
             class="grid sm:grid-cols-2 sm:gap-4 p-4"
             label-position="top"
             size="large">
-            <el-form-item label="Bauweise" required>
+            <el-form-item
+                label="Bauweise"
+                required
+                :error="form.errors.construction">
                 <el-cascader
                     v-model="form.construction"
                     :options="options"
@@ -238,7 +227,9 @@ const hasAdditional = computed(() => {
 
             <div class="hidden sm:block"></div>
 
-            <el-form-item label="Stärke der Wand in cm (falls bekannt)">
+            <el-form-item
+                label="Stärke der Wand in cm (falls bekannt)"
+                :error="form.errors.thickness">
                 <el-input-number
                     v-model="form.thickness"
                     :max="200"
@@ -246,7 +237,9 @@ const hasAdditional = computed(() => {
                     :step="1"
                     placeholder="0" />
             </el-form-item>
-            <el-form-item label="U-Wert (falls bekannt)">
+            <el-form-item
+                label="U-Wert (falls bekannt)"
+                :error="form.errors.u_value">
                 <el-input-number
                     v-model="form.u_value"
                     :max="10"
@@ -349,7 +342,7 @@ const hasAdditional = computed(() => {
             </template>
 
             <el-form label-position="top" size="large">
-                <el-form-item label="Anzahl">
+                <el-form-item label="Anzahl" :error="windowForm.errors.count">
                     <el-input-number
                         v-model="windowForm.count"
                         :max="20"
@@ -358,7 +351,9 @@ const hasAdditional = computed(() => {
                         placeholder="0"></el-input-number>
                 </el-form-item>
 
-                <el-form-item label="Höhe in cm">
+                <el-form-item
+                    label="Höhe in cm"
+                    :error="windowForm.errors.height">
                     <el-input-number
                         v-model="windowForm.height"
                         :max="500"
@@ -367,7 +362,9 @@ const hasAdditional = computed(() => {
                         placeholder="0"></el-input-number>
                 </el-form-item>
 
-                <el-form-item label="Breite in cm">
+                <el-form-item
+                    label="Breite in cm"
+                    :error="windowForm.errors.width">
                     <el-input-number
                         v-model="windowForm.width"
                         :max="500"
@@ -376,7 +373,9 @@ const hasAdditional = computed(() => {
                         placeholder="0"></el-input-number>
                 </el-form-item>
 
-                <el-form-item label="Verglasung">
+                <el-form-item
+                    label="Verglasung"
+                    :error="windowForm.errors.glazing">
                     <el-select
                         v-model="windowForm.glazing"
                         class="w-full"
@@ -410,7 +409,9 @@ const hasAdditional = computed(() => {
             </template>
 
             <el-form label-position="top" size="large">
-                <el-form-item label="Form der Dämmung">
+                <el-form-item
+                    label="Form der Dämmung"
+                    :error="insulationForm.errors.type">
                     <el-select
                         v-model="insulationForm.type"
                         class="w-full"
@@ -427,7 +428,9 @@ const hasAdditional = computed(() => {
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="Stärke in cm">
+                <el-form-item
+                    label="Stärke in cm"
+                    :error="insulationForm.errors.thickness">
                     <el-input-number
                         v-model="insulationForm.thickness"
                         :max="500"
