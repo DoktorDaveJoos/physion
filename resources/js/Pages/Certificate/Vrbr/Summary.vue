@@ -16,6 +16,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     order: Object,
+    links: Object,
     customer: Object,
     product: Object,
 });
