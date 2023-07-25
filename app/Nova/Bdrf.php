@@ -89,7 +89,7 @@ class Bdrf extends Resource
             HasMany::make('Heizung', 'heatingSystems', HeatingSystem::class),
             HasMany::make('Erneuerbare Energien', 'renewableEnergyInstallations', RenewableEnergyInstallation::class),
 
-            KeyValue::make('Vorschlagsmatrix', 'suggestions')->rules('json')->hideFromIndex(),
+            KeyValue::make('Vorschlagsmatrix', 'suggestion_check')->rules('json')->hideFromIndex(),
         ];
     }
 
