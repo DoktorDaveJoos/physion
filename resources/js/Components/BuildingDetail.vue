@@ -51,7 +51,7 @@ if (props.order) {
         : null;
     form.cooling_service = certificate.cooling_service;
 
-    form.suggestion_check = JSON.parse(certificate.suggestion_check ?? '{}');
+    form.suggestion_check = certificate.suggestion_check;
 }
 
 const submit = () => {
