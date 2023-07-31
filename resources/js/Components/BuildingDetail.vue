@@ -51,7 +51,13 @@ if (props.order) {
         : null;
     form.cooling_service = certificate.cooling_service;
 
-    form.suggestion_check = certificate.suggestion_check;
+    form.suggestion_check = certificate.suggestion_check ?? {
+        led: false,
+        attic: false,
+        windows: false,
+        external_wall: false,
+        cellar_ceiling: false,
+    };
 }
 
 const submit = () => {
