@@ -166,7 +166,10 @@ const navigation = {
             name: 'Verbrauchsausweis',
             href: route('order.create', { category: 'vrbr' }),
         },
-        // { name: 'Bedarfsausweis', href: '#' },
+        {
+            name: 'Bedarfsausweis',
+            href: route('order.create', { category: 'bdrf' }),
+        },
         // { name: 'BIRN Zertifikat', href: '#' },
         // { name: 'Ratgeber', href: '#' },
     ],
