@@ -18,7 +18,7 @@
 {{--</div>--}}
 
 
-<div class="fixed z-20 inset-x-0 bottom-0 flex flex-col justify-end gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
+<div class="js-cookie-consent cookie-consent fixed z-20 inset-x-0 bottom-0 flex flex-col justify-end gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
     <p class="max-w-4xl text-sm leading-6 text-gray-900">
         {!! trans('cookie-consent::texts.message') !!}
     </p>
