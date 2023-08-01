@@ -77,13 +77,6 @@ const addInsulation = () => {
                 insulationForm.reset();
                 state.insulation = false;
             },
-            onError: (err) => {
-                ElNotification({
-                    title: 'Fehler',
-                    message: err.message,
-                    type: 'error',
-                });
-            },
         }
     );
 };
@@ -225,7 +218,9 @@ const hasAdditional = computed(() => {
             </template>
 
             <el-form label-position="top" size="large">
-                <el-form-item label="Form der Dämmung">
+                <el-form-item
+                    label="Form der Dämmung"
+                    :error="insulationForm.errors.type">
                     <el-select
                         v-model="insulationForm.type"
                         class="w-full"
@@ -242,7 +237,9 @@ const hasAdditional = computed(() => {
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="Stärke in cm">
+                <el-form-item
+                    label="Stärke in cm"
+                    :error="insulationForm.errors.thickness">
                     <el-input-number
                         v-model="insulationForm.thickness"
                         :max="500"

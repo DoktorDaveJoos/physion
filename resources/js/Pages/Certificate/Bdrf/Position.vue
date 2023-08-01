@@ -35,7 +35,8 @@ const form = useForm({
     side_b: props.order.certificate.side_b
         ? parseInt(props.order.certificate.side_b)
         : null,
-    orientation: props.order.certificate.orientation,
+    orientation: props.order.certificate.orientation ?? null,
+    maps: props.order.certificate.maps ?? null,
 });
 
 const agree = () => {
@@ -73,6 +74,9 @@ const deny = () => {
         },
         {
             preserveScroll: true,
+            onSuccess: () => {
+                form.maps = 'denied';
+            },
         }
     );
 };

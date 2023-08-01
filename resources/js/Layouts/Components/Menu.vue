@@ -199,6 +199,12 @@ const resources = [
                             </PopoverPanel>
                         </transition>
                     </Popover>
+
+                    <Link
+                        :href="route('business-partner')"
+                        class="text-base font-medium px-6 text-blue-500 hover:text-blue-900"
+                        >Partner werden
+                    </Link>
                 </div>
             </PopoverGroup>
             <div

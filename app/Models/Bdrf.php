@@ -20,6 +20,7 @@ class Bdrf extends Model
 
     protected $casts = [
         'cooling_service' => 'datetime',
+        'suggestion_check' => 'json'
     ];
 
     public function order(): MorphOne

@@ -56,9 +56,11 @@ class CellarController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'type' => 'string|required',
-            'thickness' => 'numeric|nullable',
+            'thickness' => 'numeric|required',
         ], [
             'type.required' => 'Bitte wählen Sie eine Dämmung aus.',
+            'type.string' => 'Bitte wählen Sie eine gültige Dämmung aus.',
+            'thickness.required' => 'Bitte geben Sie eine Dicke an.',
             'thickness.numeric' => 'Bitte geben Sie eine gültige Dicke an.',
         ]);
 

@@ -38,8 +38,8 @@ class CheckoutController extends Controller
         $checkout_session = Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => route('checkout.success', ['order' => $order->id]),
-            'cancel_url' => route('checkout.show', ['order' => $order->id]),
+            'success_url' => route('checkout.success', ['order' => $order->slug]),
+            'cancel_url' => route('checkout.show', ['order' => $order->slug, 'signature' => $request->get('signature')]),
             'customer' => $order->customer->stripe_customer_id,
             'billing_address_collection' => 'auto',
             'shipping_address_collection' => [
@@ -53,6 +53,7 @@ class CheckoutController extends Controller
             ],
             'client_reference_id' => $order->id,
         ]);
+        ray($checkout_session->url);
 
         return Redirect::away($checkout_session->url);
     }

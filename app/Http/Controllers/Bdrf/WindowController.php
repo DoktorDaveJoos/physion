@@ -18,13 +18,14 @@ class WindowController extends Controller
         $validator = Validator::make($request->all(), [
             'for' => 'numeric|required',
             'count' => 'numeric|required',
-            'verglasung' => 'string|required',
+            'glazing' => 'string|required',
             'height' => 'numeric|required|min:0|max:500',
             'width' => 'numeric|required|min:0|max:500',
         ], [
             'count.required' => 'Bitte geben Sie eine Anzahl an.',
             'count.numeric' => 'Bitte geben Sie eine gültige Anzahl an.',
-            'verglasung.required' => 'Bitte wählen Sie eine Verglasung aus.',
+            'glazing.required' => 'Bitte wählen Sie eine Verglasung aus.',
+            'glazing.string' => 'Bitte wählen Sie eine gültige Verglasung aus.',
             'height.required' => 'Bitte geben Sie eine Höhe an.',
             'height.numeric' => 'Bitte geben Sie eine gültige Höhe an.',
             'height.min' => 'Bitte geben Sie eine gültige Höhe an.',

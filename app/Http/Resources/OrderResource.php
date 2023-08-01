@@ -30,7 +30,7 @@ class OrderResource extends JsonResource
             'links' => [
                 'self' => URL::temporarySignedRoute('order.show', now()->addHour(), ['order' => $this->slug ]),
                 'certificate' => $this->status === 'created' ? URL::signedRoute('certificate.show', ['order' => $this->slug]) : null,
-                'checkout' => $this->status === 'finalized' ? route('checkout.show', $this->id) : null,
+                'checkout' => $this->status === 'finalized' ? URL::signedRoute('checkout.show', ['order' => $this->slug]) : null,
             ],
         ];
     }

@@ -49,7 +49,7 @@ class Vrbr extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Order ID', 'order.slug'),
-            Text::make('Grund der Austellung', 'reason'),
+            Text::make('Grund der Ausstellung', 'reason'),
 
             new Panel('Adresse', [
                 Text::make('Straße', 'street_address')->copyable(),
@@ -84,7 +84,7 @@ class Vrbr extends Resource
 
             HasMany::make('Leerstand', 'vacancies', Vacancy::class),
 
-            KeyValue::make('Vorschlagsmatrix', 'suggestions')->rules('json')->hideFromIndex(),
+            KeyValue::make('Vorschlagsmatrix', 'suggestion_check')->rules('json')->hideFromIndex(),
         ];
     }
 

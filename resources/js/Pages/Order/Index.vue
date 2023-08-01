@@ -6,6 +6,7 @@ import {
     CurrencyEuroIcon,
     PhotoIcon,
     ShieldCheckIcon,
+    ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import dayjs from 'dayjs';
@@ -19,6 +20,7 @@ const props = defineProps({
         required: true,
     },
     products: Array,
+    attachments: Array,
 });
 
 const mapStatus = computed(() => {
@@ -43,7 +45,7 @@ const mapStatus = computed(() => {
         };
     }
 
-    if (props.order.data.status === 'done') {
+    if (props.order.data.status === 'shipped') {
         return {
             step: 3,
             name: 'Abgeschlossen',
@@ -278,8 +280,7 @@ const download = () => {
                                                                     .checkout
                                                             "
                                                             as="link">
-                                                            Auftrag bezahlen und
-                                                            abschließen
+                                                            Auftrag abschließen
                                                         </bz-button>
                                                     </div>
                                                 </dd>
@@ -384,16 +385,31 @@ const download = () => {
                             <template v-else>
                                 <div
                                     class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8 text-right">
-                                    <a
-                                        :href="
-                                            route(
-                                                'order.download',
-                                                order.data.id
-                                            )
-                                        "
-                                        class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                        >Energieausweis herunterladen</a
-                                    >
+                                    <template
+                                        v-for="attachment in attachments.data">
+                                        <a
+                                            :href="attachment.links?.self"
+                                            target="_blank">
+                                            <span
+                                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                <ArrowDownTrayIcon
+                                                    class="inline-block mr-2 w-4 h-4 text-white"
+                                                    aria-hidden="true" />
+                                                Download
+                                                {{ attachment.data.name }}
+                                            </span>
+                                        </a>
+                                    </template>
+                                    <!--                                    <a-->
+                                    <!--                                        :href="-->
+                                    <!--                                            route(-->
+                                    <!--                                                'order.download',-->
+                                    <!--                                                order.data.id-->
+                                    <!--                                            )-->
+                                    <!--                                        "-->
+                                    <!--                                        class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"-->
+                                    <!--                                        >Energieausweis herunterladen</a-->
+                                    <!--                                    >-->
                                 </div>
                             </template>
                         </div>

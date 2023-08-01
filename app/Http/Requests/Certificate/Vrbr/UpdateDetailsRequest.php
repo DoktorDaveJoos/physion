@@ -36,6 +36,7 @@ class UpdateDetailsRequest extends FormRequest
             'cooling_count' => 'nullable|integer|min:0|max:1000',
             'cooling_service' => 'nullable|date',
             'suggestion_check' => 'present',
+            'page' => 'required|string'
         ];
     }
 

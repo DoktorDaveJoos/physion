@@ -6,6 +6,7 @@ use App\Enums\Category;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
@@ -49,8 +50,14 @@ class CertificateController extends Controller
 
         $page = $request->get('page', 'details');
 
+        // @todo replace by resource
         return Inertia::render($category->getVueComponent($page), [
             'order' => $order,
+            'links' => [
+                'checkout' => URL::signedRoute('checkout.show', [
+                    'order' => $order->slug,
+                ])
+            ],
             'category' => $category->value,
             'page' => $page,
         ]);

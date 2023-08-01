@@ -13,6 +13,7 @@ class Vrbr extends Model
 
     protected $casts = [
         'cooling_service' => 'datetime',
+        'suggestion_check' => 'json'
     ];
 
     protected $guarded = ['id'];

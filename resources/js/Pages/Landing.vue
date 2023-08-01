@@ -6,12 +6,15 @@ import {
     FireIcon,
     CalculatorIcon,
     CursorArrowRaysIcon,
+    PresentationChartLineIcon,
 } from '@heroicons/vue/24/outline';
 import Features from '../Components/Features.vue';
 import Prices from '../Components/Prices.vue';
 import { ref } from 'vue';
 import EnergieausweisCheck from '../Components/EnergieausweisCheck.vue';
-import { InertiaLink } from '@inertiajs/inertia-vue3';
+
+import { Link } from '@inertiajs/inertia-vue3';
+
 import Blog from '../Components/Blog.vue';
 import Faq from '../Components/Faq.vue';
 import LogoCarousel from '../Components/LogoCarousel.vue';
@@ -40,12 +43,14 @@ const checkTool = ref(false);
                             <div class="relative px-6 lg:px-8">
                                 <h1
                                     class="text-center text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                                    <span class="block text-black"
-                                        >Energieeffizienz von A-Z</span
+                                    <span class="block"
+                                        >Energieeffizienz von A bis Z mit</span
                                     >
-                                    <span class="block text-blue-600"
-                                        >mit bauzertifikate.de</span
+
+                                    <span class="font-bold"
+                                        >bauzertifikate</span
                                     >
+                                    <span class="text-blue-600">.de</span>
                                 </h1>
                                 <p
                                     class="mx-auto mt-6 max-w-lg text-center text-xl text-slate-700 sm:max-w-3xl">
@@ -55,20 +60,20 @@ const checkTool = ref(false);
                                     deren Nachweise.
                                 </p>
                             </div>
-                            <div class="flex justify-center my-16">
+                            <div class="flex justify-center my-12">
                                 <div class="inline-flex rounded-md shadow">
-                                    <InertiaLink
+                                    <Link
                                         href="#prices"
                                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-5 py-3 text-base font-medium text-white hover:bg-blue-700">
                                         Jetzt loslegen!
-                                    </InertiaLink>
+                                    </Link>
                                 </div>
                                 <div class="ml-3 inline-flex">
-                                    <InertiaLink
+                                    <Link
                                         href="#features"
                                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-100 px-5 py-3 text-base font-medium text-blue-700 hover:bg-blue-200">
                                         Mehr erfahren
-                                    </InertiaLink>
+                                    </Link>
                                 </div>
                             </div>
 
@@ -99,7 +104,7 @@ const checkTool = ref(false);
                                 </div>
 
                                 <div class="flex justify-center px-2 sm:px-0">
-                                    <InertiaLink
+                                    <Link
                                         :href="
                                             route('order.create', {
                                                 category: 'vrbr',
@@ -119,11 +124,11 @@ const checkTool = ref(false);
                                                 erstellen
                                             </p>
                                         </div>
-                                    </InertiaLink>
+                                    </Link>
                                 </div>
 
                                 <div class="flex justify-center px-2 sm:px-0">
-                                    <InertiaLink
+                                    <Link
                                         :href="
                                             route('order.create', {
                                                 category: 'bdrf',
@@ -142,7 +147,30 @@ const checkTool = ref(false);
                                                 Jetzt Bedarfsausweis erstellen
                                             </p>
                                         </div>
-                                    </InertiaLink>
+                                    </Link>
+                                </div>
+                                <div class="flex justify-center px-2 sm:px-0">
+                                    <Link
+                                        :href="
+                                            route('order.create', {
+                                                category: 'bdrf',
+                                            })
+                                        "
+                                        class="bg-slate-100 w-full max-w-sm flex items-center rounded-lg px-4 py-1 hover:bg-slate-200 cursor-pointer">
+                                        <PresentationChartLineIcon
+                                            class="h-6 w-6 mx-1 text-gray-900"
+                                            aria-hidden="true" />
+                                        <div class="block ml-4">
+                                            <p
+                                                class="text-sm font-medium text-gray-900">
+                                                Heizlastberechnung
+                                            </p>
+                                            <p class="text-sm text-gray-800">
+                                                Jetzt Heizlastberechnung
+                                                erstellen
+                                            </p>
+                                        </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

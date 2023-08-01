@@ -16,6 +16,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     order: Object,
+    links: Object,
     customer: Object,
     product: Object,
 });
@@ -449,7 +450,7 @@ const items = computed(() => {
                         v-if="showSummary"
                         as="link"
                         type="primary"
-                        :href="route('checkout.show', order.id)">
+                        :href="links.checkout">
                         Bestellung abschließen
                     </bz-button>
                     <bz-button v-else type="primary" disabled @click="">
