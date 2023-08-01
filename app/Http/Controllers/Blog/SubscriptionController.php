@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SubscriptionsController extends Controller
+class SubscriptionController extends Controller
 {
     public function store(Request $request)
     {
@@ -19,6 +19,25 @@ class SubscriptionsController extends Controller
         ]);
 
         DB::insert('insert into newsletter_subscriptions (email, created_at, updated_at) values (?, ?, ?)', [
+            $request->input('email'),
+            now(),
+            now(),
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function storeBusiness(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|unique:partner_requests,email',
+        ], [
+            'email.required' => 'Bitte gib eine E-Mail-Adresse an.',
+            'email.email' => 'Bitte gib eine gültige E-Mail-Adresse an.',
+            'email.unique' => 'Diese E-Mail-Adresse wurde bereits eingegeben.',
+        ]);
+
+        DB::insert('insert into partner_requests (email, created_at, updated_at) values (?, ?, ?)', [
             $request->input('email'),
             now(),
             now(),

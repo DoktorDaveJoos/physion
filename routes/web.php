@@ -6,7 +6,7 @@ use App\Http\Controllers\Bdrf\PositionController;
 use App\Http\Controllers\Bdrf\RenewableController;
 use App\Http\Controllers\Bdrf\RoofController;
 use App\Http\Controllers\Bdrf\WallController;
-use App\Http\Controllers\Blog\SubscriptionsController;
+use App\Http\Controllers\Blog\SubscriptionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\Checkout\AddUpsellController;
 use App\Http\Controllers\Checkout\CheckoutController;
@@ -209,10 +209,11 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
     Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
 
-    Route::post('subscribe', [SubscriptionsController::class, 'store'])->name('subscribe');
+    Route::post('subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 });
 
-Route::post('/newsletter', [SubscriptionsController::class, 'store'])->name('newsletter.store');
+Route::post('/newsletter', [SubscriptionController::class, 'store'])->name('newsletter.store');
+Route::post('/business', [SubscriptionController::class, 'storeBusiness'])->name('business.store');
 
 Route::get('/about', function () {
     return Inertia::render('About/About');
@@ -222,6 +223,9 @@ Route::get('/energiehub', function () {
     return Inertia::render('Feature/EnergieHub');
 })->name('energiehub');
 
+Route::get('/business', function () {
+    return Inertia::render('Feature/BusinessPartnerProgram');
+})->name('business-partner');
 
 Route::prefix('kontakt')->name('contact.')->group(function () {
     Route::get('', [ContactController::class, 'index'])->name('show');
