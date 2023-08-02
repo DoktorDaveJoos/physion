@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
@@ -69,7 +69,7 @@ const safe = () => {
     prepareForm(form).put(
         route('bdrf.wall', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -88,7 +88,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.wall.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -104,7 +104,7 @@ const addWindow = () => {
     windowForm.put(
         route('bdrf.wall.window', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -121,7 +121,7 @@ const deleteInsulation = (id) => {
         route('bdrf.wall.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -134,7 +134,7 @@ const deleteWindow = (id) => {
         route('bdrf.wall.window.delete', {
             bdrf: props.order.certificate.id,
             window: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,

@@ -1,7 +1,6 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import {
-    CheckIcon,
     RocketLaunchIcon,
     FireIcon,
     CalculatorIcon,
@@ -13,9 +12,7 @@ import Prices from '../Components/Prices.vue';
 import { ref } from 'vue';
 import EnergieausweisCheck from '../Components/EnergieausweisCheck.vue';
 
-import { Link } from '@inertiajs/inertia-vue3';
-
-import Blog from '../Components/Blog.vue';
+import { Link } from '@inertiajs/vue3';
 import Faq from '../Components/Faq.vue';
 import LogoCarousel from '../Components/LogoCarousel.vue';
 
@@ -181,7 +178,6 @@ const checkTool = ref(false);
         <logo-carousel />
         <Features />
         <Prices @open-modal="checkTool = true" />
-        <Blog />
         <Faq />
     </GuestLayout>
 </template>

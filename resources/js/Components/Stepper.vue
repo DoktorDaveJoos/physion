@@ -1,8 +1,8 @@
 <script setup>
 import { CheckIcon, EyeIcon } from '@heroicons/vue/24/outline';
-import { Link, usePage } from '@inertiajs/inertia-vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
-const { order, category, page, signature } = usePage().props.value;
+const { order, category, page, signature } = usePage().props;
 
 const steps = {
     vrbr: [

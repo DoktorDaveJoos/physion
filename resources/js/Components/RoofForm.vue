@@ -10,7 +10,7 @@ import {
     ExclamationTriangleIcon,
 } from '@heroicons/vue/20/solid';
 import SatteldachForm from './SatteldachForm.vue';
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { computed, reactive, watch } from 'vue';
 import FlachdachForm from './FlachdachForm.vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
@@ -171,7 +171,7 @@ watch(
                                 {
                                     bdrf: props.order.certificate.id,
                                     dormer: dormer.id,
-                                    signature: usePage().props.value.signature,
+                                    signature: usePage().props..signature,
                                 },
                                 {
                                     preserveScroll: true,
@@ -263,7 +263,7 @@ const safe = () => {
     prepareForm(form).put(
         route('bdrf.roof', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -282,7 +282,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.roof.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -298,7 +298,7 @@ const addSkylight = () => {
     skylightForm.put(
         route('bdrf.roof.skylight', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -314,7 +314,7 @@ const addDormer = () => {
     dormerForm.put(
         route('bdrf.roof.dormer', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -331,7 +331,7 @@ const deleteInsulation = (id) => {
         route('bdrf.roof.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -344,7 +344,7 @@ const deleteSkylight = (id) => {
         route('bdrf.roof.skylight.delete', {
             bdrf: props.order.certificate.id,
             window: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -357,7 +357,7 @@ const deleteDormer = (id) => {
         route('bdrf.roof.dormer.delete', {
             bdrf: props.order.certificate.id,
             dormer: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,

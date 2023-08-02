@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { Loader } from '@googlemaps/js-api-loader';
 import FormHeader from './FormHeader.vue';
 import { onMounted, ref } from 'vue';

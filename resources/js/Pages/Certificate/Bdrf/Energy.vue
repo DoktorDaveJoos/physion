@@ -6,7 +6,7 @@ import InformationBox from '../../../Components/InformationBox.vue';
 import Badge from '../../../Components/Badge.vue';
 import { computed, reactive, ref } from 'vue';
 import BzButton from '../../../Components/BzButton.vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ElDrawer, ElNotification } from 'element-plus';
 import { BoltIcon, FireIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { Inertia } from '@inertiajs/inertia';

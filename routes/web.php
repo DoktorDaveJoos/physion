@@ -208,7 +208,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
-    Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
+//    Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
 
     Route::post('subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 });

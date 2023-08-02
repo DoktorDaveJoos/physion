@@ -9,7 +9,7 @@ import {
 } from '@heroicons/vue/24/outline';
 
 import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import BzButton from '../../../Components/BzButton.vue';
 import { computed } from 'vue';

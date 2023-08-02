@@ -140,7 +140,7 @@
 <script setup>
 import { defineComponent, h } from 'vue';
 import { ElNotification } from 'element-plus';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     email: '',

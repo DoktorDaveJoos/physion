@@ -13,7 +13,7 @@ import { ref } from 'vue';
 import RoofForm from '../../../Components/RoofForm.vue';
 import CellarForm from '../../../Components/CellarForm.vue';
 import BzButton from '../../../Components/BzButton.vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     order: Object,

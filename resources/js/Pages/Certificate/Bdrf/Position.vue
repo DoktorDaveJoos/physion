@@ -8,7 +8,7 @@ import {
     RadioGroupOption,
 } from '@headlessui/vue';
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ElNotification } from 'element-plus';
 import { Inertia } from '@inertiajs/inertia';
 import GuestLayout from '../../../Layouts/GuestLayout.vue';

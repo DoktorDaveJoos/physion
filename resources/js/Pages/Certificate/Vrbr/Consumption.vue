@@ -6,7 +6,7 @@ import { Inertia } from '@inertiajs/inertia';
 
 import { ElDrawer, ElMessageBox } from 'element-plus';
 import dayjs from 'dayjs';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import GuestLayout from '../../../Layouts/GuestLayout.vue';
 import BzButton from '../../../Components/BzButton.vue';
 

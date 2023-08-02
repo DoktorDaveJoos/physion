@@ -1,15 +1,14 @@
 import './bootstrap';
-import '../css/tailwind.scss';
+import '../css/app.css';
 
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/inertia-vue3';
-import { InertiaProgress } from '@inertiajs/progress';
+import { createInertiaApp } from '@inertiajs/vue3';
+
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import ElementPlus from 'element-plus';
-import de from 'element-plus/dist/locale/de';
-import 'dayjs/locale/de';
-import '../css/element-plus.scss';
 
 const appName =
     window.document.getElementsByTagName('title')[0]?.innerText ||
@@ -22,15 +21,14 @@ createInertiaApp({
             `./Pages/${name}.vue`,
             import.meta.glob('./Pages/**/*.vue')
         ),
-    setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props) })
+    setup({ el, App, props, plugin }) {
+        return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
-            .use(ElementPlus, {
-                locale: de,
-            })
+            .use(ElementPlus)
             .mount(el);
     },
+    progress: {
+        color: '#4B5563',
+    },
 });
-
-InertiaProgress.init({ color: '#4B5563' });

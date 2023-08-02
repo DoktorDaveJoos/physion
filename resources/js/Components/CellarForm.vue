@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
@@ -50,7 +50,7 @@ const safe = () => {
     form.put(
         route('bdrf.cellar', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -69,7 +69,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.cellar.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,
@@ -86,7 +86,7 @@ const deleteInsulation = (id) => {
         route('bdrf.cellar.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props.value.signature,
+            signature: usePage().props..signature,
         }),
         {
             preserveScroll: true,

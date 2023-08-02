@@ -1,8 +1,4 @@
 <script setup>
-import { EnvelopeIcon } from '@heroicons/vue/24/outline';
-import GuestLayout from '../../Layouts/GuestLayout.vue';
-import { onMounted, ref } from 'vue';
-import { InertiaLink } from '@inertiajs/inertia-vue3';
 import BzButton from '../../Components/BzButton.vue';
 import BlinkingWrapper from './Components/BlinkingWrapper.vue';
 

@@ -36,13 +36,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-
-        $shared = [];
-
-        if ($request->get('signature')) {
-            $shared['signature'] = $request->get('signature');
-        }
-
-        return array_merge(parent::share($request), $shared);
+        return array_merge(parent::share($request), [
+            'resources' => $request
+                ->user()
+                ->roles()
+                ->with('resources')
+                ->get()
+                ->pluck('resources')
+                ->flatten()
+                ->toArray(),
+        ]);
     }
 }

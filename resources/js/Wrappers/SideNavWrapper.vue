@@ -190,7 +190,7 @@ import {
     Square3Stack3DIcon,
 } from '@heroicons/vue/24/outline';
 
-import { usePage } from '@inertiajs/inertia-vue3';
+import { usePage } from '@inertiajs/vue3';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 
 export default {
@@ -215,8 +215,8 @@ export default {
         MenuItems,
     },
     setup() {
-        const { order } = usePage().props.value;
-        const { product } = usePage().props.value;
+        const { order } = usePage().props.;
+        const { product } = usePage().props.;
 
         const navigation = [
             {

@@ -1,17 +1,10 @@
 <script setup>
 import AppLayout from '../../../Layouts/AppLayout.vue';
-import { InertiaLink } from '@inertiajs/inertia-vue3';
 
 import {
-    CalendarIcon,
-    ChartBarIcon,
-    FolderIcon,
-    HomeIcon,
-    InboxIcon,
-    UsersIcon,
-    PencilSquareIcon,
     AdjustmentsHorizontalIcon,
     LightBulbIcon,
+    HomeIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
