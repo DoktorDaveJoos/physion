@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Resource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -36,15 +37,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        // @todo find a better way to deal with this
+        $resources = Resource::whereHas('roles', function ($query) {
+            $query->whereHas('users', function ($query) {
+                $query->where('user_has_roles.user_id', auth()->id());
+            });
+        })->get();
+
         return array_merge(parent::share($request), [
-            'resources' => $request
-                ->user()
-                ->roles()
-                ->with('resources')
-                ->get()
-                ->pluck('resources')
-                ->flatten()
-                ->toArray(),
+            'resources' => $resources,
         ]);
     }
 }

@@ -7,6 +7,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
 
 defineProps({
     canResetPassword: Boolean,
@@ -20,7 +21,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.transform(data => ({
+    form.transform((data) => ({
         ...data,
         remember: form.remember ? 'on' : '',
     })).post(route('login'), {
@@ -34,7 +35,7 @@ const submit = () => {
 
     <AuthenticationCard>
         <template #logo>
-            <AuthenticationCardLogo />
+            <ApplicationMark />
         </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -51,8 +52,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                     autofocus
-                    autocomplete="username"
-                />
+                    autocomplete="username" />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
@@ -64,8 +64,7 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="current-password"
-                />
+                    autocomplete="current-password" />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
@@ -77,11 +76,17 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                <Link
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="underline text-sm text-gray-600 hover:text-gray-900">
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton
+                    class="ml-4"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing">
                     Log in
                 </PrimaryButton>
             </div>

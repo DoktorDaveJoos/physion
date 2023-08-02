@@ -86,30 +86,36 @@
                                             <ul
                                                 role="list"
                                                 class="-mx-2 space-y-1">
-                                                <li
-                                                    v-for="item in $page.props
-                                                        .resources"
+                                                <template
+                                                    v-for="item in navigation"
                                                     :key="item.name">
-                                                    <a
-                                                        href="#"
-                                                        :class="[
-                                                            1 === 0
-                                                                ? 'bg-gray-50 text-blue-600'
-                                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
-                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                                        ]">
-                                                        <!--                                                        <component-->
-                                                        <!--                                                            :is="item.icon"-->
-                                                        <!--                                                            :class="[-->
-                                                        <!--                                                                1 === 0-->
-                                                        <!--                                                                    ? 'text-blue-600'-->
-                                                        <!--                                                                    : 'text-gray-400 group-hover:text-blue-600',-->
-                                                        <!--                                                                'h-6 w-6 shrink-0',-->
-                                                        <!--                                                            ]"-->
-                                                        <!--                                                            aria-hidden="true" />-->
-                                                        {{ item.display_name }}
-                                                    </a>
-                                                </li>
+                                                    <li
+                                                        v-if="
+                                                            userHasResource(
+                                                                item.name
+                                                            )
+                                                        ">
+                                                        <a
+                                                            :href="item.href"
+                                                            :class="[
+                                                                item.current
+                                                                    ? 'bg-gray-50 text-blue-600'
+                                                                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                                                            ]">
+                                                            <!--                                                        <component-->
+                                                            <!--                                                            :is="item.icon"-->
+                                                            <!--                                                            :class="[-->
+                                                            <!--                                                                1 === 0-->
+                                                            <!--                                                                    ? 'text-blue-600'-->
+                                                            <!--                                                                    : 'text-gray-400 group-hover:text-blue-600',-->
+                                                            <!--                                                                'h-6 w-6 shrink-0',-->
+                                                            <!--                                                            ]"-->
+                                                            <!--                                                            aria-hidden="true" />-->
+                                                            {{ item.name }}
+                                                        </a>
+                                                    </li>
+                                                </template>
                                             </ul>
                                         </li>
                                         <li>
@@ -201,29 +207,31 @@
                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
                         <li>
                             <ul role="list" class="-mx-2 space-y-1">
-                                <li
-                                    v-for="item in $page.props.resources"
+                                <template
+                                    v-for="item in navigation"
                                     :key="item.name">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            1 === 0
-                                                ? 'bg-gray-50 text-blue-600'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
-                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                        ]">
-                                        <!--                                        <component-->
-                                        <!--                                            :is="item.icon"-->
-                                        <!--                                            :class="[-->
-                                        <!--                                                item.current-->
-                                        <!--                                                    ? 'text-blue-600'-->
-                                        <!--                                                    : 'text-gray-400 group-hover:text-blue-600',-->
-                                        <!--                                                'h-6 w-6 shrink-0',-->
-                                        <!--                                            ]"-->
-                                        <!--                                            aria-hidden="true" />-->
-                                        {{ item.display_name }}
-                                    </a>
-                                </li>
+                                    <li v-if="userHasResource(item.name)">
+                                        <a
+                                            :href="item.href"
+                                            :class="[
+                                                item.current
+                                                    ? 'bg-gray-50 text-blue-600'
+                                                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                                            ]">
+                                            <component
+                                                :is="item.icon"
+                                                :class="[
+                                                    item.current
+                                                        ? 'text-blue-600'
+                                                        : 'text-gray-400 group-hover:text-blue-600',
+                                                    'h-6 w-6 shrink-0',
+                                                ]"
+                                                aria-hidden="true" />
+                                            {{ item.name }}
+                                        </a>
+                                    </li>
+                                </template>
                             </ul>
                         </li>
                         <li>
@@ -433,26 +441,45 @@ import {
     HomeIcon,
     UsersIcon,
     XMarkIcon,
+    AdjustmentsVerticalIcon,
+    WrenchIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 import Dropdown from '../Components/Dropdown.vue';
 import DropdownLink from '../Components/DropdownLink.vue';
 import ApplicationMark from '../Components/ApplicationMark.vue';
 import NavLink from '../Components/NavLink.vue';
+import { usePage } from '@inertiajs/vue3';
 
 const navigation = [
-    { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-    { name: 'Team', href: '#', icon: UsersIcon, current: false },
-    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-    { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
     {
-        name: 'Documents',
-        href: '#',
-        icon: DocumentDuplicateIcon,
-        current: false,
+        name: 'Dashboard',
+        href: route('hub.dashboard'),
+        icon: HomeIcon,
+        current: route().current('hub.dashboard'),
     },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Energieausweise', href: '#', icon: FolderIcon, current: false },
+
+    { name: 'Nova', href: '#', icon: AdjustmentsVerticalIcon, current: false },
+    { name: 'Telescope', href: '#', icon: WrenchIcon, current: false },
 ];
+
+const jetstreamNavigation = [
+    {
+        name: 'Team',
+        href: route('teams.show', {
+            team: usePage().props.user.current_team_id,
+        }),
+        icon: UsersIcon,
+        current: route().current('teams.show'),
+    },
+];
+
+const userHasResource = (itemName) => {
+    return usePage().props.resources.some(
+        (item) => item.display_name === itemName
+    );
+};
 
 const userNavigation = [
     { name: 'Your profile', href: '#' },

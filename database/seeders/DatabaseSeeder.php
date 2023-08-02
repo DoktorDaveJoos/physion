@@ -55,28 +55,29 @@ class DatabaseSeeder extends Seeder
 //            ]
 //        );
 
-        $role = Role::create(['name' => 'admin']);
-
-        $resource = Resource::create([
-            'name' => 'nova',
-            'display_name' => 'Nova',
-        ]);
-        $role->resources()->attach($resource->id);
-
-        $resource = Resource::create([
-            'name' => 'telescope',
-            'display_name' => 'Telescope',
-        ]);
-        $role->resources()->attach($resource->id);
-
-        $resource = Resource::create([
-            'name' => 'certificates',
-            'display_name' => 'Energieausweise',
-        ]);
-
-        $role->resources()->attach($resource->id);
-
-        $user = User::where('name', 'David')->first();
-        $user->roles()->attach($role->id);
+//        $role = Role::create(['name' => 'admin']);
+//
+//        $resource = Resource::create([
+//            'name' => 'nova',
+//            'display_name' => 'Nova',
+//        ]);
+//
+//        $role->resources()->attach($resource->id);
+//
+//        $resource = Resource::create([
+//            'name' => 'telescope',
+//            'display_name' => 'Telescope',
+//        ]);
+//        $role->resources()->attach($resource->id);
+//
+//        $resource = Resource::create([
+//            'name' => 'certificates',
+//            'display_name' => 'Energieausweise',
+//        ]);
+//
+//        $role->resources()->attach($resource->id);
+//
+//        $user = User::where('name', 'David')->first();
+//        $user->roles()->attach($role->id);
     }
 }
