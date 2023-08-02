@@ -212,7 +212,7 @@ const resources = [
                 class="hidden items-center justify-end md:flex">
                 <Link
                     :href="route('login')"
-                    class="text-xs font-light underline text-gray-500 hover:text-gray-900"
+                    class="text-sm font-light underline text-gray-500 hover:text-gray-900"
                     >EnergieHub Anmeldung
                 </Link>
             </div>

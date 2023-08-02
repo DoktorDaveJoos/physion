@@ -125,6 +125,11 @@ const logout = () => {
                                             Profile</DropdownLink
                                         >
 
+                                        <!--                                        <DropdownLink-->
+                                        <!--                                            :href="route('teams.create')">-->
+                                        <!--                                            Teams</DropdownLink-->
+                                        <!--                                        >-->
+
                                         <DropdownLink
                                             v-if="
                                                 $page.props.jetstream
