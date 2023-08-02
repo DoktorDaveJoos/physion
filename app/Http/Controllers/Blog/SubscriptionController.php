@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Support\Telegram\Telegram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,12 +25,14 @@ class SubscriptionController extends Controller
             now(),
         ]);
 
+        Telegram::broadcast('Neue Newsletter-Anmeldung: '.$request->input('email'));
+
         return redirect()->back();
     }
 
     public function storeBusiness(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'email' => 'required|email|unique:partner_requests,email',
         ], [
             'email.required' => 'Bitte gib eine E-Mail-Adresse an.',
@@ -42,6 +45,8 @@ class SubscriptionController extends Controller
             now(),
             now(),
         ]);
+
+        Telegram::broadcast('Ein interessierter Partner: '.$request->input('email'));
 
         return redirect()->back();
     }

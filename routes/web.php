@@ -20,6 +20,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
 use App\Http\Controllers\Vrbr\VacanciesController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -240,6 +241,15 @@ Route::prefix('/find')->name('find.')->group(function () {
 });
 
 Route::get('/', LandingController::class)->name('start');
+
+
+Route::get('/billing-portal', function(Request $request) {
+//    rd($request->user());
+
+//    $request->user()->createOrGetStripeCustomer();
+
+    return $request->user()->redirectToBillingPortal(route('hub.dashboard'));
+})->middleware(['auth:sanctum', 'verified'])->name('billing-portal');
 
 Route::middleware([
     'auth:sanctum',
