@@ -1,21 +1,21 @@
 <template>
-    <div class='bg-white'>
-        <div class='mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
-            <div class='max-w-xl'>
-                <h1 class='text-base font-medium text-blue-600'>
+    <div class="bg-white">
+        <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+            <div class="max-w-xl">
+                <h1 class="text-base font-medium text-blue-600">
                     Danke schön!
                 </h1>
-                <p class='mt-2 text-4xl font-bold tracking-tight sm:text-5xl'>
+                <p class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
                     Auftrag in Bearbeitung!
                 </p>
-                <p class='mt-2 text-base text-gray-500'>
+                <p class="mt-2 text-base text-gray-500">
                     Wir haben deinen Auftrag erfolgreich erhalten.
                 </p>
 
-                <p class='mt-10 text-base text-gray-900 font-semibold'>
+                <p class="mt-10 text-base text-gray-900 font-semibold">
                     Wie gehts weiter?
                 </p>
-                <p class='mt-1 text-gray-600'>
+                <p class="mt-1 text-gray-600">
                     In Kürze erhältst du zwei wichtige E-Mails von uns: eine
                     Auftragsbestätigung sowie einen Zahlungsbeleg. Zusätzlich
                     hast du jederzeit Zugriff auf den aktuellen
@@ -31,8 +31,8 @@
                 </p>
             </div>
 
-            <div class='mt-10 border-t border-gray-200 py-6 flex justify-end'>
-                <bz-button :href='link' as='link'> Auftrag anzeigen</bz-button>
+            <div class="mt-10 border-t border-gray-200 py-6 flex justify-end">
+                <bz-button :href="link" as="link"> Auftrag anzeigen</bz-button>
             </div>
         </div>
     </div>
@@ -50,16 +50,12 @@ const props = defineProps({
 console.log(props.price);
 
 onMounted(() => {
-    <!-- Event snippet for Kauf conversion page -->
+    // Event snippet for Kauf conversion page
     gtag('event', 'conversion', {
-        'send_to': 'AW-11282900730/pPDuCP691c0YEPrNjYQq',
-        'value': props.price,
-        'currency': 'EUR',
-        'transaction_id': '',
+        send_to: 'AW-11282900730/pPDuCP691c0YEPrNjYQq',
+        value: props.price,
+        currency: 'EUR',
+        transaction_id: '',
     });
 });
-</script>
-
-})
-
 </script>
