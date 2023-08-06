@@ -46,6 +46,7 @@ class ShowController extends Controller
     {
         $order->update([
             'status' => 'open',
+            'price' => $order->products->sum('price'),
         ]);
 
         $order->customer->notify(new OrderPaid($order, $order->customer->name));
