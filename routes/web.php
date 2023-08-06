@@ -20,6 +20,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
 use App\Http\Controllers\Vrbr\VacanciesController;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -194,9 +196,11 @@ Route::prefix('vrbr/{vrbr}')->group(function () {
 
 Route::prefix('checkout')->name('checkout.')->group(function () {
     Route::prefix('{order:slug}')->group(function () {
-        Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
 
         Route::get('/', [ShowController::class, 'index'])->middleware('signed')->name('show');
+
+        Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
+
         Route::post('upsell/{upsell}', AddUpsellController::class)->name('upsell.add');
         Route::delete('upsell/{upsell}', DeleteUpsellController::class)->name('upsell.delete');
 
@@ -258,8 +262,24 @@ Route::middleware([
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
         Route::get('/dashboard', function () {
-            return Inertia::render('Hub/Dashboard');
+            return Inertia::render('Hub/Dashboard', [
+                'products' => Product::where('active', true)->where('type', 'certificate')->get(),
+            ]);
         })->name('dashboard');
+
+//        Route::get('/certificates/open', function () {
+//            return Inertia::render('Hub/Certificates/Index', [
+//                'orders' => Order::all()
+//            ]);
+//        })->name('certificates.open');
+
+        Route::get('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'create'])->name('orders.create');
+        Route::post('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'store'])->name('orders.store');
+
+        Route::get('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'show'])->name('certificates.show');
+        Route::put('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'update'])->name('certificates.update');
+
+        Route::get('/orders', [\App\Http\Controllers\Hub\OrderController::class, 'index'])->name('certificates');
 
         Route::get('/admin', [\App\Http\Controllers\Hub\Admin\ShowController::class, 'index'])->name('admin');
 

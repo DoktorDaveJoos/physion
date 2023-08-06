@@ -17,7 +17,6 @@ class SummaryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order' => 'required|exists:orders,slug',
             'feedback' => 'nullable|string',
             'page' => 'required|string'
         ];

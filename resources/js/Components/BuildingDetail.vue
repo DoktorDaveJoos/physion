@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 
 import FormHeader from './FormHeader.vue';
 import BzButton from './BzButton.vue';
@@ -61,13 +61,18 @@ if (props.order) {
 }
 
 const submit = () => {
-    form.put(
-        route(`certificate.update`, {
-            order: props.order.slug,
-            page: 'details',
-            signature: route().params.signature,
-        })
-    );
+    const url = usePage().props.user
+        ? route(`hub.certificates.update`, {
+              order: props.order.slug,
+              page: 'details',
+          })
+        : route(`certificate.update`, {
+              order: props.order.slug,
+              page: 'details',
+              signature: route().params.signature,
+          });
+
+    form.put(url);
 };
 
 const hasCooling = ref(form.cooling !== null);

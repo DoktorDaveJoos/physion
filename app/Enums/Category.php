@@ -106,12 +106,13 @@ enum Category: string
         }
 
         $nextIndex = $index + 1;
+
         return $pages[$nextIndex];
     }
 
-    public function getVueComponent(string $key): string
+    public function getVueComponent(string $key, bool $hub = false): string
     {
-        return $this->getPage($key)->getVueComponent();
+        return $this->getPage($key)->getVueComponent($hub);
     }
 
     /**
@@ -187,6 +188,8 @@ enum Category: string
                     'Zusammenfassung',
                     'Zusammenfassung der Angaben',
                     'Certificate/Bdrf/Summary',
+                    SummaryRequest::class,
+                    UpdateCertificate::class
                 ),
             ],
             self::VRBR => [

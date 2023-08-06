@@ -22,12 +22,7 @@ class CreateOrderRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email|regex:/^[^@]+@(?:[^@]+\.)+[a-z]{2,}$/i',
-            'place_id' => 'nullable|string',
-            'phone' => 'nullable|string',
+        $base = [
             'reason' => 'required|string',
             'street_address' => 'required|string',
             'zip' => 'required|digits:5',
@@ -35,6 +30,17 @@ class CreateOrderRequest extends FormRequest
             'type' => 'required|string',
             'additional_type' => 'required|string',
         ];
+
+        if (!request()->user()) {
+            return array_merge($base, [
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email',
+                'phone' => 'nullable|string',
+            ]);
+        }
+
+        return $base;
     }
 
     /**

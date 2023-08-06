@@ -2,6 +2,9 @@
 import GuestLayout from '../../../Layouts/GuestLayout.vue';
 import StepperWrapper from '../../../Wrappers/StepperWrapper.vue';
 import BuildingDetail from '../../../Components/BuildingDetail.vue';
+import SidebarLayout from '../../../Layouts/SidebarLayout.vue';
+import StepperWrapperHub from '../../../Wrappers/StepperWrapperHub.vue';
+import PageWrapper from '../../../Wrappers/PageWrapper.vue';
 
 defineProps({
     order: {
@@ -11,9 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <guest-layout>
-        <stepper-wrapper>
-            <building-detail :order="order" />
-        </stepper-wrapper>
-    </guest-layout>
+    <page-wrapper>
+        <building-detail :order="order" />
+    </page-wrapper>
 </template>

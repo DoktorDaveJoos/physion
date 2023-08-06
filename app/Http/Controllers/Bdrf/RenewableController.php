@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bdrf;
 use App\Models\HeatingSystem;
 use App\Models\RenewableEnergyInstallation;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -14,6 +15,8 @@ use Illuminate\Validation\ValidationException;
 
 class RenewableController extends Controller
 {
+
+    use HandleFreeAndPaid;
 
     // invokable method
     /**
@@ -44,22 +47,14 @@ class RenewableController extends Controller
 
         $bdrf->renewableEnergyInstallations()->create($validator->validated());
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'energy',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'energy');
     }
 
     public function destroy(Bdrf $bdrf, RenewableEnergyInstallation $renewableEnergyInstallation, Request $request): RedirectResponse
     {
         $renewableEnergyInstallation->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'energy',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'energy');
     }
 
 

@@ -207,15 +207,17 @@ const resources = [
                     </Link>
                 </div>
             </PopoverGroup>
-            <div
-                v-if="showMenu"
-                class="hidden items-center justify-end md:flex">
-                <Link
-                    :href="route('login')"
-                    class="text-sm font-light underline text-gray-500 hover:text-gray-900"
-                    >EnergieHub Anmeldung
-                </Link>
-            </div>
+            <template v-if="!$page.props.user">
+                <div
+                    v-if="showMenu"
+                    class="hidden items-center justify-end md:flex">
+                    <Link
+                        :href="route('login')"
+                        class="text-sm font-light underline text-gray-500 hover:text-gray-900"
+                        >EnergieHub Anmeldung
+                    </Link>
+                </div>
+            </template>
             <transition
                 enter-active-class="duration-200 ease-out"
                 enter-from-class="opacity-0 scale-95"

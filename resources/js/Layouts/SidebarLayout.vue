@@ -21,7 +21,7 @@
       <body class="h-full">
       ```
     -->
-    <div>
+    <div class="bg-gray-50 h-screen">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
@@ -95,7 +95,7 @@
                                                                 item.name
                                                             )
                                                         ">
-                                                        <a
+                                                        <Link
                                                             :href="item.href"
                                                             :class="[
                                                                 item.current
@@ -113,7 +113,7 @@
                                                             <!--                                                            ]"-->
                                                             <!--                                                            aria-hidden="true" />-->
                                                             {{ item.name }}
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                 </template>
                                             </ul>
@@ -130,13 +130,18 @@
                                                     v-for="team in $page.props
                                                         .user.all_teams"
                                                     :key="team.name">
-                                                    <a
-                                                        :href="team.href"
+                                                    <!--                                                        :href="team.href"-->
+                                                    <button
+                                                        @click="
+                                                            switchToTeam(
+                                                                team.id
+                                                            )
+                                                        "
                                                         :class="[
                                                             team.current
                                                                 ? 'bg-gray-50 text-blue-600'
                                                                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
-                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                                         ]">
                                                         <span
                                                             :class="[
@@ -157,7 +162,7 @@
                                                                 team.name
                                                             }}</span
                                                         >
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             </ul>
                                         </li>
@@ -243,13 +248,13 @@
                                 <li
                                     v-for="team in $page.props.user.all_teams"
                                     :key="team.name">
-                                    <a
-                                        :href="team.href"
+                                    <button
+                                        @click="switchToTeam(team.id)"
                                         :class="[
                                             team.current
                                                 ? 'bg-gray-50 text-blue-600'
                                                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
-                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                         ]">
                                         <span
                                             :class="[
@@ -264,7 +269,7 @@
                                         <span class="truncate">{{
                                             team.name
                                         }}</span>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </li>
@@ -409,9 +414,12 @@
                 </div>
             </div>
 
-            <main class="py-10">
+            <slot name="header" />
+
+            <main class="py-6">
                 <div class="px-4 sm:px-6 lg:px-8">
                     <!-- Your content -->
+                    <slot />
                 </div>
             </main>
         </div>
@@ -449,7 +457,7 @@ import Dropdown from '../Components/Dropdown.vue';
 import DropdownLink from '../Components/DropdownLink.vue';
 import ApplicationMark from '../Components/ApplicationMark.vue';
 import NavLink from '../Components/NavLink.vue';
-import { usePage } from '@inertiajs/vue3';
+import { router, usePage, Link } from '@inertiajs/vue3';
 
 const navigation = [
     {
@@ -458,7 +466,14 @@ const navigation = [
         icon: HomeIcon,
         current: route().current('hub.dashboard'),
     },
-    { name: 'Energieausweise', href: '#', icon: FolderIcon, current: false },
+    {
+        name: 'Bestellungen',
+        href: route('hub.certificates'),
+        icon: FolderIcon,
+        current:
+            route().current('hub.orders*') ||
+            route().current('hub.certificates*'),
+    },
 
     { name: 'Nova', href: '#', icon: AdjustmentsVerticalIcon, current: false },
     { name: 'Telescope', href: '#', icon: WrenchIcon, current: false },
@@ -474,6 +489,18 @@ const jetstreamNavigation = [
         current: route().current('teams.show'),
     },
 ];
+
+const switchToTeam = (teamId) => {
+    router.put(
+        route('current-team.update'),
+        {
+            team_id: teamId,
+        },
+        {
+            preserveState: false,
+        }
+    );
+};
 
 const userHasResource = (itemName) => {
     return usePage().props.resources.some(

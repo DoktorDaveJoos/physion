@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -48,6 +49,8 @@ class Team extends Resource
             BelongsTo::make('User', 'owner', User::class),
             Text::make('Name'),
             Boolean::make('Personal Team'),
+
+            BelongsToMany::make('Resources', 'resources', TeamResource::class),
         ];
     }
 

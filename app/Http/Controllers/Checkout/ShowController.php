@@ -20,10 +20,6 @@ class ShowController extends Controller
     {
         $order->load('products', 'certificate');
 
-        $order->update([
-            'status' => 'finalized',
-        ]);
-
         $certificateUrl = URL::signedRoute(
                 'certificate.show',
                 ['order' => $order->slug]
@@ -48,7 +44,7 @@ class ShowController extends Controller
             'status' => 'open',
         ]);
 
-        $order->customer->notify(new OrderPaid($order, $order->customer->name));
+        $order->owner?->notify(new OrderPaid($order, $order->owner->name));
 
         return Inertia::render('Checkout/ThankYou', [
             'link' => URL::temporarySignedRoute(

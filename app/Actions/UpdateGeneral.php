@@ -11,7 +11,7 @@ class UpdateGeneral
 
     public function handle(Order $order, mixed $data): void
     {
-        $order->customer->update($data);
+        $order->owner->update($data);
         $order->certificate->update($data);
     }
 }

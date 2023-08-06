@@ -76,7 +76,7 @@ const to = (page) => {
     return route('certificate.show', {
         order: order.slug,
         page: page,
-        signature: signature,
+        signature: route().params.signature,
     });
 };
 </script>

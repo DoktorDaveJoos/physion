@@ -9,15 +9,17 @@ use App\Http\Requests\Certificate\Vrbr\CreateConsumptionPeriodRequest;
 use App\Models\ConsumptionPeriod;
 use App\Models\EnergySource;
 use App\Models\Vrbr;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PeriodsController extends Controller
 {
 
+    use HandleFreeAndPaid;
+
     public function store(CreateConsumptionPeriodRequest $request, Vrbr $vrbr, EnergySource $source): RedirectResponse
     {
-
         ConsumptionPeriod::create([
             'energy_source_id' => $source->id,
             'start' => $request->get('period')[0],
@@ -26,27 +28,14 @@ class PeriodsController extends Controller
             'water' => $request->get('water'),
         ]);
 
-        return to_route('certificate.show', [
-            'order' => $vrbr->order,
-            'page' => 'consumption',
-            'signature' => $request->get('signature')
-        ]);
-
+        return self::handleRedirect($request, $vrbr, 'consumption');
     }
 
     public function destroy(Request $request, Vrbr $vrbr, ConsumptionPeriod $period): RedirectResponse
     {
-        $request->validate([
-            'signature' => 'required|string',
-        ]);
-
         $period->delete();
 
-        return to_route('certificate.show', [
-            'order' => $vrbr->order,
-            'page' => 'consumption',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $vrbr, 'consumption');
     }
 
 

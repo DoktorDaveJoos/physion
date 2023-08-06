@@ -18,11 +18,12 @@ class CertificateController extends Controller
      */
     public function show(Order $order, Request $request): Response
     {
+        ray($request->get('signature'));
         $category = Category::fromModel($order->certificate_type);
 
         if ($category->value === 'bdrf') {
             $order->load(
-                'customer',
+                'owner',
                 'certificate',
                 'certificate.wall',
                 'certificate.wall.insulations',
@@ -40,7 +41,7 @@ class CertificateController extends Controller
 
         if ($category->value === 'vrbr') {
             $order->load(
-                'customer',
+                'owner',
                 'certificate',
                 'certificate.sources',
                 'certificate.sources.periods',
@@ -53,11 +54,6 @@ class CertificateController extends Controller
         // @todo replace by resource
         return Inertia::render($category->getVueComponent($page), [
             'order' => $order,
-            'links' => [
-                'checkout' => URL::signedRoute('checkout.show', [
-                    'order' => $order->slug,
-                ])
-            ],
             'category' => $category->value,
             'page' => $page,
         ]);
@@ -83,18 +79,19 @@ class CertificateController extends Controller
         // Check if there is a next page
         // If there is no next page, redirect to the checkout page
         if (!($nextPage = $category->getNextPageAfter($page))) {
-
             $order->update([
-                'status' => 'finalized'
+                'status' => 'finalized',
             ]);
 
-            return redirect()->route('checkout.show', [
+            $checkout = URL::signedRoute('checkout.show', [
                 'order' => $order->slug,
             ]);
+
+            return redirect()->to($checkout);
         }
 
         // Redirect to the next page
-        return redirect()->route('certificate.show', [
+        return to_route('certificate.show', [
             'order' => $order->slug,
             'page' => $nextPage,
             'signature' => $request->get('signature'),

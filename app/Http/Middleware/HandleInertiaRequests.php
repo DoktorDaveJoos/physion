@@ -37,15 +37,9 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // @todo find a better way to deal with this
-        $resources = Resource::whereHas('roles', function ($query) {
-            $query->whereHas('users', function ($query) {
-                $query->where('user_has_roles.user_id', auth()->id());
-            });
-        })->get();
 
         return array_merge(parent::share($request), [
-            'resources' => $resources,
+            'resources' => $request->user()?->currentTeam?->resources ?? []
         ]);
     }
 }

@@ -11,9 +11,10 @@ import {
     ShieldCheckIcon,
     LockClosedIcon,
 } from '@heroicons/vue/24/outline';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import BzButton from '../../Components/BzButton.vue';
+import Badge from '../../Components/Badge.vue';
 
 const props = defineProps({
     order: Object,
@@ -59,7 +60,7 @@ const map = {
 };
 
 const addUpsell = (upsell) => {
-    Inertia.post(
+    router.post(
         route('checkout.upsell.add', {
             order: props.order.slug,
             upsell: upsell,
@@ -69,7 +70,7 @@ const addUpsell = (upsell) => {
 };
 
 const removeUpsell = (upsell) => {
-    Inertia.delete(
+    router.delete(
         route('checkout.upsell.delete', {
             order: props.order.slug,
             upsell: upsell,
@@ -99,13 +100,14 @@ const total = computed(() => {
                 >
                 <div class="flex items-center">
                     <h1
-                        class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        class="text-3xl font-black tracking-tight text-gray-900 sm:text-4xl font-display">
                         Warenkorb
                     </h1>
-                    <span
-                        class="inline-flex ml-4 items-center rounded-md bg-blue-100 px-2.5 py-0.5 text-lg font-medium text-blue-800"
-                        >{{ order.slug }}</span
-                    >
+                    <badge
+                        dot
+                        size="lg"
+                        :label="order.slug"
+                        class="ml-4"></badge>
                 </div>
                 <div
                     class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
@@ -146,7 +148,7 @@ const total = computed(() => {
                                                 >
                                             </h3>
                                             <p
-                                                class="text-sm font-medium text-gray-900">
+                                                class="text-sm font-bold text-gray-900 font-number">
                                                 {{
                                                     product.price
                                                         .toString()
@@ -185,7 +187,7 @@ const total = computed(() => {
                                                 </h3>
 
                                                 <p
-                                                    class="text-sm font-medium text-gray-900">
+                                                    class="text-sm font-bold font-number text-gray-900">
                                                     {{ addedUpsell.price }} €
                                                 </p>
                                             </div>
@@ -266,7 +268,7 @@ const total = computed(() => {
                                                                         <!--                                                                        >-->
                                                                     </div>
                                                                     <p
-                                                                        class="mt-2 sm:mt-0">
+                                                                        class="mt-2 sm:mt-0 font-number font-bold">
                                                                         {{
                                                                             upsell.price
                                                                                 .toString()
@@ -295,17 +297,16 @@ const total = computed(() => {
                                                                 class="mt-2 flex items-center space-x-4 divide-x divide-gray-200 border-t border-gray-200 pt-4 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
                                                                 <div
                                                                     class="flex flex-1 justify-center">
-                                                                    <el-button
-                                                                        text
+                                                                    <bz-button
+                                                                        plain
                                                                         type="primary"
                                                                         @click="
                                                                             addUpsell(
                                                                                 upsell.id
                                                                             )
-                                                                        "
-                                                                        class="whitespace-nowrap text-indigo-600 hover:text-indigo-500">
+                                                                        ">
                                                                         Hinzufügen
-                                                                    </el-button>
+                                                                    </bz-button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -325,7 +326,7 @@ const total = computed(() => {
                         class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
                         <h2
                             id="summary-heading"
-                            class="text-lg font-medium text-gray-900">
+                            class="text-lg font-bold text-gray-900">
                             Bestellübersicht
                         </h2>
 
@@ -334,7 +335,8 @@ const total = computed(() => {
                                 <dt class="text-sm text-gray-600">
                                     {{ order.products[0].name }}
                                 </dt>
-                                <dd class="text-sm font-medium text-gray-900">
+                                <dd
+                                    class="text-sm font-bold text-gray-900 font-number">
                                     {{
                                         order.products
                                             .find(
@@ -367,7 +369,8 @@ const total = computed(() => {
                                         </a>
                                     </el-tooltip>
                                 </dt>
-                                <dd class="text-sm font-medium text-gray-900">
+                                <dd
+                                    class="text-sm font-bold text-gray-900 font-number">
                                     0,00 €
                                 </dd>
                             </div>
@@ -389,7 +392,8 @@ const total = computed(() => {
                                         </a>
                                     </el-tooltip>
                                 </dt>
-                                <dd class="text-sm font-medium text-gray-900">
+                                <dd
+                                    class="text-sm text-gray-900 font-number font-bold">
                                     {{
                                         addedUpsells
                                             .reduce(
@@ -410,13 +414,14 @@ const total = computed(() => {
                                 <dt class="text-base font-medium text-gray-900">
                                     Gesamt
                                 </dt>
-                                <dd class="text-base font-medium text-gray-900">
+                                <dd
+                                    class="text-base font-bold text-gray-900 font-number">
                                     {{ total.toString().replace('.', ',') }} €
                                 </dd>
                             </div>
                         </dl>
 
-                        <div class="mt-6">
+                        <div class="mt-10">
                             <div class="grid">
                                 <bz-button
                                     as="a"

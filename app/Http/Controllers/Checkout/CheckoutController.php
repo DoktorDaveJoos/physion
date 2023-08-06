@@ -40,7 +40,7 @@ class CheckoutController extends Controller
             'mode' => 'payment',
             'success_url' => route('checkout.success', ['order' => $order->slug]),
             'cancel_url' => route('checkout.show', ['order' => $order->slug, 'signature' => $request->get('signature')]),
-            'customer' => $order->customer->stripe_customer_id,
+            'customer' => $order->owner->stripe_customer_id,
             'billing_address_collection' => 'auto',
             'shipping_address_collection' => [
                 'allowed_countries' => ['DE', 'AT', 'CH'],

@@ -7,9 +7,9 @@ use App\Http\Requests\Bedarf\UpdateRoofRequest;
 use App\Models\Bdrf;
 use App\Models\Dormer;
 use App\Models\Insulation;
-use App\Models\Order;
 use App\Models\Roof;
 use App\Models\Window;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -19,6 +19,8 @@ use Illuminate\Validation\ValidationException;
 class RoofController extends Controller
 {
 
+    use HandleFreeAndPaid;
+
     public function __invoke(Bdrf $bdrf, UpdateRoofRequest $request): RedirectResponse
     {
         Roof::updateOrCreate(
@@ -26,24 +28,19 @@ class RoofController extends Controller
             $request->validated()
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function insulation(Bdrf $bdrf, Request $request): RedirectResponse
     {
-
         $validator = Validator::make($request->all(), [
             'type' => 'string|required',
-            'thickness' => 'numeric|required'
+            'thickness' => 'numeric|required',
         ], [
             'type.required' => 'Bitte wählen Sie eine Dämmung aus.',
             'type.string' => 'Bitte wählen Sie eine Dämmung aus.',
             'thickness.required' => 'Bitte geben Sie eine Stärke an.',
-            'thickness.numeric' => 'Bitte geben Sie eine gültige Stärke an.'
+            'thickness.numeric' => 'Bitte geben Sie eine gültige Stärke an.',
         ]);
 
         if ($validator->fails()) {
@@ -54,23 +51,14 @@ class RoofController extends Controller
             $validator->validated()
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature')
-        ]);
-
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function deleteInsulation(Bdrf $bdrf, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function dormer(Bdrf $bdrf, Request $request): RedirectResponse
@@ -103,22 +91,14 @@ class RoofController extends Controller
             $validator->validated()
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function deleteDormer(Bdrf $bdrf, Dormer $dormer, Request $request): RedirectResponse
     {
         $dormer->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     /**
@@ -155,24 +135,14 @@ class RoofController extends Controller
             + ['type' => 'dachfenster']
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function deleteSkylight(Bdrf $bdrf, Window $window, Request $request): RedirectResponse
     {
-        ray($window);
-
         $window->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
 }

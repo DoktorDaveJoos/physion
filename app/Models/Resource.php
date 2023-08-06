@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property string $name
  * @property string|null $description
- * @property Collection<Role> $roles
+ * @property Collection<Team> $teams
  */
 class Resource extends Model
 {
@@ -19,8 +19,8 @@ class Resource extends Model
 
     protected $guarded = ['id'];
 
-    public function roles(): BelongsToMany
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'role_has_resources');
+        return $this->belongsToMany(Team::class, 'team_has_resources');
     }
 }

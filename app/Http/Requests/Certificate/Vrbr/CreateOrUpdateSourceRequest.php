@@ -26,7 +26,6 @@ class CreateOrUpdateSourceRequest extends FormRequest
         return [
             'source' => 'required|string',
             'water' => 'required|string',
-            'signature' => 'required|string',
         ];
     }
 

@@ -21,7 +21,7 @@ class ShowController extends Controller
         return Inertia::render('Bedarf/General', [
             'step' => 'general',
             'context' => 'bedarf',
-            'order' => $order->load('product', 'customer'),
+            'order' => $order->load('product', 'owner'),
         ]);
     }
 
@@ -31,7 +31,7 @@ class ShowController extends Controller
         return Inertia::render('Bedarf/Details', [
             'step' => 'details',
             'context' => 'bedarf',
-            'order' => $order->load('product', 'customer'),
+            'order' => $order->load('product', 'owner'),
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Models\Cellar;
 use App\Models\Insulation;
 use App\Models\Wall;
 use App\Models\Window;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class CellarController extends Controller
 {
+
+    use HandleFreeAndPaid;
 
     // invokable method
     /**
@@ -42,11 +45,7 @@ class CellarController extends Controller
             $validator->validated()
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     /**
@@ -74,22 +73,14 @@ class CellarController extends Controller
 
         $bdrf->cellar->insulations()->create($validator->validated());
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function deleteInsulation(Bdrf $bdrf, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     /**
@@ -130,22 +121,14 @@ class CellarController extends Controller
             $validator->validated()
         );
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
     public function deleteWindow(Bdrf $bdrf, Window $window, Request $request): RedirectResponse
     {
         $window->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'thermal',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'thermal');
     }
 
 

@@ -17,13 +17,18 @@ const props = defineProps({
     disabled: Boolean,
 });
 
+defineEmits(['click']);
+
 const getClass = computed(() => {
     const classes = [
-        'font-medium',
+        'uppercase',
+        'text-xs',
+        'tracking-wider',
+        'font-bold',
         'inline-flex',
         'items-center',
         'justify-center',
-        'py-1.5',
+        'py-2.5',
     ];
 
     classes.push(props.class);
@@ -32,6 +37,7 @@ const getClass = computed(() => {
         if (props.plain) {
             classes.push(
                 'bg-transparent',
+                'text-sm',
                 'hover:bg-transparent',
                 'text-blue-600',
                 'hover:text-blue-500'
@@ -41,9 +47,8 @@ const getClass = computed(() => {
         }
 
         classes.push(
-            'rounded',
+            'rounded-md',
             'text-sm',
-            'h-[40px]',
             'px-5',
             'bg-blue-600',
             'hover:bg-blue-500',
@@ -56,9 +61,8 @@ const getClass = computed(() => {
         if (props.plain) {
             classes.push(
                 'bg-transparent',
-                'hover:bg-transparent',
                 'text-gray-600',
-                'hover:text-gray-500'
+                'hover:text-gray-800'
             );
 
             return classes.join(' ');
@@ -66,15 +70,10 @@ const getClass = computed(() => {
 
         classes.push(
             'text-sm',
-            'h-[40px]',
             'px-5',
-            'rounded',
-            'border',
-            'border-gray-300',
+            'rounded-md',
+            'bg-gray-100',
             'hover:text-gray-900',
-            'hover:bg-blue-100',
-            'hover:border-blue-200',
-            'hover:text-blue-600',
             'text-gray-600',
             'cursor-pointer',
             'disabled:cursor-not-allowed'
@@ -93,15 +92,16 @@ const getClass = computed(() => {
         <slot />
     </Link>
 
-    <el-button
+    <!--        :link="plain"-->
+    <button
+        type="button"
         v-else-if="as === 'button'"
-        :link="plain"
-        :type="type"
+        @click="$emit('click')"
         :class="getClass"
         :disabled="disabled"
         size="large">
         <slot />
-    </el-button>
+    </button>
 
     <a v-else-if="as === 'a'" :class="getClass" :href="href">
         <slot />

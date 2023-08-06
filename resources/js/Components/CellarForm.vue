@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
@@ -7,12 +7,10 @@ import {
 import {
     PlusIcon,
     Square3Stack3DIcon,
-    SunIcon,
     TrashIcon,
 } from '@heroicons/vue/24/outline';
 import { computed, onMounted, reactive } from 'vue';
 import { ElNotification } from 'element-plus';
-import { Inertia } from '@inertiajs/inertia';
 import BzButton from './BzButton.vue';
 
 const props = defineProps({
@@ -50,7 +48,7 @@ const safe = () => {
     form.put(
         route('bdrf.cellar', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -69,7 +67,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.cellar.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -82,11 +80,11 @@ const addInsulation = () => {
 };
 
 const deleteInsulation = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.cellar.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -249,20 +247,16 @@ const hasAdditional = computed(() => {
                 </el-form-item>
 
                 <div class="flex justify-end mt-5">
-                    <el-button type="primary" @click="addInsulation"
-                        >Hinzufügen</el-button
-                    >
+                    <bz-button @click="addInsulation">Hinzufügen</bz-button>
                 </div>
             </el-form>
         </el-drawer>
 
         <div class="w-full flex justify-end p-4 border-t border-gray-200">
-            <el-button
+            <bz-button
                 :disabled="
                     form.processing || !form.isDirty || form.type === null
                 "
-                size="large"
-                type="primary"
                 @click="safe">
                 {{
                     form.isDirty
@@ -273,7 +267,7 @@ const hasAdditional = computed(() => {
                         ? 'Gespeichert'
                         : 'Speichern'
                 }}
-            </el-button>
+            </bz-button>
         </div>
     </el-card>
 </template>

@@ -7,6 +7,7 @@ use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Vrbr;
 use App\Notifications\OrderCreated;
 use App\Services\NanoIdCore;
@@ -14,11 +15,6 @@ use App\Shared\Transferable;
 use App\Support\Telegram\Telegram;
 use Closure;
 use Hidehalo\Nanoid\Client;
-use Illuminate\Mail\Mailable;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\URL;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
 
@@ -34,7 +30,7 @@ class CreateOrder
     /**
      * @throws Throwable
      */
-    public function handle(Bdrf|Vrbr $certificate, Customer $customer, mixed $data)
+    public function handle(Bdrf|Vrbr $certificate, ?Customer $customer, ?User $user, mixed $data)
     {
         // Create slug
         $slug = $this->nanoClient->formattedId(
@@ -42,15 +38,22 @@ class CreateOrder
             NanoIdCore::ID_LENGTH
         );
 
+        $ownerData = [
+            'owner_id' => $customer->id ?? $user->id,
+            'owner_type' => $customer ? Customer::class : User::class,
+        ];
+
         // Create Order
         $order = Order::create(
-            array_merge($data, [
-                'slug' => $slug,
-                'customer_id' => $customer->id,
-                'certificate_id' => $certificate->id,
-                'certificate_type' => $certificate::class,
-                'meta' => ['steps' => ['general']],
-            ])
+            array_merge(
+                $data,
+                [
+                    'slug' => $slug,
+                    'certificate_id' => $certificate->id,
+                    'certificate_type' => $certificate::class,
+                    'meta' => ['steps' => ['general']],
+                ] + $ownerData
+            )
         );
 
         $product = Product::whereCategory(Category::fromModel($certificate::class)->value)->first();
@@ -63,10 +66,10 @@ class CreateOrder
         $order->products()->attach($product);
 
         // Notify Customer
-        $customer->notify((new OrderCreated($order, $customer->name))->locale('de'));
+        $customer?->notify((new OrderCreated($order, $customer->name))->locale('de'));
 
         // Notify Bauzertifikate Team - @todo make async
-        Telegram::broadcast("[Order created] $customer->name: $order->certificate_type");
+        Telegram::broadcast("[Order created] $order->owner->name: $order->certificate_type");
 
         return $order;
     }
@@ -81,6 +84,7 @@ class CreateOrder
         $order = self::run(
             $transferable->getCertificate(),
             $transferable->getCustomer(),
+            $transferable->getUser(),
             $transferable->getData()
         );
 

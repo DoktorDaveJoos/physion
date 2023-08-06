@@ -8,7 +8,7 @@ use App\Shared\Transferable;
 use Illuminate\Pipeline\Pipeline;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class CreateOrderWithProduct
+class CreateOrderForPartner
 {
     use AsAction;
 
@@ -17,9 +17,8 @@ class CreateOrderWithProduct
         mixed $data
     ): Order {
         return app(Pipeline::class)
-            ->send(Transferable::fromCategory($data, $category))
+            ->send(Transferable::fromUser($data, $category, request()->user()))
             ->through([
-                CreateCustomer::class,
                 CreateCertificate::class,
                 CreateOrder::class,
             ])

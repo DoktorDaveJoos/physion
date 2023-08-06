@@ -10,11 +10,10 @@ import {
     ExclamationTriangleIcon,
 } from '@heroicons/vue/20/solid';
 import SatteldachForm from './SatteldachForm.vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import { computed, reactive, watch } from 'vue';
 import FlachdachForm from './FlachdachForm.vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
-import { Inertia } from '@inertiajs/inertia';
 import PultdachForm from './PultdachForm.vue';
 import {
     BuildingStorefrontIcon,
@@ -165,13 +164,13 @@ watch(
             )
                 .then(() => {
                     props.order.certificate.roof.dormers?.forEach((dormer) => {
-                        Inertia.delete(
+                        router.delete(
                             route(
                                 'bdrf.roof.dormer.delete',
                                 {
                                     bdrf: props.order.certificate.id,
                                     dormer: dormer.id,
-                                    signature: usePage().props..signature,
+                                    signature: route().params?.signature,
                                 },
                                 {
                                     preserveScroll: true,
@@ -263,7 +262,7 @@ const safe = () => {
     prepareForm(form).put(
         route('bdrf.roof', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -282,7 +281,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.roof.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -298,7 +297,7 @@ const addSkylight = () => {
     skylightForm.put(
         route('bdrf.roof.skylight', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -314,7 +313,7 @@ const addDormer = () => {
     dormerForm.put(
         route('bdrf.roof.dormer', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -327,11 +326,11 @@ const addDormer = () => {
 };
 
 const deleteInsulation = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.roof.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -340,11 +339,11 @@ const deleteInsulation = (id) => {
 };
 
 const deleteSkylight = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.roof.skylight.delete', {
             bdrf: props.order.certificate.id,
             window: id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -353,11 +352,11 @@ const deleteSkylight = (id) => {
 };
 
 const deleteDormer = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.roof.dormer.delete', {
             bdrf: props.order.certificate.id,
             dormer: id,
-            signature: usePage().props..signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -659,18 +658,18 @@ console.log(form.construction);
 
             <div
                 v-if="roof"
-                class="p-4 flex justify-end border-t border-gray-200">
-                <bz-button plain @click="openDrawer('insulation')">
+                class="p-4 flex space-x-2 justify-end border-t border-gray-200">
+                <bz-button type="secondary" @click="openDrawer('insulation')">
                     <plus-icon class="h-4 w-4 mr-1" />
                     <span class="text-xs">Dämmung hinzufügen</span>
                 </bz-button>
-                <bz-button plain @click="openDrawer('skylight')">
+                <bz-button type="secondary" @click="openDrawer('skylight')">
                     <plus-icon class="h-4 w-4 mr-1" />
                     <span class="text-xs">Dachfenster hinzufügen</span>
                 </bz-button>
                 <bz-button
                     v-if="form.roof_shape.title === 'Satteldach'"
-                    plain
+                    type="secondary"
                     @click="openDrawer('dormer')">
                     <plus-icon class="h-4 w-4 mr-1" />
                     <span class="text-xs">Gaube hinzufügen</span>
@@ -825,9 +824,7 @@ console.log(form.construction);
                         type="info" />
 
                     <div class="flex justify-end mt-5">
-                        <el-button type="primary" @click="addDormer"
-                            >Hinzufügen</el-button
-                        >
+                        <bz-button @click="addDormer">Hinzufügen</bz-button>
                     </div>
                 </el-form>
             </el-drawer>
@@ -869,9 +866,7 @@ console.log(form.construction);
                     </el-form-item>
 
                     <div class="flex justify-end mt-5">
-                        <el-button type="primary" @click="addInsulation"
-                            >Hinzufügen</el-button
-                        >
+                        <bz-button @click="addInsulation">Hinzufügen</bz-button>
                     </div>
                 </el-form>
             </el-drawer>
@@ -880,14 +875,12 @@ console.log(form.construction);
         <div
             id="roof-button-container"
             class="w-full flex justify-end p-5 border-t border-gray-200">
-            <el-button
+            <bz-button
                 :disabled="
                     form.processing ||
                     !form.isDirty ||
                     form.construction.length !== 2
                 "
-                size="large"
-                type="primary"
                 @click="safe">
                 {{
                     form.isDirty
@@ -896,7 +889,7 @@ console.log(form.construction);
                             : 'Speichern'
                         : 'Bereits gespeichert'
                 }}
-            </el-button>
+            </bz-button>
         </div>
     </el-card>
 </template>

@@ -20,11 +20,7 @@ class UpdateGeneralRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'nullable|string',
+        $base = [
             'reason' => 'required|string',
             'street_address' => 'required|string',
             'zip' => 'required|digits:5',
@@ -33,6 +29,17 @@ class UpdateGeneralRequest extends FormRequest
             'additional_type' => 'required|string',
             'page' => 'required|string'
         ];
+
+        if (!request()->user()) {
+            return array_merge($base, [
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email',
+                'phone' => 'nullable|string',
+            ]);
+        }
+
+        return $base;
     }
 
 
