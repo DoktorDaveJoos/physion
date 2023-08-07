@@ -247,34 +247,37 @@ Route::prefix('/find')->name('find.')->group(function () {
 Route::get('/', LandingController::class)->name('start');
 
 
-Route::get('/billing-portal', function(Request $request) {
-//    rd($request->user());
-
-//    $request->user()->createOrGetStripeCustomer();
-
-    return $request->user()->redirectToBillingPortal(route('hub.dashboard'));
-})->middleware(['auth:sanctum', 'verified'])->name('billing-portal');
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
-        Route::get('/dashboard', function () {
+        Route::get('/dashboard', function (Request $request) {
             return Inertia::render('Hub/Dashboard', [
-                'products' => Product::where('active', true)->where('type', 'certificate')->get(),
+                'products' => Product::where('recurring', true)->where('type', 'certificate')->get(),
+                'stats' => [
+                    'orders' => [
+                        'open' => Order::where('status', 'open')->where('team_id', $request->user()->current_team_id)->count(),
+                        'all' => Order::where('team_id', $request->user()->current_team_id)->count(),
+                    ],
+                    'team' => [
+                        'members' => $request->user()->currentTeam->allUsers()->count(),
+                    ],
+                ]
             ]);
         })->name('dashboard');
 
-//        Route::get('/certificates/open', function () {
-//            return Inertia::render('Hub/Certificates/Index', [
-//                'orders' => Order::all()
-//            ]);
-//        })->name('certificates.open');
+        Route::get('/billing', function (Request $request) {
+            $team = $request->user()->currentTeam;
+            $team->createOrGetStripeCustomer();
+
+            return $team->redirectToBillingPortal(route('hub.dashboard'));
+        })->name('billing');
 
         Route::get('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'create'])->name('orders.create');
         Route::post('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'store'])->name('orders.store');
+        Route::delete('/orders/{order:slug}', [\App\Http\Controllers\Hub\OrderController::class, 'destroy'])->name('orders.destroy');
 
         Route::get('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'show'])->name('certificates.show');
         Route::put('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'update'])->name('certificates.update');

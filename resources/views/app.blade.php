@@ -7,6 +7,7 @@
         <title inertia>{{ config('app.name', 'Bauzertifikate') }}</title>
 
         <!-- Fonts -->
+{{--        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@400;500&display=swap">--}}
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,4 +21,5 @@
     <body class="font-sans antialiased">
         @inertia
     </body>
+    @include('cookie-consent::index')
 </html>

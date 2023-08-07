@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Hub;
 use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,7 +23,7 @@ class CertificateController extends Controller
     {
         $category = Category::fromModel($order->certificate_type);
 
-        if ($category->value === 'bdrf') {
+        if ($category->value === 'bdrf' || $category->value === 'bdrf_partner') {
             $order->load(
                 'owner',
                 'certificate',
@@ -39,7 +41,7 @@ class CertificateController extends Controller
             );
         }
 
-        if ($category->value === 'vrbr') {
+        if ($category->value === 'vrbr' || $category->value === 'vrbr_partner') {
             $order->load(
                 'owner',
                 'certificate',
@@ -81,8 +83,19 @@ class CertificateController extends Controller
         if (!($nextPage = $category->getNextPageAfter($page))) {
 
             $order->update([
-                'status' => 'finalized'
+                'status' => 'open'
             ]);
+
+            /** @var Team $team */
+            $team = $request->user()->currentTeam;
+
+            $stripeProductId = $order->products->first()->stripe_product_id;
+            $stripePriceId = DB::query()->select('stripe_price')
+                ->from('subscription_items')
+                ->where('stripe_product', $stripeProductId)
+                ->get();
+
+            $team->subscription()->reportUsageFor($stripePriceId->first()->stripe_price);
 
             return to_route('hub.certificates');
         }

@@ -29,7 +29,10 @@ class ShowController extends Controller
             'order' => $order,
             'certificateUrl' => $certificateUrl,
             'addedUpsells' => $order->upsells,
-            'upsells' => Product::whereNot('type', 'certificate')->whereDoesntHave(
+            'upsells' => Product::whereNot('type', 'certificate')
+                ->where('active', true)
+                ->where('recurring', false)
+                ->whereDoesntHave(
                 'orders',
                 function ($query) use ($order) {
                     $query->where('order_id', $order->id);

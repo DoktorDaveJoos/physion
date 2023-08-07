@@ -16,6 +16,7 @@ class LandingController extends Controller
             'tiers' => ProductResource::collection(
                 Product::where('active', true)
                     ->where('type', 'certificate')
+                    ->where('recurring', 'false')
                     ->get()
             ),
         ]);

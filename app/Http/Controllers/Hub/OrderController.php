@@ -63,4 +63,17 @@ class OrderController extends Controller
         );
     }
 
+    public function destroy(Order $order, Request $request): RedirectResponse
+    {
+
+        if ($request->user()->hasTeamPermission($order->team, 'order:delete') === false) {
+            abort(403);
+        }
+
+        $order->products()->detach($order->products->pluck('id'));
+        $order->delete();
+
+        return redirect()->route('hub.certificates');
+    }
+
 }

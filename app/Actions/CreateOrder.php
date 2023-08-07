@@ -43,6 +43,10 @@ class CreateOrder
             'owner_type' => $customer ? Customer::class : User::class,
         ];
 
+        if ($user) {
+            $ownerData['team_id'] = $user->current_team_id;
+        }
+
         // Create Order
         $order = Order::create(
             array_merge(

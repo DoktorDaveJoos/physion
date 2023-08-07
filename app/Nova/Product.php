@@ -59,6 +59,7 @@ class Product extends Resource
             Text::make('Description'),
             Text::make('Price'),
             File::make('Image'),
+            Boolean::make('Recurring'),
 
             Boolean::make('Active'),
             Code::make('Meta')->json(),

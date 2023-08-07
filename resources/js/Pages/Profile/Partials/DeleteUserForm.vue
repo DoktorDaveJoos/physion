@@ -39,61 +39,61 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title>
-            Delete Account
-        </template>
+        <template #title> Lösche Account</template>
 
-        <template #description>
-            Permanently delete your account.
-        </template>
+        <template #description> Lösche dein Konto dauerhaft.</template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.
+                Sobald Ihr Konto gelöscht ist, werden alle Ressourcen und Daten
+                dauerhaft gelöscht. Bevor Sie Ihr Konto löschen, laden Sie bitte
+                alle Daten oder Informationen herunter, die Sie behalten
+                möchten.
             </div>
 
             <div class="mt-5">
                 <DangerButton @click="confirmUserDeletion">
-                    Delete Account
+                    Lösche Account
                 </DangerButton>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
             <DialogModal :show="confirmingUserDeletion" @close="closeModal">
-                <template #title>
-                    Delete Account
-                </template>
+                <template #title> Lösche Account</template>
 
                 <template #content>
-                    Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.
+                    Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Sobald
+                    Ihr Konto gelöscht ist, werden alle Ressourcen und Daten
+                    dauerhaft gelöscht. Bitte geben Sie Ihr Passwort ein, um zu
+                    bestätigen, dass Sie Ihr Konto dauerhaft löschen möchten.
 
                     <div class="mt-4">
                         <TextInput
                             ref="passwordInput"
                             v-model="form.password"
-                            type="password"
+                            autocomplete="current-password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
-                            autocomplete="current-password"
-                            @keyup.enter="deleteUser"
-                        />
+                            type="password"
+                            @keyup.enter="deleteUser" />
 
-                        <InputError :message="form.errors.password" class="mt-2" />
+                        <InputError
+                            :message="form.errors.password"
+                            class="mt-2" />
                     </div>
                 </template>
 
                 <template #footer>
                     <SecondaryButton @click="closeModal">
-                        Cancel
+                        Abbrechen
                     </SecondaryButton>
 
                     <DangerButton
-                        class="ml-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
-                        @click="deleteUser"
-                    >
-                        Delete Account
+                        class="ml-3"
+                        @click="deleteUser">
+                        Lösche Account
                     </DangerButton>
                 </template>
             </DialogModal>

@@ -26,11 +26,11 @@ const confirmationForm = useForm({
 });
 
 const twoFactorEnabled = computed(
-    () => ! enabling.value && usePage().props.user?.two_factor_enabled,
+    () => !enabling.value && usePage().props.user?.two_factor_enabled
 );
 
 watch(twoFactorEnabled, () => {
-    if (! twoFactorEnabled.value) {
+    if (!twoFactorEnabled.value) {
         confirmationForm.reset();
         confirmationForm.clearErrors();
     }
@@ -39,41 +39,46 @@ watch(twoFactorEnabled, () => {
 const enableTwoFactorAuthentication = () => {
     enabling.value = true;
 
-    router.post('/user/two-factor-authentication', {}, {
-        preserveScroll: true,
-        onSuccess: () => Promise.all([
-            showQrCode(),
-            showSetupKey(),
-            showRecoveryCodes(),
-        ]),
-        onFinish: () => {
-            enabling.value = false;
-            confirming.value = props.requiresConfirmation;
-        },
-    });
+    router.post(
+        '/user/two-factor-authentication',
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () =>
+                Promise.all([
+                    showQrCode(),
+                    showSetupKey(),
+                    showRecoveryCodes(),
+                ]),
+            onFinish: () => {
+                enabling.value = false;
+                confirming.value = props.requiresConfirmation;
+            },
+        }
+    );
 };
 
 const showQrCode = () => {
-    return axios.get('/user/two-factor-qr-code').then(response => {
+    return axios.get('/user/two-factor-qr-code').then((response) => {
         qrCode.value = response.data.svg;
     });
 };
 
 const showSetupKey = () => {
-    return axios.get('/user/two-factor-secret-key').then(response => {
+    return axios.get('/user/two-factor-secret-key').then((response) => {
         setupKey.value = response.data.secretKey;
     });
-}
+};
 
 const showRecoveryCodes = () => {
-    return axios.get('/user/two-factor-recovery-codes').then(response => {
+    return axios.get('/user/two-factor-recovery-codes').then((response) => {
         recoveryCodes.value = response.data;
     });
 };
 
 const confirmTwoFactorAuthentication = () => {
     confirmationForm.post('/user/confirmed-two-factor-authentication', {
-        errorBag: "confirmTwoFactorAuthentication",
+        errorBag: 'confirmTwoFactorAuthentication',
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
@@ -105,30 +110,36 @@ const disableTwoFactorAuthentication = () => {
 
 <template>
     <ActionSection>
-        <template #title>
-            Two Factor Authentication
-        </template>
+        <template #title> Zwei-Faktor-Authentifizierung </template>
 
         <template #description>
-            Add additional security to your account using two factor authentication.
+            Fügen Sie Ihrem Konto zusätzliche Sicherheit hinzu, indem Sie die
+            Zwei-Faktor-Authentifizierung aktivieren.
         </template>
 
         <template #content>
-            <h3 v-if="twoFactorEnabled && ! confirming" class="text-lg font-medium text-gray-900">
-                You have enabled two factor authentication.
+            <h3
+                v-if="twoFactorEnabled && !confirming"
+                class="text-lg font-medium text-gray-900">
+                Sie haben die Zwei-Faktor-Authentifizierung aktiviert.
             </h3>
 
-            <h3 v-else-if="twoFactorEnabled && confirming" class="text-lg font-medium text-gray-900">
-                Finish enabling two factor authentication.
+            <h3
+                v-else-if="twoFactorEnabled && confirming"
+                class="text-lg font-medium text-gray-900">
+                Beenden Sie die Aktivierung der Zwei-Faktor-Authentifizierung.
             </h3>
 
             <h3 v-else class="text-lg font-medium text-gray-900">
-                You have not enabled two factor authentication.
+                Du hast Zwei-Faktor-Authentifizierung nicht aktiviert.
             </h3>
 
             <div class="mt-3 max-w-xl text-sm text-gray-600">
                 <p>
-                    When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.
+                    Wenn die Zwei-Faktor-Authentifizierung aktiviert ist, werden
+                    Sie bei der Anmeldung zur Eingabe eines sicheren, zufälligen
+                    Tokens aufgefordert. Diesen Token können Sie über die Google
+                    Authenticator-Anwendung auf Ihrem Telefon abrufen.
                 </p>
             </div>
 
@@ -136,17 +147,26 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="qrCode">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p v-if="confirming" class="font-semibold">
-                            To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code.
+                            Um die Aktivierung der Zwei-Faktor-Authentifizierung
+                            abzuschließen, scannen Sie den folgenden QR-Code mit
+                            Ihrer Authenticator-Anwendung auf dem Telefon oder
+                            geben Sie den Einrichtungsschlüssel ein und geben
+                            Sie den generierten OTP-Code ein.
                         </p>
 
                         <p v-else>
-                            Two factor authentication is now enabled. Scan the following QR code using your phone's authenticator application or enter the setup key.
+                            Die Zwei-Faktor-Authentifizierung ist jetzt
+                            aktiviert. Scannen Sie den folgenden QR-Code mit
+                            Ihrer Authenticator-Anwendung auf dem Telefon oder
+                            geben Sie den Einrichtungsschlüssel ein.
                         </p>
                     </div>
 
                     <div class="mt-4" v-html="qrCode" />
 
-                    <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
+                    <div
+                        v-if="setupKey"
+                        class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
                             Setup Key: <span v-html="setupKey"></span>
                         </p>
@@ -164,21 +184,27 @@ const disableTwoFactorAuthentication = () => {
                             inputmode="numeric"
                             autofocus
                             autocomplete="one-time-code"
-                            @keyup.enter="confirmTwoFactorAuthentication"
-                        />
+                            @keyup.enter="confirmTwoFactorAuthentication" />
 
-                        <InputError :message="confirmationForm.errors.code" class="mt-2" />
+                        <InputError
+                            :message="confirmationForm.errors.code"
+                            class="mt-2" />
                     </div>
                 </div>
 
-                <div v-if="recoveryCodes.length > 0 && ! confirming">
+                <div v-if="recoveryCodes.length > 0 && !confirming">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
-                            Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.
+                            Speichern Sie diese Wiederherstellungscodes in einem
+                            sicheren Passwortmanager. Sie können verwendet
+                            werden, um Zugriff auf Ihr Konto wiederherzustellen,
+                            wenn Ihr Gerät für die Zwei-Faktor-Authentifizierung
+                            verloren geht.
                         </p>
                     </div>
 
-                    <div class="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
+                    <div
+                        class="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
                         <div v-for="code in recoveryCodes" :key="code">
                             {{ code }}
                         </div>
@@ -187,62 +213,64 @@ const disableTwoFactorAuthentication = () => {
             </div>
 
             <div class="mt-5">
-                <div v-if="! twoFactorEnabled">
-                    <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-                        <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
-                            Enable
+                <div v-if="!twoFactorEnabled">
+                    <ConfirmsPassword
+                        @confirmed="enableTwoFactorAuthentication">
+                        <PrimaryButton
+                            type="button"
+                            :class="{ 'opacity-25': enabling }"
+                            :disabled="enabling">
+                            Aktivieren
                         </PrimaryButton>
                     </ConfirmsPassword>
                 </div>
 
                 <div v-else>
-                    <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
+                    <ConfirmsPassword
+                        @confirmed="confirmTwoFactorAuthentication">
                         <PrimaryButton
                             v-if="confirming"
                             type="button"
                             class="mr-3"
                             :class="{ 'opacity-25': enabling }"
-                            :disabled="enabling"
-                        >
-                            Confirm
+                            :disabled="enabling">
+                            Bestätigen
                         </PrimaryButton>
                     </ConfirmsPassword>
 
                     <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
                         <SecondaryButton
-                            v-if="recoveryCodes.length > 0 && ! confirming"
-                            class="mr-3"
-                        >
+                            v-if="recoveryCodes.length > 0 && !confirming"
+                            class="mr-3">
                             Regenerate Recovery Codes
                         </SecondaryButton>
                     </ConfirmsPassword>
 
                     <ConfirmsPassword @confirmed="showRecoveryCodes">
                         <SecondaryButton
-                            v-if="recoveryCodes.length === 0 && ! confirming"
-                            class="mr-3"
-                        >
-                            Show Recovery Codes
+                            v-if="recoveryCodes.length === 0 && !confirming"
+                            class="mr-3">
+                            Zeige Recovery Codes
                         </SecondaryButton>
                     </ConfirmsPassword>
 
-                    <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
+                    <ConfirmsPassword
+                        @confirmed="disableTwoFactorAuthentication">
                         <SecondaryButton
                             v-if="confirming"
                             :class="{ 'opacity-25': disabling }"
-                            :disabled="disabling"
-                        >
-                            Cancel
+                            :disabled="disabling">
+                            Abbrechen
                         </SecondaryButton>
                     </ConfirmsPassword>
 
-                    <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
+                    <ConfirmsPassword
+                        @confirmed="disableTwoFactorAuthentication">
                         <DangerButton
-                            v-if="! confirming"
+                            v-if="!confirming"
                             :class="{ 'opacity-25': disabling }"
-                            :disabled="disabling"
-                        >
-                            Disable
+                            :disabled="disabling">
+                            De-aktiveren
                         </DangerButton>
                     </ConfirmsPassword>
                 </div>

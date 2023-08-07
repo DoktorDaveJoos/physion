@@ -37,12 +37,22 @@ class ProductObserver
         }
 
         if ($product->isDirty('price')) {
-            $newPrice = $this->client->prices->create([
+            $config = [
                 'product' => $product->stripe_product_id,
                 'currency' => 'eur',
                 'unit_amount' => $product->price * 100,
                 'tax_behavior' => 'inclusive',
-            ]);
+            ];
+
+            if ($product->recurring) {
+                $config['recurring'] = [
+                    'aggregate_usage' => 'sum',
+                    'interval' => 'month',
+                    'usage_type' => 'metered',
+                ];
+            }
+
+            $newPrice = $this->client->prices->create($config);
 
             $this->client->products->update(
                 $product->stripe_product_id,
@@ -72,12 +82,29 @@ class ProductObserver
             'name' => $product->name,
         ]);
 
-        $client->prices->create([
+        $config = [
             'product' => $stripeProduct->id,
             'currency' => 'eur',
             'unit_amount' => $product->price * 100,
             'tax_behavior' => 'inclusive',
-        ]);
+        ];
+
+        if ($product->recurring) {
+            $config['recurring'] = [
+                'aggregate_usage' => 'sum',
+                'interval' => 'month',
+                'usage_type' => 'metered',
+            ];
+        }
+
+        $price = $client->prices->create($config);
+
+        $client->products->update(
+            $stripeProduct->id,
+            [
+                'default_price' => $price->id,
+            ]
+        );
 
         return $stripeProduct->id;
     }

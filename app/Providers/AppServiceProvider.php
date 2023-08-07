@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Services\Order\OrderService;
-use App\Services\Stripe\StripeService;
+use App\Models\Team;
 use Hidehalo\Nanoid\Client;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
 use Stripe\Stripe;
 use Stripe\StripeClient;
 
@@ -19,22 +19,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(OrderService::class, function () {
-            return new OrderService();
-        });
 
         $this->app->singleton(StripeClient::class, function () {
             Stripe::setApiKey(config('stripe.api_key'));
             return new StripeClient(config('stripe.api_key'));
         });
 
-        $this->app->bind(StripeService::class, function($app) {
-            return new StripeService($app->make(StripeClient::class));
-        });
-
         $this->app->bind(Client::class, function () {
             return new Client();
         });
+
+
     }
 
     /**
@@ -42,8 +37,9 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //
+        Cashier::useCustomerModel(Team::class);
+        Cashier::calculateTaxes();
     }
 }

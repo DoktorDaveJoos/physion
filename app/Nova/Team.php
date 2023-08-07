@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddSubscriptionToTeam;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -95,6 +96,8 @@ class Team extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new AddSubscriptionToTeam(),
+        ];
     }
 }

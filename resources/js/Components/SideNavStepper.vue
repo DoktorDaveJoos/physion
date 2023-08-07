@@ -5,7 +5,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 const { order, category, page, signature } = usePage().props;
 
 const steps = {
-    vrbr: [
+    vrbr_partner: [
         {
             key: 'general',
             name: 'Allgemein',
@@ -32,7 +32,7 @@ const steps = {
         },
     ],
 
-    bdrf: [
+    bdrf_partner: [
         {
             key: 'general',
             name: 'Allgemein',

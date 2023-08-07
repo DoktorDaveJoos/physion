@@ -22,7 +22,6 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int|null $current_team_id
  * @property string|null $profile_photo_path
  * @property string|null $two_factor_secret
- * @property Collection<Role> $roles
  */
 class User extends Authenticatable
 {
@@ -39,7 +38,8 @@ class User extends Authenticatable
      * @var string<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];

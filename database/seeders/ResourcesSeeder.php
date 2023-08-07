@@ -22,9 +22,9 @@ class ResourcesSeeder extends Seeder
         ]);
 
         $certificates = Resource::create([
-            'name' => 'certificates',
-            'display_name' => 'Energieausweise',
-            'description' => 'Zertifikate',
+            'name' => 'orders',
+            'display_name' => 'Bestellungen',
+            'description' => 'Bestellungen',
         ]);
 
         $nova = Resource::create([

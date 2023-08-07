@@ -2,9 +2,15 @@
 import SidebarLayout from '../../../Layouts/SidebarLayout.vue';
 
 import BzButton from '../../../Components/BzButton.vue';
-import { PlusIcon } from '@heroicons/vue/24/outline';
+import {
+    PlusIcon,
+    PencilSquareIcon,
+    TrashIcon,
+} from '@heroicons/vue/24/outline';
 import Badge from '../../../Components/Badge.vue';
-import { router } from '@inertiajs/vue3';
+import { router, Link } from '@inertiajs/vue3';
+import Pagination from '../../../Components/Pagination.vue';
+import { ElMessageBox, ElNotification } from 'element-plus';
 
 defineProps({
     orders: Array,
@@ -22,6 +28,42 @@ const handleFilter = (filter) => {
     } else {
         router.get(route('hub.certificates'));
     }
+};
+
+const deleteOrder = (orderSlug) => {
+    ElMessageBox.confirm(
+        'Wollen Sie diesen Auftrag wirklich löschen?',
+        'Warnung',
+        {
+            confirmButtonText: 'Ja',
+            cancelButtonText: 'Nein',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            console.log('lol');
+            router.delete(route('hub.orders.destroy', { order: orderSlug }), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    ElNotification({
+                        title: 'Erfolgreich',
+                        message: 'Auftrag wurde gelöscht',
+                        type: 'success',
+                    });
+                },
+                onError: () => {
+                    ElNotification({
+                        title: 'Fehler',
+                        message: 'Auftrag konnte nicht gelöscht werden',
+                        type: 'error',
+                    });
+                },
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            // catch error
+        });
 };
 
 const mapper = {
@@ -73,14 +115,18 @@ const mapper = {
                 <bz-button
                     type="secondary"
                     as="link"
-                    :href="route('hub.orders.create', { category: 'vrbr' })">
+                    :href="
+                        route('hub.orders.create', { category: 'vrbr_partner' })
+                    ">
                     <plus-icon class="w-4 h-4 mr-1 -ml-1" />
                     Verbrauchsausweis
                 </bz-button>
                 <bz-button
                     type="secondary"
                     as="link"
-                    :href="route('hub.orders.create', { category: 'bdrf' })">
+                    :href="
+                        route('hub.orders.create', { category: 'bdrf_partner' })
+                    ">
                     <plus-icon class="w-4 h-4 mr-1 -ml-1" />
                     Bedarfsausweis
                 </bz-button>
@@ -91,7 +137,7 @@ const mapper = {
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow rounded-lg">
+                    <div class="overflow-hidden shadow rounded-t-lg">
                         <table class="min-w-full divide-y divide-gray-300">
                             <thead class="bg-white">
                                 <tr>
@@ -117,8 +163,8 @@ const mapper = {
                                     </th>
                                     <th
                                         scope="col"
-                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                        <span class="sr-only">Edit</span>
+                                        class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900">
+                                        Aktion
                                     </th>
                                 </tr>
                             </thead>
@@ -128,12 +174,12 @@ const mapper = {
                                     :key="order.id">
                                     <td
                                         class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                        <p class="font-bold text-gray-500">
+                                        <p class="font-bold text-gray-900">
                                             {{
                                                 order.certificate.street_address
                                             }}
                                         </p>
-                                        <p class="font-bold text-gray-500">
+                                        <p class="font-bold text-gray-900">
                                             {{ order.certificate.zip }}
                                             {{ order.certificate.city }}
                                         </p>
@@ -144,19 +190,72 @@ const mapper = {
                                     </td>
                                     <td
                                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ order.owner.name }}
+                                        {{ order.owner.first_name }}
+                                        {{ order.owner.last_name }}
                                     </td>
                                     <td
                                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         <Badge
+                                            :type="
+                                                order.status === 'created'
+                                                    ? 'warning'
+                                                    : order.status === 'shipped'
+                                                    ? 'success'
+                                                    : 'default'
+                                            "
                                             :label="order.status"
                                             size="sm" />
                                     </td>
                                     <td
-                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"></td>
+                                        class="whitespace-nowrap px-3 py-4 text-sm">
+                                        <div
+                                            class="flex items-center space-x-1.5">
+                                            <template
+                                                v-if="
+                                                    order.status !==
+                                                        'shipped' &&
+                                                    order.status !== 'open'
+                                                ">
+                                                <Link
+                                                    class="flex items-center"
+                                                    :href="
+                                                        route(
+                                                            'hub.certificates.show',
+                                                            {
+                                                                order: order.slug,
+                                                            }
+                                                        )
+                                                    ">
+                                                    <pencil-square-icon
+                                                        class="w-5 h-5 text-gray-500" />
+                                                </Link>
+                                                <button
+                                                    @click="
+                                                        deleteOrder(order.slug)
+                                                    "
+                                                    type="button"
+                                                    class="flex items-center">
+                                                    <trash-icon
+                                                        class="w-5 h-5 text-gray-500" />
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div
+                        class="w-full bg-white rounded-b-lg border-t border-gray-300 py-1 shadow">
+                        <Pagination
+                            :data="{
+                                current: orders.current_page,
+                                from: orders.from,
+                                next: orders.next_page_url,
+                                prev: orders.prev_page_url,
+                                to: orders.to,
+                                total: orders.total,
+                            }" />
                     </div>
                 </div>
             </div>
