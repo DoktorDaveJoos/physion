@@ -51,21 +51,24 @@ class OrderController extends Controller
 
     public function store(Category $category, CreateOrderRequest $request): RedirectResponse
     {
-        $order = CreateOrderForPartner::run(
-            $category,
-            $request->validated()
-        );
+        if ($request->user()->currentTeam()?->subscribed('default')) {
+            $order = CreateOrderForPartner::run(
+                $category,
+                $request->validated()
+            );
 
-        return redirect()->to(
-            route('hub.certificates.show', [
-                'order' => $order->slug,
-            ])
-        );
+            return redirect()->to(
+                route('hub.certificates.show', [
+                    'order' => $order->slug,
+                ])
+            );
+        }
+
+        return redirect()->route('hub.certificates')->with('error', 'Keine aktive Mitgliedschaft gefunden.');
     }
 
     public function destroy(Order $order, Request $request): RedirectResponse
     {
-
         if ($request->user()->hasTeamPermission($order->team, 'order:delete') === false) {
             abort(403);
         }
