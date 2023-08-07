@@ -13,6 +13,8 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
+                sansguest: ['Inter', ...defaultTheme.fontFamily.sans],
+                displayguest: ['Lexend', ...defaultTheme.fontFamily.sans],
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
                 display: ['Lato'],
                 number: ['Roboto Mono'],

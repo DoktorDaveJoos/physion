@@ -1,12 +1,11 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthenticationCard from '../../Components/AuthenticationCard.vue';
+import Checkbox from '../../Components/Checkbox.vue';
+import InputError from '../../Components/InputError.vue';
+import InputLabel from '../../Components/InputLabel.vue';
+import PrimaryButton from '../../Components/PrimaryButton.vue';
+import TextInput from '../../Components/TextInput.vue';
 import ApplicationMark from '../../Components/ApplicationMark.vue';
 
 defineProps({
@@ -38,6 +37,14 @@ const submit = () => {
             <ApplicationMark />
         </template>
 
+        <template #header>
+            <h1
+                class="font-black font-display tracking-tight text-3xl text-gray-900 mt-4">
+                EnergieHub
+            </h1>
+            <p class="text-gray-500 text-center">by bauzertifikate.de</p>
+        </template>
+
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
@@ -57,7 +64,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Passwort" />
                 <TextInput
                     id="password"
                     v-model="form.password"
@@ -71,7 +78,9 @@ const submit = () => {
             <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    <span class="ml-2 text-sm text-gray-600"
+                        >Angemeldet bleiben</span
+                    >
                 </label>
             </div>
 
@@ -80,14 +89,14 @@ const submit = () => {
                     v-if="canResetPassword"
                     :href="route('password.request')"
                     class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
+                    Passwort vergessen?
                 </Link>
 
                 <PrimaryButton
                     class="ml-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
-                    Log in
+                    Einloggen
                 </PrimaryButton>
             </div>
         </form>

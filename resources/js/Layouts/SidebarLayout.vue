@@ -40,7 +40,7 @@
                 <div class="fixed inset-0 bg-gray-900/80" />
             </TransitionChild>
 
-            <div class="fixed inset-0 flex">
+            <div class="fixed inset-0 flex font-sans">
                 <TransitionChild
                     as="template"
                     enter="transition ease-in-out duration-300 transform"

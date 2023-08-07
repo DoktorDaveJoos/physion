@@ -12,7 +12,8 @@ defineProps({
 <template>
     <SidebarLayout>
         <template v-if="!$page.props.user?.current_team_id">
-            <el-empty></el-empty>
+            <el-empty
+                description="Sie müssen zuerst einem Team beitreten!"></el-empty>
 
             <div class="flex justify-center">
                 <div class="max-w-lg text-sm text-gray-500">
