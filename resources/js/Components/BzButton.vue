@@ -28,6 +28,7 @@ const getClass = computed(() => {
         'inline-flex',
         'items-center',
         'justify-center',
+        'font-sans',
     ];
 
     classes.push(props.class);

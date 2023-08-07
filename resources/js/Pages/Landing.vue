@@ -147,12 +147,8 @@ const checkTool = ref(false);
                                     </Link>
                                 </div>
                                 <div class="flex justify-center px-2 sm:px-0">
-                                    <Link
-                                        :href="
-                                            route('order.create', {
-                                                category: 'bdrf',
-                                            })
-                                        "
+                                    <a
+                                        href="/blog/heizungsdimensionierung-wie-viel-kw-sollte-meine-neue-heizung-haben/"
                                         class="bg-slate-100 w-full max-w-sm flex items-center rounded-lg px-4 py-1 hover:bg-slate-200 cursor-pointer">
                                         <PresentationChartLineIcon
                                             class="h-6 w-6 mx-1 text-gray-900"
@@ -167,7 +163,7 @@ const checkTool = ref(false);
                                                 erstellen
                                             </p>
                                         </div>
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>
                         </div>
