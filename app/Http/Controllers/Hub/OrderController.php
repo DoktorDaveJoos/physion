@@ -21,7 +21,7 @@ class OrderController extends Controller
     {
         $filter = $request->get('filter');
 
-        $orders = Order::where('team_id', $request->user()->currentTeam->id)
+        $orders = Order::where('team_id', $request->user()?->current_team_id)
             ->when($filter, function ($query, $filter) {
                 return $query->where('status', $filter);
             })

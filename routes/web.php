@@ -262,7 +262,7 @@ Route::middleware([
                         'all' => Order::where('team_id', $request->user()->current_team_id)->count(),
                     ],
                     'team' => [
-                        'members' => $request->user()->currentTeam->allUsers()->count(),
+                        'members' => $request->user()->currentTeam?->allUsers()?->count(),
                     ],
                 ]
             ]);

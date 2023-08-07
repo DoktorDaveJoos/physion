@@ -42,5 +42,10 @@ return new class extends Migration
             $order->customer_id = $order->owner_id;
             $order->save();
         }
+
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn(['owner_id', 'owner_type']);
+        });
+
     }
 };

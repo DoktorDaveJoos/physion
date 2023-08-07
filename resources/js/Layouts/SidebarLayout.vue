@@ -206,7 +206,7 @@
                             <template
                                 v-for="item in navigation"
                                 :key="item.name">
-                                <li v-if="userHasResource(item.name)">
+                                <li>
                                     <Link
                                         :href="item.href"
                                         :class="[
@@ -231,7 +231,7 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li v-if="$page.props.permission.view_management">
                         <div
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Management
@@ -265,7 +265,7 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li v-if="$page.props.permission.view_admin">
                         <div
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Administration
@@ -294,7 +294,7 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li v-if="$page.props.user.all_teams?.length > 0">
                         <div
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Deine Teams
@@ -528,9 +528,11 @@ const navigation = [
 const jetstreamNavigation = [
     {
         name: 'Team',
-        href: route('teams.show', {
-            team: usePage().props.user.current_team_id,
-        }),
+        href: usePage().props.user?.current_team_id
+            ? route('teams.show', {
+                  team: usePage().props.user.current_team_id,
+              })
+            : null,
         icon: UsersIcon,
         current: route().current('teams.show'),
     },

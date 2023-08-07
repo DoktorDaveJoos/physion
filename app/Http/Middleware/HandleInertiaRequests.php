@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Resource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,7 +40,11 @@ class HandleInertiaRequests extends Middleware
     {
 
         return array_merge(parent::share($request), [
-            'resources' => $request->user()?->currentTeam?->resources ?? []
+//            'resources' => $request->user()?->currentTeam?->resources ?? []
+            'permission' => [
+                'view_admin' => Str::contains($request->user()?->email, ['david@bauzertifikate.de', 'hannes@bauzertifikate.de']),
+                'view_management' => $request->user()?->hasTeamPermission($request->user()?->currentTeam, 'team:read'),
+            ]
         ]);
     }
 }
