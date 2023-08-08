@@ -6,7 +6,6 @@ use App\Actions\CreateOrderForPartner;
 use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
-use App\Http\Resources\AttachmentResource;
 use App\Http\Resources\OrderHubResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
