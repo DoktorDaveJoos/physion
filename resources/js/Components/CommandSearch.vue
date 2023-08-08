@@ -15,9 +15,19 @@ import {
 import Badge from './Badge.vue';
 import { router } from '@inertiajs/vue3';
 
-defineEmits(['close']);
+const emits = defineEmits(['close']);
+const props = defineProps({
+    open: Boolean,
+});
 
-const open = ref(true);
+const open = computed({
+    get: () => {
+        return props.open;
+    },
+    set: () => {
+        emits('close');
+    },
+});
 const query = ref('');
 
 const results = ref([]);

@@ -357,7 +357,7 @@
                 <div class="flex-1 flex justify-start">
                     <button
                         type="button"
-                        class="flex items-center space-x-2"
+                        class="flex items-center space-x-2 w-full"
                         @click="showSearch">
                         <magnifying-glass-icon
                             aria-hidden="true"
@@ -367,6 +367,7 @@
                         >
                     </button>
                     <command-search
+                        :open="search"
                         @close="search = false"
                         v-if="search"></command-search>
                 </div>
