@@ -7,6 +7,8 @@ import InputLabel from '../../Components/InputLabel.vue';
 import PrimaryButton from '../../Components/PrimaryButton.vue';
 import TextInput from '../../Components/TextInput.vue';
 import ApplicationMark from '../../Components/ApplicationMark.vue';
+import SecondaryButton from '../../Components/SecondaryButton.vue';
+import BzButton from '../../Components/BzButton.vue';
 
 defineProps({
     canResetPassword: Boolean,
@@ -75,29 +77,39 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4">
+            <div class="flex justify-between mt-4">
                 <label class="flex items-center">
                     <Checkbox v-model:checked="form.remember" name="remember" />
                     <span class="ml-2 text-sm text-gray-600"
                         >Angemeldet bleiben</span
                     >
                 </label>
-            </div>
 
-            <div class="flex items-center justify-end mt-4">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
                     class="underline text-sm text-gray-600 hover:text-gray-900">
                     Passwort vergessen?
                 </Link>
+            </div>
 
+            <div class="flex items-center justify-end mt-4"></div>
+            <div class="flex items-center justify-end mt-4">
                 <PrimaryButton
                     class="ml-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
                     Einloggen
                 </PrimaryButton>
+
+                <bz-button
+                    type="secondary"
+                    class="ml-4"
+                    as="link"
+                    :disabled="form.processing"
+                    :href="route('register')">
+                    Registrieren
+                </bz-button>
             </div>
         </form>
     </AuthenticationCard>
