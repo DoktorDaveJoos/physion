@@ -6,6 +6,9 @@
 
         <title inertia>{{ config('app.name', 'Bauzertifikate') }}</title>
 
+        <!-- Fathom - beautiful, simple website analytics -->
+        <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="{{ config('tracking.fathom')  }}" defer></script>
+
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11282900730"></script>
         <script>
@@ -13,7 +16,7 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'AW-11282900730');
+            gtag('config', {{ config('tracking.ads') }}
         </script>
 
         <!-- Fonts -->
