@@ -33,7 +33,7 @@
             </div>
 
             <div class="mt-10 border-t border-gray-200 py-6 flex justify-end">
-                <bz-button as="link" :href="link"> Auftrag anzeigen </bz-button>
+                <bz-button :href="link" as="link"> Auftrag anzeigen</bz-button>
             </div>
         </div>
     </div>
@@ -41,8 +41,22 @@
 
 <script setup>
 import BzButton from '../../Components/BzButton.vue';
+import { onMounted } from 'vue';
 
-defineProps({
+const props = defineProps({
     link: String,
+    price: Number,
+});
+
+console.log(props.price);
+
+onMounted(() => {
+    // Event snippet for Kauf conversion page
+    gtag('event', 'conversion', {
+        send_to: 'AW-11282900730/pPDuCP691c0YEPrNjYQq',
+        value: props.price,
+        currency: 'EUR',
+        transaction_id: '',
+    });
 });
 </script>

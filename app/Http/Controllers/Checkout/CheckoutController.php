@@ -53,7 +53,6 @@ class CheckoutController extends Controller
             ],
             'client_reference_id' => $order->id,
         ]);
-        ray($checkout_session->url);
 
         return Redirect::away($checkout_session->url);
     }

@@ -55,6 +55,7 @@ class ShowController extends Controller
                 now()->addMinutes(30),
                 ['order' => $order->slug]
             ),
+            'price' => $order->products->sum('price'),
         ]);
     }
 }
