@@ -19,7 +19,7 @@ use Throwable;
  * @property $status
  * @property $certificate_id
  * @property $certificate_type
- * @property Customer $customer
+ * @property Customer|User $owner
  * @property Collection $upsells
  * @property $created_at
  * @property $updated_at

@@ -55,7 +55,7 @@ class Order extends Resource
                 'shipped' => 'info',
                 'in_clarification' => 'warning',
             ]),
-            Email::make('Email', 'customer.email'),
+            Email::make('Email', 'owner.email'),
             MorphTo::make('Certificate')
         ];
     }
