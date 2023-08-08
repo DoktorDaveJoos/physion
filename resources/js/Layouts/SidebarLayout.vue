@@ -189,13 +189,17 @@
                     <ApplicationMark />
                     <div class="ml-1 hidden lg:flex items-baseline">
                         <span
-                            class="ml-1 text-lg tracking-tight font-light text-gray-800">
-                            ENERGIE
+                            class="font-display font-black text-gray-800 text-xl tracking-tight">
+                            EnergieHub
                         </span>
-                        <span
-                            class="hidden ml-0.5 text-lg text-blue-600 font-semibold md:block">
-                            HUB
-                        </span>
+                        <!--                        <span-->
+                        <!--                            class="ml-1 text-lg tracking-tight font-light text-gray-800">-->
+                        <!--                            ENERGIE-->
+                        <!--                        </span>-->
+                        <!--                        <span-->
+                        <!--                            class="hidden ml-0.5 text-lg text-blue-600 font-semibold md:block">-->
+                        <!--                            HUB-->
+                        <!--                        </span>-->
                     </div>
                 </NavLink>
             </div>
