@@ -17,8 +17,13 @@ use Inertia\Response;
 class OrderController extends Controller
 {
 
-    public function index(Request $request): Response
+    public function index(Request $request): Response|RedirectResponse
     {
+        if (!$request->user()->currentTeam?->subscribed('default')) {
+            return to_route('hub.dashboard');
+        }
+
+
         $filter = $request->get('filter');
 
         $orders = Order::where('team_id', $request->user()?->current_team_id)

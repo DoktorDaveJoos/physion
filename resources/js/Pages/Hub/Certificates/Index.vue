@@ -8,7 +8,7 @@ import {
     TrashIcon,
 } from '@heroicons/vue/24/outline';
 import Badge from '../../../Components/Badge.vue';
-import { router, Link } from '@inertiajs/vue3';
+import { router, Link, Head } from '@inertiajs/vue3';
 import Pagination from '../../../Components/Pagination.vue';
 import { ElMessageBox, ElNotification } from 'element-plus';
 
@@ -73,6 +73,7 @@ const mapper = {
 </script>
 
 <template>
+    <Head title="Bestellungen" />
     <sidebar-layout>
         <template v-if="!$page.props.user?.current_team_id">
             <el-empty

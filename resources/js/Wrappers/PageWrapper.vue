@@ -3,14 +3,13 @@ import GuestLayout from '../Layouts/GuestLayout.vue';
 import StepperWrapper from './StepperWrapper.vue';
 import SidebarLayout from '../Layouts/SidebarLayout.vue';
 import StepperWrapperHub from './StepperWrapperHub.vue';
+import { Head } from '@inertiajs/vue3';
 
 defineProps({
     order: {
         type: Object,
     },
 });
-
-import { ChevronRightIcon, HomeIcon } from '@heroicons/vue/20/solid';
 
 const pages = [
     { name: 'Projects', href: '#', current: false },
@@ -19,6 +18,7 @@ const pages = [
 </script>
 
 <template>
+    <Head title="Erstellen" />
     <template v-if="$page.props.user">
         <sidebar-layout>
             <stepper-wrapper-hub>

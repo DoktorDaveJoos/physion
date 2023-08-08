@@ -254,6 +254,8 @@ Route::middleware([
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
         Route::get('/dashboard', function (Request $request) {
+            ray($request->user()->currentTeam?->subscription('default')?->upcomingInvoice());
+
             return Inertia::render('Hub/Dashboard', [
                 'products' => Product::where('recurring', true)->where('type', 'certificate')->get(),
                 'stats' => [
@@ -264,6 +266,7 @@ Route::middleware([
                     'team' => [
                         'members' => $request->user()->currentTeam?->allUsers()?->count(),
                     ],
+                    'subscription' => $request->user()->currentTeam?->subscribed('default'),
                 ]
             ]);
         })->name('dashboard');
