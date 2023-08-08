@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
@@ -21,8 +20,7 @@ class SendCertificate extends Mailable
         public string $teamName,
         public string $attachmentPath,
         public string $certificateType = 'Energieausweis',
-    )
-    {
+    ) {
         //
     }
 
@@ -32,7 +30,7 @@ class SendCertificate extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Dein ' . $this->certificateType,
+            subject: 'Dein '.$this->certificateType,
         );
     }
 
@@ -54,7 +52,7 @@ class SendCertificate extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromStorage($this->attachmentPath)
+            Attachment::fromStorage($this->attachmentPath),
         ];
     }
 }
