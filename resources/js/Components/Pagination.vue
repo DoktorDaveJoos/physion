@@ -6,13 +6,13 @@
             <p class="text-sm text-gray-700">
                 Zeige
                 {{ ' ' }}
-                <span class="font-medium">{{ data.from ?? 0 }}</span>
+                <span class="font-medium">{{ meta.from ?? 0 }}</span>
                 {{ ' ' }} bis
-                <span class="font-medium">{{ data.to ?? 0 }}</span>
+                <span class="font-medium">{{ meta.to ?? 0 }}</span>
                 {{ ' ' }}
                 von
                 {{ ' ' }}
-                <span class="font-bold">{{ data.total }}</span>
+                <span class="font-bold">{{ meta.total }}</span>
                 {{ ' ' }}
                 Bestellungen
             </p>
@@ -21,17 +21,17 @@
             <bz-button
                 plain
                 as="link"
-                :disabled="!data.prev"
+                :disabled="!links.prev"
                 type="secondary"
-                :href="data.prev"
+                :href="links.prev"
                 ><chevron-left-icon class="h-4 w-4"
             /></bz-button>
             <bz-button
                 plain
                 as="link"
-                :disabled="!data.next"
+                :disabled="!links.next"
                 type="secondary"
-                :href="data.next">
+                :href="links.next">
                 <chevron-right-icon class="h-4 w-4" />
             </bz-button>
         </div>
@@ -43,6 +43,7 @@ import BzButton from './BzButton.vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
 defineProps({
-    data: Object,
+    meta: Object,
+    links: Object,
 });
 </script>

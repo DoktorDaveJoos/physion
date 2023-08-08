@@ -7,6 +7,7 @@ use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Resources\AttachmentResource;
+use App\Http\Resources\OrderHubResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
@@ -23,27 +24,25 @@ class OrderController extends Controller
             return to_route('hub.dashboard');
         }
 
-
         $filter = $request->get('filter');
 
         $orders = Order::where('team_id', $request->user()?->current_team_id)
             ->when($filter, function ($query, $filter) {
                 return $query->where('status', $filter);
             })
-            ->with('certificate', 'owner')
             ->paginate(10);
 
         return Inertia::render('Hub/Certificates/Index', [
-            'orders' => $orders,
+            'orders' => OrderHubResource::collection($orders),
             'filter' => $filter,
         ]);
     }
 
     public function show(Order $order): Response
     {
+        $order->load('attachments');
         return Inertia::render('Order/Index', [
             'order' => OrderResource::make($order),
-            'attachments' => AttachmentResource::collection($order->attachments),
         ]);
     }
 

@@ -3,18 +3,65 @@ import SidebarLayout from '../../../Layouts/SidebarLayout.vue';
 
 import BzButton from '../../../Components/BzButton.vue';
 import {
-    PlusIcon,
+    ArrowDownTrayIcon,
+    PaperAirplaneIcon,
     PencilSquareIcon,
+    PlusIcon,
     TrashIcon,
 } from '@heroicons/vue/24/outline';
 import Badge from '../../../Components/Badge.vue';
-import { router, Link, Head } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import Pagination from '../../../Components/Pagination.vue';
 import { ElMessageBox, ElNotification } from 'element-plus';
+import DialogModal from '../../../Components/DialogModal.vue';
+import { ref } from 'vue';
 
 defineProps({
     orders: Array,
 });
+
+const sendForm = useForm({
+    order: null,
+    email: null,
+});
+
+const showSendForm = ref(false);
+
+const closeSendForm = () => {
+    sendForm.reset();
+    showSendForm.value = false;
+};
+
+const openSendFormFor = (slug) => {
+    sendForm.order = slug;
+    showSendForm.value = true;
+};
+
+const sendCertificate = () => {
+    sendForm.post(
+        route('hub.certificates.send', {
+            order: sendForm.order,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                ElNotification({
+                    title: 'Erfolgreich',
+                    message: 'Zertifikat wurde versendet',
+                    type: 'success',
+                });
+                closeSendForm();
+            },
+            onError: () => {
+                ElNotification({
+                    title: 'Fehler',
+                    message: 'Zertifikat konnte nicht versendet werden',
+                    type: 'error',
+                });
+            },
+        }
+    );
+};
 
 const tabs = [
     { name: 'Alle', filter: null },
@@ -41,7 +88,6 @@ const deleteOrder = (orderSlug) => {
         }
     )
         .then(() => {
-            console.log('lol');
             router.delete(route('hub.orders.destroy', { order: orderSlug }), {
                 preserveScroll: true,
                 onSuccess: () => {
@@ -93,12 +139,12 @@ const mapper = {
                 class="rounded-lg shadow bg-white px-6 py-4 flex items-center justify-between">
                 <div>
                     <div class="sm:hidden">
-                        <label for="tabs" class="sr-only">Select a tab</label>
+                        <label class="sr-only" for="tabs">Select a tab</label>
                         <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                         <select
                             id="tabs"
-                            name="tabs"
-                            class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            name="tabs">
                             <option
                                 v-for="tab in tabs"
                                 :key="tab.name"
@@ -108,12 +154,11 @@ const mapper = {
                         </select>
                     </div>
                     <div class="hidden sm:block">
-                        <nav class="flex space-x-4" aria-label="Tabs">
+                        <nav aria-label="Tabs" class="flex space-x-4">
                             <button
                                 v-for="tab in tabs"
                                 :key="tab.name"
-                                type="button"
-                                @click="handleFilter(tab.filter)"
+                                :aria-current="tab.current ? 'page' : undefined"
                                 :class="[
                                     (route().params?.filter ?? null) ===
                                     tab.filter
@@ -121,9 +166,8 @@ const mapper = {
                                         : 'text-gray-500 hover:text-gray-700',
                                     'rounded-md px-3 py-2 text-xs font-bold tracking-wider uppercase',
                                 ]"
-                                :aria-current="
-                                    tab.current ? 'page' : undefined
-                                ">
+                                type="button"
+                                @click="handleFilter(tab.filter)">
                                 {{ tab.name }}
                             </button>
                         </nav>
@@ -131,24 +175,24 @@ const mapper = {
                 </div>
                 <div class="flex items-center space-x-4">
                     <bz-button
-                        type="secondary"
-                        as="link"
                         :href="
                             route('hub.orders.create', {
                                 category: 'vrbr_partner',
                             })
-                        ">
+                        "
+                        as="link"
+                        type="secondary">
                         <plus-icon class="w-4 h-4 mr-1 -ml-1" />
                         Verbrauchsausweis
                     </bz-button>
                     <bz-button
-                        type="secondary"
-                        as="link"
                         :href="
                             route('hub.orders.create', {
                                 category: 'bdrf_partner',
                             })
-                        ">
+                        "
+                        as="link"
+                        type="secondary">
                         <plus-icon class="w-4 h-4 mr-1 -ml-1" />
                         Bedarfsausweis
                     </bz-button>
@@ -164,28 +208,28 @@ const mapper = {
                                 <thead class="bg-white">
                                     <tr>
                                         <th
-                                            scope="col"
-                                            class="py-3.5 pl-4 pr-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wide text-gray-900 sm:pl-6">
+                                            class="py-3.5 pl-4 pr-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wide text-gray-900 sm:pl-6"
+                                            scope="col">
                                             Objekt
                                         </th>
                                         <th
-                                            scope="col"
-                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900">
+                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900"
+                                            scope="col">
                                             Typ
                                         </th>
                                         <th
-                                            scope="col"
-                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900">
+                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900"
+                                            scope="col">
                                             Erstellt von
                                         </th>
                                         <th
-                                            scope="col"
-                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900">
+                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900"
+                                            scope="col">
                                             Status
                                         </th>
                                         <th
-                                            scope="col"
-                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900">
+                                            class="px-3 py-3.5 text-left text-xs font-bold text-gray-800 font-bold uppercase tracking-wide text-gray-900"
+                                            scope="col">
                                             Aktion
                                         </th>
                                     </tr>
@@ -220,6 +264,7 @@ const mapper = {
                                         <td
                                             class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <Badge
+                                                :label="order.status"
                                                 :type="
                                                     order.status === 'created'
                                                         ? 'warning'
@@ -228,7 +273,6 @@ const mapper = {
                                                         ? 'success'
                                                         : 'default'
                                                 "
-                                                :label="order.status"
                                                 size="sm" />
                                         </td>
                                         <td
@@ -242,7 +286,6 @@ const mapper = {
                                                         order.status !== 'open'
                                                     ">
                                                     <Link
-                                                        class="flex items-center"
                                                         :href="
                                                             route(
                                                                 'hub.certificates.show',
@@ -250,20 +293,47 @@ const mapper = {
                                                                     order: order.slug,
                                                                 }
                                                             )
-                                                        ">
+                                                        "
+                                                        class="flex items-center">
                                                         <pencil-square-icon
-                                                            class="w-5 h-5 text-gray-500" />
+                                                            class="w-5 h-5 text-gray-500 hover:text-blue-600" />
                                                     </Link>
                                                     <button
+                                                        class="flex items-center"
+                                                        type="button"
                                                         @click="
                                                             deleteOrder(
                                                                 order.slug
                                                             )
-                                                        "
-                                                        type="button"
-                                                        class="flex items-center">
+                                                        ">
                                                         <trash-icon
-                                                            class="w-5 h-5 text-gray-500" />
+                                                            class="w-5 h-5 text-gray-500 hover:text-blue-600" />
+                                                    </button>
+                                                </template>
+                                                <template
+                                                    v-if="
+                                                        order.status ===
+                                                        'shipped'
+                                                    ">
+                                                    <a
+                                                        v-for="attachment in order.attachments"
+                                                        :href="
+                                                            attachment.links
+                                                                .self
+                                                        "
+                                                        target="_blank">
+                                                        <ArrowDownTrayIcon
+                                                            class="w-5 h-5 text-gray-500 hover:text-blue-600" />
+                                                    </a>
+                                                    <button
+                                                        type="button"
+                                                        @click="
+                                                            openSendFormFor(
+                                                                order.slug
+                                                            )
+                                                        ">
+                                                        <paper-airplane-icon
+                                                            class="w-5 h-5 text-gray-500 hover:text-blue-600" />
                                                     </button>
                                                 </template>
                                             </div>
@@ -275,20 +345,43 @@ const mapper = {
                         <div
                             class="w-full bg-white rounded-b-lg border-t border-gray-300 py-1 shadow">
                             <Pagination
-                                :data="{
-                                    current: orders.current_page,
-                                    from: orders.from,
-                                    next: orders.next_page_url,
-                                    prev: orders.prev_page_url,
-                                    to: orders.to,
-                                    total: orders.total,
-                                }" />
+                                :meta="orders.meta"
+                                :links="orders.links" />
                         </div>
                     </div>
                 </div>
             </div>
         </template>
     </sidebar-layout>
+
+    <dialog-modal :show="showSendForm">
+        <template #title>
+            <span class="font-bold font-display"
+                >Zertifikat senden</span
+            ></template
+        >
+        <template #content>
+            <div class="p-4">
+                <p class="text-gray-800 text-sm mb-4">
+                    Senden Sie das Zertifikat bequem an den Empfänger. Einfach
+                    E-Mail Adresse eingeben und absenden.
+                </p>
+                <el-form label-position="top" size="large">
+                    <el-form-item label="E-Mail Empfänger">
+                        <el-input v-model="sendForm.email" />
+                    </el-form-item>
+                </el-form>
+            </div>
+        </template>
+        <template #footer>
+            <bz-button type="secondary" @click="closeSendForm">
+                Abbrechen</bz-button
+            >
+            <bz-button type="primary" @click="sendCertificate">
+                Senden</bz-button
+            >
+        </template>
+    </dialog-modal>
 </template>
 
 <style scoped></style>

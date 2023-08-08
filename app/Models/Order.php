@@ -21,6 +21,7 @@ use Throwable;
  * @property $certificate_type
  * @property Customer|User $owner
  * @property Collection $upsells
+ * @property Collection<Attachment> $attachments
  * @property $created_at
  * @property $updated_at
  */

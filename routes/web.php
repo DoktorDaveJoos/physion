@@ -284,6 +284,7 @@ Route::middleware([
 
         Route::get('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'show'])->name('certificates.show');
         Route::put('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'update'])->name('certificates.update');
+        Route::post('/orders/{order:slug}/send', [\App\Http\Controllers\Hub\CertificateController::class, 'send'])->name('certificates.send');
 
         Route::get('/orders', [\App\Http\Controllers\Hub\OrderController::class, 'index'])->name('certificates');
 
