@@ -57,10 +57,10 @@ const mapper = {
             class="w-full md:grid md:grid-cols-11 gap-10">
             <side-nav-stepper class="md:col-span-2" />
             <div
-                class="col-span-9 xl:col-span-7 bg-white rounded-lg shadow p-6">
+                class="col-span-9 2xl:col-span-7 bg-white rounded-lg shadow p-6">
                 <slot />
             </div>
-            <div id="infobox" class="xl:col-span-2">
+            <div id="infobox" class="2xl:col-span-2">
                 <!--    Container for Teleport    -->
             </div>
         </div>

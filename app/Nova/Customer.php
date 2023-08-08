@@ -53,7 +53,8 @@ class Customer extends Resource
 
             HasMany::make('Bestellungen', 'orders', Order::class),
 
-            Text::make('Name', 'name'),
+            Text::make('Vorname', 'first_name'),
+            Text::make('Nachname', 'last_name'),
             Email::make('Email', 'email'),
             Text::make('Tel.', 'phone'),
 
