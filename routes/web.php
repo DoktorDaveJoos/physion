@@ -17,6 +17,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
 use App\Http\Controllers\Hub\BillingController;
 use App\Http\Controllers\Hub\DashboardController;
+use App\Http\Controllers\Hub\SearchController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
@@ -251,6 +252,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
+
+        Route::get('search', SearchController::class)->name('search');
+
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 

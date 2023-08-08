@@ -24,7 +24,7 @@
 
     <div class="bg-gray-50 h-screen w-full fixed -z-10"></div>
 
-    <TransitionRoot as="template" :show="sidebarOpen">
+    <TransitionRoot :show="sidebarOpen" as="template">
         <Dialog
             as="div"
             class="relative z-50 lg:hidden"
@@ -62,13 +62,13 @@
                             <div
                                 class="absolute left-full top-0 flex w-16 justify-center pt-5">
                                 <button
-                                    type="button"
                                     class="-m-2.5 p-2.5"
+                                    type="button"
                                     @click="sidebarOpen = false">
                                     <span class="sr-only">Close sidebar</span>
                                     <XMarkIcon
-                                        class="h-6 w-6 text-white"
-                                        aria-hidden="true" />
+                                        aria-hidden="true"
+                                        class="h-6 w-6 text-white" />
                                 </button>
                             </div>
                         </TransitionChild>
@@ -80,10 +80,10 @@
                             </div>
                             <nav class="flex flex-1 flex-col">
                                 <ul
-                                    role="list"
-                                    class="flex flex-1 flex-col gap-y-7">
+                                    class="flex flex-1 flex-col gap-y-7"
+                                    role="list">
                                     <li>
-                                        <ul role="list" class="-mx-2 space-y-1">
+                                        <ul class="-mx-2 space-y-1" role="list">
                                             <template
                                                 v-for="item in navigation"
                                                 :key="item.name">
@@ -94,13 +94,13 @@
                                                         )
                                                     ">
                                                     <Link
-                                                        :href="item.href"
                                                         :class="[
                                                             item.current
                                                                 ? 'bg-gray-50 text-blue-600'
                                                                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
                                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                                        ]">
+                                                        ]"
+                                                        :href="item.href">
                                                         <!--                                                        <component-->
                                                         <!--                                                            :is="item.icon"-->
                                                         <!--                                                            :class="[-->
@@ -122,23 +122,23 @@
                                             Deine Teams
                                         </div>
                                         <ul
-                                            role="list"
-                                            class="-mx-2 mt-2 space-y-1">
+                                            class="-mx-2 mt-2 space-y-1"
+                                            role="list">
                                             <li
                                                 v-for="team in $page.props.user
                                                     .all_teams"
                                                 :key="team.name">
                                                 <!--                                                        :href="team.href"-->
                                                 <button
-                                                    @click="
-                                                        switchToTeam(team.id)
-                                                    "
                                                     :class="[
                                                         team.current
                                                             ? 'bg-gray-50 text-blue-600'
                                                             : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
-                                                    ]">
+                                                    ]"
+                                                    @click="
+                                                        switchToTeam(team.id)
+                                                    ">
                                                     <span
                                                         :class="[
                                                             team.current
@@ -157,16 +157,16 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="mt-auto">
-                                        <a
-                                            href="#"
-                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">
-                                            <Cog6ToothIcon
-                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"
-                                                aria-hidden="true" />
-                                            Settings
-                                        </a>
-                                    </li>
+                                    <!--                                    <li class="mt-auto">-->
+                                    <!--                                        <a-->
+                                    <!--                                            href="#"-->
+                                    <!--                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                                    <!--                                            <Cog6ToothIcon-->
+                                    <!--                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                                    <!--                                                aria-hidden="true" />-->
+                                    <!--                                            Settings-->
+                                    <!--                                        </a>-->
+                                    <!--                                    </li>-->
                                 </ul>
                             </nav>
                         </div>
@@ -196,21 +196,21 @@
                 </NavLink>
             </div>
             <nav class="flex flex-1 flex-col">
-                <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                <ul class="flex flex-1 flex-col gap-y-7" role="list">
                     <li>
-                        <ul role="list" class="-mx-2 space-y-1">
+                        <ul class="-mx-2 space-y-1" role="list">
                             <template
                                 v-for="item in navigation"
                                 :key="item.name">
                                 <li>
                                     <Link
-                                        :href="item.href"
                                         :class="[
                                             item.current
                                                 ? 'bg-gray-50 text-blue-600'
                                                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                        ]">
+                                        ]"
+                                        :href="item.href">
                                         <component
                                             :is="item.icon"
                                             :class="[
@@ -232,19 +232,19 @@
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Management
                         </div>
-                        <ul role="list" class="-mx-2 space-y-1">
+                        <ul class="-mx-2 space-y-1" role="list">
                             <template
                                 v-for="item in jetstreamNavigation"
                                 :key="item.name">
                                 <li>
                                     <a
-                                        :href="item.href"
                                         :class="[
                                             item.current
                                                 ? 'bg-gray-50 text-blue-600'
                                                 : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                        ]">
+                                        ]"
+                                        :href="item.href">
                                         <component
                                             :is="item.icon"
                                             :class="[
@@ -266,7 +266,7 @@
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Administration
                         </div>
-                        <ul role="list" class="-mx-2 space-y-1">
+                        <ul class="-mx-2 space-y-1" role="list">
                             <template
                                 v-for="item in adminNavigation"
                                 :key="item.name">
@@ -295,18 +295,18 @@
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Deine Teams
                         </div>
-                        <ul role="list" class="-mx-2 mt-2 space-y-1">
+                        <ul class="-mx-2 mt-2 space-y-1" role="list">
                             <li
                                 v-for="team in $page.props.user.all_teams"
                                 :key="team.name">
                                 <button
-                                    @click="switchToTeam(team.id)"
                                     :class="[
                                         team.current
                                             ? 'bg-gray-50 text-blue-600'
                                             : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
-                                    ]">
+                                    ]"
+                                    @click="switchToTeam(team.id)">
                                     <span
                                         :class="[
                                             team.id ===
@@ -324,16 +324,16 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="mt-auto">
-                        <a
-                            href="#"
-                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">
-                            <Cog6ToothIcon
-                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"
-                                aria-hidden="true" />
-                            Settings
-                        </a>
-                    </li>
+                    <!--                    <li class="mt-auto">-->
+                    <!--                        <a-->
+                    <!--                            href="#"-->
+                    <!--                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                    <!--                            <Cog6ToothIcon-->
+                    <!--                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                    <!--                                aria-hidden="true" />-->
+                    <!--                            Settings-->
+                    <!--                        </a>-->
+                    <!--                    </li>-->
                 </ul>
             </nav>
         </div>
@@ -343,34 +343,51 @@
         <div
             class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button
-                type="button"
                 class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+                type="button"
                 @click="sidebarOpen = true">
                 <span class="sr-only">Open sidebar</span>
-                <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                <Bars3Icon aria-hidden="true" class="h-6 w-6" />
             </button>
 
             <!-- Separator -->
-            <div class="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
+            <div aria-hidden="true" class="h-6 w-px bg-gray-200 lg:hidden" />
 
             <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                <form class="relative flex flex-1" action="#" method="GET">
-                    <label for="search-field" class="sr-only">Search</label>
-                    <MagnifyingGlassIcon
-                        class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                        aria-hidden="true" />
-                    <input
-                        id="search-field"
-                        class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                        placeholder="Search..."
-                        type="search"
-                        name="search" />
-                </form>
+                <div class="flex-1 flex justify-start">
+                    <button
+                        type="button"
+                        class="flex items-center space-x-2"
+                        @click="showSearch">
+                        <magnifying-glass-icon
+                            aria-hidden="true"
+                            class="h-5 w-5 text-gray-500" />
+                        <span class="font-semibold text-sm text-gray-500"
+                            >Suche</span
+                        >
+                    </button>
+                    <command-search
+                        @close="search = false"
+                        v-if="search"></command-search>
+                </div>
+
+                <!--                <form class="relative flex flex-1" action="#" method="GET">-->
+                <!--                    <label for="search-field" class="sr-only">Search</label>-->
+                <!--                    <MagnifyingGlassIcon-->
+                <!--                        class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"-->
+                <!--                        aria-hidden="true" />-->
+                <!--                    <input-->
+                <!--                        id="search-field"-->
+                <!--                        class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"-->
+                <!--                        placeholder="Suche..."-->
+                <!--                        type="search"-->
+                <!--                        name="search" />-->
+                <!--                </form>-->
                 <div class="flex items-center gap-x-4 lg:gap-x-6">
                     <!-- Separator -->
                     <div
-                        class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200"
-                        aria-hidden="true" />
+                        aria-hidden="true"
+                        class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" />
 
                     <!-- Profile dropdown -->
                     <Menu as="div" class="relative text-left">
@@ -384,17 +401,17 @@
                                     "
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img
-                                        class="h-8 w-8 rounded-full object-cover"
+                                        :alt="$page.props.user.first_name"
                                         :src="
                                             $page.props.user.profile_photo_url
                                         "
-                                        :alt="$page.props.user.first_name" />
+                                        class="h-8 w-8 rounded-full object-cover" />
                                 </button>
 
                                 <span v-else class="inline-flex rounded-md">
                                     <button
-                                        type="button"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
+                                        type="button">
                                         {{ $page.props.user.first_name }}
 
                                         <ChevronDownIcon class="ml-2 h-4 w-4" />
@@ -444,11 +461,11 @@
                                     :key="item.name"
                                     v-slot="{ active }">
                                     <a
-                                        :href="item.href"
                                         :class="[
                                             active ? 'bg-gray-50' : '',
                                             'block px-3 py-1 text-sm leading-6 text-gray-900',
                                         ]"
+                                        :href="item.href"
                                         >{{ item.name }}</a
                                     >
                                 </MenuItem>
@@ -482,22 +499,27 @@ import {
     TransitionRoot,
 } from '@headlessui/vue';
 import {
+    AdjustmentsVerticalIcon,
     Bars3Icon,
-    Cog6ToothIcon,
+    CreditCardIcon,
     FolderIcon,
     HomeIcon,
     UsersIcon,
-    XMarkIcon,
-    AdjustmentsVerticalIcon,
     WrenchIcon,
-    CreditCardIcon,
+    XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 import Dropdown from '../Components/Dropdown.vue';
 import DropdownLink from '../Components/DropdownLink.vue';
 import ApplicationMark from '../Components/ApplicationMark.vue';
 import NavLink from '../Components/NavLink.vue';
-import { router, usePage, Link } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import CommandSearch from '../Components/CommandSearch.vue';
+
+const search = ref(false);
+const showSearch = () => {
+    search.value = true;
+};
 
 const navigation = [
     {

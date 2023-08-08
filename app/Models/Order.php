@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 use Throwable;
 
 /**
@@ -28,6 +29,7 @@ use Throwable;
 class Order extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $guarded = ['id'];
 
@@ -35,6 +37,12 @@ class Order extends Model
         'id' => 'string',
         'meta' => 'json',
     ];
+
+    public function searchableAs(): string
+    {
+        return 'orders_index';
+    }
+
 
     public function capture(): void
     {

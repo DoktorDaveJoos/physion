@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 
 class Bdrf extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $table = 'bdrfs';
 
@@ -22,6 +24,11 @@ class Bdrf extends Model
         'cooling_service' => 'datetime',
         'suggestion_check' => 'json'
     ];
+
+    public function searchableAs(): string
+    {
+        return 'bdrfs_index';
+    }
 
     public function order(): MorphOne
     {

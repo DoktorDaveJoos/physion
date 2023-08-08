@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Resources\OrderHubResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Bdrf;
 use App\Models\Order;
+use App\Models\Vrbr;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,17 +25,22 @@ class OrderController extends Controller
             return to_route('hub.dashboard');
         }
 
-        $filter = $request->get('filter');
+        $orderQuery = Order::where('team_id', $request->user()?->current_team_id);
 
         $orders = Order::where('team_id', $request->user()?->current_team_id)
-            ->when($filter, function ($query, $filter) {
+            ->when($request->get('filter'), function ($query, $filter) {
                 return $query->where('status', $filter);
             })
-            ->paginate(10);
+            ->when($request->get('query'), function ($query) use ($request) {
+                $type = $request->get('type') === 'vrbrs' ? Vrbr::class : Bdrf::class;
+
+                return $query->where('certificate_id', $request->get('query'))
+                    ->where('certificate_type', $type);
+            })
+            ->paginate(15);
 
         return Inertia::render('Hub/Certificates/Index', [
             'orders' => OrderHubResource::collection($orders),
-            'filter' => $filter,
         ]);
     }
 
