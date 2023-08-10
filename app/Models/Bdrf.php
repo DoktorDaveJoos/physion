@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
 
@@ -22,12 +21,17 @@ class Bdrf extends Model
 
     protected $casts = [
         'cooling_service' => 'datetime',
-        'suggestion_check' => 'json'
+        'suggestion_check' => 'json',
     ];
 
     public function searchableAs(): string
     {
         return 'bdrfs_index';
+    }
+
+    public function makeAllSearchableUsing(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with('order');
     }
 
     public function order(): MorphOne

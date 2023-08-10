@@ -55,6 +55,16 @@ enum Category: string
         };
     }
 
+    /**
+     * @throws Exception
+     */
+    public function name(): string
+    {
+        return match ($this) {
+            self::BDRF, self::BDRF_PARTNER => 'Bedarfsausweis',
+            self::VRBR, self::VRBR_PARTNER => 'Verbrauchsausweis',
+        };
+    }
 
     /**
      * Returns the Category::case for the model.
@@ -66,6 +76,8 @@ enum Category: string
      */
     public static function fromModel(string $classString): Category
     {
+
+        // @todo: Fix this - can cause errors - we need to determine a definite way to determine the category
         if (request()?->user()?->id) {
             return match ($classString) {
                 Bdrf::class => self::BDRF_PARTNER,

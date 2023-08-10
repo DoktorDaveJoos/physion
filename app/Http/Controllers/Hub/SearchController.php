@@ -2,52 +2,32 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Actions\CreateOrderForPartner;
 use App\Enums\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateOrderRequest;
-use App\Http\Resources\OrderHubResource;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\BdrfSearchResource;
+use App\Http\Resources\VrbrSearchResource;
 use App\Models\Bdrf;
-use App\Models\Order;
 use App\Models\Vrbr;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class SearchController extends Controller
 {
 
     public function __invoke(Request $request)
     {
-        $bdrfs = Bdrf::search($request->input('query'))->get()->pluck('id');
-        $vrbrs = Vrbr::search($request->input('query'))->get()->pluck('id');
-        $orders = Order::search($request->input('query'))->get()->pluck('id');
+        $bdrfs = Bdrf::search($request->input('query'))->query(
+            fn(Builder $query) => $query->whereRelation('order', 'team_id', '=', $request->user()->current_team_id)
+        )->get();
 
-        $results = collect();
-        $bdrfs->each(function ($item, $key) use ($results) {
-            $results->push([
-                'type' => 'bdrfs',
-                'data' => Bdrf::find($item),
-            ]);
-        });
+        $vrbrs = Vrbr::search($request->input('query'))->query(
+            fn(Builder $query) => $query->whereRelation('order', 'team_id', '=', $request->user()->current_team_id)
+        )->get();
 
-        $vrbrs->each(function ($item, $key) use ($results) {
-            $results->push([
-                'type' => 'vrbrs',
-                'data' => Vrbr::find($item),
-            ]);
-        });
-
-        $orders->each(function ($item, $key) use ($results) {
-            $results->push([
-                'type' => 'orders',
-                'data' => Order::find($item),
-            ]);
-        });
-
-        return $results->toArray();
+        return [
+            'bdrfs' => BdrfSearchResource::collection($bdrfs),
+            'vrbrs' => VrbrSearchResource::collection($vrbrs),
+        ];
     }
 
 }

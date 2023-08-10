@@ -142,6 +142,7 @@ return [
                     'id',
                     'slug',
                     'status',
+                    'team_id'
                 ],
                 'sortableAttributes' => ['created_at'],
             ],

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Collection as BaseCollection;
 use Laravel\Scout\Searchable;
 
 class Vrbr extends Model
@@ -15,7 +18,7 @@ class Vrbr extends Model
 
     protected $casts = [
         'cooling_service' => 'datetime',
-        'suggestion_check' => 'json'
+        'suggestion_check' => 'json',
     ];
 
     protected $guarded = ['id'];
@@ -23,6 +26,16 @@ class Vrbr extends Model
     public function searchableAs(): string
     {
         return 'vrbrs_index';
+    }
+
+    public function makeAllSearchableUsing(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with('order');
+    }
+
+    public function makeSearchableUsing(Collection $models): Collection
+    {
+        return $models->load('order');
     }
 
     public function order(): MorphOne
