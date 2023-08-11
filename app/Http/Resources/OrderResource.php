@@ -21,16 +21,12 @@ class OrderResource extends JsonResource
                 'id' => $this->id,
                 'slug' => $this->slug,
                 'status' => $this->status,
-                'customer' => $this->customer,
+                'customer' => $this->owner,
                 'product' => $this->getCertificateProduct(),
                 'upsells' => $this->upsells,
                 'certificate' => $this->certificate,
+                'attachments' => AttachmentResource::collection($this->attachments),
                 'created_at' => $this->created_at->format('d.m.Y'),
-            ],
-            'links' => [
-                'self' => URL::temporarySignedRoute('order.show', now()->addHour(), ['order' => $this->slug ]),
-                'certificate' => $this->status === 'created' ? URL::signedRoute('certificate.show', ['order' => $this->slug]) : null,
-                'checkout' => $this->status === 'finalized' ? URL::signedRoute('checkout.show', ['order' => $this->slug]) : null,
             ],
         ];
     }

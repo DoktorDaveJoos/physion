@@ -1,12 +1,14 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetCheckbox from '@/Jetstream/Checkbox.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import AuthenticationCard from '../../Components/AuthenticationCard.vue';
+import Checkbox from '../../Components/Checkbox.vue';
+import InputError from '../../Components/InputError.vue';
+import InputLabel from '../../Components/InputLabel.vue';
+import PrimaryButton from '../../Components/PrimaryButton.vue';
+import TextInput from '../../Components/TextInput.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
+import SecondaryButton from '../../Components/SecondaryButton.vue';
+import BzButton from '../../Components/BzButton.vue';
 
 defineProps({
     canResetPassword: Boolean,
@@ -32,12 +34,18 @@ const submit = () => {
 <template>
     <Head title="Log in" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <ApplicationMark />
         </template>
 
-        <JetValidationErrors class="mb-4" />
+        <template #header>
+            <h1
+                class="font-black font-display tracking-tight text-3xl text-gray-900 mt-4">
+                EnergieHub
+            </h1>
+            <p class="text-gray-500 text-center">by bauzertifikate.de</p>
+        </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
@@ -45,51 +53,64 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <JetLabel for="email" value="Email" />
-                <JetInput
+                <InputLabel for="email" value="Email" />
+                <TextInput
                     id="email"
                     v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autofocus />
+                    autofocus
+                    autocomplete="username" />
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password" value="Password" />
-                <JetInput
+                <InputLabel for="password" value="Passwort" />
+                <TextInput
                     id="password"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
                     required
                     autocomplete="current-password" />
+                <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4">
+            <div class="flex justify-between mt-4">
                 <label class="flex items-center">
-                    <JetCheckbox
-                        v-model:checked="form.remember"
-                        name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    <Checkbox v-model:checked="form.remember" name="remember" />
+                    <span class="ml-2 text-sm text-gray-600"
+                        >Angemeldet bleiben</span
+                    >
                 </label>
-            </div>
 
-            <div class="flex items-center justify-end mt-4">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
                     class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
+                    Passwort vergessen?
                 </Link>
+            </div>
 
-                <JetButton
+            <div class="flex items-center justify-end mt-4"></div>
+            <div class="flex items-center justify-end mt-4">
+                <PrimaryButton
                     class="ml-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
-                    Log in
-                </JetButton>
+                    Einloggen
+                </PrimaryButton>
+
+                <bz-button
+                    type="secondary"
+                    class="ml-4"
+                    as="link"
+                    :disabled="form.processing"
+                    :href="route('register')">
+                    Registrieren
+                </bz-button>
             </div>
         </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>

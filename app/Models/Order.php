@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
+use Throwable;
 
 /**
  * @property $id
@@ -18,14 +20,16 @@ use Illuminate\Support\Collection;
  * @property $status
  * @property $certificate_id
  * @property $certificate_type
- * @property Customer $customer
+ * @property Customer|User $owner
  * @property Collection $upsells
+ * @property Collection<Attachment> $attachments
  * @property $created_at
  * @property $updated_at
  */
 class Order extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $guarded = ['id'];
 
@@ -33,6 +37,12 @@ class Order extends Model
         'id' => 'string',
         'meta' => 'json',
     ];
+
+    public function searchableAs(): string
+    {
+        return 'orders_index';
+    }
+
 
     public function capture(): void
     {
@@ -56,9 +66,9 @@ class Order extends Model
         return $this->status === 'done';
     }
 
-    public function customer(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->morphTo();
     }
 
     public function certificate(): MorphTo
@@ -66,6 +76,9 @@ class Order extends Model
         return $this->morphTo();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function getCertificateProduct(): ?Product
     {
         return $this->products()->whereCategory(
@@ -86,6 +99,11 @@ class Order extends Model
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
 }

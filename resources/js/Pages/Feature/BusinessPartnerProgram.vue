@@ -49,11 +49,14 @@
                                         size="large"
                                         placeholder="Deine Email Adresse" />
                                 </el-form-item>
-                                <bz-button
-                                    @click="subscribe"
-                                    class="flex-none rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                    Angebot einholen
-                                </bz-button>
+                                <el-form-item>
+                                    <!--                                        class="flex-none rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">-->
+                                    <bz-button
+                                        @click="subscribe"
+                                        class="flex-none h-full">
+                                        Angebot einholen
+                                    </bz-button>
+                                </el-form-item>
                             </div>
                             <p class="text-sm leading-6 text-gray-900">
                                 Deine Daten sind uns wichtig. Lies unseren
@@ -107,9 +110,12 @@ import {
     PhoneIcon,
     ReceiptPercentIcon,
     ChatBubbleOvalLeftIcon,
+    GiftIcon,
+    UserGroupIcon,
+    PaperAirplaneIcon,
 } from '@heroicons/vue/24/outline';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import BzButton from '../../Components/BzButton.vue';
 import { ElNotification } from 'element-plus';
 
@@ -151,7 +157,19 @@ const features = [
         icon: ReceiptPercentIcon,
     },
     {
-        name: 'Mitgestaltung',
+        name: 'Keine Fixkosten',
+        description:
+            'Sie zahlen nur für die Ausweise die Sie auch wirklich benötigen. Keine Fixkosten, keine versteckten Kosten. Sie zahlen nur für die Dienstleistung die Sie auch wirklich benötigen.',
+        icon: GiftIcon,
+    },
+    {
+        name: 'Team Verwaltung',
+        description:
+            'Verwalten Sie Ihr Team und Ihre Projekte in einem übersichtlichen Dashboard. Sie können jederzeit neue Projekte anlegen und Ihre Mitarbeiter hinzufügen. So haben Sie immer den Überblick.',
+        icon: UserGroupIcon,
+    },
+    {
+        name: 'Mitgestalten',
         description:
             'Sie haben Anregungen oder Wünsche? Wir setzen Ihre Wünsche um. Gestalten Sie das Produkt mit und helfen Sie uns dabei, die beste Lösung für Sie zu entwickeln.',
         icon: ChatBubbleOvalLeftIcon,
@@ -167,6 +185,12 @@ const features = [
         description:
             'Die Sicherheit Ihrer Daten ist uns das größte Anliegen. Wir arbeiten ausschließlich mit Technologien die höchsten Sicherheitsstandards genügen. Alle Daten werden verschlüsselt übertragen und gespeichert.',
         icon: LockClosedIcon,
+    },
+    {
+        name: 'Papierlos',
+        description:
+            'Wir arbeiten ausschließlich digital. Sie erhalten Ihre Ausweise als PDF und können diese direkt an Ihre Kunden weiterleiten. Nie wieder Papierkram und Aktenordner.',
+        icon: PaperAirplaneIcon,
     },
 ];
 </script>

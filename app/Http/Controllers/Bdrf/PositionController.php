@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Bedarf\UpdateDetailsRequest;
 use App\Models\Bdrf;
 use App\Models\Order;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
 {
+
+    use HandleFreeAndPaid;
+
     /**
      * Handle the incoming request.
      *
@@ -20,10 +24,6 @@ class PositionController extends Controller
      */
     public function maps(Bdrf $bdrf, Request $request): RedirectResponse
     {
-        if (!$request->has('signature')) {
-            abort(401);
-        }
-
         $validated = $request->validate([
             'maps' => 'required|string',
         ]);
@@ -36,11 +36,7 @@ class PositionController extends Controller
 
         $bdrf->save();
 
-        return redirect()->route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'signature' => $request->get('signature'),
-            'page' => $request->get('page')
-        ]);
+        return self::handleRedirect($request, $bdrf, 'position');
     }
 
     public function update(Order $order, UpdateDetailsRequest $request): RedirectResponse
@@ -67,6 +63,6 @@ class PositionController extends Controller
             ],
         ]);
 
-        return redirect()->route('bedarf.wall', $order);
+        return self::handleRedirect($request, $order->certificate, 'position');
     }
 }

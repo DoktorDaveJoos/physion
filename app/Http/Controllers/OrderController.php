@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateOrderWithProduct;
+use App\Actions\CreateOrderForCustomer;
 use App\Enums\Category;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Resources\AttachmentResource;
@@ -33,7 +33,7 @@ class OrderController extends Controller
 
     public function store(Category $category, CreateOrderRequest $request): RedirectResponse
     {
-        $order = CreateOrderWithProduct::run(
+        $order = CreateOrderForCustomer::run(
             $category,
             $request->validated()
         );

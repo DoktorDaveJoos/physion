@@ -21,6 +21,9 @@ enum Category: string
     case BDRF = 'bdrf';
     case VRBR = 'vrbr';
 
+    case BDRF_PARTNER = 'bdrf_partner';
+    case VRBR_PARTNER = 'vrbr_partner';
+
     /**
      * Returns an instance of Bdrf or Vrbr.
      * @return Bdrf|Vrbr
@@ -28,8 +31,8 @@ enum Category: string
     public function getModel(): Vrbr|Bdrf
     {
         return match ($this) {
-            self::BDRF => self::getModelInstance(Bdrf::class),
-            self::VRBR => self::getModelInstance(Vrbr::class),
+            self::BDRF, self::BDRF_PARTNER => self::getModelInstance(Bdrf::class),
+            self::VRBR, self::VRBR_PARTNER => self::getModelInstance(Vrbr::class),
         };
     }
 
@@ -47,11 +50,21 @@ enum Category: string
     public static function fromValue(string $value): self
     {
         return match ($value) {
-            self::BDRF->value => self::BDRF,
-            self::VRBR->value => self::VRBR,
+            self::BDRF->value, self::BDRF_PARTNER->value => self::BDRF,
+            self::VRBR->value, self::VRBR_PARTNER->value => self::VRBR,
         };
     }
 
+    /**
+     * @throws Exception
+     */
+    public function name(): string
+    {
+        return match ($this) {
+            self::BDRF, self::BDRF_PARTNER => 'Bedarfsausweis',
+            self::VRBR, self::VRBR_PARTNER => 'Verbrauchsausweis',
+        };
+    }
 
     /**
      * Returns the Category::case for the model.
@@ -63,6 +76,16 @@ enum Category: string
      */
     public static function fromModel(string $classString): Category
     {
+
+        // @todo: Fix this - can cause errors - we need to determine a definite way to determine the category
+        if (request()?->user()?->id) {
+            return match ($classString) {
+                Bdrf::class => self::BDRF_PARTNER,
+                Vrbr::class => self::VRBR_PARTNER,
+                default => throw new Exception('Invalid category'),
+            };
+        }
+
         return match ($classString) {
             Bdrf::class => self::BDRF,
             Vrbr::class => self::VRBR,
@@ -73,7 +96,7 @@ enum Category: string
     public function eligibleForUpdate(): array
     {
         return match ($this) {
-            self::BDRF, self::VRBR => ['created', 'finalized', 'in_clarification'],
+            self::BDRF, self::VRBR, self::VRBR_PARTNER, self::BDRF_PARTNER => ['created', 'finalized', 'in_clarification'],
         };
     }
 
@@ -106,12 +129,13 @@ enum Category: string
         }
 
         $nextIndex = $index + 1;
+
         return $pages[$nextIndex];
     }
 
-    public function getVueComponent(string $key): string
+    public function getVueComponent(string $key, bool $hub = false): string
     {
-        return $this->getPage($key)->getVueComponent();
+        return $this->getPage($key)->getVueComponent($hub);
     }
 
     /**
@@ -147,7 +171,7 @@ enum Category: string
     public function getAvailablePages(): array
     {
         return match ($this) {
-            self::BDRF => [
+            self::BDRF, self::BDRF_PARTNER => [
                 'general' => Page::make(
                     'Allgemein',
                     'Allgemeine Angaben zum Gebäude',
@@ -187,9 +211,11 @@ enum Category: string
                     'Zusammenfassung',
                     'Zusammenfassung der Angaben',
                     'Certificate/Bdrf/Summary',
+                    SummaryRequest::class,
+                    UpdateCertificate::class
                 ),
             ],
-            self::VRBR => [
+            self::VRBR, self::VRBR_PARTNER => [
                 'general' => Page::make(
                     'Allgemein',
                     'Allgemeine Angaben zum Gebäude',

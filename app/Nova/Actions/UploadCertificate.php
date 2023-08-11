@@ -4,6 +4,7 @@ namespace App\Nova\Actions;
 
 use App\Models\Order;
 use App\Notifications\AttachmentUploaded;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -13,8 +14,8 @@ use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Throwable;
 
 class UploadCertificate extends Action
 {
@@ -28,38 +29,41 @@ class UploadCertificate extends Action
      * @param  Collection  $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
-        $order = Order::where('slug', $fields->order_slug)->first();
-        if (!$order) {
-            return Action::danger('Order not found!');
+        try {
+            $models->each(function (Order $order) use ($fields) {
+                $path = 'production/'.$order->slug.'/'.$fields->type.'/'.$fields->attachment->getClientOriginalName();
+                $success = Storage::disk('digitalocean')->put($path, $fields->attachment->get());
+
+                throw_if(!$success, new Exception('Attachment could not be uploaded!'));
+
+                $order->attachments()->create([
+                    'path' => $path,
+                    'type' => $fields->type,
+                    'name' => $fields->attachment->getClientOriginalName(),
+                    'published' => $fields->publish,
+                ]);
+
+                if ($fields->type == 'certificate') {
+                    $order->update([
+                        'status' => 'shipped',
+                    ]);
+                }
+
+                $order->owner->notify(
+                    new AttachmentUploaded(
+                        $order,
+                        $order->owner->first_name,
+                        $path,
+                        $fields->attachment->getClientOriginalName()
+                    )
+                );
+            });
+            return Action::message('Attachment uploaded!');
+        } catch (Throwable $throwable) {
+            return Action::danger($throwable->getMessage());
         }
-
-        $path = 'production/'.$fields->order_slug.'/'.$fields->type.'/'.$fields->attachment->getClientOriginalName();
-        $success = Storage::disk('digitalocean')->put($path, $fields->attachment->get());
-
-        if (!$success) {
-            return Action::danger('Attachment could not be uploaded!');
-        }
-
-        $order->attachments()->create([
-            'path' => $path,
-            'type' => $fields->type,
-            'name' => $fields->attachment->getClientOriginalName(),
-            'published' => $fields->publish,
-        ]);
-
-        if ($fields->type == 'certificate') {
-            $order->update([
-                'status' => 'shipped',
-            ]);
-        }
-
-        $order->customer->notify(
-            new AttachmentUploaded($order, $order->customer->name, $path, $fields->attachment->getClientOriginalName())
-        );
-
-        return Action::message('Attachment uploaded!');
     }
 
     /**
@@ -71,7 +75,6 @@ class UploadCertificate extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Order Slug'),
             Select::make('Type')->options([
                 'certificate' => 'Certificate',
                 'guide' => 'Guide',

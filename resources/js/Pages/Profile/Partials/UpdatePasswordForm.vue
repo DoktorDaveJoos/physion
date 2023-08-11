@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import JetActionMessage from '@/Jetstream/ActionMessage.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetFormSection from '@/Jetstream/FormSection.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetLabel from '@/Jetstream/Label.vue';
+import { useForm } from '@inertiajs/vue3';
+import ActionMessage from '@/Components/ActionMessage.vue';
+import FormSection from '@/Components/FormSection.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -38,66 +38,67 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <JetFormSection @submitted="updatePassword">
-        <template #title> Update Password </template>
+    <FormSection @submitted="updatePassword">
+        <template #title> Update Passwort </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            Stellen Sie sicher, dass Ihr Konto ein langes und zufälliges
+            Passwort verwendet, um die Sicherheit zu gewährleisten.
         </template>
 
         <template #form>
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="current_password" value="Current Password" />
-                <JetInput
+                <InputLabel for="current_password" value="Aktuelles Passwort" />
+                <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="current-password" />
-                <JetInputError
+                <InputError
                     :message="form.errors.current_password"
                     class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="password" value="New Password" />
-                <JetInput
+                <InputLabel for="password" value="Neues Passwort" />
+                <TextInput
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="new-password" />
-                <JetInputError :message="form.errors.password" class="mt-2" />
+                <InputError :message="form.errors.password" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel
+                <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password" />
-                <JetInput
+                    value="Passwort bestätigen" />
+                <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="new-password" />
-                <JetInputError
+                <InputError
                     :message="form.errors.password_confirmation"
                     class="mt-2" />
             </div>
         </template>
 
         <template #actions>
-            <JetActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Saved.
-            </JetActionMessage>
+            <ActionMessage :on="form.recentlySuccessful" class="mr-3">
+                Gespeichert.
+            </ActionMessage>
 
-            <JetButton
+            <PrimaryButton
                 :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing">
-                Save
-            </JetButton>
+                Speichern
+            </PrimaryButton>
         </template>
-    </JetFormSection>
+    </FormSection>
 </template>

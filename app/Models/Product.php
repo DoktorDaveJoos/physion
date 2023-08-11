@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property float $price
  * @property string $image
  * @property string $image_alt
+ * @property bool recurring
  */
 class Product extends Model
 {

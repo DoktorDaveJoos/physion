@@ -1,15 +1,16 @@
 <script setup>
 import { computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
 
 const props = defineProps({
     status: String,
 });
 
-const form = useForm();
+const form = useForm({});
 
 const submit = () => {
     form.post(route('verification.send'));
@@ -21,39 +22,48 @@ const verificationLinkSent = computed(
 </script>
 
 <template>
-    <Head title="Email Verification" />
+    <Head title="Email Bestätigen" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <ApplicationMark />
+        </template>
+
+        <template #header>
+            <h1
+                class="font-black font-display tracking-tight text-3xl text-gray-900 mt-4">
+                EnergieHub
+            </h1>
+            <p class="text-gray-500 text-center">by bauzertifikate.de</p>
         </template>
 
         <div class="mb-4 text-sm text-gray-600">
-            Before continuing, could you verify your email address by clicking
-            on the link we just emailed to you? If you didn't receive the email,
-            we will gladly send you another.
+            Bevor du fortfährst, könntest du bitte deine E-Mail-Adresse
+            überprüfen, indem du auf den Link klickst, den wir dir gerade per
+            E-Mail geschickt haben? Falls du die E-Mail nicht erhalten hast,
+            senden wir dir gerne eine weitere.
         </div>
 
         <div
             v-if="verificationLinkSent"
             class="mb-4 font-medium text-sm text-green-600">
-            A new verification link has been sent to the email address you
-            provided in your profile settings.
+            Ein neuer Bestätigungslink wurde an die E-Mail-Adresse gesendet, die
+            du in deinen Profileinstellungen angegeben hast.
         </div>
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">
-                <JetButton
+                <PrimaryButton
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
-                    Resend Verification Email
-                </JetButton>
+                    E-Mail erneut senden
+                </PrimaryButton>
 
                 <div>
                     <Link
                         :href="route('profile.show')"
                         class="underline text-sm text-gray-600 hover:text-gray-900">
-                        Edit Profile</Link
+                        Profil bearbeiten</Link
                     >
 
                     <Link
@@ -61,10 +71,10 @@ const verificationLinkSent = computed(
                         method="post"
                         as="button"
                         class="underline text-sm text-gray-600 hover:text-gray-900 ml-2">
-                        Log Out
+                        Log out
                     </Link>
                 </div>
             </div>
         </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>

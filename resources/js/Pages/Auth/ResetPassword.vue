@@ -1,11 +1,12 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
 
 const props = defineProps({
     email: String,
@@ -29,56 +30,68 @@ const submit = () => {
 <template>
     <Head title="Reset Password" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <ApplicationMark />
         </template>
 
-        <JetValidationErrors class="mb-4" />
+        <template #header>
+            <h1
+                class="font-black font-display tracking-tight text-3xl text-gray-900 mt-4">
+                EnergieHub
+            </h1>
+            <p class="text-gray-500 text-center">by bauzertifikate.de</p>
+        </template>
 
         <form @submit.prevent="submit">
             <div>
-                <JetLabel for="email" value="Email" />
-                <JetInput
+                <InputLabel for="email" value="Email" />
+                <TextInput
                     id="email"
                     v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autofocus />
+                    autofocus
+                    autocomplete="username" />
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password" value="Password" />
-                <JetInput
+                <InputLabel for="password" value="Password" />
+                <TextInput
                     id="password"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
                     required
                     autocomplete="new-password" />
+                <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
-                <JetLabel
+                <InputLabel
                     for="password_confirmation"
                     value="Confirm Password" />
-                <JetInput
+                <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
                     required
                     autocomplete="new-password" />
+                <InputError
+                    class="mt-2"
+                    :message="form.errors.password_confirmation" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <JetButton
+                <PrimaryButton
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing">
                     Reset Password
-                </JetButton>
+                </PrimaryButton>
             </div>
         </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>

@@ -15,13 +15,14 @@ use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
+use App\Http\Controllers\Hub\BillingController;
+use App\Http\Controllers\Hub\DashboardController;
+use App\Http\Controllers\Hub\SearchController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vrbr\PeriodsController;
 use App\Http\Controllers\Vrbr\SourcesController;
 use App\Http\Controllers\Vrbr\VacanciesController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
@@ -174,7 +175,9 @@ Route::prefix('bdrf/{bdrf}')->group(function () {
 
     // renewable energy
     Route::put('/renewable', RenewableController::class)->name('bdrf.renewable');
-    Route::delete('/renewable/{renewableEnergyInstallation}', [RenewableController::class, 'destroy'])->name('bdrf.renewable.delete');
+    Route::delete('/renewable/{renewableEnergyInstallation}', [RenewableController::class, 'destroy'])->name(
+        'bdrf.renewable.delete'
+    );
 
     // position
     Route::put('/maps', [PositionController::class, 'maps'])->name('bdrf.maps');
@@ -194,9 +197,10 @@ Route::prefix('vrbr/{vrbr}')->group(function () {
 
 Route::prefix('checkout')->name('checkout.')->group(function () {
     Route::prefix('{order:slug}')->group(function () {
+        Route::get('/', [ShowController::class, 'index'])->middleware('signed')->name('show');
+
         Route::get('/session', [CheckoutController::class, 'checkoutSession'])->name('session');
 
-        Route::get('/', [ShowController::class, 'index'])->middleware('signed')->name('show');
         Route::post('upsell/{upsell}', AddUpsellController::class)->name('upsell.add');
         Route::delete('upsell/{upsell}', DeleteUpsellController::class)->name('upsell.delete');
 
@@ -208,7 +212,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('', [\App\Http\Controllers\Blog\ShowController::class, 'index'])->name('show');
-    Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
+//    Route::get('{post}', [\App\Http\Controllers\Blog\ShowController::class, 'show'])->name('show.post');
 
     Route::post('subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 });
@@ -242,24 +246,42 @@ Route::prefix('/find')->name('find.')->group(function () {
 
 Route::get('/', LandingController::class)->name('start');
 
-
-Route::get('/billing-portal', function(Request $request) {
-//    rd($request->user());
-
-//    $request->user()->createOrGetStripeCustomer();
-
-    return $request->user()->redirectToBillingPortal(route('hub.dashboard'));
-})->middleware(['auth:sanctum', 'verified'])->name('billing-portal');
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
-        Route::get('/dashboard', function () {
-            return Inertia::render('Hub/Dashboard');
-        })->name('dashboard');
+
+        Route::get('search', SearchController::class)->name('search');
+
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+        Route::get('/billing', BillingController::class)->name('billing');
+
+        Route::get('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'create'])->name(
+            'orders.create'
+        );
+        Route::post('/orders/create/{category}', [\App\Http\Controllers\Hub\OrderController::class, 'store'])->name(
+            'orders.store'
+        );
+        Route::delete('/orders/{order:slug}', [\App\Http\Controllers\Hub\OrderController::class, 'destroy'])->name(
+            'orders.destroy'
+        );
+
+        Route::get('/orders/{order:slug}/certificate', [\App\Http\Controllers\Hub\CertificateController::class, 'show']
+        )->name('certificates.show');
+
+        Route::put(
+            '/orders/{order:slug}/certificate',
+            [\App\Http\Controllers\Hub\CertificateController::class, 'update']
+        )->name('certificates.update');
+
+        Route::post('/orders/{order:slug}/send', [\App\Http\Controllers\Hub\CertificateController::class, 'send']
+        )->name('certificates.send');
+
+        Route::get('/orders', [\App\Http\Controllers\Hub\OrderController::class, 'index'])->name('certificates');
 
         Route::get('/admin', [\App\Http\Controllers\Hub\Admin\ShowController::class, 'index'])->name('admin');
 

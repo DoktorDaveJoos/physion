@@ -206,7 +206,7 @@ import {
     RadioGroupOption,
 } from '@headlessui/vue';
 import { FireIcon, CalculatorIcon } from '@heroicons/vue/24/outline';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/vue3';
 
 const settingsConstructionYear = [
     {

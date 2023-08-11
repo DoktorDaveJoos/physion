@@ -20,10 +20,6 @@ class ShowController extends Controller
     {
         $order->load('products', 'certificate');
 
-        $order->update([
-            'status' => 'finalized',
-        ]);
-
         $certificateUrl = URL::signedRoute(
                 'certificate.show',
                 ['order' => $order->slug]
@@ -33,7 +29,10 @@ class ShowController extends Controller
             'order' => $order,
             'certificateUrl' => $certificateUrl,
             'addedUpsells' => $order->upsells,
-            'upsells' => Product::whereNot('type', 'certificate')->whereDoesntHave(
+            'upsells' => Product::whereNot('type', 'certificate')
+                ->where('active', true)
+                ->where('recurring', false)
+                ->whereDoesntHave(
                 'orders',
                 function ($query) use ($order) {
                     $query->where('order_id', $order->id);
@@ -48,7 +47,7 @@ class ShowController extends Controller
             'status' => 'open',
         ]);
 
-        $order->customer->notify(new OrderPaid($order, $order->customer->name));
+        $order->owner?->notify(new OrderPaid($order, $order->owner->name));
 
         return Inertia::render('Checkout/ThankYou', [
             'link' => URL::temporarySignedRoute(

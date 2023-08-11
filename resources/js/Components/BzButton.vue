@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -17,67 +17,110 @@ const props = defineProps({
     disabled: Boolean,
 });
 
+defineEmits(['click']);
+
 const getClass = computed(() => {
     const classes = [
-        'font-medium',
+        'uppercase',
+        'text-xs',
+        'tracking-wider',
+        'font-bold',
         'inline-flex',
         'items-center',
         'justify-center',
-        'py-1.5',
+        'font-sans',
     ];
 
     classes.push(props.class);
 
     if (props.type === 'primary') {
         if (props.plain) {
+            if (props.disabled) {
+                classes.push(
+                    'bg-transparent',
+                    'hover:bg-transparent',
+                    'text-blue-400',
+                    'hover:text-blue-400'
+                );
+            } else {
+                classes.push(
+                    'bg-transparent',
+                    'hover:bg-transparent',
+                    'text-blue-600',
+                    'hover:text-blue-500'
+                );
+            }
+
+            return classes.join(' ');
+        }
+
+        if (props.disabled) {
             classes.push(
-                'bg-transparent',
-                'hover:bg-transparent',
+                'bg-blue-200',
                 'text-blue-600',
-                'hover:text-blue-500'
+                'px-5',
+                'rounded-md',
+                'cursor-not-allowed',
+                'hover:bg-blue-200',
+                'py-2.5'
             );
 
             return classes.join(' ');
         }
 
         classes.push(
-            'rounded',
-            'text-sm',
-            'h-[40px]',
+            'rounded-md',
             'px-5',
             'bg-blue-600',
             'hover:bg-blue-500',
-            'text-white'
+            'text-white',
+            'py-2.5'
         );
         return classes.join(' ');
     }
 
     if (props.type === 'secondary') {
         if (props.plain) {
-            classes.push(
-                'bg-transparent',
-                'hover:bg-transparent',
-                'text-gray-600',
-                'hover:text-gray-500'
-            );
+            if (props.disabled) {
+                classes.push(
+                    'bg-transparent',
+                    'hover:bg-transparent',
+                    'text-gray-400',
+                    'hover:text-gray-400',
+                    'cursor-not-allowed'
+                );
+            } else {
+                classes.push(
+                    'bg-transparent',
+                    'hover:bg-transparent',
+                    'text-gray-600',
+                    'hover:text-gray-800'
+                );
+            }
 
             return classes.join(' ');
         }
 
+        if (props.disabled) {
+            classes.push(
+                'rounded-md',
+                'px-5',
+                'bg-gray-100',
+                'text-gray-400',
+                'cursor-not-allowed',
+                'py-2.5'
+            );
+
+            return classes.join(' ');
+        }
         classes.push(
-            'text-sm',
-            'h-[40px]',
             'px-5',
-            'rounded',
-            'border',
-            'border-gray-300',
+            'rounded-md',
+            'bg-gray-100',
             'hover:text-gray-900',
-            'hover:bg-blue-100',
-            'hover:border-blue-200',
-            'hover:text-blue-600',
             'text-gray-600',
             'cursor-pointer',
-            'disabled:cursor-not-allowed'
+            'py-2.5'
         );
         return classes.join(' ');
     }
@@ -85,25 +128,26 @@ const getClass = computed(() => {
 </script>
 
 <template>
-    <Link
-        v-if="as === 'link'"
-        :class="getClass"
-        :href="href"
-        :disabled="disabled">
-        <slot />
-    </Link>
+    <template v-if="disabled">
+        <div :class="getClass" class="">
+            <slot />
+        </div>
+    </template>
+    <template v-else>
+        <Link v-if="as === 'link'" :class="getClass" :href="href">
+            <slot />
+        </Link>
 
-    <el-button
-        v-else-if="as === 'button'"
-        :link="plain"
-        :type="type"
-        :class="getClass"
-        :disabled="disabled"
-        size="large">
-        <slot />
-    </el-button>
+        <button
+            type="button"
+            v-else-if="as === 'button'"
+            @click="$emit('click')"
+            :class="getClass">
+            <slot />
+        </button>
 
-    <a v-else-if="as === 'a'" :class="getClass" :href="href">
-        <slot />
-    </a>
+        <a v-else-if="as === 'a'" :class="getClass" :href="href">
+            <slot />
+        </a>
+    </template>
 </template>

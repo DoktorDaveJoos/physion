@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/vue3';
 import { Loader } from '@googlemaps/js-api-loader';
 import FormHeader from './FormHeader.vue';
 import { onMounted, ref } from 'vue';
@@ -32,12 +32,12 @@ const form = useForm({
 });
 
 if (props.order) {
-    const { certificate, customer } = props.order;
+    const { certificate, owner } = props.order;
 
-    form.first_name = customer.first_name;
-    form.last_name = customer.last_name;
-    form.email = customer.email;
-    form.phone = customer.phone;
+    form.first_name = owner.first_name;
+    form.last_name = owner.last_name;
+    form.email = owner.email;
+    form.phone = owner.phone;
 
     form.reason = certificate.reason;
     form.street_address = certificate.street_address;

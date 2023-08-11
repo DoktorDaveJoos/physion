@@ -8,16 +8,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Certificate\Vrbr\CreateOrUpdateSourceRequest;
 use App\Models\EnergySource;
 use App\Models\Vrbr;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class SourcesController extends Controller
 {
 
+    use HandleFreeAndPaid;
+
 
     public function store(CreateOrUpdateSourceRequest $request, Vrbr $vrbr): RedirectResponse
     {
-
         $waterEnabled = $request->get('water') === 'Im Verbrauch enthalten - Genaue Werte bekannt'
             || $request->get('water') === 'Nicht im Verbrauch enthalten - Werte bekannt';
 
@@ -31,27 +33,14 @@ class SourcesController extends Controller
             'main' => $isMain,
         ]);
 
-        return to_route('certificate.show', [
-            'order' => $vrbr->order,
-            'page' => 'consumption',
-            'signature' => $request->get('signature')
-        ]);
-
+        return self::handleRedirect($request, $vrbr, 'consumption');
     }
 
     public function destroy(Request $request, Vrbr $vrbr, EnergySource $source): RedirectResponse
     {
-        $request->validate([
-            'signature' => 'required|string',
-        ]);
-
         $source->delete();
 
-        return to_route('certificate.show', [
-            'order' => $vrbr->order,
-            'page' => 'consumption',
-            'signature' => $request->get('signature')
-        ]);
+        return self::handleRedirect($request, $vrbr, 'consumption');
     }
 
 

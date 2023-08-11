@@ -8,6 +8,7 @@ use App\Models\Cellar;
 use App\Models\HeatingSystem;
 use App\Models\Insulation;
 use App\Models\Window;
+use App\Traits\HandleFreeAndPaid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class HeatingController extends Controller
 {
+
+    use HandleFreeAndPaid;
 
     // invokable method
     /**
@@ -44,22 +47,14 @@ class HeatingController extends Controller
 
         $bdrf->heatingSystems()->create($validator->validated());
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'energy',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'energy');
     }
 
     public function destroy(Bdrf $bdrf, HeatingSystem $heatingSystem, Request $request): RedirectResponse
     {
         $heatingSystem->delete();
 
-        return Redirect::route('certificate.show', [
-            'order' => $bdrf->order->slug,
-            'page' => 'energy',
-            'signature' => $request->get('signature'),
-        ]);
+        return self::handleRedirect($request, $bdrf, 'energy');
     }
 
 

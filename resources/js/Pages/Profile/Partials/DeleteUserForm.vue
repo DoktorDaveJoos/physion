@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import JetActionSection from '@/Jetstream/ActionSection.vue';
-import JetDialogModal from '@/Jetstream/DialogModal.vue';
-import JetDangerButton from '@/Jetstream/DangerButton.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
+import { useForm } from '@inertiajs/vue3';
+import ActionSection from '@/Components/ActionSection.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputError from '@/Components/InputError.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
@@ -38,63 +38,65 @@ const closeModal = () => {
 </script>
 
 <template>
-    <JetActionSection>
-        <template #title> Delete Account </template>
+    <ActionSection>
+        <template #title> Lösche Account</template>
 
-        <template #description> Permanently delete your account. </template>
+        <template #description> Lösche dein Konto dauerhaft.</template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                Once your account is deleted, all of its resources and data will
-                be permanently deleted. Before deleting your account, please
-                download any data or information that you wish to retain.
+                Sobald Ihr Konto gelöscht ist, werden alle Ressourcen und Daten
+                dauerhaft gelöscht. Bevor Sie Ihr Konto löschen, laden Sie bitte
+                alle Daten oder Informationen herunter, die Sie behalten
+                möchten.
             </div>
 
             <div class="mt-5">
-                <JetDangerButton @click="confirmUserDeletion">
-                    Delete Account
-                </JetDangerButton>
+                <DangerButton @click="confirmUserDeletion">
+                    Lösche Account
+                </DangerButton>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
-            <JetDialogModal :show="confirmingUserDeletion" @close="closeModal">
-                <template #title> Delete Account </template>
+            <DialogModal :show="confirmingUserDeletion" @close="closeModal">
+                <template #title> Lösche Account</template>
 
                 <template #content>
-                    Are you sure you want to delete your account? Once your
-                    account is deleted, all of its resources and data will be
-                    permanently deleted. Please enter your password to confirm
-                    you would like to permanently delete your account.
+                    Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Sobald
+                    Ihr Konto gelöscht ist, werden alle Ressourcen und Daten
+                    dauerhaft gelöscht. Bitte geben Sie Ihr Passwort ein, um zu
+                    bestätigen, dass Sie Ihr Konto dauerhaft löschen möchten.
 
                     <div class="mt-4">
-                        <JetInput
+                        <TextInput
                             ref="passwordInput"
                             v-model="form.password"
-                            type="password"
+                            autocomplete="current-password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
+                            type="password"
                             @keyup.enter="deleteUser" />
 
-                        <JetInputError
+                        <InputError
                             :message="form.errors.password"
                             class="mt-2" />
                     </div>
                 </template>
 
                 <template #footer>
-                    <JetSecondaryButton @click="closeModal">
-                        Cancel
-                    </JetSecondaryButton>
+                    <SecondaryButton @click="closeModal">
+                        Abbrechen
+                    </SecondaryButton>
 
-                    <JetDangerButton
-                        class="ml-3"
+                    <DangerButton
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
+                        class="ml-3"
                         @click="deleteUser">
-                        Delete Account
-                    </JetDangerButton>
+                        Lösche Account
+                    </DangerButton>
                 </template>
-            </JetDialogModal>
+            </DialogModal>
         </template>
-    </JetActionSection>
+    </ActionSection>
 </template>

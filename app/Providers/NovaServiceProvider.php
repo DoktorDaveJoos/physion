@@ -7,6 +7,7 @@ use App\Nova\Customer;
 use App\Nova\Dashboards\Main;
 use App\Nova\Order;
 use App\Nova\Product;
+use App\Nova\Team;
 use App\Nova\User;
 use App\Nova\Vrbr;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Admin', [
                     MenuItem::resource(Product::class),
                     MenuItem::resource(User::class),
+                    MenuItem::resource(Team::class),
                     MenuItem::externalLink('Stripe', 'https://dashboard.stripe.com/test/payments'),
                 ])->collapsable(),
 

@@ -39,6 +39,7 @@ class CreateCertificate
                 $transferable->getData(),
                 $transferable->getCategory(),
                 $transferable->getCustomer(),
+                $transferable->getUser(),
                 null,
                 $certificate
             )

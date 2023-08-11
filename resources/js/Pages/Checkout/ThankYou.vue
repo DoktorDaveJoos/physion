@@ -5,7 +5,8 @@
                 <h1 class="text-base font-medium text-blue-600">
                     Danke schön!
                 </h1>
-                <p class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+                <p
+                    class="mt-2 text-4xl font-black font-display tracking-tight sm:text-5xl">
                     Auftrag in Bearbeitung!
                 </p>
                 <p class="mt-2 text-base text-gray-500">

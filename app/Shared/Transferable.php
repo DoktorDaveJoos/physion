@@ -5,18 +5,20 @@ namespace App\Shared;
 use App\Enums\Category;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\User;
 
-class Transferable
+readonly class Transferable
 {
 
     /**
      */
     public function __construct(
-        private readonly mixed $data,
-        private readonly ?Category $category = null,
-        private readonly ?Customer $customer = null,
-        private readonly ?Order $order = null,
-        private readonly mixed $certificate = null,
+        private mixed $data,
+        private ?Category $category = null,
+        private ?Customer $customer = null,
+        private ?User $user = null,
+        private ?Order $order = null,
+        private mixed $certificate = null,
     ) {
     }
 
@@ -24,10 +26,11 @@ class Transferable
         mixed $data,
         Category $category = null,
         Customer $customer = null,
+        User $user =null,
         Order $order = null,
         mixed $certificate = null,
     ): Transferable {
-        return new self($data, $category, $customer, $order, $certificate);
+        return new self($data, $category, $customer, $user, $order, $certificate);
     }
 
     public static function fromData(mixed $data): Transferable
@@ -43,6 +46,11 @@ class Transferable
     public static function fromCustomer(mixed $data, Category $category, Customer $customer): Transferable
     {
         return self::make($data, $category, $customer);
+    }
+
+    public static function fromUser(mixed $data, Category $category, User $user): Transferable
+    {
+        return self::make($data, $category, null, $user);
     }
 
     /**
@@ -64,9 +72,14 @@ class Transferable
     /**
      * @return Customer
      */
-    public function getCustomer(): Customer
+    public function getCustomer(): ?Customer
     {
-        return $this->customer;
+        return $this->customer ?? null;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user ?? null;
     }
 
     /**

@@ -20,12 +20,4 @@ class ShowController extends Controller
         return redirect()->route('hub.admin.blog');
     }
 
-    public function blog(): Response
-    {
-        return Inertia::render('Hub/Admin/Blog', [
-            'title' => 'Admin',
-            'subtitle' => 'Blog',
-        ]);
-    }
-
 }

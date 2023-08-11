@@ -11,8 +11,9 @@ import {
 import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import BzButton from '../../Components/BzButton.vue';
+import Badge from '../../Components/Badge.vue';
 
 const props = defineProps({
     order: {
@@ -81,7 +82,7 @@ const products = [
 ];
 
 const download = () => {
-    Inertia.get(route('order.download', props.order.data.id));
+    router.get(route('order.download', props.order.data.id));
 };
 </script>
 
@@ -95,26 +96,14 @@ const download = () => {
                     <div class="flex sm:items-baseline sm:space-x-4">
                         <div class="flex items-center">
                             <h1
-                                class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                                class="text-2xl font-black tracking-tight font-display text-gray-900 sm:text-3xl">
                                 Bestellung
                             </h1>
-                            <span
-                                class="inline-flex ml-4 items-center rounded-md bg-blue-100 px-2.5 py-0.5 font-medium text-blue-800">
-                                <svg
-                                    class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 8 8">
-                                    <circle cx="4" cy="4" r="3" />
-                                </svg>
-                                {{ order.data.slug }}
-                            </span>
-
-                            <!--                            <a-->
-                            <!--                                href="#"-->
-                            <!--                                class="hidden ml-4 pb-1 text-sm font-medium text-blue-600 hover:text-blue-500 sm:block self-end">-->
-                            <!--                                Service beanspruchen-->
-                            <!--                                <span aria-hidden="true"> &rarr;</span>-->
-                            <!--                            </a>-->
+                            <Badge
+                                :label="order.data.slug"
+                                dot
+                                size="lg"
+                                class="ml-4" />
                         </div>
                     </div>
                     <p class="text-sm text-gray-600">

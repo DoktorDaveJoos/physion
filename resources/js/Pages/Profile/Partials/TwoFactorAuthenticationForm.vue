@@ -1,15 +1,14 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
-import JetActionSection from '@/Jetstream/ActionSection.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetConfirmsPassword from '@/Jetstream/ConfirmsPassword.vue';
-import JetDangerButton from '@/Jetstream/DangerButton.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
+import ActionSection from '@/Components/ActionSection.vue';
+import ConfirmsPassword from '@/Components/ConfirmsPassword.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
     requiresConfirmation: Boolean,
@@ -27,7 +26,7 @@ const confirmationForm = useForm({
 });
 
 const twoFactorEnabled = computed(
-    () => !enabling.value && usePage().props.value.user?.two_factor_enabled
+    () => !enabling.value && usePage().props.user?.two_factor_enabled
 );
 
 watch(twoFactorEnabled, () => {
@@ -40,7 +39,7 @@ watch(twoFactorEnabled, () => {
 const enableTwoFactorAuthentication = () => {
     enabling.value = true;
 
-    Inertia.post(
+    router.post(
         '/user/two-factor-authentication',
         {},
         {
@@ -99,7 +98,7 @@ const regenerateRecoveryCodes = () => {
 const disableTwoFactorAuthentication = () => {
     disabling.value = true;
 
-    Inertia.delete('/user/two-factor-authentication', {
+    router.delete('/user/two-factor-authentication', {
         preserveScroll: true,
         onSuccess: () => {
             disabling.value = false;
@@ -110,37 +109,37 @@ const disableTwoFactorAuthentication = () => {
 </script>
 
 <template>
-    <JetActionSection>
-        <template #title> Two Factor Authentication </template>
+    <ActionSection>
+        <template #title> Zwei-Faktor-Authentifizierung </template>
 
         <template #description>
-            Add additional security to your account using two factor
-            authentication.
+            Fügen Sie Ihrem Konto zusätzliche Sicherheit hinzu, indem Sie die
+            Zwei-Faktor-Authentifizierung aktivieren.
         </template>
 
         <template #content>
             <h3
                 v-if="twoFactorEnabled && !confirming"
                 class="text-lg font-medium text-gray-900">
-                You have enabled two factor authentication.
+                Sie haben die Zwei-Faktor-Authentifizierung aktiviert.
             </h3>
 
             <h3
                 v-else-if="twoFactorEnabled && confirming"
                 class="text-lg font-medium text-gray-900">
-                Finish enabling two factor authentication.
+                Beenden Sie die Aktivierung der Zwei-Faktor-Authentifizierung.
             </h3>
 
             <h3 v-else class="text-lg font-medium text-gray-900">
-                You have not enabled two factor authentication.
+                Du hast Zwei-Faktor-Authentifizierung nicht aktiviert.
             </h3>
 
             <div class="mt-3 max-w-xl text-sm text-gray-600">
                 <p>
-                    When two factor authentication is enabled, you will be
-                    prompted for a secure, random token during authentication.
-                    You may retrieve this token from your phone's Google
-                    Authenticator application.
+                    Wenn die Zwei-Faktor-Authentifizierung aktiviert ist, werden
+                    Sie bei der Anmeldung zur Eingabe eines sicheren, zufälligen
+                    Tokens aufgefordert. Diesen Token können Sie über die Google
+                    Authenticator-Anwendung auf Ihrem Telefon abrufen.
                 </p>
             </div>
 
@@ -148,33 +147,35 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="qrCode">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p v-if="confirming" class="font-semibold">
-                            To finish enabling two factor authentication, scan
-                            the following QR code using your phone's
-                            authenticator application or enter the setup key and
-                            provide the generated OTP code.
+                            Um die Aktivierung der Zwei-Faktor-Authentifizierung
+                            abzuschließen, scannen Sie den folgenden QR-Code mit
+                            Ihrer Authenticator-Anwendung auf dem Telefon oder
+                            geben Sie den Einrichtungsschlüssel ein und geben
+                            Sie den generierten OTP-Code ein.
                         </p>
 
                         <p v-else>
-                            Two factor authentication is now enabled. Scan the
-                            following QR code using your phone's authenticator
-                            application or enter the setup key.
+                            Die Zwei-Faktor-Authentifizierung ist jetzt
+                            aktiviert. Scannen Sie den folgenden QR-Code mit
+                            Ihrer Authenticator-Anwendung auf dem Telefon oder
+                            geben Sie den Einrichtungsschlüssel ein.
                         </p>
                     </div>
 
                     <div class="mt-4" v-html="qrCode" />
 
                     <div
-                        class="mt-4 max-w-xl text-sm text-gray-600"
-                        v-if="setupKey">
+                        v-if="setupKey"
+                        class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
                             Setup Key: <span v-html="setupKey"></span>
                         </p>
                     </div>
 
                     <div v-if="confirming" class="mt-4">
-                        <JetLabel for="code" value="Code" />
+                        <InputLabel for="code" value="Code" />
 
-                        <JetInput
+                        <TextInput
                             id="code"
                             v-model="confirmationForm.code"
                             type="text"
@@ -185,7 +186,7 @@ const disableTwoFactorAuthentication = () => {
                             autocomplete="one-time-code"
                             @keyup.enter="confirmTwoFactorAuthentication" />
 
-                        <JetInputError
+                        <InputError
                             :message="confirmationForm.errors.code"
                             class="mt-2" />
                     </div>
@@ -194,10 +195,11 @@ const disableTwoFactorAuthentication = () => {
                 <div v-if="recoveryCodes.length > 0 && !confirming">
                     <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
-                            Store these recovery codes in a secure password
-                            manager. They can be used to recover access to your
-                            account if your two factor authentication device is
-                            lost.
+                            Speichern Sie diese Wiederherstellungscodes in einem
+                            sicheren Passwortmanager. Sie können verwendet
+                            werden, um Zugriff auf Ihr Konto wiederherzustellen,
+                            wenn Ihr Gerät für die Zwei-Faktor-Authentifizierung
+                            verloren geht.
                         </p>
                     </div>
 
@@ -212,67 +214,67 @@ const disableTwoFactorAuthentication = () => {
 
             <div class="mt-5">
                 <div v-if="!twoFactorEnabled">
-                    <JetConfirmsPassword
+                    <ConfirmsPassword
                         @confirmed="enableTwoFactorAuthentication">
-                        <JetButton
+                        <PrimaryButton
                             type="button"
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling">
-                            Enable
-                        </JetButton>
-                    </JetConfirmsPassword>
+                            Aktivieren
+                        </PrimaryButton>
+                    </ConfirmsPassword>
                 </div>
 
                 <div v-else>
-                    <JetConfirmsPassword
+                    <ConfirmsPassword
                         @confirmed="confirmTwoFactorAuthentication">
-                        <JetButton
+                        <PrimaryButton
                             v-if="confirming"
                             type="button"
                             class="mr-3"
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling">
-                            Confirm
-                        </JetButton>
-                    </JetConfirmsPassword>
+                            Bestätigen
+                        </PrimaryButton>
+                    </ConfirmsPassword>
 
-                    <JetConfirmsPassword @confirmed="regenerateRecoveryCodes">
-                        <JetSecondaryButton
+                    <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
+                        <SecondaryButton
                             v-if="recoveryCodes.length > 0 && !confirming"
                             class="mr-3">
                             Regenerate Recovery Codes
-                        </JetSecondaryButton>
-                    </JetConfirmsPassword>
+                        </SecondaryButton>
+                    </ConfirmsPassword>
 
-                    <JetConfirmsPassword @confirmed="showRecoveryCodes">
-                        <JetSecondaryButton
+                    <ConfirmsPassword @confirmed="showRecoveryCodes">
+                        <SecondaryButton
                             v-if="recoveryCodes.length === 0 && !confirming"
                             class="mr-3">
-                            Show Recovery Codes
-                        </JetSecondaryButton>
-                    </JetConfirmsPassword>
+                            Zeige Recovery Codes
+                        </SecondaryButton>
+                    </ConfirmsPassword>
 
-                    <JetConfirmsPassword
+                    <ConfirmsPassword
                         @confirmed="disableTwoFactorAuthentication">
-                        <JetSecondaryButton
+                        <SecondaryButton
                             v-if="confirming"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling">
-                            Cancel
-                        </JetSecondaryButton>
-                    </JetConfirmsPassword>
+                            Abbrechen
+                        </SecondaryButton>
+                    </ConfirmsPassword>
 
-                    <JetConfirmsPassword
+                    <ConfirmsPassword
                         @confirmed="disableTwoFactorAuthentication">
-                        <JetDangerButton
+                        <DangerButton
                             v-if="!confirming"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling">
-                            Disable
-                        </JetDangerButton>
-                    </JetConfirmsPassword>
+                            De-aktiveren
+                        </DangerButton>
+                    </ConfirmsPassword>
                 </div>
             </div>
         </template>
-    </JetActionSection>
+    </ActionSection>
 </template>

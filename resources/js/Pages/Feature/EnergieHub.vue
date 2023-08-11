@@ -106,7 +106,7 @@ import {
     LockClosedIcon,
 } from '@heroicons/vue/20/solid';
 import GuestLayout from '../../Layouts/GuestLayout.vue';
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import BzButton from '../../Components/BzButton.vue';
 import { ElNotification } from 'element-plus';
 

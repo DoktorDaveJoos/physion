@@ -1,14 +1,13 @@
 <script setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
-import StepperWrapper from '../../../Wrappers/StepperWrapper.vue';
 import { computed, reactive, ref } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
 
 import { ElDrawer, ElMessageBox } from 'element-plus';
 import dayjs from 'dayjs';
-import { useForm } from '@inertiajs/inertia-vue3';
-import GuestLayout from '../../../Layouts/GuestLayout.vue';
+import { useForm, router, usePage } from '@inertiajs/vue3';
 import BzButton from '../../../Components/BzButton.vue';
+import PageWrapper from '../../../Wrappers/PageWrapper.vue';
+import Badge from '../../../Components/Badge.vue';
 
 const props = defineProps({
     order: Object,
@@ -100,7 +99,7 @@ const addPeriod = (sourceId) => {
 };
 
 const deletePeriod = (sourceId, periodId) => {
-    Inertia.delete(
+    router.delete(
         route('vrbr.periods.destroy', {
             vrbr: props.order.certificate.id,
             period: periodId,
@@ -118,7 +117,7 @@ const deleteSource = (sourceId) => {
         cancelButtonText: 'Nein',
     })
         .then(() => {
-            Inertia.delete(
+            router.delete(
                 route('vrbr.sources.destroy', {
                     vrbr: props.order.certificate.id,
                     source: sourceId,
@@ -167,7 +166,7 @@ const addVacancy = () => {
 };
 
 const deleteVacancy = (vacancyId) => {
-    Inertia.delete(
+    router.delete(
         route('vrbr.vacancies.destroy', {
             vrbr: props.order.certificate.id,
             vacancy: vacancyId,
@@ -216,17 +215,19 @@ const shortcuts = [2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014].map(
     }
 );
 
-const markDone = () => {
-    markDoneForm.put(
-        route('certificate.update', {
-            order: props.order.slug,
-            page: 'consumption',
-            signature: route().params.signature,
-        }),
-        {
-            preserveScroll: true,
-        }
-    );
+const submit = () => {
+    const url = usePage().props.user
+        ? route('hub.certificates.update', {
+              order: props.order.slug,
+              page: 'consumption',
+          })
+        : route('certificate.update', {
+              order: props.order.slug,
+              page: 'consumption',
+              signature: route().params.signature,
+          });
+
+    markDoneForm.put(url);
 };
 </script>
 
@@ -330,538 +331,508 @@ const markDone = () => {
             </div>
         </template>
         <template #footer>
-            <div style="flex: auto">
-                <el-button @click="cancelSource">Abbrechen</el-button>
-                <el-button
-                    type="primary"
-                    @click="addSource"
-                    :loading="drawer.loading"
-                    >Anlegen</el-button
+            <div class="flex space-x-2 justify-end">
+                <bz-button type="secondary" @click="cancelSource"
+                    >Abbrechen</bz-button
+                >
+                <bz-button @click="addSource" :loading="drawer.loading"
+                    >Anlegen</bz-button
                 >
             </div>
         </template>
     </el-drawer>
-    <guest-layout>
-        <stepper-wrapper>
-            <el-form label-position="top" class="grid sm:grid-cols-2 gap-4">
-                <div class="sm:col-span-2 mb-4">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">
-                        Verbrauch
-                    </h3>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Im Folgenden können Sie die Energieträger und die
-                        zugehörigen Abrechnungszeiträume dafür erfassen. Dafür
-                        brauchen Sie die Rechnungen Ihres Energieversorgers -
-                        geschätzte Werte sind nicht zulässig.
-                    </p>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Für den Verbrauchsausweis müssen mindestens 36 Monate
-                        erfasst werden.
-                    </p>
-                </div>
+    <page-wrapper>
+        <el-form
+            label-position="top"
+            class="grid sm:grid-cols-2 gap-4"
+            @submit.prevent="submit">
+            <div class="sm:col-span-2 mb-4">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">
+                    Verbrauch
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    Im Folgenden können Sie die Energieträger und die
+                    zugehörigen Abrechnungszeiträume dafür erfassen. Dafür
+                    brauchen Sie die Rechnungen Ihres Energieversorgers -
+                    geschätzte Werte sind nicht zulässig.
+                </p>
+                <p class="mt-1 text-sm text-gray-500">
+                    Für den Verbrauchsausweis müssen mindestens 36 Monate
+                    erfasst werden.
+                </p>
+            </div>
 
-                <template v-if="order.certificate?.sources.length > 0">
-                    <template
-                        v-for="source in order.certificate?.sources"
-                        :key="source.id">
-                        <div
-                            class="sm:col-span-2 px-6 py-4 bg-slate-50 shadow border border-gray-100 rounded-md">
-                            <div class="sm:flex sm:items-center">
-                                <div class="sm:flex-auto">
-                                    <div class="flex items-center">
-                                        <h5
-                                            class="text-xl font-semibold text-gray-900">
-                                            {{
-                                                source.source.replace(
-                                                    /\[(.*?)\]/gm.exec(
-                                                        source.source
-                                                    )[0],
-                                                    ''
-                                                )
-                                            }}
-                                        </h5>
+            <template v-if="order.certificate?.sources.length > 0">
+                <template
+                    v-for="source in order.certificate?.sources"
+                    :key="source.id">
+                    <div
+                        class="sm:col-span-2 px-6 py-4 bg-slate-50 shadow border border-gray-100 rounded-md">
+                        <div class="sm:flex sm:items-center">
+                            <div class="sm:flex-auto">
+                                <div class="flex items-center">
+                                    <h5
+                                        class="text-xl font-semibold text-gray-900">
+                                        {{
+                                            source.source.replace(
+                                                /\[(.*?)\]/gm.exec(
+                                                    source.source
+                                                )[0],
+                                                ''
+                                            )
+                                        }}
+                                    </h5>
 
-                                        <el-button
-                                            text
-                                            type="danger"
-                                            class="group ml-2"
-                                            @click="deleteSource(source.id)">
-                                            <TrashIcon
-                                                class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
-                                        </el-button>
-                                        <span
-                                            v-if="source.main"
-                                            class="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                                            <svg
-                                                class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400"
-                                                fill="currentColor"
-                                                viewBox="0 0 8 8">
-                                                <circle cx="4" cy="4" r="3" />
-                                            </svg>
-                                            Hauptenergieträger
-                                        </span>
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-700">
-                                        Warmwasser: {{ source.water }}
-                                    </p>
+                                    <el-button
+                                        text
+                                        type="danger"
+                                        class="group ml-2"
+                                        @click="deleteSource(source.id)">
+                                        <TrashIcon
+                                            class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
+                                    </el-button>
+                                    <badge
+                                        dot
+                                        v-if="source.main"
+                                        label="Hauptenergieträger" />
+                                    <!--                                    <span-->
+                                    <!--                                        v-if="source.main"-->
+                                    <!--                                        class="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">-->
+                                    <!--                                        <svg-->
+                                    <!--                                            class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400"-->
+                                    <!--                                            fill="currentColor"-->
+                                    <!--                                            viewBox="0 0 8 8">-->
+                                    <!--                                            <circle cx="4" cy="4" r="3" />-->
+                                    <!--                                        </svg>-->
+                                    <!--                                        Hauptenergieträger-->
+                                    <!--                                    </span>-->
                                 </div>
-
-                                <div>
-                                    <el-progress
-                                        type="dashboard"
-                                        :percentage="
-                                            getMonths(source) <= 36
-                                                ? (100 / 36) * getMonths(source)
-                                                : 100
-                                        "
-                                        width="80"
-                                        :color="
-                                            getMonths(source) < 36
-                                                ? '#3b82f6'
-                                                : '#10b981'
-                                        ">
-                                        <template #default="{ percentage }">
-                                            <div class="flex flex-col">
-                                                <span class="font-semibold">{{
-                                                    getMonths(source)
-                                                }}</span>
-                                                <span class="text-xs"
-                                                    >Monate</span
-                                                >
-                                            </div>
-                                        </template>
-                                    </el-progress>
-                                </div>
+                                <p class="mt-2 text-sm text-gray-700">
+                                    Warmwasser: {{ source.water }}
+                                </p>
                             </div>
-                            <div class="mt-4 flex flex-col">
-                                <div
-                                    class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                    <div
-                                        class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                        <table
-                                            class="min-w-full divide-y divide-gray-300">
-                                            <thead>
-                                                <tr>
-                                                    <th
-                                                        scope="col"
-                                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0">
-                                                        Abrechnungszeitraum
-                                                    </th>
-                                                    <th
-                                                        scope="col"
-                                                        class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">
-                                                        Verbrauch
-                                                    </th>
-                                                    <th
-                                                        v-if="
-                                                            source.water_enabled
-                                                        "
-                                                        scope="col"
-                                                        class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">
-                                                        Anteil Wasser
-                                                    </th>
-                                                    <th
-                                                        scope="col"
-                                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
-                                                        <span class="sr-only">
-                                                            Aktion
-                                                        </span>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody
-                                                class="divide-y divide-gray-200">
-                                                <tr
-                                                    v-for="period in source.periods"
-                                                    :key="period.id">
-                                                    <td
-                                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                                        {{
-                                                            dayjs(period.start)
-                                                                .locale('de')
-                                                                .format(
-                                                                    'MMM YYYY'
-                                                                )
-                                                        }}
-                                                        -
-                                                        {{
-                                                            dayjs(period.end)
-                                                                .locale('de')
-                                                                .format(
-                                                                    'MMM YYYY'
-                                                                )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                                        {{ period.consumption }}
-                                                        {{
-                                                            /\[(.*?)\]/gm.exec(
-                                                                source.source
-                                                            )[1]
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        v-if="
-                                                            source.water_enabled
-                                                        "
-                                                        class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                                        {{ period.water }}
-                                                        {{
-                                                            /\[(.*?)\]/gm.exec(
-                                                                source.source
-                                                            )[1]
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                                                        <el-button
-                                                            text
-                                                            type="danger"
-                                                            class="group"
-                                                            @click="
-                                                                deletePeriod(
-                                                                    source.id,
-                                                                    period.id
-                                                                )
-                                                            ">
-                                                            <trash-icon
-                                                                class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
-                                                        </el-button>
-                                                    </td>
-                                                </tr>
-                                                <tr
-                                                    v-if="
-                                                        getMonths(source) < 36
-                                                    ">
-                                                    <td
-                                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                                        <el-form-item
-                                                            :error="
-                                                                errors.period
-                                                            ">
-                                                            <el-date-picker
-                                                                v-model="
-                                                                    addPeriodForm.period
-                                                                "
-                                                                type="monthrange"
-                                                                range-separator=" - "
-                                                                start-placeholder="Von"
-                                                                end-placeholder="Bis"
-                                                                format="MMM YYYY"
-                                                                :disabled-date="
-                                                                    (date) =>
-                                                                        date >
-                                                                            new Date() ||
-                                                                        date <
-                                                                            new Date(
-                                                                                2008,
-                                                                                0,
-                                                                                1
-                                                                            )
-                                                                "
-                                                                :shortcuts="
-                                                                    shortcuts
-                                                                ">
-                                                            </el-date-picker>
-                                                        </el-form-item>
-                                                    </td>
-                                                    <td
-                                                        class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                                        <el-form-item
-                                                            :error="
-                                                                errors.consumption
-                                                            ">
-                                                            <el-input
-                                                                v-model="
-                                                                    addPeriodForm.consumption
-                                                                ">
-                                                                <template
-                                                                    #append>
-                                                                    <span
-                                                                        class="text-xs">
-                                                                        {{
-                                                                            /\[(.*?)\]/gm.exec(
-                                                                                source.source
-                                                                            )[1]
-                                                                        }}
-                                                                    </span>
-                                                                </template>
-                                                            </el-input>
-                                                        </el-form-item>
-                                                    </td>
-                                                    <td
-                                                        v-if="
-                                                            source.water_enabled
-                                                        "
-                                                        class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                                        <el-form-item
-                                                            :error="
-                                                                errors.water
-                                                            ">
-                                                            <el-input
-                                                                v-model="
-                                                                    addPeriodForm.water
-                                                                ">
-                                                                <template
-                                                                    #append>
-                                                                    <span
-                                                                        class="text-xs">
-                                                                        {{
-                                                                            /\[(.*?)\]/gm.exec(
-                                                                                source.source
-                                                                            )[1]
-                                                                        }}
-                                                                    </span>
-                                                                </template>
-                                                            </el-input>
-                                                        </el-form-item>
-                                                    </td>
-                                                    <td
-                                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                                                        <el-form-item>
-                                                            <el-button
-                                                                text
-                                                                type="primary"
-                                                                @click="
-                                                                    addPeriod(
-                                                                        source.id
-                                                                    )
-                                                                ">
-                                                                <plus-icon
-                                                                    class="h-4 w-4 mr-2 group-hover:text-green-500" />
-                                                                Hinzufügen
-                                                            </el-button>
-                                                        </el-form-item>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
 
-                                        <el-alert
-                                            v-if="errors.error"
-                                            :title="errors.error"
-                                            type="error"
-                                            show-icon />
-                                    </div>
+                            <div>
+                                <el-progress
+                                    type="dashboard"
+                                    :percentage="
+                                        getMonths(source) <= 36
+                                            ? (100 / 36) * getMonths(source)
+                                            : 100
+                                    "
+                                    width="80"
+                                    :color="
+                                        getMonths(source) < 36
+                                            ? '#3b82f6'
+                                            : '#10b981'
+                                    ">
+                                    <template #default="{ percentage }">
+                                        <div class="flex flex-col">
+                                            <span class="font-semibold">{{
+                                                getMonths(source)
+                                            }}</span>
+                                            <span class="text-xs">Monate</span>
+                                        </div>
+                                    </template>
+                                </el-progress>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-col">
+                            <div
+                                class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div
+                                    class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                                    <table
+                                        class="min-w-full divide-y divide-gray-300">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    scope="col"
+                                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0">
+                                                    Abrechnungszeitraum
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">
+                                                    Verbrauch
+                                                </th>
+                                                <th
+                                                    v-if="source.water_enabled"
+                                                    scope="col"
+                                                    class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">
+                                                    Anteil Wasser
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    class="relative py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
+                                                    <span class="sr-only">
+                                                        Aktion
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr
+                                                v-for="period in source.periods"
+                                                :key="period.id">
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+                                                    {{
+                                                        dayjs(period.start)
+                                                            .locale('de')
+                                                            .format('MMM YYYY')
+                                                    }}
+                                                    -
+                                                    {{
+                                                        dayjs(period.end)
+                                                            .locale('de')
+                                                            .format('MMM YYYY')
+                                                    }}
+                                                </td>
+                                                <td
+                                                    class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                                    {{ period.consumption }}
+                                                    {{
+                                                        /\[(.*?)\]/gm.exec(
+                                                            source.source
+                                                        )[1]
+                                                    }}
+                                                </td>
+                                                <td
+                                                    v-if="source.water_enabled"
+                                                    class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                                    {{ period.water }}
+                                                    {{
+                                                        /\[(.*?)\]/gm.exec(
+                                                            source.source
+                                                        )[1]
+                                                    }}
+                                                </td>
+                                                <td
+                                                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                                                    <el-button
+                                                        text
+                                                        type="danger"
+                                                        class="group"
+                                                        @click="
+                                                            deletePeriod(
+                                                                source.id,
+                                                                period.id
+                                                            )
+                                                        ">
+                                                        <trash-icon
+                                                            class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
+                                                    </el-button>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="getMonths(source) < 36">
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+                                                    <el-form-item
+                                                        :error="errors.period">
+                                                        <el-date-picker
+                                                            v-model="
+                                                                addPeriodForm.period
+                                                            "
+                                                            type="monthrange"
+                                                            range-separator=" - "
+                                                            start-placeholder="Von"
+                                                            end-placeholder="Bis"
+                                                            format="MMM YYYY"
+                                                            :disabled-date="
+                                                                (date) =>
+                                                                    date >
+                                                                        new Date() ||
+                                                                    date <
+                                                                        new Date(
+                                                                            2008,
+                                                                            0,
+                                                                            1
+                                                                        )
+                                                            "
+                                                            :shortcuts="
+                                                                shortcuts
+                                                            ">
+                                                        </el-date-picker>
+                                                    </el-form-item>
+                                                </td>
+                                                <td
+                                                    class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                                    <el-form-item
+                                                        :error="
+                                                            errors.consumption
+                                                        ">
+                                                        <el-input
+                                                            v-model="
+                                                                addPeriodForm.consumption
+                                                            ">
+                                                            <template #append>
+                                                                <span
+                                                                    class="text-xs">
+                                                                    {{
+                                                                        /\[(.*?)\]/gm.exec(
+                                                                            source.source
+                                                                        )[1]
+                                                                    }}
+                                                                </span>
+                                                            </template>
+                                                        </el-input>
+                                                    </el-form-item>
+                                                </td>
+                                                <td
+                                                    v-if="source.water_enabled"
+                                                    class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                                    <el-form-item
+                                                        :error="errors.water">
+                                                        <el-input
+                                                            v-model="
+                                                                addPeriodForm.water
+                                                            ">
+                                                            <template #append>
+                                                                <span
+                                                                    class="text-xs">
+                                                                    {{
+                                                                        /\[(.*?)\]/gm.exec(
+                                                                            source.source
+                                                                        )[1]
+                                                                    }}
+                                                                </span>
+                                                            </template>
+                                                        </el-input>
+                                                    </el-form-item>
+                                                </td>
+                                                <td
+                                                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                                                    <el-form-item>
+                                                        <bz-button
+                                                            plain
+                                                            @click="
+                                                                addPeriod(
+                                                                    source.id
+                                                                )
+                                                            ">
+                                                            <plus-icon
+                                                                class="h-4 w-4 mr-2 group-hover:text-green-500" />
+                                                            Hinzufügen
+                                                        </bz-button>
+                                                    </el-form-item>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <el-alert
+                                        v-if="errors.error"
+                                        :title="errors.error"
+                                        type="error"
+                                        show-icon />
                                 </div>
                             </div>
                         </div>
-                        <el-divider class="sm:col-span-2"></el-divider>
-                    </template>
-
-                    <div class="flex items-center">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">
-                            Weitere Energieträger?
-                        </h3>
                     </div>
-                    <div class="flex justify-end">
-                        <el-button type="default" @click="showDrawer"
-                            >Weiterer Energieträger</el-button
-                        >
-                    </div>
+                    <el-divider class="sm:col-span-2"></el-divider>
                 </template>
 
-                <template v-else>
-                    <div class="flex sm:col-span-2 justify-center">
-                        <el-empty
-                            description="Noch keinen Energieträger angelegt">
-                            <el-button
-                                size="large"
-                                type="primary"
-                                @click="showDrawer"
-                                >Energieträger anlegen</el-button
-                            >
-                        </el-empty>
-                    </div>
-                </template>
-
-                <el-divider class="sm:col-span-2"></el-divider>
-
-                <div class="sm:col-span-2">
+                <div class="flex items-center">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">
-                        Leerstand
-                        <el-switch
-                            v-model="hasVacancy"
-                            size="large"
-                            class="ml-2"></el-switch>
+                        Weitere Energieträger?
                     </h3>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Angaben zum Leerstand in oben erfassten
-                        Abrechnungszeiträumen
-                    </p>
                 </div>
-
-                <template v-if="hasVacancy" class="sm:col-span-2">
-                    <el-tabs v-model="activeName" class="sm:col-span-2">
-                        <el-tab-pane label="Prozentual" name="percentage">
-                            <el-form-item
-                                class="w-full sm:w-1/2"
-                                label="Mittlerer Leerstand"
-                                :error="errors.vacancy_percentage">
-                                <el-input
-                                    v-model="markDoneForm.vacancy_percentage"
-                                    size="large">
-                                    <template #append>%</template>
-                                </el-input>
-                            </el-form-item>
-                            <el-alert
-                                v-if="order.certificate?.vacancies.length > 0"
-                                type="info"
-                                show-icon>
-                                Falls ein prozentualer Wert eingetragen wird,
-                                führt dies zur Löschung sämtlicher Zeiträume
-                                unter "Genauer Zeitraum".
-                            </el-alert>
-                        </el-tab-pane>
-                        <el-tab-pane label="Genauer Zeitraum" name="period">
-                            <table class="min-w-full divide-y divide-gray-300">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0">
-                                            Leerstandszeitraum
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="relative py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
-                                            <span class="sr-only">
-                                                Aktion
-                                            </span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    <tr
-                                        v-for="period in order.certificate
-                                            ?.vacancies"
-                                        :key="period.id">
-                                        <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                            {{
-                                                dayjs(period.start)
-                                                    .locale('de')
-                                                    .format('MMM YYYY')
-                                            }}
-                                            -
-                                            {{
-                                                dayjs(period.end)
-                                                    .locale('de')
-                                                    .format('MMM YYYY')
-                                            }}
-                                        </td>
-                                        <td
-                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                                            <el-button
-                                                text
-                                                type="danger"
-                                                class="group"
-                                                @click="
-                                                    deleteVacancy(period.id)
-                                                ">
-                                                <trash-icon
-                                                    class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
-                                            </el-button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                            <div class="flex">
-                                                <el-form-item
-                                                    :error="errors.period">
-                                                    <el-date-picker
-                                                        v-model="
-                                                            addVacancyForm.period
-                                                        "
-                                                        type="monthrange"
-                                                        range-separator=" - "
-                                                        start-placeholder="Von"
-                                                        end-placeholder="Bis"
-                                                        format="MMM YYYY"
-                                                        :disabled-date="
-                                                            (date) =>
-                                                                date >
-                                                                    new Date() ||
-                                                                date <
-                                                                    new Date(
-                                                                        2008,
-                                                                        0,
-                                                                        1
-                                                                    )
-                                                        "
-                                                        :shortcuts="shortcuts">
-                                                    </el-date-picker>
-                                                </el-form-item>
-                                            </div>
-                                        </td>
-
-                                        <td
-                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                                            <div class="flex justify-end">
-                                                <el-form-item>
-                                                    <el-button
-                                                        text
-                                                        type="primary"
-                                                        @click="addVacancy">
-                                                        <plus-icon
-                                                            class="h-4 w-4 mr-2 group-hover:text-green-500" />
-                                                        Hinzufügen
-                                                    </el-button>
-                                                </el-form-item>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <el-alert
-                                v-if="errors['vacancy.error']"
-                                :title="errors['vacancy.error']"
-                                type="error"
-                                show-icon />
-                            <el-alert
-                                v-if="order.certificate?.vacancy_percentage"
-                                title="Durch das Hinzufügen von Leerstandszeiträumen wird der eingetragene prozentuale Wert gelöscht"
-                                type="info"
-                                show-icon />
-                        </el-tab-pane>
-                    </el-tabs>
-                </template>
-
-                <el-divider class="sm:col-span-2"></el-divider>
-
-                <div
-                    class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
-                    <div class="grid sm:block">
-                        <bz-button
-                            as="link"
-                            type="secondary"
-                            :href="
-                                route('certificate.show', {
-                                    signature: route().params.signature,
-                                    order: order.slug,
-                                    page: 'details',
-                                })
-                            ">
-                            Zurück
-                        </bz-button>
-                    </div>
-                    <div class="grid sm:block">
-                        <bz-button
-                            as="button"
-                            type="primary"
-                            @click="markDone"
-                            :disabled="!mainSourceHas36Months">
-                            {{
-                                !mainSourceHas36Months
-                                    ? 'Nicht genügend Daten'
-                                    : 'Speichern & Weiter'
-                            }}
-                        </bz-button>
-                    </div>
+                <div class="flex justify-end">
+                    <bz-button type="secondary" @click="showDrawer">
+                        <plus-icon class="h-4 w-4 mr-2" />
+                        Weiterer Energieträger</bz-button
+                    >
                 </div>
-            </el-form>
-        </stepper-wrapper>
-    </guest-layout>
+            </template>
+
+            <template v-else>
+                <div class="flex sm:col-span-2 justify-center">
+                    <el-empty description="Noch keinen Energieträger angelegt">
+                        <bz-button @click="showDrawer"
+                            >Energieträger anlegen</bz-button
+                        >
+                    </el-empty>
+                </div>
+            </template>
+
+            <el-divider class="sm:col-span-2"></el-divider>
+
+            <div class="sm:col-span-2">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">
+                    Leerstand
+                    <el-switch
+                        v-model="hasVacancy"
+                        size="large"
+                        class="ml-2"></el-switch>
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    Angaben zum Leerstand in oben erfassten
+                    Abrechnungszeiträumen
+                </p>
+            </div>
+
+            <template v-if="hasVacancy" class="sm:col-span-2">
+                <el-tabs v-model="activeName" class="sm:col-span-2">
+                    <el-tab-pane label="Prozentual" name="percentage">
+                        <el-form-item
+                            class="w-full sm:w-1/2"
+                            label="Mittlerer Leerstand"
+                            :error="errors.vacancy_percentage">
+                            <el-input
+                                v-model="markDoneForm.vacancy_percentage"
+                                size="large">
+                                <template #append>%</template>
+                            </el-input>
+                        </el-form-item>
+                        <el-alert
+                            v-if="order.certificate?.vacancies.length > 0"
+                            type="info"
+                            show-icon>
+                            Falls ein prozentualer Wert eingetragen wird, führt
+                            dies zur Löschung sämtlicher Zeiträume unter
+                            "Genauer Zeitraum".
+                        </el-alert>
+                    </el-tab-pane>
+                    <el-tab-pane label="Genauer Zeitraum" name="period">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead>
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0">
+                                        Leerstandszeitraum
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
+                                        <span class="sr-only"> Aktion </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr
+                                    v-for="period in order.certificate
+                                        ?.vacancies"
+                                    :key="period.id">
+                                    <td
+                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+                                        {{
+                                            dayjs(period.start)
+                                                .locale('de')
+                                                .format('MMM YYYY')
+                                        }}
+                                        -
+                                        {{
+                                            dayjs(period.end)
+                                                .locale('de')
+                                                .format('MMM YYYY')
+                                        }}
+                                    </td>
+                                    <td
+                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                                        <el-button
+                                            text
+                                            type="danger"
+                                            class="group"
+                                            @click="deleteVacancy(period.id)">
+                                            <trash-icon
+                                                class="h-5 w-5 text-gray-400 group-hover:text-red-500" />
+                                        </el-button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+                                        <div class="flex">
+                                            <el-form-item
+                                                :error="errors.period">
+                                                <el-date-picker
+                                                    v-model="
+                                                        addVacancyForm.period
+                                                    "
+                                                    type="monthrange"
+                                                    range-separator=" - "
+                                                    start-placeholder="Von"
+                                                    end-placeholder="Bis"
+                                                    format="MMM YYYY"
+                                                    :disabled-date="
+                                                        (date) =>
+                                                            date > new Date() ||
+                                                            date <
+                                                                new Date(
+                                                                    2008,
+                                                                    0,
+                                                                    1
+                                                                )
+                                                    "
+                                                    :shortcuts="shortcuts">
+                                                </el-date-picker>
+                                            </el-form-item>
+                                        </div>
+                                    </td>
+
+                                    <td
+                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                                        <div class="flex justify-end">
+                                            <el-form-item>
+                                                <bz-button
+                                                    plain
+                                                    @click="addVacancy">
+                                                    <plus-icon
+                                                        class="h-4 w-4 mr-2 group-hover:text-green-500" />
+                                                    Hinzufügen
+                                                </bz-button>
+                                            </el-form-item>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <el-alert
+                            v-if="errors['vacancy.error']"
+                            :title="errors['vacancy.error']"
+                            type="error"
+                            show-icon />
+                        <el-alert
+                            v-if="order.certificate?.vacancy_percentage"
+                            title="Durch das Hinzufügen von Leerstandszeiträumen wird der eingetragene prozentuale Wert gelöscht"
+                            type="info"
+                            show-icon />
+                    </el-tab-pane>
+                </el-tabs>
+            </template>
+
+            <el-divider class="sm:col-span-2"></el-divider>
+
+            <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
+                <div class="grid sm:block">
+                    <bz-button
+                        as="link"
+                        type="secondary"
+                        :href="
+                            route('certificate.show', {
+                                signature: route().params.signature,
+                                order: order.slug,
+                                page: 'details',
+                            })
+                        ">
+                        Zurück
+                    </bz-button>
+                </div>
+                <div class="grid sm:block">
+                    <bz-button
+                        as="button"
+                        @click="submit"
+                        :disabled="!mainSourceHas36Months">
+                        {{
+                            !mainSourceHas36Months
+                                ? 'Nicht genügend Daten'
+                                : 'Speichern & Weiter'
+                        }}
+                    </bz-button>
+                </div>
+            </div>
+        </el-form>
+    </page-wrapper>
 </template>

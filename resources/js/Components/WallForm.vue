@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
@@ -12,7 +12,6 @@ import {
 } from '@heroicons/vue/24/outline';
 import { computed, onMounted, reactive } from 'vue';
 import { ElNotification } from 'element-plus';
-import { Inertia } from '@inertiajs/inertia';
 import BzButton from './BzButton.vue';
 
 const props = defineProps({
@@ -69,7 +68,7 @@ const safe = () => {
     prepareForm(form).put(
         route('bdrf.wall', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -88,7 +87,7 @@ const addInsulation = () => {
     insulationForm.put(
         route('bdrf.wall.insulation', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -104,7 +103,7 @@ const addWindow = () => {
     windowForm.put(
         route('bdrf.wall.window', {
             bdrf: props.order.certificate.id,
-            signature: usePage().props.value.signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -117,11 +116,11 @@ const addWindow = () => {
 };
 
 const deleteInsulation = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.wall.insulation.delete', {
             bdrf: props.order.certificate.id,
             insulation: id,
-            signature: usePage().props.value.signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -130,11 +129,11 @@ const deleteInsulation = (id) => {
 };
 
 const deleteWindow = (id) => {
-    Inertia.delete(
+    router.delete(
         route('bdrf.wall.window.delete', {
             bdrf: props.order.certificate.id,
             window: id,
-            signature: usePage().props.value.signature,
+            signature: route().params?.signature,
         }),
         {
             preserveScroll: true,
@@ -325,12 +324,14 @@ const hasAdditional = computed(() => {
             </div>
         </template>
 
-        <div v-if="wall" class="p-4 flex justify-end border-t border-gray-200">
-            <bz-button plain @click="openDrawer('window')">
+        <div
+            v-if="wall"
+            class="p-4 flex space-x-2 justify-end border-t border-gray-200">
+            <bz-button type="secondary" @click="openDrawer('window')">
                 <plus-icon class="h-4 w-4 mr-1" />
                 <span class="text-xs">Fenster hinzufügen</span>
             </bz-button>
-            <bz-button plain @click="openDrawer('insulation')">
+            <bz-button type="secondary" @click="openDrawer('insulation')">
                 <plus-icon class="h-4 w-4 mr-1" />
                 <span class="text-xs">Dämmung hinzufügen</span>
             </bz-button>
@@ -396,9 +397,7 @@ const hasAdditional = computed(() => {
                 </el-form-item>
 
                 <div class="flex justify-end mt-5">
-                    <el-button type="primary" @click="addWindow"
-                        >Hinzufügen</el-button
-                    >
+                    <bz-button @click="addWindow">Hinzufügen</bz-button>
                 </div>
             </el-form>
         </el-drawer>
@@ -440,22 +439,18 @@ const hasAdditional = computed(() => {
                 </el-form-item>
 
                 <div class="flex justify-end mt-5">
-                    <el-button type="primary" @click="addInsulation"
-                        >Hinzufügen</el-button
-                    >
+                    <bz-button @click="addInsulation">Hinzufügen</bz-button>
                 </div>
             </el-form>
         </el-drawer>
 
         <div class="w-full flex justify-end p-4 border-t border-gray-200">
-            <el-button
+            <bz-button
                 :disabled="
                     form.processing ||
                     !form.isDirty ||
                     form.construction.length !== 2
                 "
-                size="large"
-                type="primary"
                 @click="safe">
                 {{
                     form.isDirty
@@ -464,7 +459,7 @@ const hasAdditional = computed(() => {
                             : 'Speichern'
                         : 'Bereits gespeichert'
                 }}
-            </el-button>
+            </bz-button>
         </div>
     </el-card>
 </template>
