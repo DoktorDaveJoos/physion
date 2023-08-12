@@ -50,6 +50,8 @@ const cancelRenewable = () => {
 };
 
 const submit = () => {
+    //test
+    console.log('UFF');
     const url = usePage().props.user
         ? route('hub.certificates.update', {
               order: props.order.slug,
