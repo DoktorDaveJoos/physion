@@ -55,7 +55,7 @@ const submit = () => {
               order: props.order.slug,
               page: 'energy',
           })
-        : route('certificate.store', {
+        : route('certificate.update', {
               order: props.order.slug,
               page: 'energy',
               signature: route().params.signature,
