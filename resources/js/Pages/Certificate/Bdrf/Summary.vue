@@ -136,7 +136,10 @@ const submit = () => {
                                 <span class="font-medium text-xs text-gray-400"
                                     >Auftraggeber</span
                                 >
-                                <span>{{ order.owner.name }}</span>
+                                <span
+                                    >{{ order.owner.first_name }}
+                                    {{ order.owner.last_name }}</span
+                                >
                                 <span>{{ order.owner.email }}</span>
                                 <span v-if="order.owner.phone">{{
                                     order.owner.phone
