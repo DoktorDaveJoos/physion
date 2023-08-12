@@ -4,7 +4,7 @@ import InformationBox from '../../../Components/InformationBox.vue';
 import Badge from '../../../Components/Badge.vue';
 import { computed, reactive, ref } from 'vue';
 import BzButton from '../../../Components/BzButton.vue';
-import { useForm, router, usePage } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import { ElDrawer, ElNotification } from 'element-plus';
 import { BoltIcon, FireIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import PageWrapper from '../../../Wrappers/PageWrapper.vue';
@@ -326,8 +326,8 @@ const options = [
         <template v-if="order.certificate.heating_systems?.length === 0">
             <el-empty description="Noch keine Heizungsanlage angelegt">
                 <bz-button @click="drawer.energy_systems = true"
-                    >Heizungsanlage anlegen</bz-button
-                >
+                    >Heizungsanlage anlegen
+                </bz-button>
             </el-empty>
         </template>
         <template v-else>
@@ -349,14 +349,14 @@ const options = [
                                 {{ heatingSystem.type }}
                             </h3>
                             <Badge
-                                size="sm"
+                                v-if="heatingSystem.is_main"
                                 label="Hauptenergieträger"
-                                v-if="heatingSystem.is_main" />
+                                size="sm" />
 
                             <Badge
-                                size="sm"
                                 v-if="heatingSystem.water_included"
-                                label="Warmwasser" />
+                                label="Warmwasser"
+                                size="sm" />
                         </div>
                         <p class="text-xs text-gray-500 mt-1">
                             {{ heatingSystem.system }} - Bj.
@@ -381,8 +381,8 @@ const options = [
 
         <el-divider />
         <form-header
-            title="Energiegewinnung"
-            subtitle="Energie aus regenerativen Resourcen" />
+            subtitle="Energie aus regenerativen Resourcen"
+            title="Energiegewinnung" />
 
         <template
             v-if="
@@ -412,17 +412,17 @@ const options = [
                                 {{ renewable.type }}
                             </h3>
                             <Badge
+                                v-if="renewable.electricity"
                                 label="Strom"
-                                size="sm"
-                                v-if="renewable.electricity" />
+                                size="sm" />
                             <Badge
+                                v-if="renewable.heating"
                                 label="Heizung"
-                                size="sm"
-                                v-if="renewable.heating" />
+                                size="sm" />
                             <Badge
+                                v-if="renewable.water"
                                 label="Warmwasser"
-                                size="sm"
-                                v-if="renewable.water" />
+                                size="sm" />
                         </div>
                         <p class="text-xs text-gray-500 mt-1">
                             {{ renewable.area }} m² - Bj.
@@ -447,8 +447,8 @@ const options = [
 
         <el-drawer
             v-model="drawer.energy_systems"
-            direction="rtl"
-            :before-close="(e) => cancelSource()">
+            :before-close="(e) => cancelSource()"
+            direction="rtl">
             <template #header>
                 <div class="flex flex-col">
                     <h4 class="text-lg font-medium text-gray-900">
@@ -478,28 +478,28 @@ const options = [
                         <el-form-item label="Baujahr Heizung" required>
                             <el-input-number
                                 v-model="form.construction_year"
-                                :min="1900"
-                                :max="new Date().getFullYear()"
-                                :precision="0"
                                 :controls="false"
-                                placeholder="2012"
-                                class="w-full" />
+                                :max="new Date().getFullYear()"
+                                :min="1900"
+                                :precision="0"
+                                class="w-full"
+                                placeholder="2012" />
                         </el-form-item>
                         <el-form-item label="Warmwasseraufbereitung" required>
                             <el-switch
+                                v-model="form.water_included"
                                 active-text="Inklusive"
-                                inactive-text="Exklusive"
-                                v-model="form.water_included" />
+                                inactive-text="Exklusive" />
                         </el-form-item>
 
                         <el-form-item label="Kommentar">
                             <el-input
-                                type="textarea"
                                 v-model="form.comment"
+                                maxlength="500"
                                 placeholder="Kommentar"
                                 rows="3"
-                                maxlength="500"
-                                show-word-limit />
+                                show-word-limit
+                                type="textarea" />
                         </el-form-item>
                     </el-form>
                 </div>
@@ -507,21 +507,21 @@ const options = [
             <template #footer>
                 <div class="flex items-center justify-end space-x-2">
                     <bz-button type="secondary" @click="() => cancelSource()"
-                        >Abbrechen</bz-button
-                    >
+                        >Abbrechen
+                    </bz-button>
                     <bz-button
-                        @click="addHeatingSystem"
                         :loading="drawer.loading"
-                        >Anlegen</bz-button
-                    >
+                        @click="addHeatingSystem"
+                        >Anlegen
+                    </bz-button>
                 </div>
             </template>
         </el-drawer>
 
         <el-drawer
             v-model="drawer.renewables"
-            direction="rtl"
-            :before-close="() => cancelRenewable()">
+            :before-close="() => cancelRenewable()"
+            direction="rtl">
             <template #header>
                 <div class="flex flex-col">
                     <h4 class="text-lg font-medium text-gray-900">
@@ -556,22 +556,22 @@ const options = [
                         <el-form-item label="Fläche in m²" required>
                             <el-input-number
                                 v-model="rForm.area"
-                                :min="0"
-                                :max="new Date().getFullYear()"
-                                :precision="2"
                                 :controls="false"
-                                placeholder="10 m²"
-                                class="w-full" />
+                                :max="new Date().getFullYear()"
+                                :min="0"
+                                :precision="2"
+                                class="w-full"
+                                placeholder="10 m²" />
                         </el-form-item>
                         <el-form-item label="Baujahr der Anlage" required>
                             <el-input-number
                                 v-model="rForm.construction_year"
-                                :min="1900"
-                                :max="new Date().getFullYear()"
-                                :precision="0"
                                 :controls="false"
-                                placeholder="2012"
-                                class="w-full" />
+                                :max="new Date().getFullYear()"
+                                :min="1900"
+                                :precision="0"
+                                class="w-full"
+                                placeholder="2012" />
                         </el-form-item>
                         <el-form-item label="Nutzung" required>
                             <el-checkbox
@@ -590,12 +590,12 @@ const options = [
 
                         <el-form-item label="Kommentar">
                             <el-input
-                                type="textarea"
                                 v-model="rForm.comment"
+                                maxlength="500"
                                 placeholder="Kommentar"
                                 rows="3"
-                                maxlength="500"
-                                show-word-limit />
+                                show-word-limit
+                                type="textarea" />
                         </el-form-item>
                     </el-form>
                 </div>
@@ -603,11 +603,11 @@ const options = [
             <template #footer>
                 <div class="flex items-center justify-end space-x-2">
                     <bz-button type="secondary" @click="() => cancelRenewable()"
-                        >Abbrechen</bz-button
-                    >
-                    <bz-button @click="addRenewables" :loading="drawer.loading"
-                        >Anlegen</bz-button
-                    >
+                        >Abbrechen
+                    </bz-button>
+                    <bz-button :loading="drawer.loading" @click="addRenewables"
+                        >Anlegen
+                    </bz-button>
                 </div>
             </template>
         </el-drawer>
@@ -617,24 +617,26 @@ const options = [
         <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4 mt-6">
             <div class="grid sm:block">
                 <bz-button
-                    as="link"
-                    type="secondary"
                     :href="
                         route('certificate.show', {
                             signature: route().params.signature,
                             order: order.slug,
                             page: 'thermal',
                         })
-                    ">
+                    "
+                    as="link"
+                    type="secondary">
                     Zurück
                 </bz-button>
             </div>
             <div class="grid sm:block">
-                <bz-button :disabled="!waterCovered" @click="submit">{{
-                    !waterCovered
-                        ? 'Warmwasser muss abgedeckt sein'
-                        : 'Speichern & Weiter'
-                }}</bz-button>
+                <bz-button :disabled="!waterCovered" @click="submit"
+                    >{{
+                        !waterCovered
+                            ? 'Warmwasser muss abgedeckt sein'
+                            : 'Speichern & Weiter'
+                    }}
+                </bz-button>
             </div>
         </div>
     </page-wrapper>
