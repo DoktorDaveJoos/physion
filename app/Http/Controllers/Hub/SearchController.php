@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BdrfSearchResource;
 use App\Http\Resources\VrbrSearchResource;
@@ -16,7 +15,6 @@ class SearchController extends Controller
 
     public function __invoke(Request $request)
     {
-
         if (!$request->user()->current_team_id) {
             return [
                 'bdrfs' => [],
