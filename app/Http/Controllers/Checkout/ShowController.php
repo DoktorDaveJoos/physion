@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Notifications\OrderPaid;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class ShowController extends Controller
 {
@@ -33,11 +35,11 @@ class ShowController extends Controller
                 ->where('active', true)
                 ->where('recurring', false)
                 ->whereDoesntHave(
-                'orders',
-                function ($query) use ($order) {
-                    $query->where('order_id', $order->id);
-                }
-            )->get(),
+                    'orders',
+                    function ($query) use ($order) {
+                        $query->where('order_id', $order->id);
+                    }
+                )->get(),
         ]);
     }
 
@@ -47,7 +49,11 @@ class ShowController extends Controller
             'status' => 'open',
         ]);
 
-        $order->owner?->notify(new OrderPaid($order, $order->owner->name));
+        try {
+            $order->owner?->notify(new OrderPaid($order, $order->owner->name));
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+        }
 
         return Inertia::render('Checkout/ThankYou', [
             'link' => URL::temporarySignedRoute(

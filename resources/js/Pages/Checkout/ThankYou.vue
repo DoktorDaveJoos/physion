@@ -48,8 +48,6 @@ const props = defineProps({
     price: Number,
 });
 
-console.log(props.price);
-
 onMounted(() => {
     // Event snippet for Kauf conversion page
     gtag('event', 'conversion', {

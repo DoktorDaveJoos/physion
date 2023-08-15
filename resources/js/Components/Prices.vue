@@ -121,8 +121,6 @@
 import { CheckIcon } from '@heroicons/vue/24/outline';
 import { Link, usePage } from '@inertiajs/vue3';
 
-console.log(usePage());
-
 const { tiers } = usePage().props;
 
 // const tiers = [

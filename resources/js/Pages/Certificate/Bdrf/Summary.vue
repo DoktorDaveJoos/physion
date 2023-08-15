@@ -136,7 +136,10 @@ const submit = () => {
                                 <span class="font-medium text-xs text-gray-400"
                                     >Auftraggeber</span
                                 >
-                                <span>{{ order.owner.name }}</span>
+                                <span
+                                    >{{ order.owner.first_name }}
+                                    {{ order.owner.last_name }}</span
+                                >
                                 <span>{{ order.owner.email }}</span>
                                 <span v-if="order.owner.phone">{{
                                     order.owner.phone
@@ -320,13 +323,26 @@ const submit = () => {
         <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
             <div class="grid sm:block">
                 <bz-button
+                    v-if="$page.props.user"
+                    as="link"
+                    type="secondary"
+                    :href="
+                        route('hub.certificates.show', {
+                            order: order.slug,
+                            page: 'energy',
+                        })
+                    ">
+                    Zurück
+                </bz-button>
+                <bz-button
+                    v-else
                     as="link"
                     type="secondary"
                     :href="
                         route('certificate.show', {
                             signature: route().params.signature,
                             order: order.slug,
-                            page: 'consumption',
+                            page: 'energy',
                         })
                     ">
                     Zurück

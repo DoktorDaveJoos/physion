@@ -8,12 +8,16 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
+use Throwable;
 
 /**
  * @mixin Order
  */
 class OrderResource extends JsonResource
 {
+    /**
+     * @throws Throwable
+     */
     public function toArray(Request $request): array
     {
         return [
