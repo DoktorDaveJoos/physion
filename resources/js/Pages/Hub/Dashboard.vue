@@ -60,7 +60,7 @@ const showWarning = ref(true);
                     class="text-lg font-display font-semibold leading-6 text-gray-900">
                     Team Übersicht
                 </h3>
-                <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <dl class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
                     <div
                         class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
                         <dt class="truncate text-sm font-medium text-gray-500">
@@ -94,47 +94,6 @@ const showWarning = ref(true);
                 </dl>
             </div>
 
-            <div>
-                <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                    <div
-                        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">
-                            Fachlicher Ansprechpartner
-                        </dt>
-                        <dd
-                            class="mt-1 text-base font-semibold tracking-tight text-gray-900">
-                            <p>Hannes Jungert</p>
-                            <p class="">+49 152 23021307</p>
-                        </dd>
-                    </div>
-                    <div
-                        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">
-                            Technischer Ansprechpartner
-                        </dt>
-                        <dd
-                            class="mt-1 text-base font-semibold tracking-tight text-gray-900">
-                            <p>David Joos</p>
-                            <p class="text-base">+49 152 2541810</p>
-                        </dd>
-                    </div>
-                    <div
-                        class="overflow-hidden rounded-lg bg-white px-4 py-4 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">
-                            Subscription
-                        </dt>
-                        <dd
-                            class="mt-1 text-xl font-semibold tracking-tight text-gray-900"
-                            :class="
-                                stats.subscription
-                                    ? 'text-green-500'
-                                    : 'text-red-500'
-                            ">
-                            {{ stats.subscription ? 'Aktiv' : 'Inaktiv' }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
             <div class="bg-white rounded-lg shadow">
                 <div class="border-b border-gray-200 px-4 py-5 sm:px-6 mt-6">
                     <h3 class="text-sm font-bold leading-6 text-gray-900">
@@ -194,6 +153,48 @@ const showWarning = ref(true);
                 <el-empty
                     v-else
                     description="Es sind keine Produkte verfügbar."></el-empty>
+            </div>
+
+            <div>
+                <dl class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                    <div
+                        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                        <dt class="truncate text-sm font-medium text-gray-500">
+                            Fachlicher Ansprechpartner
+                        </dt>
+                        <dd
+                            class="mt-1 text-base font-semibold tracking-tight text-gray-900">
+                            <p>Hannes Jungert</p>
+                            <p class="">+49 152 23021307</p>
+                        </dd>
+                    </div>
+                    <div
+                        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                        <dt class="truncate text-sm font-medium text-gray-500">
+                            Technischer Ansprechpartner
+                        </dt>
+                        <dd
+                            class="mt-1 text-base font-semibold tracking-tight text-gray-900">
+                            <p>David Joos</p>
+                            <p class="text-base">+49 152 2541810</p>
+                        </dd>
+                    </div>
+                    <div
+                        class="overflow-hidden rounded-lg bg-white px-4 py-4 shadow sm:p-6">
+                        <dt class="truncate text-sm font-medium text-gray-500">
+                            Subscription
+                        </dt>
+                        <dd
+                            class="mt-1 text-xl font-semibold tracking-tight text-gray-900"
+                            :class="
+                                stats.subscription
+                                    ? 'text-green-500'
+                                    : 'text-red-500'
+                            ">
+                            {{ stats.subscription ? 'Aktiv' : 'Inaktiv' }}
+                        </dd>
+                    </div>
+                </dl>
             </div>
         </template>
     </SidebarLayout>

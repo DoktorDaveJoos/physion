@@ -462,6 +462,19 @@ if (
             <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
                 <div class="grid sm:block">
                     <bz-button
+                        v-if="$page.props.user"
+                        as="link"
+                        type="secondary"
+                        :href="
+                            route('hub.certificates.show', {
+                                order: order.slug,
+                                page: 'details',
+                            })
+                        ">
+                        Zurück
+                    </bz-button>
+                    <bz-button
+                        v-else
                         as="link"
                         type="secondary"
                         :href="

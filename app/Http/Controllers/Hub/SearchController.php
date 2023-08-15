@@ -16,6 +16,14 @@ class SearchController extends Controller
 
     public function __invoke(Request $request)
     {
+
+        if (!$request->user()->current_team_id) {
+            return [
+                'bdrfs' => [],
+                'vrbrs' => [],
+            ];
+        }
+
         $bdrfs = Bdrf::search($request->input('query'))->query(
             fn(Builder $query) => $query->whereRelation('order', 'team_id', '=', $request->user()->current_team_id)
         )->get();
