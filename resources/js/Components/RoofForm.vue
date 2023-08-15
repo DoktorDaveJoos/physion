@@ -393,8 +393,6 @@ const hasAdditional = computed(() => {
         props.order.certificate.roof?.dormers?.length > 0
     );
 });
-
-console.log(form.construction);
 </script>
 
 <template>

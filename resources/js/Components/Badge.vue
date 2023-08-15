@@ -72,7 +72,7 @@ const types = {
                         : size === 'md'
                         ? 'text-xs'
                         : 'text-[11px]',
-                    'font-bold tracking-wider uppercase',
+                    'font-bold tracking-wider uppercase font-sans',
                 ]"
                 >{{ label }}</span
             >
