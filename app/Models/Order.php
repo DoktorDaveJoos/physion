@@ -81,7 +81,7 @@ class Order extends Model
      */
     public function getCertificateProduct(): ?Product
     {
-        return $this->products()->where(
+        return Product::where(
             'short_name',
             Category::fromModel($this->certificate_type)->value
         )->first();
