@@ -28,7 +28,7 @@ class HandleCustomerFromStripe
             throw new RuntimeException('Order not found for customer: '.$event->payload['customer']['email']);
         }
 
-        $customer = $order->customer;
+        $customer = $order->owner;
 
         $customer->update($event->payload['customer']);
 
