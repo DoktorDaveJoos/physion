@@ -37,7 +37,7 @@ class HandleOrderPaid
         }, 0.0);
 
         Telegram::broadcast(
-            '🚀 Patte gemacht: '.$price.'€ bezahlt von '.$order->customer->email.' für '.$order->products->count(
+            '🚀 Patte gemacht: '.$price.'€ bezahlt von '.$order->owner->email.' für '.$order->products->count(
             ).' Produkte.'
         );
     }
