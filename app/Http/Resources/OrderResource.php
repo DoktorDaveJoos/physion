@@ -32,6 +32,14 @@ class OrderResource extends JsonResource
                 'attachments' => AttachmentResource::collection($this->attachments),
                 'created_at' => $this->created_at->format('d.m.Y'),
             ],
+            'links' => [
+                'checkout' => URL::signedRoute('checkout.show', [
+                    'order' => $this->slug,
+                ]),
+                'certificate' => URL::signedRoute('certificate.show', [
+                    'order' => $this->slug,
+                ]),
+            ]
         ];
     }
 

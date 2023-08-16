@@ -11,7 +11,7 @@ import {
 import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, Head } from '@inertiajs/vue3';
 import BzButton from '../../Components/BzButton.vue';
 import Badge from '../../Components/Badge.vue';
 
@@ -88,6 +88,9 @@ const download = () => {
 
 <template>
     <guest-layout>
+        <Head>
+            <title>Bestellung</title>
+        </Head>
         <div class="bg-slate-50">
             <div
                 class="mx-auto max-w-2xl pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
