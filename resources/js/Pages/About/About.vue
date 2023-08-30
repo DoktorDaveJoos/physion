@@ -197,7 +197,7 @@ const people = [
         name: 'Hannes Jungert',
         role: 'Geschäftsführer',
         imageUrl: '/hannes-blog.png',
-        bio: 'Maschinenbau Ingenieur, zertifiziert als Energieberater und BIRN-Auditor, übernimmt die operative Umsetzung unserer Projekte.',
+        bio: 'Ingenieur, zertifiziert als Energieberater und BIRN-Auditor, übernimmt die operative Umsetzung unserer Projekte.',
         twitterUrl: '#',
         linkedinUrl: '#',
     },
