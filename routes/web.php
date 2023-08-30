@@ -131,6 +131,9 @@ Route::prefix('orders')->group(function () {
             Route::put('/', [CertificateController::class, 'update'])->name('certificate.update');
         }
     );
+
+    Route::post('{order:slug}/certificate/picture', [CertificateController::class, 'picture'])->name('certificate.picture');
+    Route::delete('{order:slug}/certificate/picture', [CertificateController::class, 'deletePicture'])->name('certificate.picture.delete');
 });
 
 Route::prefix('bdrf/{bdrf}')->group(function () {
@@ -252,7 +255,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
-
         Route::get('search', SearchController::class)->name('search');
 
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
@@ -277,6 +279,16 @@ Route::middleware([
             '/orders/{order:slug}/certificate',
             [\App\Http\Controllers\Hub\CertificateController::class, 'update']
         )->name('certificates.update');
+
+        Route::post(
+            '/orders/{order:slug}/certificate/picture',
+            [\App\Http\Controllers\Hub\CertificateController::class, 'picture']
+        )->name('certificates.picture');
+        Route::delete(
+            '/orders/{order:slug}/certificate/picture',
+            [\App\Http\Controllers\Hub\CertificateController::class, 'deletePicture']
+        )->name('certificates.picture.delete');
+
 
         Route::post('/orders/{order:slug}/send', [\App\Http\Controllers\Hub\CertificateController::class, 'send']
         )->name('certificates.send');

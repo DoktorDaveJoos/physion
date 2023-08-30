@@ -4,17 +4,21 @@ import {
     ClipboardIcon,
     DocumentMagnifyingGlassIcon,
     ChartBarIcon,
+    PhotoIcon,
 } from '@heroicons/vue/24/outline';
 
 import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import BzButton from '../../../Components/BzButton.vue';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import PageWrapper from '../../../Wrappers/PageWrapper.vue';
+import BzDropzone from '../../../Components/BzDropzone.vue';
+import { ElNotification } from 'element-plus';
 
 const props = defineProps({
     order: Object,
+    picture: String,
     product: Object,
 });
 
@@ -84,6 +88,73 @@ const submit = () => {
           });
 
     feedbackForm.put(url);
+};
+
+const uploadingFile = ref(false);
+const pictureForm = useForm({
+    picture: null,
+});
+
+const uploadPicture = (file) => {
+    pictureForm.picture = file;
+
+    const url = usePage().props.user
+        ? route('hub.certificates.picture', {
+              order: props.order.slug,
+              page: 'summary',
+          })
+        : route('certificate.picture', {
+              order: props.order.slug,
+              page: 'summary',
+              signature: route().params.signature,
+          });
+
+    pictureForm.post(url, {
+        preserveScroll: true,
+        onStart: () => {
+            uploadingFile.value = true;
+        },
+        onError: () => {
+            ElNotification({
+                title: 'Fehler',
+                message: 'Das Bild konnte nicht hochgeladen werden.',
+                type: 'error',
+            });
+        },
+        onFinish: () => {
+            uploadingFile.value = false;
+        },
+    });
+};
+
+const deletePicture = () => {
+    const url = usePage().props.user
+        ? route('hub.certificates.picture.delete', {
+              order: props.order.slug,
+              page: 'summary',
+          })
+        : route('certificate.picture.delete', {
+              order: props.order.slug,
+              page: 'summary',
+              signature: route().params.signature,
+          });
+
+    router.delete(url, {
+        preserveScroll: true,
+        onStart: () => {
+            uploadingFile.value = true;
+        },
+        onError: () => {
+            ElNotification({
+                title: 'Fehler',
+                message: 'Das Bild konnte nicht gelöscht werden.',
+                type: 'error',
+            });
+        },
+        onFinish: () => {
+            uploadingFile.value = false;
+        },
+    });
 };
 </script>
 
@@ -336,6 +407,21 @@ const submit = () => {
                         </Link>
                     </dd>
                 </div>
+
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                    <label
+                        for="cover-photo"
+                        class="text-sm font-medium text-gray-500"
+                        >Bild des Gebäudes (Optional)</label
+                    >
+                    <bz-dropzone
+                        @delete="deletePicture"
+                        @select="uploadPicture"
+                        :selected="picture"
+                        :loading="uploadingFile"
+                        :allowed-mime-types="['image/jpeg', 'image/png']" />
+                </div>
+
                 <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                     <dt class="text-sm font-medium text-gray-500">Feedback</dt>
                     <dd

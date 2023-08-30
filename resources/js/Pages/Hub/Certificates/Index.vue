@@ -17,7 +17,7 @@ import DialogModal from '../../../Components/DialogModal.vue';
 import { ref } from 'vue';
 
 defineProps({
-    orders: Array,
+    orders: Object,
 });
 
 const sendForm = useForm({
@@ -119,7 +119,7 @@ const mapper = {
 </script>
 
 <template>
-    <Head title="Bestellungen" />
+    <Head><title>Bestellungen</title></Head>
     <sidebar-layout>
         <template v-if="!$page.props.user?.current_team_id">
             <el-empty
