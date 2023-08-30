@@ -12,7 +12,7 @@ import Prices from '../Components/Prices.vue';
 import { ref } from 'vue';
 import EnergieausweisCheck from '../Components/EnergieausweisCheck.vue';
 
-import { Link } from '@inertiajs/vue3';
+import { Link, Head } from '@inertiajs/vue3';
 import Faq from '../Components/Faq.vue';
 import LogoCarousel from '../Components/LogoCarousel.vue';
 
@@ -21,6 +21,10 @@ const checkTool = ref(false);
 
 <template>
     <GuestLayout>
+        <Head>
+            <title>Startseite</title>
+        </Head>
+
         <el-dialog v-model="checkTool" title="Energieausweis Check">
             <EnergieausweisCheck @close="() => (checkTool = false)" />
         </el-dialog>

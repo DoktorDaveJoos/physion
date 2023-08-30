@@ -57,6 +57,7 @@ return [
         ],
 
         'digitalocean' => [
+            'visibility' => 'public', // 'public' or 'private
             'driver' => 's3',
             'key' => env('DIGITALOCEAN_SPACES_KEY'),
             'secret' => env('DIGITALOCEAN_SPACES_SECRET'),

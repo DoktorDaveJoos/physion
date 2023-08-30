@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use App\Actions\FinalizeOrder;
 use App\Actions\UpdateCertificate;
 use App\Actions\UpdateGeneral;
 use App\Http\Requests\Certificate\Bdrf\UpdateDetailsRequest;
@@ -212,7 +213,7 @@ enum Category: string
                     'Zusammenfassung der Angaben',
                     'Certificate/Bdrf/Summary',
                     SummaryRequest::class,
-                    UpdateCertificate::class
+                    FinalizeOrder::class
                 ),
             ],
             self::VRBR, self::VRBR_PARTNER => [
@@ -242,7 +243,7 @@ enum Category: string
                     'Abschluss und Checkout',
                     'Certificate/Vrbr/Summary',
                     SummaryRequest::class,
-                    UpdateCertificate::class
+                    FinalizeOrder::class
                 ),
             ],
         };

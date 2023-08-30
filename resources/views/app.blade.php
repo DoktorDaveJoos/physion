@@ -16,7 +16,7 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', {{ config('tracking.ads') }}
+            gtag('config', {{ config('tracking.ads') }});
         </script>
 
         <!-- Fonts -->

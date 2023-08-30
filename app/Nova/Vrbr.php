@@ -7,10 +7,12 @@ use Laravel\Nova\Exceptions\HelperNotSupported;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use Storage;
 
 class Vrbr extends Resource
 {
@@ -51,6 +53,8 @@ class Vrbr extends Resource
             Text::make('Order ID', 'order.slug'),
             Text::make('Grund der Ausstellung', 'reason'),
 
+            Image::make('Gebäudebild', 'picture_path')->disk('digitalocean'),
+
             new Panel('Adresse', [
                 Text::make('Straße', 'street_address')->copyable(),
                 Text::make('Postleitzahl & Ort', function() {
@@ -85,6 +89,7 @@ class Vrbr extends Resource
             HasMany::make('Leerstand', 'vacancies', Vacancy::class),
 
             KeyValue::make('Vorschlagsmatrix', 'suggestion_check')->rules('json')->hideFromIndex(),
+
         ];
     }
 

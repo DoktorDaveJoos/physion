@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Hub;
 
 use App\Enums\Category;
 use App\Http\Controllers\Controller;
-use App\Mail\Certificate;
 use App\Mail\SendCertificate;
 use App\Models\Order;
 use App\Models\Team;
@@ -12,8 +11,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 use Throwable;
 
 class CertificateController extends Controller
@@ -58,6 +59,9 @@ class CertificateController extends Controller
         // @todo replace by resource
         return Inertia::render($category->getVueComponent($page), [
             'order' => $order,
+            'picture' => $order->certificate->picture_path && $page === 'summary' ? Storage::disk(
+                'digitalocean'
+            )->url($order->certificate->picture_path) : null,
             'category' => $category->value,
             'page' => $page,
         ]);
@@ -117,7 +121,6 @@ class CertificateController extends Controller
 
     public function send(Order $order, Request $request): RedirectResponse
     {
-
         $validated = $request->validate([
             'email' => 'required|email',
         ], [
@@ -125,11 +128,71 @@ class CertificateController extends Controller
             'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
         ]);
 
-        Mail::to($validated['email'])->send(new SendCertificate(
-            $request->user()->currentTeam?->name,
-            $order->attachments->where('type', 'certificate')->first()->path
-        ));
+        Mail::to($validated['email'])->send(
+            new SendCertificate(
+                $request->user()->currentTeam?->name,
+                $order->attachments->where('type', 'certificate')->first()->path
+            )
+        );
 
         return to_route('hub.certificates');
+    }
+
+
+    /**
+     * @throws Throwable
+     */
+    public function picture(Order $order, Request $request): RedirectResponse
+    {
+        $request->validate([
+            'picture' => 'image|mimes:jpeg,png,jpg|max:10000',
+        ], [
+            'picture.image' => 'Bitte laden Sie ein Bild hoch.',
+            'picture.mimes' => 'Bitte laden Sie ein Bild im Format jpg oder png hoch.',
+            'picture.max' => 'Bitte laden Sie ein Bild hoch, das kleiner als 10 MB ist.',
+        ]);
+
+        $path = config('app.env').'/'.$order->slug.'/pictures';
+
+        $success = $request->file('picture')->store($path, 'digitalocean');
+
+        throw_if(!$success, new RuntimeException('Could not store file'));
+
+        $order->certificate->update([
+            'picture_path' => $success,
+        ]);
+
+        if ($request->user()) {
+            return to_route('hub.certificates.show', [
+                'order' => $order->slug,
+                'page' => $request->get('page'),
+            ]);
+        }
+
+        return redirect()->route('certificate.show', [
+            'order' => $order->slug,
+            'page' => $request->get('page'),
+        ]);
+    }
+
+    public function deletePicture(Order $order, Request $request): RedirectResponse
+    {
+        Storage::disk('digitalocean')->delete($order->certificate->picture_path);
+
+        $order->certificate->update([
+            'picture_path' => null,
+        ]);
+
+        if ($request->user()) {
+            return to_route('hub.certificates.show', [
+                'order' => $order->slug,
+                'page' => $request->get('page'),
+            ]);
+        }
+
+        return redirect()->route('certificate.show', [
+            'order' => $order->slug,
+            'page' => $request->get('page'),
+        ]);
     }
 }

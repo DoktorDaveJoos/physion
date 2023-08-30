@@ -19,19 +19,12 @@ class OrderController extends Controller
 
     public function index(Request $request): Response|RedirectResponse
     {
-        if (!$request->user()->currentTeam?->subscribed('default')) {
-            return to_route('hub.dashboard');
-        }
-
-        $orderQuery = Order::where('team_id', $request->user()?->current_team_id);
-
         $orders = Order::where('team_id', $request->user()?->current_team_id)
             ->when($request->get('filter'), function ($query, $filter) {
                 return $query->where('status', $filter);
             })
             ->when($request->get('query'), function ($query) use ($request) {
                 $type = Category::fromValue($request->get('type'))->getModel();
-                ray($type);
 
                 return $query->where('certificate_id', $request->get('query'))
                     ->where('certificate_type', $type::class);
