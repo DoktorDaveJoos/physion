@@ -29,7 +29,6 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
-        "@formkit/auto-animate": "^0.7.0",
         "@googlemaps/js-api-loader": "^1.15.1",
         "@headlessui/vue": "^1.7.3",
         "@heroicons/vue": "^2.0.12",
