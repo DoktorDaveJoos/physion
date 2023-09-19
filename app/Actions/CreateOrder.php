@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Enums\Category;
+use App\Jobs\BroadcastMessageJob;
 use App\Models\Bdrf;
 use App\Models\Customer;
 use App\Models\Order;
@@ -69,11 +70,18 @@ class CreateOrder
         // Attach Product of Certificate
         $order->products()->attach($product);
 
-        // Notify Customer
+        // Notify only external customers
         $customer?->notify((new OrderCreated($order, $customer->name))->locale('de'));
 
-        // Notify Bauzertifikate Team - @todo make async
-        Telegram::broadcast("[Order created] $order->owner->name: $order->certificate_type");
+        // Notify Bauzertifikate Team
+        BroadcastMessageJob::dispatch(
+            sprintf(
+                'Neue Bestellung [%s] von %s %s',
+                explode('/', $order->certificate_type)[2],
+                $customer?->first_name ?? $user?->first_name,
+                $customer->last_name ?? $user?->last_name,
+            )
+        );
 
         return $order;
     }

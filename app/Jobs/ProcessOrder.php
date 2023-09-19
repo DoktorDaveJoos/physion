@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Services\Order\OrderService;
 use App\Support\Telegram\TelegramPublisher;
 use Exception;
 use Illuminate\Bus\Queueable;

@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\CustomerUpdatedFromStripe;
+use App\Jobs\BroadcastMessageJob;
 use App\Models\Order;
 use App\Models\Product;
 use App\Support\Telegram\Telegram;
@@ -36,9 +37,14 @@ class HandleOrderPaid
             return $carry + $product->price;
         }, 0.0);
 
-        Telegram::broadcast(
-            '🚀 Patte gemacht: '.$price.'€ bezahlt von '.$order->owner->email.' für '.$order->products->count(
-            ).' Produkte.'
+        BroadcastMessageJob::dispatch(
+            sprintf(
+                '🚀 Patte gemacht: %s€ bezahlt von %s %s für %s Produkte.',
+                $price,
+                $order->owner->first_name,
+                $order->owner->last_name,
+                $order->products->count()
+            )
         );
     }
 }

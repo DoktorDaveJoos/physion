@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hub;
 
 use App\Enums\Category;
 use App\Http\Controllers\Controller;
+use App\Jobs\BroadcastMessageJob;
 use App\Mail\SendCertificate;
 use App\Models\Order;
 use App\Models\Team;
@@ -101,6 +102,16 @@ class CertificateController extends Controller
                 ->get();
 
             $team->subscription()->reportUsageFor($stripePriceId->first()->stripe_price);
+
+            BroadcastMessageJob::dispatch(
+                sprintf(
+                    '🚀 Patte gemacht: %s€ bezahlt von %s %s für %s Produkte.',
+                    $order->products->first()->price,
+                    $order->owner->first_name,
+                    $order->owner->last_name,
+                    $order->products->count()
+                )
+            );
 
             return to_route('hub.certificates');
         }
