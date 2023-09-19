@@ -70,14 +70,13 @@ enum Category: string
     /**
      * Returns the Category::case for the model.
      *
-     * @param class-string<Vrbr::class, Bdrf::class> $classString
+     * @param  class-string<Vrbr::class, Bdrf::class>  $classString
      * @return Category
      *
      * @throws Throwable
      */
     public static function fromModel(string $classString): Category
     {
-
         // @todo: Fix this - can cause errors - we need to determine a definite way to determine the category
         if (request()?->user()?->id) {
             return match ($classString) {
@@ -97,7 +96,11 @@ enum Category: string
     public function eligibleForUpdate(): array
     {
         return match ($this) {
-            self::BDRF, self::VRBR, self::VRBR_PARTNER, self::BDRF_PARTNER => ['created', 'finalized', 'in_clarification'],
+            self::BDRF, self::VRBR, self::VRBR_PARTNER, self::BDRF_PARTNER => [
+                'created',
+                'finalized',
+                'in_clarification',
+            ],
         };
     }
 
@@ -136,7 +139,11 @@ enum Category: string
 
     public function getVueComponent(string $key, bool $hub = false): string
     {
-        return $this->getPage($key)->getVueComponent($hub);
+        try {
+            return $this->getPage($key)->getVueComponent($hub);
+        } catch (Exception) {
+            abort(404);
+        }
     }
 
     /**

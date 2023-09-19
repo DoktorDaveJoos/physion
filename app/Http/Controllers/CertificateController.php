@@ -56,7 +56,9 @@ class CertificateController extends Controller
         // @todo replace by resource
         return Inertia::render($category->getVueComponent($page), [
             'order' => $order,
-            'picture' => $order->certificate->picture_path ? Storage::disk('digitalocean')->url($order->certificate->picture_path) : null,
+            'picture' => $order->certificate->picture_path ? Storage::disk('digitalocean')->url(
+                $order->certificate->picture_path
+            ) : null,
             'category' => $category->value,
             'page' => $page,
         ]);
@@ -67,6 +69,7 @@ class CertificateController extends Controller
      */
     public function update(Order $order, Request $request): RedirectResponse
     {
+
         $category = Category::fromModel($order->certificate_type);
         $page = $request->get('page');
 
@@ -101,7 +104,8 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function picture(Order $order, Request $request): RedirectResponse {
+    public function picture(Order $order, Request $request): RedirectResponse
+    {
         $request->validate([
             'picture' => 'image|mimes:jpeg,png,jpg|max:10000',
         ], [
@@ -136,7 +140,6 @@ class CertificateController extends Controller
 
     public function deletePicture(Order $order, Request $request): RedirectResponse
     {
-
         Storage::disk('digitalocean')->delete($order->certificate->picture_path);
 
         $order->certificate->update([

@@ -64,6 +64,7 @@ class Bdrf extends Resource
                 Text::make('Baujahr', 'construction_year')->copyable()->hideFromIndex(),
                 Text::make('Baujahr Heizung', 'construction_year_heating')->copyable()->hideFromIndex(),
                 Text::make('Wohnfläche', 'floor_area')->copyable()->hideFromIndex(),
+                Text::make('Anzahl Geschosse', 'floors')->copyable()->hideFromIndex(),
                 Text::make('Anzahl Wohneinheiten', 'housing_units')->copyable()->hideFromIndex(),
                 Text::make('Lüftung', 'ventilation')->copyable()->hideFromIndex(),
             ]),

@@ -29,6 +29,7 @@ class UpdateDetailsRequest extends FormRequest
         return [
             'construction_year' => 'required|integer|min:1800|max:'.(date('Y')),
             'floor_area' => 'required|numeric|min:1|max:10000',
+            'floors' => 'required|numeric|min:1|max:100',
             'housing_units' => 'required|integer|min:1|max:1000',
             'ventilation' => 'required|string',
             'cooling' => 'nullable|string',
@@ -59,6 +60,10 @@ class UpdateDetailsRequest extends FormRequest
             'floor_area.numeric' => 'Bitte geben Sie die Wohnfläche des Gebäudes als Zahl an.',
             'floor_area.min' => 'Bitte geben Sie die Wohnfläche des Gebäudes als Zahl an.',
             'floor_area.max' => 'Die Wohnfläche ist zu groß.',
+            'floors.required' => 'Bitte geben Sie die Anzahl der Stockwerke an.',
+            'floors.numeric' => 'Bitte geben Sie die Anzahl der Stockwerke als Zahl an.',
+            'floors.min' => 'Bitte geben Sie die Anzahl der Stockwerke als Zahl an.',
+            'floors.max' => 'Zu viele Stockwerke angegeben.',
             'housing_units.required' => 'Bitte geben Sie die Anzahl der Wohnungen an.',
             'housing_units.integer' => 'Bitte geben Sie die Anzahl der Wohnungen als Zahl an.',
             'housing_units.min' => 'Bitte geben Sie die Anzahl der Wohnungen als Zahl an.',
