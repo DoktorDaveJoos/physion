@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Exceptions\HelperNotSupported;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
@@ -53,7 +54,10 @@ class Vrbr extends Resource
             Text::make('Order ID', 'order.slug'),
             Text::make('Grund der Ausstellung', 'reason'),
 
-            Image::make('Gebäudebild', 'picture_path')->disk('digitalocean'),
+            Image::make('Gebäudebild', 'picture_path')->disk('digitalocean')->download(function($request, $model, $disk, $value) {
+                ob_end_clean();
+                return Storage::disk($disk)->download($this->picture_path, $this->street_address . '_' . $this->zip . '_' . $this->city . '.jpg');
+            }),
 
             new Panel('Adresse', [
                 Text::make('Straße', 'street_address')->copyable(),

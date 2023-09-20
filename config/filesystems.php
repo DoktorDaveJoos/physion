@@ -34,6 +34,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
             'throw' => false,
+            'visibility' => 'public', // 'public' or 'private
         ],
 
         'public' => [
@@ -64,6 +65,8 @@ return [
             'endpoint' => env('DIGITALOCEAN_SPACES_ENDPOINT'),
             'region' => env('DIGITALOCEAN_SPACES_REGION'),
             'bucket' => env('DIGITALOCEAN_SPACES_BUCKET'),
+            'url' => env('DIGITALOCEAN_SPACES_URL'),
+            'throw' => false,
         ],
 
 
