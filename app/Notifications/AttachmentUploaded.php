@@ -38,7 +38,6 @@ class AttachmentUploaded extends Notification
     {
         $url = URL::signedRoute('order.show', ['order' => $this->order->slug]);
 
-
         return (new MailMessage)
             ->subject('Ihre Bestellung bei Bauzertifikate.de')
             ->greeting('Hallo ' . $this->name)

@@ -77,7 +77,7 @@ class CreateOrder
         BroadcastMessageJob::dispatch(
             sprintf(
                 'Neue Bestellung [%s] von %s %s',
-                explode('/', $order->certificate_type)[2],
+                explode('\\', $order->certificate_type)[2],
                 $customer?->first_name ?? $user?->first_name,
                 $customer->last_name ?? $user?->last_name,
             )
