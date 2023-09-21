@@ -7,7 +7,7 @@ import {
     RadioGroupLabel,
     RadioGroupOption,
 } from '@headlessui/vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useForm, router, usePage } from '@inertiajs/vue3';
 import { ElNotification } from 'element-plus';
 import FormHeader from '../../../Components/FormHeader.vue';
@@ -15,6 +15,7 @@ import Maps from '../../../Components/Maps.vue';
 import Orientation from '../../../Components/Orientation.vue';
 import PageWrapper from '../../../Wrappers/PageWrapper.vue';
 import BzButton from '../../../Components/BzButton.vue';
+import LayoutForm from './Position/LayoutForm.vue';
 
 const props = defineProps({
     order: {
@@ -28,11 +29,18 @@ const props = defineProps({
 });
 
 const form = useForm({
+    layout: props.order.certificate.layout ?? 'rectangle',
     side_a: props.order.certificate.side_a
         ? parseInt(props.order.certificate.side_a)
         : null,
     side_b: props.order.certificate.side_b
         ? parseInt(props.order.certificate.side_b)
+        : null,
+    side_c: props.order.certificate.side_c
+        ? parseInt(props.order.certificate.side_c)
+        : null,
+    side_d: props.order.certificate.side_d
+        ? parseInt(props.order.certificate.side_d)
         : null,
     orientation: props.order.certificate.orientation ?? null,
     maps: props.order.certificate.maps ?? null,
@@ -104,23 +112,39 @@ const floorPlans = [
         id: 1,
         title: 'Rechteck',
         description: 'Rechteck & Quadrat',
-        active: true,
+        short: 'rectangle',
     },
     {
         id: 2,
         title: 'L-Form',
         description: 'Demnächst verfügbar',
-        active: false,
+        short: 'l',
     },
     {
         id: 3,
         title: 'T-Form',
         description: 'Demnächst verfügbar',
-        active: false,
+        short: 't',
     },
 ];
 
-const selectedFloorPlan = ref(floorPlans[0]);
+const selectedFloorPlan = ref(floorPlans.find((f) => f.short === form.layout));
+
+watch(selectedFloorPlan, (value) => {
+    form.layout = value.short;
+    form.side_a = props.order.certificate.side_a
+        ? parseInt(props.order.certificate.side_a)
+        : null;
+    form.side_b = props.order.certificate.side_b
+        ? parseInt(props.order.certificate.side_b)
+        : null;
+    form.side_c = props.order.certificate.side_c
+        ? parseInt(props.order.certificate.side_c)
+        : null;
+    form.side_d = props.order.certificate.side_d
+        ? parseInt(props.order.certificate.side_d)
+        : null;
+});
 
 if (
     !props.order.certificate.place_id &&
@@ -150,7 +174,6 @@ if (
                             v-for="floorPlan in floorPlans"
                             :key="floorPlan.id"
                             v-slot="{ checked, active }"
-                            :disabled="!floorPlan.active"
                             :value="floorPlan"
                             as="template">
                             <div
@@ -183,31 +206,27 @@ if (
                                             class="mt-6 flex text-sm font-medium text-gray-900">
                                             <template
                                                 v-if="
-                                                    floorPlan.title ===
-                                                    'Rechteck'
+                                                    floorPlan.short ===
+                                                    'rectangle'
                                                 ">
                                                 <div
                                                     class="h-8 w-12 bg-blue-100"></div>
                                             </template>
 
                                             <template
-                                                v-if="
-                                                    floorPlan.title === 'L-Form'
-                                                ">
+                                                v-if="floorPlan.short === 'l'">
                                                 <div
-                                                    class="h-8 w-4 bg-blue-100"></div>
+                                                    class="h-8 w-6 bg-blue-100"></div>
                                                 <div
-                                                    class="h-4 w-8 bg-blue-100"></div>
+                                                    class="h-5 w-6 bg-blue-100"></div>
                                             </template>
 
                                             <template
-                                                v-if="
-                                                    floorPlan.title === 'T-Form'
-                                                ">
+                                                v-if="floorPlan.short === 't'">
                                                 <div
                                                     class="flex flex-col items-center">
                                                     <div
-                                                        class="h-4 w-4 bg-blue-100"></div>
+                                                        class="h-4 w-5 bg-blue-100"></div>
                                                     <div
                                                         class="h-4 w-12 bg-blue-100"></div>
                                                 </div>
@@ -235,57 +254,7 @@ if (
                     </div>
                 </RadioGroup>
             </div>
-
-            <div class="flex flex-col">
-                <div class="grid grid-cols-2">
-                    <div class="flex flex-col">
-                        <div class="flex w-24 justify-between">
-                            <span>&#8592;</span>
-                            <span>A</span>
-                            <span>&#8594;</span>
-                        </div>
-                        <div
-                            class="w-24 h-20 bg-blue-100 border-t-2 border-red-400"></div>
-                    </div>
-
-                    <el-form-item
-                        :error="form.errors.side_a"
-                        :required="true"
-                        class="flex-1"
-                        label="Länge A in Meter">
-                        <el-input-number
-                            v-model="form.side_a"
-                            :precision="2"
-                            placeholder="Länge"></el-input-number>
-                    </el-form-item>
-                </div>
-
-                <div class="grid grid-cols-2">
-                    <div class="flex self-end">
-                        <div
-                            class="w-24 h-20 bg-blue-100 border-r-2 border-red-400 mr-1"></div>
-                        <div
-                            class="flex flex-col h-20 items-center justify-between">
-                            <span>&#8593;</span>
-                            <span>B</span>
-                            <span>&#8595;</span>
-                        </div>
-                    </div>
-
-                    <el-form-item
-                        :error="form.errors.side_b"
-                        :required="true"
-                        class="flex-1"
-                        label="Länge B in Meter">
-                        <el-input-number
-                            v-model="form.side_b"
-                            :precision="2"
-                            placeholder="Länge"></el-input-number>
-                    </el-form-item>
-                </div>
-            </div>
-
-            <div></div>
+            <LayoutForm :form="form" :type="selectedFloorPlan.short" />
 
             <el-divider class="sm:col-span-2"></el-divider>
 

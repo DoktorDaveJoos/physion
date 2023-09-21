@@ -24,8 +24,11 @@ class UpdatePositionRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'layout' => 'required|string',
             'side_a' => 'required|numeric|min:0|max:100',
             'side_b' => 'required|numeric|min:0|max:100',
+            'side_c' => 'nullable|numeric|min:0|max:100',
+            'side_d' => 'nullable|numeric|min:0|max:100',
             'orientation' => 'required_unless:maps,agreed',
             'page' => 'required|string'
         ];
@@ -47,6 +50,12 @@ class UpdatePositionRequest extends FormRequest
             'side_b.numeric' => 'Bitte geben Sie die Länge der Seite B als Zahl an.',
             'side_b.min' => 'Bitte geben Sie die Länge der Seite B als Zahl an.',
             'side_b.max' => 'Die Länge der Seite B ist zu groß.',
+            'side_c.numeric' => 'Bitte geben Sie die Länge der Seite C als Zahl an.',
+            'side_c.min' => 'Bitte geben Sie die Länge der Seite C als Zahl an.',
+            'side_c.max' => 'Die Länge der Seite C ist zu groß.',
+            'side_d.numeric' => 'Bitte geben Sie die Länge der Seite D als Zahl an.',
+            'side_d.min' => 'Bitte geben Sie die Länge der Seite D als Zahl an.',
+            'side_d.max' => 'Die Länge der Seite D ist zu groß.',
             'orientation.required' => 'Bitte geben Sie die Ausrichtung des Gebäudes an.',
         ];
     }
