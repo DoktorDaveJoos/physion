@@ -76,8 +76,11 @@ class Bdrf extends Resource
             ]),
 
             new Panel('Lage und Grundriss', [
+                Text::make('Layout', 'layout')->hideFromIndex(),
                 Text::make('Länge A', 'side_a')->copyable()->hideFromIndex(),
                 Text::make('Länge B', 'side_b')->copyable()->hideFromIndex(),
+                Text::make('Länge C', 'side_c')->copyable()->hideFromIndex(),
+                Text::make('Länge D', 'side_d')->copyable()->hideFromIndex(),
                 Text::make('Orientierung', 'orientation')->copyable()->hideFromIndex(),
             ]),
 
