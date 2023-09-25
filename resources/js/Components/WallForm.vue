@@ -25,6 +25,7 @@ const form = useForm({
     construction: null,
     variant: null,
     thickness: null,
+    height: null,
 });
 
 onMounted(() => {
@@ -35,6 +36,7 @@ onMounted(() => {
             : null,
         variant: wall?.value?.variant ?? null,
         thickness: wall?.value?.thickness ?? null,
+        height: wall?.value?.height ?? null,
     });
 
     form.reset();
@@ -224,7 +226,18 @@ const hasAdditional = computed(() => {
                     placeholder="Bitte wählen" />
             </el-form-item>
 
-            <div class="hidden sm:block"></div>
+            <el-form-item
+                label="Geschosshöhe in m"
+                :error="form.errors.height"
+                required>
+                <el-input-number
+                    v-model="form.height"
+                    :precision="2"
+                    :max="10"
+                    :min="0"
+                    :step="0.01"
+                    placeholder="0" />
+            </el-form-item>
 
             <el-form-item
                 label="Stärke der Wand in cm (falls bekannt)"

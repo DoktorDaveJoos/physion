@@ -23,6 +23,7 @@ const form = useForm({
     type: null,
     u_value: null,
     ceiling: null,
+    height: null,
 });
 
 onMounted(() => {
@@ -30,6 +31,7 @@ onMounted(() => {
         type: cellar?.value?.type ?? null,
         u_value: cellar?.value?.u_value ?? null,
         ceiling: cellar?.value?.ceiling ?? null,
+        height: cellar?.value?.height ?? null,
     });
 
     form.reset();
@@ -141,15 +143,13 @@ const hasAdditional = computed(() => {
 
             <div class="hidden sm:block"></div>
 
-            <el-form-item
-                label="U-Wert (falls bekannt) (Bodenplatte/Zwischendecke)"
-                :error="form.errors.u_value">
+            <el-form-item label="Raumhöhe in m" :error="form.errors.height">
                 <el-input-number
-                    v-model="form.u_value"
+                    v-model="form.height"
                     :max="10"
                     :min="0"
                     :precision="2"
-                    :step="0.08"
+                    :step="0.01"
                     placeholder="0" />
             </el-form-item>
             <el-form-item
@@ -160,6 +160,17 @@ const hasAdditional = computed(() => {
                     :max="100"
                     :min="0"
                     :step="1"
+                    placeholder="0" />
+            </el-form-item>
+            <el-form-item
+                label="U-Wert (falls bekannt) (Bodenplatte/Zwischendecke)"
+                :error="form.errors.u_value">
+                <el-input-number
+                    v-model="form.u_value"
+                    :max="10"
+                    :min="0"
+                    :precision="2"
+                    :step="0.08"
                     placeholder="0" />
             </el-form-item>
         </el-form>

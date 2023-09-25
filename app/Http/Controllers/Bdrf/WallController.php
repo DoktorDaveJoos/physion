@@ -30,11 +30,14 @@ class WallController extends Controller
             'construction' => 'string|required',
             'variant' => 'string|required',
             'thickness' => 'numeric|nullable',
+            'height' => 'numeric|required',
         ], [
             'u_wert.numeric' => 'Bitte geben Sie einen gültigen U-Wert an.',
             'construction.required' => 'Bitte wählen Sie eine Konstruktion aus.',
             'variant.required' => 'Bitte wählen Sie eine Variante aus.',
             'thickness.numeric' => 'Bitte geben Sie eine gültige Stärke an.',
+            'height.numeric' => 'Bitte geben Sie eine gültige Höhe an.',
+            'height.required' => 'Bitte geben Sie eine Geschosshöhe an.',
         ]);
 
         if ($validator->fails()) {

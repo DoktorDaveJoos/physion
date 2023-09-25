@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CellarController extends Controller
@@ -30,10 +31,15 @@ class CellarController extends Controller
             'u_value' => 'numeric|nullable',
             'type' => 'string|required',
             'ceiling' => 'numeric|nullable',
+            'height' => Rule::requiredIf(function () use ($request) {
+                return $request->type !== 'Kein Keller';
+            }),
         ], [
             'u_wert.numeric' => 'Bitte geben Sie einen gültigen U-Wert an.',
             'heated.required' => 'Bitte geben Sie an, ob der Keller beheizt ist.',
             'ceiling.numeric' => 'Bitte geben Sie eine gültige Deckenhöhe an.',
+            'height.numeric' => 'Bitte geben Sie eine gültige Höhe an.',
+            'height.required' => 'Bitte geben Sie eine Geschosshöhe an.',
         ]);
 
         if ($validator->fails()) {
