@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bdrf;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bdrf;
+use App\Models\Building;
 use App\Models\Cellar;
 use App\Models\HeatingSystem;
 use App\Models\Insulation;
@@ -24,7 +25,7 @@ class HeatingController extends Controller
     /**
      * @throws ValidationException
      */
-    public function __invoke(Bdrf $bdrf, Request $request): RedirectResponse
+    public function __invoke(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'type' => 'required|string',
@@ -45,16 +46,16 @@ class HeatingController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->heatingSystems()->create($validator->validated());
+        $building->heatingSystems()->create($validator->validated());
 
-        return self::handleRedirect($request, $bdrf, 'energy');
+        return to_route('hub.buildings.energy', $building);
     }
 
-    public function destroy(Bdrf $bdrf, HeatingSystem $heatingSystem, Request $request): RedirectResponse
+    public function destroy(Building $building, HeatingSystem $heatingSystem, Request $request): RedirectResponse
     {
         $heatingSystem->delete();
 
-        return self::handleRedirect($request, $bdrf, 'energy');
+        return to_route('hub.buildings.energy', $building);
     }
 
 

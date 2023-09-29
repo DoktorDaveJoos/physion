@@ -263,8 +263,14 @@ Route::middleware([
 
 
         Route::get('/buildings', [BuildingController::class, 'index'])->name('buildings.index');
-        Route::get('/buildings/{building}', [BuildingController::class, 'show'])->name('buildings.show');
+        Route::get('/buildings/{building}', [BuildingController::class, 'show'])->name('buildings.show.index');
+        Route::get('/buildings/{building}/docs', [BuildingController::class, 'showDocs'])->name('buildings.show.docs');
+        Route::get('/buildings/{building}/energieausweis', [BuildingController::class, 'showEnergieausweis'])->name('buildings.show.energieausweis');
+        Route::get('/buildings/{building}/isfp', [BuildingController::class, 'showIsfp'])->name('buildings.show.isfp');
+        Route::get('/buildings/{building}/bza', [BuildingController::class, 'showBza'])->name('buildings.show.bza');
+
         Route::get('buildings/{building}/thermal', [BuildingController::class, 'thermal'])->name('buildings.thermal');
+        Route::get('buildings/{building}/energy', [BuildingController::class, 'energy'])->name('buildings.energy');
 
 
         Route::get('/billing', BillingController::class)->name('billing');

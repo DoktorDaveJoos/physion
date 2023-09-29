@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hub;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Building\BuildingResource;
+use App\Http\Resources\Building\BuildingResourceEnergieausweis;
 use App\Http\Resources\Building\BuildingThermalResource;
 use App\Models\Building;
 use Illuminate\Http\Request;
@@ -27,11 +28,33 @@ class BuildingController extends Controller
 
     public function show(Building $building)
     {
-
-        return Inertia::render('Hub/Building/BuildingDetail', [
+        return Inertia::render('Hub/Building/Show/BuildingShowIndex', [
             'building' => new BuildingResource($building),
         ]);
-
+    }
+    public function showDocs(Building $building)
+    {
+        return Inertia::render('Hub/Building/Show/BuildingShowDocs', [
+            'building' => new BuildingResource($building),
+        ]);
+    }
+    public function showEnergieausweis(Building $building)
+    {
+        return Inertia::render('Hub/Building/Show/BuildingShowEnergieausweis', [
+            'building' => new BuildingResourceEnergieausweis($building),
+        ]);
+    }
+    public function showIsfp(Building $building)
+    {
+        return Inertia::render('Hub/Building/Show/BuildingDetail', [
+            'building' => new BuildingResource($building),
+        ]);
+    }
+    public function showBza(Building $building)
+    {
+        return Inertia::render('Hub/Building/Show/BuildingDetail', [
+            'building' => new BuildingResource($building),
+        ]);
     }
 
     public function thermal(Building $building)
@@ -45,7 +68,7 @@ class BuildingController extends Controller
     public function energy(Building $building)
     {
         return Inertia::render('Hub/Building/BuildingEnergy', [
-            'building' => new BuildingThermalResource($building),
+            'building' => new BuildingResource($building),
         ]);
     }
     public function create(Request $request)

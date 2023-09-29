@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bdrf;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bdrf;
+use App\Models\Building;
 use App\Models\HeatingSystem;
 use App\Models\RenewableEnergyInstallation;
 use App\Traits\HandleFreeAndPaid;
@@ -22,7 +23,7 @@ class RenewableController extends Controller
     /**
      * @throws ValidationException
      */
-    public function __invoke(Bdrf $bdrf, Request $request): RedirectResponse
+    public function __invoke(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'type' => 'required|string',
@@ -45,16 +46,16 @@ class RenewableController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->renewableEnergyInstallations()->create($validator->validated());
+        $building->renewableEnergyInstallations()->create($validator->validated());
 
-        return self::handleRedirect($request, $bdrf, 'energy');
+        return to_route('hub.buildings.energy', $building);
     }
 
-    public function destroy(Bdrf $bdrf, RenewableEnergyInstallation $renewableEnergyInstallation, Request $request): RedirectResponse
+    public function destroy(Building $building, RenewableEnergyInstallation $renewableEnergyInstallation, Request $request): RedirectResponse
     {
         $renewableEnergyInstallation->delete();
 
-        return self::handleRedirect($request, $bdrf, 'energy');
+        return to_route('hub.buildings.energy', $building);
     }
 
 

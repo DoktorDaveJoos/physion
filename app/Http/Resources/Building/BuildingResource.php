@@ -54,10 +54,12 @@ class BuildingResource extends JsonResource
                 'wall' => $this->wall?->load('insulations', 'windows'),
                 'roof' => $this->roof?->load('insulations', 'windows', 'dormers'),
                 'cellarModel' => $this->cellarObject?->load('insulations'),
+                'heatingSystems' => $this->heatingSystems,
+                'renewableEnergyInstallations' => $this->renewableEnergyInstallations,
             ],
             'links' => [
                 'image' => $this->image ? Storage::url($this->image) : null,
-                'self' => route('hub.buildings.show', $this->id),
+                'self' => route('hub.buildings.show.index', $this->id),
             ],
         ];
     }

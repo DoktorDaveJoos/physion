@@ -33,7 +33,7 @@ const steps = [
             props.building.data.postal_code +
             ' ' +
             props.building.data.city,
-        route: route('hub.buildings.show', {
+        route: route('hub.buildings.show.index', {
             building: props.building.data.id,
         }),
     },

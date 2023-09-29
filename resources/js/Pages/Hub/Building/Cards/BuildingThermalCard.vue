@@ -22,7 +22,12 @@ defineProps({
                     Detaillierte Angaben zur Gebäudehülle
                 </p>
             </div>
-            <bz-button type="secondary">bearbeiten</bz-button>
+            <bz-button
+                as="link"
+                :href="route('hub.buildings.thermal', building.data.id)"
+                type="secondary"
+                >bearbeiten</bz-button
+            >
         </div>
         <div class="border-t border-gray-100">
             <el-empty

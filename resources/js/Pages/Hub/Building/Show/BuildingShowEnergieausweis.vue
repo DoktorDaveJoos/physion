@@ -1,0 +1,514 @@
+<script setup>
+import { Head, Link } from '@inertiajs/vue3';
+import { CheckIcon } from '@heroicons/vue/24/outline';
+import BuildingShowWrapper from './BuildingShowWrapper.vue';
+import BzCard from '../../Components/BzCard.vue';
+import BzButton from '../../../../Components/BzButton.vue';
+import { computed } from 'vue';
+
+const props = defineProps({
+    building: Object,
+});
+
+const canOrderBdrf = computed(() => {
+    if (props.building.data.products.bdrf) {
+        return false;
+    }
+
+    if (
+        !props.building.data.wall ||
+        !props.building.data.roof ||
+        !props.building.data.cellarModel ||
+        !props.building.data.heatingSystem
+    ) {
+        return false;
+    }
+
+    return true;
+});
+
+const bdrfExists = computed(() => {
+    return props.building.data.products.bdrf?.id;
+});
+
+const vrbrExists = computed(() => {
+    return props.building.data.products.vrbr?.id;
+});
+
+const bdrfThermalExists = computed(() => {
+    return (
+        props.building.data.wall &&
+        props.building.data.roof &&
+        props.building.data.cellarModel
+    );
+});
+
+const vrbrConsumptionExists = computed(() => {
+    return props.building.data.consumptions?.length > 0;
+});
+
+const bdrfHeatingExists = computed(() => {
+    return (
+        props.building.data.heatingSystems?.length > 0 &&
+        props.building.data.heatingSystems.filter(
+            (heatingSystem) => heatingSystem.water_included
+        ).length > 0
+    );
+});
+
+const bdrfSteps = [
+    {
+        id: '01',
+        name: 'Gebäudedaten',
+        description: 'Allgemeine Daten vollständig erfassen',
+        href: '#',
+        status: 'complete',
+    },
+    {
+        id: '02',
+        name: 'Gebäudedaten',
+        description: 'Thermische Hülle & Energieträger vollständig erfassen',
+        href: '#',
+        status: bdrfThermalExists.value
+            ? 'complete'
+            : bdrfThermalExists.value && bdrfHeatingExists.value
+            ? 'complete'
+            : 'current',
+    },
+    {
+        id: '03',
+        name: 'Bedarfsausweis',
+        description: 'Daten prüfen und Bestellung abschließen',
+        href: '#',
+        status: bdrfExists.value
+            ? 'complete'
+            : bdrfThermalExists.value && bdrfHeatingExists.value
+            ? 'current'
+            : 'upcoming',
+    },
+];
+const vrbrSteps = [
+    {
+        id: '01',
+        name: 'Gebäudedaten',
+        description: 'Allgemeine Daten vollständig erfassen',
+        href: '#',
+        status: 'complete',
+    },
+    {
+        id: '02',
+        name: 'Gebäudedaten',
+        description: 'Verbrauchsdaten über min. 3 Jahre erfassen',
+        href: '#',
+        status: vrbrExists.value
+            ? 'complete'
+            : vrbrConsumptionExists.value
+            ? 'complete'
+            : 'current',
+    },
+    {
+        id: '03',
+        name: 'Verbrauchsausweis',
+        description: 'Daten prüfen und Bestellung abschließen',
+        href: '#',
+        status: vrbrExists.value
+            ? 'complete'
+            : vrbrConsumptionExists.value
+            ? 'current'
+            : 'upcoming',
+    },
+];
+</script>
+
+<template>
+    <Head>
+        <title>Energieausweis</title>
+    </Head>
+
+    <building-show-wrapper :building="building">
+        <bz-card :class="vrbrExists ? 'opacity-50' : null">
+            <template #title>Bedarfsausweis</template>
+            <template #button>
+                <div class="flex space-x-2">
+                    <bz-button v-if="bdrfExists">Download</bz-button>
+                    <bz-button v-if="bdrfExists" type="secondary"
+                        >Per Mail verschicken
+                    </bz-button>
+                </div>
+                <bz-button
+                    v-if="!bdrfExists"
+                    :disabled="!bdrfThermalExists || !bdrfHeatingExists"
+                    as="link"
+                    >Bestellen</bz-button
+                >
+            </template>
+            <template #content>
+                <nav
+                    aria-label="Progress"
+                    class="mx-auto border-b border-gray-100">
+                    <ol class="overflow-hidden lg:flex" role="list">
+                        <li
+                            v-for="(step, stepIdx) in bdrfSteps"
+                            :key="step.id"
+                            class="relative overflow-hidden lg:flex-1">
+                            <div
+                                :class="[
+                                    stepIdx === 0
+                                        ? 'rounded-t-md border-b-0'
+                                        : '',
+                                    stepIdx === bdrfSteps.length - 1
+                                        ? 'rounded-b-md border-t-0'
+                                        : '',
+                                    'overflow-hidden border border-gray-200 lg:border-0',
+                                ]">
+                                <a
+                                    v-if="step.status === 'complete'"
+                                    :href="step.href"
+                                    class="group">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                                                <CheckIcon
+                                                    aria-hidden="true"
+                                                    class="h-4 w-4 text-white" />
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span class="text-sm font-medium">{{
+                                                step.name
+                                            }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <a
+                                    v-else-if="step.status === 'current'"
+                                    :href="step.href"
+                                    aria-current="step">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                <span class="text-blue-600">{{
+                                                    step.id
+                                                }}</span>
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span
+                                                class="text-sm font-medium text-blue-600"
+                                                >{{ step.name }}</span
+                                            >
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <a v-else :href="step.href" class="group">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                                <span class="text-gray-500">{{
+                                                    step.id
+                                                }}</span>
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.name }}</span
+                                            >
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <template v-if="stepIdx !== 0">
+                                    <!-- Separator -->
+                                    <div
+                                        aria-hidden="true"
+                                        class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
+                                        <svg
+                                            class="h-full w-full text-gray-300"
+                                            fill="none"
+                                            preserveAspectRatio="none"
+                                            viewBox="0 0 12 82">
+                                            <path
+                                                d="M0.5 0V31L10.5 41L0.5 51V82"
+                                                stroke="currentcolor"
+                                                vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </div>
+                                </template>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+                <template v-if="!bdrfExists">
+                    <div class="bg-white rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Thermische Hülle & Energieträger erfassen
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Für den bedarfsorientierten Energieausweis
+                                    muss die thermische Hülle, der Energieträger
+                                    und die Heizungsanlage erfasst werden.
+                                    Zusätzlich können Sie erneuerbare Energien
+                                    wie Photovoltaik oder Solarthermie erfassen,
+                                    falls diese vorhanden sind.
+                                </p>
+                            </div>
+                            <div class="mt-3 text-sm leading-6 flex flex-col">
+                                <Link
+                                    :href="
+                                        route(
+                                            'hub.buildings.thermal',
+                                            building.data.id
+                                        )
+                                    "
+                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    Jetzt thermische Hülle erfassen
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </Link>
+                                <Link
+                                    :href="
+                                        route(
+                                            'hub.buildings.energy',
+                                            building.data.id
+                                        )
+                                    "
+                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    Jetzt Energieträger und Heizungsanlage
+                                    erfassen
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </bz-card>
+
+        <bz-card :class="bdrfExists ? 'opacity-50' : null">
+            <template #title>Verbrauchsausweis</template>
+            <template #button>
+                <div class="flex space-x-2">
+                    <bz-button v-if="vrbrExists">Download</bz-button>
+                    <bz-button v-if="vrbrExists" type="secondary"
+                        >Send per Mail
+                    </bz-button>
+                </div>
+                <bz-button
+                    v-if="!vrbrExists"
+                    :disabled="!vrbrConsumptionExists"
+                    as="link"
+                    >Bestellen</bz-button
+                >
+            </template>
+            <template #content>
+                <nav
+                    aria-label="Progress"
+                    class="mx-auto border-b border-gray-100">
+                    <ol class="overflow-hidden lg:flex" role="list">
+                        <li
+                            v-for="(step, stepIdx) in vrbrSteps"
+                            :key="step.id"
+                            class="relative overflow-hidden lg:flex-1">
+                            <div
+                                :class="[
+                                    stepIdx === 0
+                                        ? 'rounded-t-md border-b-0'
+                                        : '',
+                                    stepIdx === vrbrSteps.length - 1
+                                        ? 'rounded-b-md border-t-0'
+                                        : '',
+                                    'overflow-hidden border border-gray-200 lg:border-0',
+                                ]">
+                                <a
+                                    v-if="step.status === 'complete'"
+                                    :href="step.href"
+                                    class="group">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                                                <CheckIcon
+                                                    aria-hidden="true"
+                                                    class="h-4 w-4 text-white" />
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span class="text-sm font-medium">{{
+                                                step.name
+                                            }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <a
+                                    v-else-if="step.status === 'current'"
+                                    :href="step.href"
+                                    aria-current="step">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                <span class="text-blue-600">{{
+                                                    step.id
+                                                }}</span>
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span
+                                                class="text-sm font-medium text-blue-600"
+                                                >{{ step.name }}</span
+                                            >
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <a v-else :href="step.href" class="group">
+                                    <span
+                                        aria-hidden="true"
+                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                    <span
+                                        :class="[
+                                            stepIdx !== 0 ? 'lg:pl-9' : '',
+                                            'flex items-start px-6 py-5 text-sm font-medium',
+                                        ]">
+                                        <span class="flex-shrink-0">
+                                            <span
+                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                                <span class="text-gray-500">{{
+                                                    step.id
+                                                }}</span>
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.name }}</span
+                                            >
+                                            <span
+                                                class="text-sm font-medium text-gray-500"
+                                                >{{ step.description }}</span
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                                <template v-if="stepIdx !== 0">
+                                    <!-- Separator -->
+                                    <div
+                                        aria-hidden="true"
+                                        class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
+                                        <svg
+                                            class="h-full w-full text-gray-300"
+                                            fill="none"
+                                            preserveAspectRatio="none"
+                                            viewBox="0 0 12 82">
+                                            <path
+                                                d="M0.5 0V31L10.5 41L0.5 51V82"
+                                                stroke="currentcolor"
+                                                vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </div>
+                                </template>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+                <template v-if="!vrbrExists">
+                    <div class="bg-white rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Verbrauch erfassen
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Für den verbrauchsorientierten
+                                    Energieausweis müssen die Verbrauchsdaten
+                                    der letzten 3 Jahre (36 Monate) erfasst
+                                    werden. Zusätzlich können Sie Leerstand,
+                                    falls vorhanden, erfassen.
+                                </p>
+                            </div>
+                            <div class="mt-3 text-sm leading-6 flex flex-col">
+                                <Link
+                                    :href="
+                                        route(
+                                            'hub.buildings.thermal',
+                                            building.data.id
+                                        )
+                                    "
+                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    Jetzt Verbrauch erfassen
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </bz-card>
+    </building-show-wrapper>
+</template>
