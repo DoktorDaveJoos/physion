@@ -13,6 +13,11 @@ class HeatingSystem extends Model
 
     protected $guarded = ['id'];
 
+    public function building(): BelongsTo
+    {
+        return $this->belongsTo(Building::class);
+    }
+
     public function bedarfsausweis(): BelongsTo
     {
         return $this->belongsTo(Bdrf::class, 'bdrf_id');

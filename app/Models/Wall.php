@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * @property int $id
+ * @property int $building_id
+ * @property Building $building
+ */
 class Wall extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function building(): BelongsTo
+    {
+        return $this->belongsTo(Building::class);
+    }
 
     public function bedarfsausweis(): BelongsTo
     {

@@ -40,6 +40,11 @@ const types = {
         text: 'text-yellow-800',
         icon: 'text-yellow-400',
     },
+    info: {
+        bg: 'bg-gray-100',
+        text: 'text-gray-800',
+        icon: 'text-gray-400',
+    },
 };
 </script>
 
@@ -63,7 +68,7 @@ const types = {
             viewBox="0 0 8 8">
             <circle cx="4" cy="4" r="3" />
         </svg>
-        <div class="flex-1">
+        <div class="flex-1 flex items-center py-1">
             <slot name="prepend"></slot>
             <span
                 :class="[

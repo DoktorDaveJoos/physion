@@ -508,6 +508,8 @@ import {
     UsersIcon,
     WrenchIcon,
     XMarkIcon,
+    HomeModernIcon,
+    RectangleGroupIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid';
 import Dropdown from '../Components/Dropdown.vue';
@@ -526,8 +528,14 @@ const navigation = [
     {
         name: 'Dashboard',
         href: route('hub.dashboard'),
-        icon: HomeIcon,
+        icon: RectangleGroupIcon,
         current: route().current('hub.dashboard'),
+    },
+    {
+        name: 'Gebäude',
+        href: route('hub.buildings.index'),
+        icon: HomeModernIcon,
+        current: route().current('hub.buildings*'),
     },
     {
         name: 'Bestellungen',

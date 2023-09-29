@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bdrf;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bdrf;
+use App\Models\Building;
 use App\Models\Insulation;
 use App\Models\Wall;
 use App\Models\Window;
@@ -20,10 +21,11 @@ class WallController extends Controller
     use HandleFreeAndPaid;
 
     // invokable method
+
     /**
      * @throws ValidationException
      */
-    public function __invoke(Bdrf $bdrf, Request $request): RedirectResponse
+    public function __invoke(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'u_value' => 'numeric|nullable',
@@ -45,17 +47,17 @@ class WallController extends Controller
         }
 
         Wall::updateOrCreate(
-            ['bdrf_id' => $bdrf->id],
+            ['building_id' => $building->id],
             $validator->validated()
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
     /**
      * @throws ValidationException
      */
-    public function insulation(Bdrf $bdrf, Request $request): RedirectResponse
+    public function insulation(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'type' => 'string|required',
@@ -71,26 +73,26 @@ class WallController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        if (!$bdrf->wall) {
+        if (!$building->wall) {
             abort(400, 'Noch keine Außenwand angelegt.');
         }
 
-        $bdrf->wall->insulations()->create($validator->validated());
+        $building->wall->insulations()->create($validator->validated());
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function deleteInsulation(Bdrf $bdrf, Insulation $insulation, Request $request): RedirectResponse
+    public function deleteInsulation(Building $building, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
     /**
      * @throws ValidationException
      */
-    public function window(Bdrf $bdrf, Request $request): RedirectResponse
+    public function window(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'count' => 'numeric|required',
@@ -116,24 +118,24 @@ class WallController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        if (!$bdrf->wall) {
+        if (!$building->wall) {
             return Redirect::back()->withErrors([
                 'wall' => 'Noch keine Außenwand angelegt.',
             ]);
         }
 
-        $bdrf->wall->windows()->create(
+        $building->wall->windows()->create(
             $validator->validated()
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function deleteWindow(Bdrf $bdrf, Window $window, Request $request): RedirectResponse
+    public function deleteWindow(Building $building, Window $window, Request $request): RedirectResponse
     {
         $window->delete();
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
 

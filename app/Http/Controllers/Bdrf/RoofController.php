@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bdrf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bedarf\UpdateRoofRequest;
 use App\Models\Bdrf;
+use App\Models\Building;
 use App\Models\Dormer;
 use App\Models\Insulation;
 use App\Models\Roof;
@@ -21,17 +22,17 @@ class RoofController extends Controller
 
     use HandleFreeAndPaid;
 
-    public function __invoke(Bdrf $bdrf, UpdateRoofRequest $request): RedirectResponse
+    public function __invoke(Building $building, UpdateRoofRequest $request): RedirectResponse
     {
         Roof::updateOrCreate(
-            ['bdrf_id' => $bdrf->id],
+            ['building_id' => $building->id],
             $request->validated()
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function insulation(Bdrf $bdrf, Request $request): RedirectResponse
+    public function insulation(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'type' => 'string|required',
@@ -47,21 +48,21 @@ class RoofController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->roof->insulations()->create(
+        $building->roof->insulations()->create(
             $validator->validated()
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function deleteInsulation(Bdrf $bdrf, Insulation $insulation, Request $request): RedirectResponse
+    public function deleteInsulation(Building $building, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function dormer(Bdrf $bdrf, Request $request): RedirectResponse
+    public function dormer(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'count' => 'numeric|required',
@@ -87,24 +88,24 @@ class RoofController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->roof->dormers()->create(
+        $building->roof->dormers()->create(
             $validator->validated()
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function deleteDormer(Bdrf $bdrf, Dormer $dormer, Request $request): RedirectResponse
+    public function deleteDormer(Building $building, Dormer $dormer, Request $request): RedirectResponse
     {
         $dormer->delete();
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
     /**
      * @throws ValidationException
      */
-    public function skylight(Bdrf $bdrf, Request $request): RedirectResponse
+    public function skylight(Building $building, Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'count' => 'numeric|required',
@@ -130,19 +131,19 @@ class RoofController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $bdrf->roof->windows()->create(
+        $building->roof->windows()->create(
             $validator->validated()
             + ['type' => 'dachfenster']
         );
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
-    public function deleteSkylight(Bdrf $bdrf, Window $window, Request $request): RedirectResponse
+    public function deleteSkylight(Building $building, Window $window, Request $request): RedirectResponse
     {
         $window->delete();
 
-        return self::handleRedirect($request, $bdrf, 'thermal');
+        return to_route('hub.buildings.thermal', $building);
     }
 
 }

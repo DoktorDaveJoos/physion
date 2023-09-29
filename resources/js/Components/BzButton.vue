@@ -56,6 +56,7 @@ const getClass = computed(() => {
 
         if (props.disabled) {
             classes.push(
+                'opacity-50',
                 'bg-blue-200',
                 'text-blue-600',
                 'px-5',

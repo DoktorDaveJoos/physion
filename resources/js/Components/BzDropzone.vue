@@ -64,7 +64,7 @@ const processFile = (file) => {
             dragging = false;
             handleFileUpload($event);
         "
-        class="col-span-2 flex justify-center rounded border border-dashed transition duration-75 px-6 py-8 group"
+        class="col-span-2 flex justify-center rounded-lg border border-dashed transition duration-75 px-6 py-8 group"
         :class="dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">
         <div class="text-center">
             <PhotoIcon

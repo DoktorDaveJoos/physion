@@ -16,6 +16,7 @@ use App\Http\Controllers\Checkout\ShowController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
 use App\Http\Controllers\Hub\BillingController;
+use App\Http\Controllers\Hub\BuildingController;
 use App\Http\Controllers\Hub\DashboardController;
 use App\Http\Controllers\Hub\SearchController;
 use App\Http\Controllers\LandingController;
@@ -136,55 +137,55 @@ Route::prefix('orders')->group(function () {
     Route::delete('{order:slug}/certificate/picture', [CertificateController::class, 'deletePicture'])->name('certificate.picture.delete');
 });
 
-Route::prefix('bdrf/{bdrf}')->group(function () {
+Route::prefix('building/{building}')->name('building.')->group(function () {
     // roof
-    Route::put('/roof', RoofController::class)->name('bdrf.roof');
+    Route::put('/roof', RoofController::class)->name('roof');
 
     // roof insulation
-    Route::put('/roof/insulation', [RoofController::class, 'insulation'])->name('bdrf.roof.insulation');
+    Route::put('/roof/insulation', [RoofController::class, 'insulation'])->name('roof.insulation');
     Route::delete('/roof/insulation/{insulation}', [RoofController::class, 'deleteInsulation'])
-        ->name('bdrf.roof.insulation.delete');
+        ->name('roof.insulation.delete');
     // roof windows
-    Route::put('/roof/skylight', [RoofController::class, 'skylight'])->name('bdrf.roof.skylight');
+    Route::put('/roof/skylight', [RoofController::class, 'skylight'])->name('roof.skylight');
     Route::delete('/roof/skylight/{window}', [RoofController::class, 'deleteSkylight'])
-        ->name('bdrf.roof.skylight.delete');
+        ->name('roof.skylight.delete');
     // roof dormer
-    Route::put('/roof/dormer', [RoofController::class, 'dormer'])->name('bdrf.roof.dormer');
-    Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'])->name('bdrf.roof.dormer.delete');
+    Route::put('/roof/dormer', [RoofController::class, 'dormer'])->name('roof.dormer');
+    Route::delete('/dormer/{dormer}', [RoofController::class, 'deleteDormer'])->name('roof.dormer.delete');
 
     // wall
-    Route::put('/wall', WallController::class)->name('bdrf.wall');
+    Route::put('/wall', WallController::class)->name('wall');
 
     // wall insulation
-    Route::put('/wall/insulation', [WallController::class, 'insulation'])->name('bdrf.wall.insulation');
+    Route::put('/wall/insulation', [WallController::class, 'insulation'])->name('wall.insulation');
     Route::delete('/wall/insulation/{insulation}', [WallController::class, 'deleteInsulation'])
-        ->name('bdrf.wall.insulation.delete');
+        ->name('wall.insulation.delete');
     // wall windows
-    Route::put('/wall/window', [WallController::class, 'window'])->name('bdrf.wall.window');
+    Route::put('/wall/window', [WallController::class, 'window'])->name('wall.window');
     Route::delete('/wall/window/{window}', [WallController::class, 'deleteWindow'])
-        ->name('bdrf.wall.window.delete');
+        ->name('wall.window.delete');
 
     // cellar
-    Route::put('/cellar', CellarController::class)->name('bdrf.cellar');
+    Route::put('/cellar', CellarController::class)->name('cellar');
 
     // cellar insulation
-    Route::put('/cellar/insulation', [CellarController::class, 'insulation'])->name('bdrf.cellar.insulation');
+    Route::put('/cellar/insulation', [CellarController::class, 'insulation'])->name('cellar.insulation');
     Route::delete('/cellar/insulation/{insulation}', [CellarController::class, 'deleteInsulation'])
-        ->name('bdrf.cellar.insulation.delete');
+        ->name('cellar.insulation.delete');
 
     // heating system
-    Route::put('/heating', HeatingController::class)->name('bdrf.heating');
-    Route::delete('/heating/{heatingSystem}', [HeatingController::class, 'destroy'])->name('bdrf.heating.delete');
+    Route::put('/heating', HeatingController::class)->name('heating');
+    Route::delete('/heating/{heatingSystem}', [HeatingController::class, 'destroy'])->name('heating.delete');
 
     // renewable energy
-    Route::put('/renewable', RenewableController::class)->name('bdrf.renewable');
+    Route::put('/renewable', RenewableController::class)->name('renewable');
     Route::delete('/renewable/{renewableEnergyInstallation}', [RenewableController::class, 'destroy'])->name(
-        'bdrf.renewable.delete'
+        'renewable.delete'
     );
 
     // position
-    Route::put('/maps', [PositionController::class, 'maps'])->name('bdrf.maps');
-    Route::put('/position', [PositionController::class, 'position'])->name('bdrf.position');
+    Route::put('/maps', [PositionController::class, 'maps'])->name('maps');
+    Route::put('/position', [PositionController::class, 'position'])->name('position');
 });
 
 Route::prefix('vrbr/{vrbr}')->group(function () {
@@ -259,6 +260,12 @@ Route::middleware([
 
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+
+        Route::get('/buildings', [BuildingController::class, 'index'])->name('buildings.index');
+        Route::get('/buildings/{building}', [BuildingController::class, 'show'])->name('buildings.show');
+        Route::get('buildings/{building}/thermal', [BuildingController::class, 'thermal'])->name('buildings.thermal');
+
 
         Route::get('/billing', BillingController::class)->name('billing');
 
