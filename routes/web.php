@@ -13,6 +13,7 @@ use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\Checkout\DeleteUpsellController;
 use App\Http\Controllers\Checkout\PayPal;
 use App\Http\Controllers\Checkout\ShowController;
+use App\Http\Controllers\ConsumptionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Find\FindByController;
 use App\Http\Controllers\Hub\BillingController;
@@ -183,6 +184,11 @@ Route::prefix('building/{building}')->name('building.')->group(function () {
         'renewable.delete'
     );
 
+    // consumptions
+    Route::put('/consumption', [ConsumptionController::class, 'store'])->name('consumption');
+    Route::delete('/consumption/{consumption}', [ConsumptionController::class, 'destroy'])->name(
+        'consumption.delete');
+
     // position
     Route::put('/maps', [PositionController::class, 'maps'])->name('maps');
     Route::put('/position', [PositionController::class, 'position'])->name('position');
@@ -271,7 +277,15 @@ Route::middleware([
 
         Route::get('buildings/{building}/thermal', [BuildingController::class, 'thermal'])->name('buildings.thermal');
         Route::get('buildings/{building}/energy', [BuildingController::class, 'energy'])->name('buildings.energy');
+        Route::get('buildings/{building}/consumption', [BuildingController::class, 'consumption'])->name('buildings.consumption');
 
+        Route::post('buildings/{building}/documents', [BuildingController::class, 'storeDocument'])->name('buildings.documents.store');
+        Route::delete('buildings/{building}/documents/{attachment}', [BuildingController::class, 'deleteDocument'])->name('buildings.documents.destroy');
+
+        Route::post('buildings/{building}/images', [BuildingController::class, 'storeImage'])->name('buildings.images.store');
+
+        Route::post('buildings/{building}/certificates', [App\Http\Controllers\Hub\CertificateController::class, 'store'])->name('certificates.store');
+        Route::get('certificates/{certificate}/download', [App\Http\Controllers\Hub\CertificateController::class, 'download'])->name('certificates.download');
 
         Route::get('/billing', BillingController::class)->name('billing');
 

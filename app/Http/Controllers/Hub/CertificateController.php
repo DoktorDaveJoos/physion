@@ -6,6 +6,8 @@ use App\Enums\Category;
 use App\Http\Controllers\Controller;
 use App\Jobs\BroadcastMessageJob;
 use App\Mail\SendCertificate;
+use App\Models\Building;
+use App\Models\EnergyCertificate;
 use App\Models\Order;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +22,29 @@ use Throwable;
 
 class CertificateController extends Controller
 {
+
+
+    public function store(Building $building, Request $request)
+    {
+        $data = $request->validate([
+            'type' => 'required|in:bdrf,bdrf_partner,vrbr,vrbr_partner',
+            'reason' => 'required|string',
+            'suggestion_check' => 'present|array',
+        ], [
+            'type.required' => 'Bitte wählen Sie einen Zertifikatstypen aus.',
+            'type.in' => 'Bitte wählen Sie einen Zertifikatstypen aus.',
+            'reason.required' => 'Bitte geben Sie einen Grund für die Erstellung des Energieausweises an.',
+            'reason.string' => 'Bitte geben Sie einen Grund für die Erstellung des Energieausweises an.',
+        ]);
+
+        $building->energyCertificates()->create($data);
+
+        return to_route('hub.buildings.show.energieausweis', [
+            'building' => $building->id,
+        ]);
+    }
+
+
     /**
      * @throws Throwable
      */
@@ -205,5 +230,11 @@ class CertificateController extends Controller
             'order' => $order->slug,
             'page' => $request->get('page'),
         ]);
+    }
+
+    public function download(EnergyCertificate $certificate)
+    {
+        rd($certificate);
+        return Storage::disk('digitalocean')->download($certificate->file, 'energieausweis.pdf');
     }
 }

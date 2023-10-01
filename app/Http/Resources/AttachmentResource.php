@@ -22,9 +22,10 @@ class AttachmentResource extends JsonResource
             'data' => [
                 'id' => $this->id,
                 'name' => $this->name,
+                'type' => $this->type
             ],
             'links' => [
-                'self' => Storage::temporaryUrl($this->path, now()->addMinutes(30)),
+                'self' => Storage::url($this->path),
             ],
         ];
     }

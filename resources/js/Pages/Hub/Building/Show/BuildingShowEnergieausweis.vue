@@ -1,13 +1,29 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { CheckIcon } from '@heroicons/vue/24/outline';
 import BuildingShowWrapper from './BuildingShowWrapper.vue';
 import BzCard from '../../Components/BzCard.vue';
 import BzButton from '../../../../Components/BzButton.vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import DialogModal from '../../../../Components/DialogModal.vue';
+import { ElNotification } from 'element-plus';
 
 const props = defineProps({
     building: Object,
+});
+
+const modal = ref(false);
+
+const form = useForm({
+    type: null,
+    reason: null,
+    suggestion_check: {
+        attic: false,
+        external_wall: false,
+        windows: false,
+        cellar_ceiling: false,
+        led: false,
+    },
 });
 
 const canOrderBdrf = computed(() => {
@@ -44,7 +60,7 @@ const bdrfThermalExists = computed(() => {
 });
 
 const vrbrConsumptionExists = computed(() => {
-    return props.building.data.consumptions?.length > 0;
+    return parseInt(props.building.data.consumptionMonths) >= 36;
 });
 
 const bdrfHeatingExists = computed(() => {
@@ -55,6 +71,35 @@ const bdrfHeatingExists = computed(() => {
         ).length > 0
     );
 });
+
+const order = (type) => {
+    form.type = type;
+    modal.value = true;
+};
+
+const cancel = () => {
+    form.reset();
+    modal.value = false;
+};
+
+const submitOrder = () => {
+    form.post(
+        route('hub.certificates.store', {
+            building: props.building.data.id,
+        }),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                ElNotification({
+                    title: 'Bestellung erfolgreich',
+                    message: 'Ihre Bestellung wurde erfolgreich abgeschlossen.',
+                    type: 'success',
+                });
+                modal.value = false;
+            },
+        }
+    );
+};
 
 const bdrfSteps = [
     {
@@ -118,6 +163,8 @@ const vrbrSteps = [
             : 'upcoming',
     },
 ];
+
+console.log(parseInt(props.building.data.consumptionMonths));
 </script>
 
 <template>
@@ -126,14 +173,35 @@ const vrbrSteps = [
     </Head>
 
     <building-show-wrapper :building="building">
-        <bz-card :class="vrbrExists ? 'opacity-50' : null">
+        <bz-card
+            :class="
+                vrbrExists
+                    ? 'opacity-50 hover:opacity-100 transition duration-150'
+                    : null
+            ">
             <template #title>Bedarfsausweis</template>
+            <template #subtitle>Bedarfsorientierter Energieausweis</template>
             <template #button>
                 <div class="flex space-x-2">
-                    <bz-button v-if="bdrfExists">Download</bz-button>
-                    <bz-button v-if="bdrfExists" type="secondary"
-                        >Per Mail verschicken
-                    </bz-button>
+                    <template
+                        v-if="bdrfExists && building.data.products.bdrf?.file">
+                        <bz-button
+                            v-if="bdrfExists"
+                            as="a"
+                            :href="
+                                route('hub.certificates.download', bdrfExists)
+                            "
+                            >Download</bz-button
+                        >
+                        <bz-button v-if="bdrfExists" type="secondary"
+                            >Per Mail verschicken
+                        </bz-button>
+                    </template>
+                    <template v-else-if="bdrfExists"
+                        ><span class="text-xs text-gray-500 animate-pulse"
+                            >In Bearbeitung...</span
+                        >
+                    </template>
                 </div>
                 <bz-button
                     v-if="!bdrfExists"
@@ -208,9 +276,10 @@ const vrbrSteps = [
                                         <span class="flex-shrink-0">
                                             <span
                                                 class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
-                                                <span class="text-blue-600">{{
-                                                    step.id
-                                                }}</span>
+                                                <span
+                                                    class="text-blue-600 mt-0.5"
+                                                    >{{ step.id }}</span
+                                                >
                                             </span>
                                         </span>
                                         <span
@@ -238,9 +307,10 @@ const vrbrSteps = [
                                         <span class="flex-shrink-0">
                                             <span
                                                 class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
-                                                <span class="text-gray-500">{{
-                                                    step.id
-                                                }}</span>
+                                                <span
+                                                    class="text-gray-500 mt-0.5"
+                                                    >{{ step.id }}</span
+                                                >
                                             </span>
                                         </span>
                                         <span
@@ -277,6 +347,25 @@ const vrbrSteps = [
                         </li>
                     </ol>
                 </nav>
+                <template
+                    v-if="bdrfExists && !building.data.products.bdrf?.file">
+                    <div class="rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Bestellung in Bearbeitung
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Ihre Bestellung wird gerade bearbeitet.
+                                    Sobald der Energieausweis fertiggestellt
+                                    ist, können Sie ihn hier herunterladen. Sie
+                                    werden zusätzlich per Mail benachrichtigt.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
                 <template v-if="!bdrfExists">
                     <div class="bg-white rounded-b-lg">
                         <div class="px-4 py-5 sm:p-6">
@@ -325,19 +414,33 @@ const vrbrSteps = [
             </template>
         </bz-card>
 
-        <bz-card :class="bdrfExists ? 'opacity-50' : null">
+        <bz-card
+            :class="
+                bdrfExists
+                    ? 'opacity-50 hover:opacity-100 transition duration-150'
+                    : null
+            ">
             <template #title>Verbrauchsausweis</template>
+            <template #subtitle>Verbrauchsorientierter Energieausweis</template>
             <template #button>
-                <div class="flex space-x-2">
-                    <bz-button v-if="vrbrExists">Download</bz-button>
-                    <bz-button v-if="vrbrExists" type="secondary"
-                        >Send per Mail
-                    </bz-button>
-                </div>
+                <template
+                    v-if="vrbrExists && building.data.products.vrbr?.file">
+                    <div class="flex space-x-2">
+                        <bz-button v-if="vrbrExists">Download</bz-button>
+                        <bz-button v-if="vrbrExists" type="secondary"
+                            >Send per Mail
+                        </bz-button>
+                    </div>
+                </template>
+                <template v-else-if="vrbrExists"
+                    ><span class="text-xs text-gray-500 animate-pulse"
+                        >In Bearbeitung...</span
+                    >
+                </template>
                 <bz-button
                     v-if="!vrbrExists"
                     :disabled="!vrbrConsumptionExists"
-                    as="link"
+                    @click="order('vrbr')"
                     >Bestellen</bz-button
                 >
             </template>
@@ -407,9 +510,10 @@ const vrbrSteps = [
                                         <span class="flex-shrink-0">
                                             <span
                                                 class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
-                                                <span class="text-blue-600">{{
-                                                    step.id
-                                                }}</span>
+                                                <span
+                                                    class="text-blue-600 mt-0.5"
+                                                    >{{ step.id }}</span
+                                                >
                                             </span>
                                         </span>
                                         <span
@@ -437,9 +541,10 @@ const vrbrSteps = [
                                         <span class="flex-shrink-0">
                                             <span
                                                 class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
-                                                <span class="text-gray-500">{{
-                                                    step.id
-                                                }}</span>
+                                                <span
+                                                    class="text-gray-500 mt-0.5"
+                                                    >{{ step.id }}</span
+                                                >
                                             </span>
                                         </span>
                                         <span
@@ -476,7 +581,26 @@ const vrbrSteps = [
                         </li>
                     </ol>
                 </nav>
-                <template v-if="!vrbrExists">
+                <template
+                    v-if="vrbrExists && !building.data.products.vrbr?.file">
+                    <div class="rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Bestellung in Bearbeitung
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Ihre Bestellung wird gerade bearbeitet.
+                                    Sobald der Energieausweis fertiggestellt
+                                    ist, können Sie ihn hier herunterladen. Sie
+                                    werden zusätzlich per Mail benachrichtigt.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-if="!vrbrExists && !vrbrConsumptionExists">
                     <div class="bg-white rounded-b-lg">
                         <div class="px-4 py-5 sm:p-6">
                             <h3
@@ -487,7 +611,7 @@ const vrbrSteps = [
                                 <p>
                                     Für den verbrauchsorientierten
                                     Energieausweis müssen die Verbrauchsdaten
-                                    der letzten 3 Jahre (36 Monate) erfasst
+                                    von mindestens 3 Jahren (36 Monate) erfasst
                                     werden. Zusätzlich können Sie Leerstand,
                                     falls vorhanden, erfassen.
                                 </p>
@@ -496,7 +620,7 @@ const vrbrSteps = [
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.thermal',
+                                            'hub.buildings.consumption',
                                             building.data.id
                                         )
                                     "
@@ -511,4 +635,75 @@ const vrbrSteps = [
             </template>
         </bz-card>
     </building-show-wrapper>
+
+    <dialog-modal :closeable="true" :show="modal" @close="cancel">
+        <template #title
+            ><span class=""
+                >{{
+                    form.type === 'vrbr'
+                        ? 'Verbrauchsausweis'
+                        : 'Bedarfsausweis'
+                }}
+                - Bestellung abschließen</span
+            ></template
+        >
+        <template #content>
+            <el-form
+                :model="form"
+                class="grid sm:grid-cols-2 sm:gap-x-8"
+                label-position="top"
+                size="large"
+                @submit.prevent="">
+                <el-form-item
+                    :error="form.errors.reason"
+                    :required="true"
+                    label="Ausstellungsgrund">
+                    <el-select
+                        v-model="form.reason"
+                        class="w-full"
+                        placeholder="Bitte auswählen">
+                        <el-option
+                            default-first-option
+                            label="Modernisierung/Änderung"
+                            value="Modernisierung/Änderung" />
+                        <el-option
+                            default-first-option
+                            label="Vermietung/Verkauf"
+                            value="Vermietung/Verkauf" />
+                        <el-option
+                            default-first-option
+                            label="Sonstiges"
+                            value="Sonstiges" />
+                    </el-select>
+                </el-form-item>
+                <div class="flex flex-col">
+                    <el-checkbox
+                        v-model="form.suggestion_check.attic"
+                        label="Dach-/Dachbodendämmung"></el-checkbox>
+                    <el-checkbox
+                        v-model="form.suggestion_check.external_wall"
+                        label="Außenwanddämmung"></el-checkbox>
+                    <el-checkbox
+                        v-model="form.suggestion_check.windows"
+                        label="Wärmeschutz-/Isolierverglasung"></el-checkbox>
+                    <el-checkbox
+                        v-model="form.suggestion_check.cellar_ceiling"
+                        label="Kellerdeckendämmung"></el-checkbox>
+                    <el-checkbox
+                        v-model="form.suggestion_check.led"
+                        label="Ausschließlich LED Leuchtmittel"></el-checkbox>
+                </div>
+            </el-form>
+        </template>
+        <template #footer>
+            <div class="flex justify-end space-x-2">
+                <bz-button type="secondary" @click="cancel"
+                    >Abbrechen</bz-button
+                >
+                <bz-button @click="submitOrder"
+                    >Kostenpflichtig bestellen</bz-button
+                >
+            </div>
+        </template>
+    </dialog-modal>
 </template>

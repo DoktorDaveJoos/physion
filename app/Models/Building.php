@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * @property int $id
@@ -48,6 +49,11 @@ class Building extends Model
         return $this->hasOne(Bdrf::class);
     }
 
+    public function energyCertificates(): HasMany
+    {
+        return $this->hasMany(EnergyCertificate::class);
+    }
+
     public function isfp(): HasOne
     {
         return $this->hasOne(Isfp::class);
@@ -76,5 +82,20 @@ class Building extends Model
     public function renewableEnergyInstallations(): HasMany
     {
         return $this->hasMany(RenewableEnergyInstallation::class);
+    }
+
+    public function consumptions(): HasMany
+    {
+        return $this->hasMany(Consumption::class);
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
+    public function storagePath(): string
+    {
+        return 'buildings/' . $this->id;
     }
 }

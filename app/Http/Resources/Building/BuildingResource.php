@@ -47,8 +47,8 @@ class BuildingResource extends JsonResource
                 'place_id' => $this->place_id,
                 'created_by' => 'David Joos', //@todo
                 'products' => [
-                    'vrbr' => (bool) $this->vrbr,
-                    'bdrf' => (bool) $this->bdrf,
+                    'vrbr' => $this->energyCertificates()->where('type', 'vrbr')->exists(),
+                    'bdrf' => $this->energyCertificates()->where('type', 'bdrf')->exists(),
                     'isfp' => (bool) $this->isfp,
                 ],
                 'wall' => $this->wall?->load('insulations', 'windows'),
@@ -56,6 +56,7 @@ class BuildingResource extends JsonResource
                 'cellarModel' => $this->cellarObject?->load('insulations'),
                 'heatingSystems' => $this->heatingSystems,
                 'renewableEnergyInstallations' => $this->renewableEnergyInstallations,
+
             ],
             'links' => [
                 'image' => $this->image ? Storage::url($this->image) : null,

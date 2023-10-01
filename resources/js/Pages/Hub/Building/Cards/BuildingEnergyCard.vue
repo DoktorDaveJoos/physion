@@ -1,5 +1,4 @@
 <script setup>
-import { PaperClipIcon } from '@heroicons/vue/24/outline';
 import BzButton from '../../../../Components/BzButton.vue';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
 
@@ -29,8 +28,8 @@ defineProps({
         <div class="border-t border-gray-100">
             <el-empty
                 v-if="
-                    !building.data.heatingSystems &&
-                    !building.data.renewableEnergyInstallations
+                    building.data.heatingSystems?.length === 0 &&
+                    building.data.renewableEnergyInstallations?.length === 0
                 "
                 description="Keine Daten vorhanden">
                 <bz-button

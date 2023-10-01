@@ -19,11 +19,23 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    multiple: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const dragging = ref(false);
 
 const handleFileUpload = (event) => {
+    if (event.dataTransfer?.files.length > 1 && !props.multiple) {
+        ElNotification({
+            title: 'Mehrere Dateien ausgewählt',
+            message: 'Bitte wählen Sie nur eine Datei aus.',
+            type: 'error',
+        });
+        return;
+    }
     processFile(event.dataTransfer?.files[0]);
 };
 
@@ -35,6 +47,8 @@ const processFile = (file) => {
     if (!file) {
         return;
     }
+
+    console.log(file);
 
     if (!props.allowedMimeTypes.includes(file.type)) {
         ElNotification({
@@ -64,17 +78,17 @@ const processFile = (file) => {
             dragging = false;
             handleFileUpload($event);
         "
-        class="col-span-2 flex justify-center rounded-lg border border-dashed transition duration-75 px-6 py-8 group"
+        class="col-span-2 flex justify-center rounded-lg border-2 border-dashed transition duration-75 px-6 py-8 group"
         :class="dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">
         <div class="text-center">
             <PhotoIcon
                 class="mx-auto h-10 w-10 transition duration-75"
                 :class="[dragging ? 'text-blue-500' : 'text-gray-300']"
                 aria-hidden="true" />
-            <div class="mt-4 flex text-sm leading-6 text-gray-600">
+            <div class="mt-4 flex text-sm leading-6 text-gray-500">
                 <label
                     for="file-upload"
-                    class="relative cursor-pointer rounded-md bg-transparent font-semibold text-blue-600 hover:text-blue-500">
+                    class="relative cursor-pointer rounded-md bg-transparent font-bold text-blue-600 hover:text-blue-500">
                     <span>Bild hochladen</span>
                     <input
                         id="file-upload"
@@ -85,7 +99,7 @@ const processFile = (file) => {
                 </label>
                 <p class="pl-1">oder per drag & drop</p>
             </div>
-            <p class="text-xs leading-5 text-gray-600">
+            <p class="text-xs leading-5 text-gray-500 font-bold">
                 <span class="uppercase">{{
                     allowedMimeTypes.map((mime) => mime.split('/')[1]).join(',')
                 }}</span>
