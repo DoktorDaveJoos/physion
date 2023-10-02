@@ -479,8 +479,8 @@
 
         <slot name="header" />
 
-        <main class="py-6">
-            <div class="px-4 sm:px-6 lg:px-8">
+        <main class="py-6 flex justify-center">
+            <div class="px-4 w-full sm:px-6 lg:px-8 max-w-7xl">
                 <!-- Your content -->
                 <slot />
             </div>

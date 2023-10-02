@@ -96,12 +96,11 @@ const types = [
                 </p>
             </div>
             <bz-button type="secondary" @click="modal = true"
-                >hochladen</bz-button
+                >dokument hochladen</bz-button
             >
         </div>
         <div class="border-t border-gray-100">
             <ul
-                v-loading="loading"
                 v-if="building.data.attachments?.length > 0"
                 class="divide-y divide-gray-100"
                 role="list">
@@ -125,6 +124,11 @@ const types = [
                                 v-if="file.data.type === 'baugesuch'"
                                 size="sm"
                                 label="Baugesuch">
+                            </badge>
+                            <badge
+                                v-if="file.data.type === 'grundriss'"
+                                size="sm"
+                                label="Grundriss">
                             </badge>
                         </div>
                     </div>
@@ -192,7 +196,12 @@ const types = [
                 <bz-button type="secondary" @click="cancel"
                     >abbrechen</bz-button
                 >
-                <bz-button type="primary" @click="submit">hochladen</bz-button>
+                <bz-button
+                    type="primary"
+                    :loading="form.processing"
+                    @click="submit"
+                    >hochladen</bz-button
+                >
             </div>
         </template>
     </dialog-modal>

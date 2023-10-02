@@ -48,14 +48,14 @@ class HeatingController extends Controller
 
         $building->heatingSystems()->create($validator->validated());
 
-        return to_route('hub.buildings.energy', $building);
+        return to_route('hub.buildings.show.energy', $building);
     }
 
     public function destroy(Building $building, HeatingSystem $heatingSystem, Request $request): RedirectResponse
     {
         $heatingSystem->delete();
 
-        return to_route('hub.buildings.energy', $building);
+        return to_route('hub.buildings.show.energy', $building);
     }
 
 

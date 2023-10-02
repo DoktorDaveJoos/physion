@@ -1,6 +1,11 @@
 <script setup>
 import BzButton from '../../../../Components/BzButton.vue';
-import { PaperClipIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import {
+    PaperClipIcon,
+    TrashIcon,
+    ArrowTopRightOnSquareIcon,
+    XMarkIcon,
+} from '@heroicons/vue/24/outline';
 import DialogModal from '../../../../Components/DialogModal.vue';
 import BzDropzone from '../../../../Components/BzDropzone.vue';
 import { ref } from 'vue';
@@ -12,10 +17,12 @@ const props = defineProps({
 });
 
 const modal = ref(false);
+const modalDetail = ref(false);
 const loading = ref(false);
+const detail = ref(null);
 
 const form = useForm({
-    picture: null,
+    pictures: null,
 });
 
 const cancel = () => {
@@ -24,7 +31,7 @@ const cancel = () => {
 };
 
 const handleSelect = (e) => {
-    form.picture = e;
+    form.pictures = e;
 };
 
 const submit = () => {
@@ -67,6 +74,22 @@ const destroy = (id) => {
         )
     );
 };
+
+const handleDetail = (id) => {
+    detail.value = props.building.data.attachments.find(
+        (file) => file.data.id === id
+    ).links.self;
+    modalDetail.value = true;
+};
+
+const closeDetail = () => {
+    detail.value = null;
+    modalDetail.value = false;
+};
+
+const removePicture = (index) => {
+    form.pictures = Array.from(form.pictures).splice(index, 1);
+};
 </script>
 
 <template>
@@ -105,14 +128,25 @@ const destroy = (id) => {
                             :src="file.links.self"
                             alt=""
                             class="pointer-events-none object-cover group-hover:opacity-75" />
-                        <button
-                            class="absolute inset-0 focus:outline-none"
-                            type="button">
-                            <span class="sr-only"
-                                >View details for {{ file.title }}</span
-                            >
-                        </button>
+                        <div
+                            class="absolute inset-0 flex justify-end p-1 space-x-1">
+                            <button
+                                class="w-8 h-8 bg-gray-100 text-gray-500 flex items-center justify-center rounded opacity-30 group-hover:opacity-100 hover:bg-white hover:text-gray-900 transition duration-75"
+                                @click="handleDetail(file.data.id)">
+                                <arrow-top-right-on-square-icon
+                                    class="h-4 w-4"
+                                    aria-hidden="true" />
+                            </button>
+                            <button
+                                class="w-8 h-8 bg-gray-100 text-gray-500 flex items-center justify-center rounded opacity-30 group-hover:opacity-100 hover:bg-white hover:text-gray-900 transition duration-75"
+                                @click="destroy(file.data.id)">
+                                <trash-icon
+                                    class="h-4 w-4"
+                                    aria-hidden="true" />
+                            </button>
+                        </div>
                     </div>
+
                     <p
                         class="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
                         {{ file.title }}
@@ -135,29 +169,32 @@ const destroy = (id) => {
         @close="cancel">
         <template #title>Bild hochladen</template>
         <template #content>
-            <el-form-item class="!w-full" :error="form.errors.picture">
+            <el-form-item class="!w-full" :error="form.errors.pictures">
                 <bz-dropzone
+                    multiple
                     class="w-full"
-                    v-if="!form.picture"
+                    v-if="!form.pictures"
                     :allowed-mime-types="[
                         'application/pdf',
                         'image/jpeg',
                         'image/png',
                     ]"
                     @select="(e) => handleSelect(e)"></bz-dropzone>
-
-                <div
-                    v-else
-                    class="flex w-full items-center px-6 py-4 rounded border border-gray-300 justify-between">
-                    <div class="flex">
-                        <paper-clip-icon class="h-5 w-5 text-gray-400 mr-2" />
-                        <span class="font-semibold text-sm">{{
-                            form.picture.name
-                        }}</span>
+                <div v-else class="w-full space-y-2">
+                    <div
+                        v-for="(picture, index) in form.pictures"
+                        class="flex w-full items-center px-6 py-4 rounded border border-gray-300 justify-between">
+                        <div class="flex">
+                            <paper-clip-icon
+                                class="h-5 w-5 text-gray-400 mr-2" />
+                            <span class="font-semibold text-sm">{{
+                                picture.name
+                            }}</span>
+                        </div>
+                        <button type="button" @click="removePicture(index)">
+                            <trash-icon class="h-4 w-4 text-red-400 ml-4" />
+                        </button>
                     </div>
-                    <button type="button" @click="form.picture = null">
-                        <trash-icon class="h-4 w-4 text-red-400 ml-4" />
-                    </button>
                 </div>
             </el-form-item>
         </template>
@@ -166,8 +203,27 @@ const destroy = (id) => {
                 <bz-button type="secondary" @click="cancel"
                     >abbrechen</bz-button
                 >
-                <bz-button type="primary" @click="submit">hochladen</bz-button>
+                <bz-button
+                    type="primary"
+                    :loading="form.processing"
+                    @click="submit"
+                    >hochladen</bz-button
+                >
             </div>
+        </template>
+    </dialog-modal>
+
+    <dialog-modal :show="modalDetail" :closeable="true" @close="closeDetail">
+        <template #title>
+            <div class="flex items-center justify-between">
+                Detailansicht
+                <bz-button type="secondary" @click="closeDetail">
+                    <x-mark-icon name="x" class="h-5 w-5 text-gray-400" />
+                </bz-button>
+            </div>
+        </template>
+        <template #content>
+            <img :src="detail" alt="building_picture" />
         </template>
     </dialog-modal>
 </template>

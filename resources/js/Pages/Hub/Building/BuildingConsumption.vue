@@ -10,6 +10,7 @@ import { ElDrawer } from 'element-plus';
 import dayjs from 'dayjs';
 import { BoltIcon, TrashIcon, FireIcon } from '@heroicons/vue/24/outline';
 import Badge from '../../../Components/Badge.vue';
+import BuildingShowWrapper from './Show/BuildingShowWrapper.vue';
 
 const props = defineProps({
     building: Object,
@@ -88,7 +89,7 @@ const steps = [
 
     {
         name: 'Verbrauch',
-        route: route('hub.buildings.consumption', {
+        route: route('hub.buildings.show.consumption', {
             building: route().params.building,
         }),
     },
@@ -100,9 +101,7 @@ const steps = [
         <title>Verbrauch</title>
     </Head>
 
-    <SidebarLayout>
-        <bz-breadcrumbs :steps="steps" />
-
+    <building-show-wrapper :building="building" sub-tabs-active>
         <bz-card>
             <template #title>Verbrauch</template>
             <template #subtitle>Angaben zum Verbrauch des Gebäudes</template>
@@ -183,7 +182,7 @@ const steps = [
                             as="link"
                             :href="
                                 route(
-                                    'hub.buildings.show.energieausweis',
+                                    'hub.buildings.energieausweis',
                                     building.data.id
                                 )
                             "
@@ -331,5 +330,5 @@ const steps = [
                 </div>
             </template>
         </el-drawer>
-    </SidebarLayout>
+    </building-show-wrapper>
 </template>

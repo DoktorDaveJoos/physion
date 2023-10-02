@@ -107,7 +107,8 @@ const bdrfSteps = [
         name: 'Gebäudedaten',
         description: 'Allgemeine Daten vollständig erfassen',
         href: '#',
-        status: 'complete',
+        status:
+            props.building.data.status === 'created' ? 'current' : 'complete',
     },
     {
         id: '02',
@@ -116,6 +117,8 @@ const bdrfSteps = [
         href: '#',
         status: bdrfThermalExists.value
             ? 'complete'
+            : props.building.data.status === 'created'
+            ? 'upcoming'
             : bdrfThermalExists.value && bdrfHeatingExists.value
             ? 'complete'
             : 'current',
@@ -138,7 +141,8 @@ const vrbrSteps = [
         name: 'Gebäudedaten',
         description: 'Allgemeine Daten vollständig erfassen',
         href: '#',
-        status: 'complete',
+        status:
+            props.building.data.status === 'created' ? 'current' : 'complete',
     },
     {
         id: '02',
@@ -147,6 +151,8 @@ const vrbrSteps = [
         href: '#',
         status: vrbrExists.value
             ? 'complete'
+            : props.building.data.status === 'created'
+            ? 'upcoming'
             : vrbrConsumptionExists.value
             ? 'complete'
             : 'current',
@@ -205,7 +211,11 @@ console.log(parseInt(props.building.data.consumptionMonths));
                 </div>
                 <bz-button
                     v-if="!bdrfExists"
-                    :disabled="!bdrfThermalExists || !bdrfHeatingExists"
+                    :disabled="
+                        !bdrfThermalExists ||
+                        !bdrfHeatingExists ||
+                        building.data.status === 'created'
+                    "
                     as="link"
                     >Bestellen</bz-button
                 >
@@ -366,7 +376,39 @@ console.log(parseInt(props.building.data.consumptionMonths));
                         </div>
                     </div>
                 </template>
-                <template v-if="!bdrfExists">
+                <template v-else-if="building.data.status === 'created'">
+                    <div class="bg-white rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Lage & Position erfassen
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Für den Energieausweis muss die Lage,
+                                    Position und Grundriss erfasst werden. Für
+                                    den Bedarfsausweis ist es zudem erforderlich
+                                    auch die Heizungsanlage und die thermische
+                                    Hülle zu erfassen.
+                                </p>
+                            </div>
+                            <div class="mt-3 text-sm leading-6 flex flex-col">
+                                <Link
+                                    :href="
+                                        route(
+                                            'hub.buildings.show.position',
+                                            building.data.id
+                                        )
+                                    "
+                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    Jetzt Position & Lage erfassen
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else-if="!bdrfExists">
                     <div class="bg-white rounded-b-lg">
                         <div class="px-4 py-5 sm:p-6">
                             <h3
@@ -387,7 +429,7 @@ console.log(parseInt(props.building.data.consumptionMonths));
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.thermal',
+                                            'hub.buildings.show.thermal',
                                             building.data.id
                                         )
                                     "
@@ -398,7 +440,7 @@ console.log(parseInt(props.building.data.consumptionMonths));
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.energy',
+                                            'hub.buildings.show.energy',
                                             building.data.id
                                         )
                                     "
@@ -439,7 +481,10 @@ console.log(parseInt(props.building.data.consumptionMonths));
                 </template>
                 <bz-button
                     v-if="!vrbrExists"
-                    :disabled="!vrbrConsumptionExists"
+                    :disabled="
+                        !vrbrConsumptionExists ||
+                        building.data.status === 'created'
+                    "
                     @click="order('vrbr')"
                     >Bestellen</bz-button
                 >
@@ -600,7 +645,38 @@ console.log(parseInt(props.building.data.consumptionMonths));
                         </div>
                     </div>
                 </template>
-                <template v-if="!vrbrExists && !vrbrConsumptionExists">
+                <template v-else-if="building.data.status === 'created'">
+                    <div class="bg-white rounded-b-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3
+                                class="text-base font-semibold leading-6 text-gray-900">
+                                Lage & Position erfassen
+                            </h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>
+                                    Für den Energieausweis muss die Lage,
+                                    Position und Grundriss erfasst werden. Für
+                                    den Verbrauchsausweis muss zusätzlich noch
+                                    der Verbrauch des Gebäudes erfasst werden.
+                                </p>
+                            </div>
+                            <div class="mt-3 text-sm leading-6 flex flex-col">
+                                <Link
+                                    :href="
+                                        route(
+                                            'hub.buildings.show.position',
+                                            building.data.id
+                                        )
+                                    "
+                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    Jetzt Position & Lage erfassen
+                                    <span aria-hidden="true"> &rarr;</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else-if="!vrbrExists && !vrbrConsumptionExists">
                     <div class="bg-white rounded-b-lg">
                         <div class="px-4 py-5 sm:p-6">
                             <h3
@@ -620,7 +696,7 @@ console.log(parseInt(props.building.data.consumptionMonths));
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.consumption',
+                                            'hub.buildings.show.consumption',
                                             building.data.id
                                         )
                                     "

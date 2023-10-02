@@ -17,6 +17,7 @@ import { BoltIcon, FireIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import BzButton from '../../../Components/BzButton.vue';
 import FormHeader from '../../../Components/FormHeader.vue';
 import { ElDrawer, ElNotification } from 'element-plus';
+import BuildingShowWrapper from './Show/BuildingShowWrapper.vue';
 
 const props = defineProps({
     building: Object,
@@ -41,7 +42,7 @@ const steps = [
 
     {
         name: 'Energieträger',
-        route: route('hub.buildings.energy', {
+        route: route('hub.buildings.show.energy', {
             building: props.building.data.id,
         }),
     },
@@ -343,9 +344,7 @@ const options = [
         <title>Energieträger</title>
     </Head>
 
-    <SidebarLayout>
-        <bz-breadcrumbs :steps="steps" />
-
+    <building-show-wrapper :building="building" sub-tabs-active>
         <bz-card>
             <template #title>Heizungsanlage</template>
             <template #subtitle>Angaben zur Heizung und Warmwasser</template>
@@ -662,5 +661,5 @@ const options = [
                 </div>
             </template>
         </el-drawer>
-    </SidebarLayout>
+    </building-show-wrapper>
 </template>

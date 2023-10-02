@@ -48,14 +48,14 @@ class RenewableController extends Controller
 
         $building->renewableEnergyInstallations()->create($validator->validated());
 
-        return to_route('hub.buildings.energy', $building);
+        return to_route('hub.buildings.show.energy', $building);
     }
 
     public function destroy(Building $building, RenewableEnergyInstallation $renewableEnergyInstallation, Request $request): RedirectResponse
     {
         $renewableEnergyInstallation->delete();
 
-        return to_route('hub.buildings.energy', $building);
+        return to_route('hub.buildings.show.energy', $building);
     }
 
 

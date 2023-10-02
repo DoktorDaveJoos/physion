@@ -29,7 +29,7 @@ class RoofController extends Controller
             $request->validated()
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function insulation(Building $building, Request $request): RedirectResponse
@@ -52,14 +52,14 @@ class RoofController extends Controller
             $validator->validated()
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function deleteInsulation(Building $building, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function dormer(Building $building, Request $request): RedirectResponse
@@ -92,14 +92,14 @@ class RoofController extends Controller
             $validator->validated()
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function deleteDormer(Building $building, Dormer $dormer, Request $request): RedirectResponse
     {
         $dormer->delete();
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     /**
@@ -136,14 +136,14 @@ class RoofController extends Controller
             + ['type' => 'dachfenster']
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function deleteSkylight(Building $building, Window $window, Request $request): RedirectResponse
     {
         $window->delete();
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
 }

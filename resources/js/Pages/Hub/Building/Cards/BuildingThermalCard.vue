@@ -24,7 +24,7 @@ defineProps({
             </div>
             <bz-button
                 as="link"
-                :href="route('hub.buildings.thermal', building.data.id)"
+                :href="route('hub.buildings.show.thermal', building.data.id)"
                 type="secondary"
                 >bearbeiten</bz-button
             >
@@ -40,7 +40,7 @@ defineProps({
                 <bz-button
                     as="link"
                     :href="
-                        route('hub.buildings.thermal', {
+                        route('hub.buildings.show.thermal', {
                             building: building.data.id,
                         })
                     "
@@ -65,7 +65,10 @@ defineProps({
                             v-if="!building.data.wall"
                             as="link"
                             :href="
-                                route('hub.buildings.thermal', building.data.id)
+                                route(
+                                    'hub.buildings.show.thermal',
+                                    building.data.id
+                                )
                             "
                             type="primary"
                             plain
@@ -86,7 +89,10 @@ defineProps({
                             v-if="!building.data.roof"
                             as="link"
                             :href="
-                                route('hub.buildings.thermal', building.data.id)
+                                route(
+                                    'hub.buildings.show.thermal',
+                                    building.data.id
+                                )
                             "
                             type="primary"
                             plain
@@ -107,7 +113,10 @@ defineProps({
                             v-if="!building.data.cellarModel"
                             as="link"
                             :href="
-                                route('hub.buildings.thermal', building.data.id)
+                                route(
+                                    'hub.buildings.show.thermal',
+                                    building.data.id
+                                )
                             "
                             type="primary"
                             plain

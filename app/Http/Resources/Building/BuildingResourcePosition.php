@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin Building
  */
-class BuildingResource extends JsonResource
+class BuildingResourcePosition extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -21,8 +21,6 @@ class BuildingResource extends JsonResource
                 'id' => $this->id,
                 'status' => $this->status,
                 'address' => $this->street.' '.$this->house_number,
-                'street' => $this->street,
-                'house_number' => $this->house_number,
                 'postal_code' => $this->postal_code,
                 'city' => $this->city,
                 'state' => $this->state,
@@ -39,7 +37,7 @@ class BuildingResource extends JsonResource
                 'cooling' => $this->cooling,
                 'cooling_count' => $this->cooling_count,
                 'cooling_service' => $this->cooling_service,
-                'layout' => $this->layout->toString(),
+                'layout' => $this->layout->value(),
                 'side_a' => $this->side_a,
                 'side_b' => $this->side_b,
                 'side_c' => $this->side_c,
@@ -49,20 +47,8 @@ class BuildingResource extends JsonResource
                 'orientation' => $this->orientation,
                 'place_id' => $this->place_id,
                 'created_by' => 'David Joos', //@todo
-                'products' => [
-                    'vrbr' => $this->energyCertificates()->where('type', 'vrbr')->exists(),
-                    'bdrf' => $this->energyCertificates()->where('type', 'bdrf')->exists(),
-                    'isfp' => (bool) $this->isfp,
-                ],
-                'wall' => $this->wall?->load('insulations', 'windows'),
-                'roof' => $this->roof?->load('insulations', 'windows', 'dormers'),
-                'cellarModel' => $this->cellarObject?->load('insulations'),
-                'heatingSystems' => $this->heatingSystems,
-                'renewableEnergyInstallations' => $this->renewableEnergyInstallations,
-
             ],
             'links' => [
-                'image' => $this->image ? Storage::url($this->image) : null,
                 'self' => route('hub.buildings.show.index', $this->id),
             ],
         ];

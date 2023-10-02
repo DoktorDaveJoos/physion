@@ -20,7 +20,7 @@ defineProps({
             </div>
             <bz-button
                 as="link"
-                :href="route('hub.buildings.energy', building.data.id)"
+                :href="route('hub.buildings.show.energy', building.data.id)"
                 type="secondary"
                 >bearbeiten</bz-button
             >
@@ -34,7 +34,7 @@ defineProps({
                 description="Keine Daten vorhanden">
                 <bz-button
                     as="link"
-                    :href="route('hub.buildings.energy', building.data.id)"
+                    :href="route('hub.buildings.show.energy', building.data.id)"
                     >jetzt anlegen</bz-button
                 >
             </el-empty>
@@ -56,7 +56,10 @@ defineProps({
                             v-if="!building.data.heatingSystems.length > 0"
                             as="link"
                             :href="
-                                route('hub.buildings.energy', building.data.id)
+                                route(
+                                    'hub.buildings.show.energy',
+                                    building.data.id
+                                )
                             "
                             type="primary"
                             plain
@@ -85,7 +88,10 @@ defineProps({
                             "
                             as="link"
                             :href="
-                                route('hub.buildings.energy', building.data.id)
+                                route(
+                                    'hub.buildings.show.energy',
+                                    building.data.id
+                                )
                             "
                             type="primary"
                             plain

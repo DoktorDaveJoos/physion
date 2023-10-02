@@ -12,6 +12,7 @@ import WallForm from '../../../Components/WallForm.vue';
 import { ref } from 'vue';
 import BzBreadcrumbs from '../Components/BzBreadcrumbs.vue';
 import BzCard from '../Components/BzCard.vue';
+import BuildingShowWrapper from './Show/BuildingShowWrapper.vue';
 
 const props = defineProps({
     building: Object,
@@ -40,7 +41,7 @@ const steps = [
 
     {
         name: 'Thermische Hülle',
-        route: route('hub.buildings.thermal', {
+        route: route('hub.buildings.show.thermal', {
             building: route().params.building,
         }),
     },
@@ -52,9 +53,7 @@ const steps = [
         <title>Thermische Hülle</title>
     </Head>
 
-    <SidebarLayout>
-        <bz-breadcrumbs :steps="steps" />
-
+    <building-show-wrapper :building="building" sub-tabs-active>
         <bz-card>
             <template #title>Wandaufbau</template>
             <template #subtitle
@@ -90,5 +89,5 @@ const steps = [
                     :cellar="building.data.cellarModel" />
             </template>
         </bz-card>
-    </SidebarLayout>
+    </building-show-wrapper>
 </template>

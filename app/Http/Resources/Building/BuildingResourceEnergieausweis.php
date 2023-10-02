@@ -19,6 +19,7 @@ class BuildingResourceEnergieausweis extends JsonResource
         return [
             'data' => [
                 'id' => $this->id,
+                'status' => $this->status,
                 'address' => $this->street.' '.$this->house_number,
                 'postal_code' => $this->postal_code,
                 'city' => $this->city,

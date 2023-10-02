@@ -32,11 +32,7 @@ defineProps({
             </div>
             <div class="flex items-center space-x-4">
                 <bz-button
-                    :href="
-                        route('hub.orders.create', {
-                            category: 'vrbr_partner',
-                        })
-                    "
+                    :href="route('hub.buildings.create')"
                     as="link"
                     type="primary">
                     <plus-icon class="w-4 h-4 mr-1 -ml-1" />

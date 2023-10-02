@@ -36,21 +36,29 @@ const handleFileUpload = (event) => {
         });
         return;
     }
-    processFile(event.dataTransfer?.files[0]);
+
+    processFile(event.dataTransfer?.files);
 };
 
 const selectFile = (event) => {
-    processFile(event.target.files[0]);
+    processFile(event.target.files);
 };
 
-const processFile = (file) => {
-    if (!file) {
+const processFile = (files) => {
+    if (!files || files.length === 0) {
         return;
     }
-
-    console.log(file);
-
-    if (!props.allowedMimeTypes.includes(file.type)) {
+    try {
+        console.log(files);
+        Array.from(files).forEach((file) => {
+            console.log(file);
+            if (!props.allowedMimeTypes.includes(file.type)) {
+                console.log(file.type);
+                throw 'Falscher Dateityp';
+            }
+        });
+        emits('select', props.multiple ? files : files[0]);
+    } catch (e) {
         ElNotification({
             title: 'Falscher Dateityp',
             message:
@@ -60,10 +68,7 @@ const processFile = (file) => {
                     .join(', '),
             type: 'error',
         });
-        return;
     }
-
-    emits('select', file);
 };
 </script>
 

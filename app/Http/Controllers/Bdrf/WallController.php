@@ -51,7 +51,7 @@ class WallController extends Controller
             $validator->validated()
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     /**
@@ -79,14 +79,14 @@ class WallController extends Controller
 
         $building->wall->insulations()->create($validator->validated());
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function deleteInsulation(Building $building, Insulation $insulation, Request $request): RedirectResponse
     {
         $insulation->delete();
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     /**
@@ -128,14 +128,14 @@ class WallController extends Controller
             $validator->validated()
         );
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
     public function deleteWindow(Building $building, Window $window, Request $request): RedirectResponse
     {
         $window->delete();
 
-        return to_route('hub.buildings.thermal', $building);
+        return to_route('hub.buildings.show.thermal', $building);
     }
 
 

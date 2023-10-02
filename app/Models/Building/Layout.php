@@ -32,4 +32,15 @@ enum Layout
         };
     }
 
+    public function value(): string
+    {
+        return match ($this) {
+            self::Rectangle => 'rectangle',
+            self::L => 'l',
+            self::U => 'u',
+            self::T => 't',
+            self::H => 'h',
+        };
+    }
+
 }

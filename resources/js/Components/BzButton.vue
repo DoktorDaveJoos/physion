@@ -12,6 +12,10 @@ const props = defineProps({
         type: String,
         default: 'primary',
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
     plain: Boolean,
     class: String,
     disabled: Boolean,
@@ -135,20 +139,51 @@ const getClass = computed(() => {
         </div>
     </template>
     <template v-else>
-        <Link v-if="as === 'link'" :class="getClass" :href="href">
-            <slot />
-        </Link>
+        <template v-if="!loading">
+            <Link
+                v-loading="loading"
+                v-if="as === 'link'"
+                :class="getClass"
+                :href="href">
+                <slot />
+            </Link>
 
-        <button
-            type="button"
-            v-else-if="as === 'button'"
-            @click="$emit('click')"
-            :class="getClass">
+            <button
+                v-loading="loading"
+                type="button"
+                v-else-if="as === 'button'"
+                @click="$emit('click')"
+                :class="getClass">
+                <slot />
+            </button>
+            <a v-else-if="as === 'a'" :class="getClass" :href="href">
+                <slot />
+            </a>
+        </template>
+        <div v-else class="opacity-50" :class="getClass">
+            <span class="animate-spin mr-3">
+                <svg
+                    class="h-3 w-3"
+                    :class="[
+                        type === 'primary' ? 'text-white' : 'text-gray-600',
+                    ]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"></circle>
+                    <path
+                        class="opacity-75"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                        fill="currentColor"></path>
+                </svg>
+            </span>
             <slot />
-        </button>
-
-        <a v-else-if="as === 'a'" :class="getClass" :href="href">
-            <slot />
-        </a>
+        </div>
     </template>
 </template>

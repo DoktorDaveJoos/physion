@@ -25,6 +25,6 @@ class LayoutCast implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $value->toString();
+        return $value;
     }
 }

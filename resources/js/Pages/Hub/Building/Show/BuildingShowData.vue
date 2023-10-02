@@ -5,6 +5,8 @@ import BuildingDataCard from '../Cards/BuildingDataCard.vue';
 import BuildingThermalCard from '../Cards/BuildingThermalCard.vue';
 import BuildingEnergyCard from '../Cards/BuildingEnergyCard.vue';
 import BuildingShowWrapper from './BuildingShowWrapper.vue';
+import CreateBuildingForm from '../../Components/CreateBuildingForm.vue';
+import BzCard from '../../Components/BzCard.vue';
 
 defineProps({
     building: Object,
@@ -17,8 +19,16 @@ defineProps({
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-active>
-        <building-data-card :building="building" />
-        <building-thermal-card :building="building" />
-        <building-energy-card :building="building" />
+        <suspense>
+            <bz-card>
+                <template #title>Allgemeine Daten</template>
+                <template #subtitle
+                    >Erfassen Sie allgemeine Daten zum Gebäude</template
+                >
+                <template #content>
+                    <create-building-form :building="building" />
+                </template>
+            </bz-card>
+        </suspense>
     </building-show-wrapper>
 </template>

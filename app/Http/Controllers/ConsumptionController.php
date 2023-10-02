@@ -39,7 +39,7 @@ class ConsumptionController extends Controller
             ]
         );
 
-        return to_route('hub.buildings.consumption', $building->id);
+        return to_route('hub.buildings.show.consumption', $building->id);
     }
 
     public function destroy(Building $building, Consumption $consumption)
@@ -47,7 +47,7 @@ class ConsumptionController extends Controller
 
         $consumption->delete();
 
-        return to_route('hub.buildings.consumption', $building->id);
+        return to_route('hub.buildings.show.consumption', $building->id);
     }
 
 

@@ -29,8 +29,8 @@ class UpdatePositionRequest extends FormRequest
             'side_b' => 'required|numeric|min:0|max:100',
             'side_c' => 'nullable|numeric|min:0|max:100',
             'side_d' => 'nullable|numeric|min:0|max:100',
+            'maps' => 'required|string',
             'orientation' => 'required_unless:maps,agreed',
-            'page' => 'required|string'
         ];
     }
 
@@ -57,6 +57,7 @@ class UpdatePositionRequest extends FormRequest
             'side_d.min' => 'Bitte geben Sie die Länge der Seite D als Zahl an.',
             'side_d.max' => 'Die Länge der Seite D ist zu groß.',
             'orientation.required' => 'Bitte geben Sie die Ausrichtung des Gebäudes an.',
+            'maps.required' => 'Bitte geben Sie die Lage des Gebäudes an.',
         ];
     }
 }
