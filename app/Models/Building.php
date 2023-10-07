@@ -59,6 +59,11 @@ class Building extends Model
         return $this->hasOne(Isfp::class);
     }
 
+    public function bza(): HasOne
+    {
+        return $this->hasOne(Bza::class);
+    }
+
     public function wall(): HasOne
     {
         return $this->hasOne(Wall::class);

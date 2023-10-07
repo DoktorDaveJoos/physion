@@ -26,23 +26,6 @@ const form = useForm({
     },
 });
 
-const canOrderBdrf = computed(() => {
-    if (props.building.data.products.bdrf) {
-        return false;
-    }
-
-    if (
-        !props.building.data.wall ||
-        !props.building.data.roof ||
-        !props.building.data.cellarModel ||
-        !props.building.data.heatingSystem
-    ) {
-        return false;
-    }
-
-    return true;
-});
-
 const bdrfExists = computed(() => {
     return props.building.data.products.bdrf?.id;
 });
@@ -135,6 +118,7 @@ const bdrfSteps = [
             : 'upcoming',
     },
 ];
+
 const vrbrSteps = [
     {
         id: '01',

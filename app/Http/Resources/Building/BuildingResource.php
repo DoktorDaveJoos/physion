@@ -53,6 +53,7 @@ class BuildingResource extends JsonResource
                     'vrbr' => $this->energyCertificates()->where('type', 'vrbr')->exists(),
                     'bdrf' => $this->energyCertificates()->where('type', 'bdrf')->exists(),
                     'isfp' => (bool) $this->isfp,
+                    'bza' => $this->bza,
                 ],
                 'wall' => $this->wall?->load('insulations', 'windows'),
                 'roof' => $this->roof?->load('insulations', 'windows', 'dormers'),

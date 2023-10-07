@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Hub;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Certificate\Bdrf\UpdatePositionRequest;
 use App\Http\Requests\CreateBuildingRequest;
+use App\Http\Requests\CreateBzaRequest;
+use App\Http\Requests\CreateIsfpRequest;
 use App\Http\Resources\Building\BuildingResource;
 use App\Http\Resources\Building\BuildingResourceConsumption;
 use App\Http\Resources\Building\BuildingResourceDocs;
@@ -13,6 +15,10 @@ use App\Http\Resources\Building\BuildingResourcePosition;
 use App\Http\Resources\Building\BuildingThermalResource;
 use App\Models\Attachment;
 use App\Models\Building;
+use App\Models\Bza;
+use App\Models\Customer;
+use App\Models\Isfp;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -83,14 +89,88 @@ class BuildingController extends Controller
 
     public function showIsfp(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingDetail', [
+        return Inertia::render('Hub/Building/BuildingIsfp', [
             'building' => new BuildingResource($building),
+        ]);
+    }
+
+    public function storeIsfp(Building $building, CreateIsfpRequest $request)
+    {
+
+        $isfpProduct = Product::where('short_name', 'isfp')->firstOrFail();
+
+        $path = $request->file('vollmacht')->store($building->storagePath().'/attachments');
+
+        $customer = Customer::create([
+            'type' => $request->get('type'),
+            'title' => $request->get('title'),
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'address_line_1' => $request->get('street').' '.$request->get('house_number'),
+            'zip' => $request->get('postal_code'),
+            'city' => $request->get('city'),
+            'country' => $request->get('country'),
+            'phone' => $request->get('phone'),
+            'email' => $request->get('email'),
+        ]);
+
+        $building->update([
+            'bauantrag_date' => $request->get('bauantrag_date'),
+        ]);
+
+        Isfp::create([
+            'building_id' => $building->id,
+            'customer_id' => $customer->id,
+            'product_id' => $isfpProduct->id,
+            'power_of_attorney_path' => $path,
+        ]);
+
+        return to_route('hub.buildings.isfp', [
+            'building' => $building->id,
         ]);
     }
 
     public function showBza(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingDetail', [
+        return Inertia::render('Hub/Building/BuildingBza', [
+            'building' => new BuildingResource($building),
+        ]);
+    }
+
+    public function storeBza(Building $building, CreateBzaRequest $request)
+    {
+        $bzaProduct = Product::where('short_name', 'bza')->firstOrFail();
+
+        $path = $request->file('vollmacht')->store($building->storagePath().'/attachments');
+
+        $customer = Customer::create([
+            'type' => $request->get('type'),
+            'title' => $request->get('title'),
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'address_line_1' => $request->get('street').' '.$request->get('house_number'),
+            'zip' => $request->get('postal_code'),
+            'city' => $request->get('city'),
+            'country' => $request->get('country'),
+            'phone' => $request->get('phone'),
+            'email' => $request->get('email'),
+        ]);
+
+        Bza::create([
+            'building_id' => $building->id,
+            'customer_id' => $customer->id,
+            'product_id' => $bzaProduct->id,
+            'power_of_attorney_path' => $path,
+        ]);
+
+        return to_route('hub.buildings.bza', [
+            'building' => $building->id,
+        ]);
+    }
+
+    public function showCalculator(Building $building)
+    {
+        return Inertia::render('Hub/Building/BuildingCalculator', [
             'building' => new BuildingResource($building),
         ]);
     }
@@ -123,9 +203,9 @@ class BuildingController extends Controller
 
     public function store(CreateBuildingRequest $request)
     {
-
         $building = Building::create([
             'team_id' => $request->user()->currentTeam->id,
+            'created_by' => $request->user()->id,
             'place_id' => $request->get('place_id'),
             'street' => $request->get('street'),
             'house_number' => $request->get('house_number'),

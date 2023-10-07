@@ -36,6 +36,11 @@ const tabs = [
         active: route().current('hub.buildings.bza'),
         route: route('hub.buildings.bza', route().params?.building),
     },
+    {
+        name: 'förderung und zuschuss',
+        active: route().current('hub.buildings.calculator'),
+        route: route('hub.buildings.calculator', route().params?.building),
+    },
 ];
 
 const subTabs = [

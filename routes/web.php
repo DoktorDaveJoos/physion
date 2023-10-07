@@ -282,9 +282,16 @@ Route::middleware([
         Route::get('/buildings/{building}/consumption', [BuildingController::class, 'consumption'])->name('buildings.show.consumption');
 
         Route::get('/buildings/{building}/docs', [BuildingController::class, 'showDocs'])->name('buildings.docs');
+
         Route::get('/buildings/{building}/energieausweis', [BuildingController::class, 'showEnergieausweis'])->name('buildings.energieausweis');
+
         Route::get('/buildings/{building}/isfp', [BuildingController::class, 'showIsfp'])->name('buildings.isfp');
+        Route::post('/buildings/{building}/isfp', [BuildingController::class, 'storeIsfp'])->name('buildings.isfp.store');
+
         Route::get('/buildings/{building}/bza', [BuildingController::class, 'showBza'])->name('buildings.bza');
+        Route::post('/buildings/{building}/bza', [BuildingController::class, 'storeBza'])->name('buildings.bza.store');
+
+        Route::get('/buildings/{building}/calculator', [BuildingController::class, 'showCalculator'])->name('buildings.calculator');
 
         Route::post('buildings/{building}/documents', [BuildingController::class, 'storeDocument'])->name('buildings.documents.store');
         Route::delete('buildings/{building}/documents/{attachment}', [BuildingController::class, 'deleteDocument'])->name('buildings.documents.destroy');

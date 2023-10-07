@@ -23,6 +23,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    text: {
+        type: String,
+        default: 'Bild hochladen',
+    },
 });
 
 const dragging = ref(false);
@@ -94,7 +98,7 @@ const processFile = (files) => {
                 <label
                     for="file-upload"
                     class="relative cursor-pointer rounded-md bg-transparent font-bold text-blue-600 hover:text-blue-500">
-                    <span>Bild hochladen</span>
+                    <slot name="text">{{ text }}</slot>
                     <input
                         id="file-upload"
                         name="file-upload"
@@ -110,6 +114,7 @@ const processFile = (files) => {
                 }}</span>
                 bis zu 10MB
             </p>
+            <slot name="template"></slot>
         </div>
     </div>
     <div
