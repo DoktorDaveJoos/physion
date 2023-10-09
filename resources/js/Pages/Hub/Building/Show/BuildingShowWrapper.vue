@@ -37,7 +37,7 @@ const tabs = [
         route: route('hub.buildings.bza', route().params?.building),
     },
     {
-        name: 'förderung und zuschuss',
+        name: 'förderrechner',
         active: route().current('hub.buildings.calculator'),
         route: route('hub.buildings.calculator', route().params?.building),
     },

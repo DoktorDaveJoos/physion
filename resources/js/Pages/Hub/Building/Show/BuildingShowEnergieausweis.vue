@@ -153,8 +153,6 @@ const vrbrSteps = [
             : 'upcoming',
     },
 ];
-
-console.log(parseInt(props.building.data.consumptionMonths));
 </script>
 
 <template>

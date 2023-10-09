@@ -53,11 +53,8 @@ const processFile = (files) => {
         return;
     }
     try {
-        console.log(files);
         Array.from(files).forEach((file) => {
-            console.log(file);
             if (!props.allowedMimeTypes.includes(file.type)) {
-                console.log(file.type);
                 throw 'Falscher Dateityp';
             }
         });
