@@ -37,7 +37,9 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('hub.buildings.bza.store', props.building.data.id));
+    form.post(
+        route('hub.products.buildings.bza.store', props.building.data.id)
+    );
 };
 
 const downloadTemplate = () => {
@@ -106,7 +108,7 @@ const steps = [
         <title>BzA</title>
     </Head>
 
-    <building-show-wrapper :building="building">
+    <building-show-wrapper :building="building" sub-tabs-products-active>
         <bz-card>
             <template #title>Bestätigung zum Antrag</template>
             <template #subtitle>BzA für Wohngebäude erstellen</template>

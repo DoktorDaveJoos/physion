@@ -41,7 +41,9 @@ const submit = () => {
     form.transform((data) => ({
         ...data,
         bauantrag_date: dayjs(data.bauantrag_date).format('YYYY-MM-DD'),
-    })).post(route('hub.buildings.isfp.store', props.building.data.id));
+    })).post(
+        route('hub.products.buildings.isfp.store', props.building.data.id)
+    );
 };
 
 const downloadTemplate = () => {
@@ -79,7 +81,7 @@ const steps = [
         <title>Sanierungsfahrplan</title>
     </Head>
 
-    <building-show-wrapper :building="building">
+    <building-show-wrapper :building="building" sub-tabs-products-active>
         <bz-card>
             <template #title>Sanierungsfahrplan iSFP</template>
             <template #subtitle

@@ -160,7 +160,10 @@ watch(energyCertificate, (value) => {
                 <Link
                     class="text-blue-600 font-bold"
                     :href="
-                        route('hub.buildings.energieausweis', building.data.id)
+                        route(
+                            'hub.products.buildings.energieausweis',
+                            building.data.id
+                        )
                     "
                     >hier</Link
                 >.
@@ -170,12 +173,15 @@ watch(energyCertificate, (value) => {
                     class="w-full"
                     as="link"
                     :href="
-                        route('hub.buildings.energieausweis', building.data.id)
+                        route(
+                            'hub.products.buildings.energieausweis',
+                            building.data.id
+                        )
                     "
                     >Jetzt erstellen</bz-button
                 >
 
-                <span class="px-1 leading-6">
+                <span class="leading-6">
                     Bis zu <span class="font-bold">10% Zuschuss</span> mehr mit
                     einem Energieausweis.
                 </span>

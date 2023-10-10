@@ -134,8 +134,12 @@ Route::prefix('orders')->group(function () {
         }
     );
 
-    Route::post('{order:slug}/certificate/picture', [CertificateController::class, 'picture'])->name('certificate.picture');
-    Route::delete('{order:slug}/certificate/picture', [CertificateController::class, 'deletePicture'])->name('certificate.picture.delete');
+    Route::post('{order:slug}/certificate/picture', [CertificateController::class, 'picture'])->name(
+        'certificate.picture'
+    );
+    Route::delete('{order:slug}/certificate/picture', [CertificateController::class, 'deletePicture'])->name(
+        'certificate.picture.delete'
+    );
 });
 
 Route::prefix('building/{building}')->name('building.')->group(function () {
@@ -187,7 +191,8 @@ Route::prefix('building/{building}')->name('building.')->group(function () {
     // consumptions
     Route::put('/consumption', [ConsumptionController::class, 'store'])->name('consumption');
     Route::delete('/consumption/{consumption}', [ConsumptionController::class, 'destroy'])->name(
-        'consumption.delete');
+        'consumption.delete'
+    );
 
     // position
     Route::put('/maps', [PositionController::class, 'maps'])->name('maps');
@@ -273,33 +278,73 @@ Route::middleware([
         Route::get('/buildings', [BuildingController::class, 'index'])->name('buildings.index');
         Route::get('/buildings/{building}', [BuildingController::class, 'show'])->name('buildings.show.index');
 
-        Route::get('/buildings/{building}/general', [BuildingController::class, 'general'])->name('buildings.show.general');
-        Route::put('/buildings/{building}/general', [BuildingController::class, 'update'])->name('buildings.general.update');
-        Route::get('/buildings/{building}/position', [BuildingController::class, 'position'])->name('buildings.show.position');
-        Route::put('/buildings/{building}/position', [BuildingController::class, 'updatePosition'])->name('buildings.position.update');
-        Route::get('/buildings/{building}/thermal', [BuildingController::class, 'thermal'])->name('buildings.show.thermal');
-        Route::get('/buildings/{building}/energy', [BuildingController::class, 'energy'])->name('buildings.show.energy');
-        Route::get('/buildings/{building}/consumption', [BuildingController::class, 'consumption'])->name('buildings.show.consumption');
+        Route::get('/buildings/{building}/general', [BuildingController::class, 'general'])->name(
+            'buildings.show.general'
+        );
+        Route::put('/buildings/{building}/general', [BuildingController::class, 'update'])->name(
+            'buildings.general.update'
+        );
+        Route::get('/buildings/{building}/position', [BuildingController::class, 'position'])->name(
+            'buildings.show.position'
+        );
+        Route::put('/buildings/{building}/position', [BuildingController::class, 'updatePosition'])->name(
+            'buildings.position.update'
+        );
+        Route::get('/buildings/{building}/thermal', [BuildingController::class, 'thermal'])->name(
+            'buildings.show.thermal'
+        );
+        Route::get('/buildings/{building}/energy', [BuildingController::class, 'energy'])->name(
+            'buildings.show.energy'
+        );
+        Route::get('/buildings/{building}/consumption', [BuildingController::class, 'consumption'])->name(
+            'buildings.show.consumption'
+        );
 
         Route::get('/buildings/{building}/docs', [BuildingController::class, 'showDocs'])->name('buildings.docs');
 
-        Route::get('/buildings/{building}/energieausweis', [BuildingController::class, 'showEnergieausweis'])->name('buildings.energieausweis');
+        Route::name('products.')->group(function () {
 
-        Route::get('/buildings/{building}/isfp', [BuildingController::class, 'showIsfp'])->name('buildings.isfp');
-        Route::post('/buildings/{building}/isfp', [BuildingController::class, 'storeIsfp'])->name('buildings.isfp.store');
+            Route::get('/buildings/{building}/energieausweis', [BuildingController::class, 'showEnergieausweis'])
+                ->name('buildings.energieausweis');
 
-        Route::get('/buildings/{building}/bza', [BuildingController::class, 'showBza'])->name('buildings.bza');
-        Route::post('/buildings/{building}/bza', [BuildingController::class, 'storeBza'])->name('buildings.bza.store');
+            Route::get('/buildings/{building}/isfp', [BuildingController::class, 'showIsfp'])
+                ->name('buildings.isfp');
+            Route::post('/buildings/{building}/isfp', [BuildingController::class, 'storeIsfp'])
+                ->name('buildings.isfp.store');
 
-        Route::get('/buildings/{building}/calculator', [BuildingController::class, 'showCalculator'])->name('buildings.calculator');
+            Route::get('/buildings/{building}/bza', [BuildingController::class, 'showBza'])
+                ->name('buildings.bza');
+            Route::post('/buildings/{building}/bza', [BuildingController::class, 'storeBza'])
+                ->name('buildings.bza.store');
 
-        Route::post('buildings/{building}/documents', [BuildingController::class, 'storeDocument'])->name('buildings.documents.store');
-        Route::delete('buildings/{building}/documents/{attachment}', [BuildingController::class, 'deleteDocument'])->name('buildings.documents.destroy');
+            Route::get('/buildings/{building}/appraisal', [BuildingController::class, 'showAppraisal'])
+                ->name('buildings.appraisal');
 
-        Route::post('buildings/{building}/images', [BuildingController::class, 'storeImages'])->name('buildings.images.store');
+        });
 
-        Route::post('buildings/{building}/certificates', [App\Http\Controllers\Hub\CertificateController::class, 'store'])->name('certificates.store');
-        Route::get('certificates/{certificate}/download', [App\Http\Controllers\Hub\CertificateController::class, 'download'])->name('certificates.download');
+
+        Route::get('/buildings/{building}/calculator', [BuildingController::class, 'showCalculator'])->name(
+            'buildings.calculator'
+        );
+
+        Route::post('buildings/{building}/documents', [BuildingController::class, 'storeDocument'])->name(
+            'buildings.documents.store'
+        );
+        Route::delete('buildings/{building}/documents/{attachment}', [BuildingController::class, 'deleteDocument']
+        )->name('buildings.documents.destroy');
+
+        Route::post('buildings/{building}/images', [BuildingController::class, 'storeImages'])->name(
+            'buildings.images.store'
+        );
+
+        Route::post(
+            'buildings/{building}/certificates',
+            [App\Http\Controllers\Hub\CertificateController::class, 'store']
+        )->name('certificates.store');
+        Route::get(
+            'certificates/{certificate}/download',
+            [App\Http\Controllers\Hub\CertificateController::class, 'download']
+        )->name('certificates.download');
 
         Route::get('/billing', BillingController::class)->name('billing');
 

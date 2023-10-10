@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const zielzustand = {
     'EH 40': {
         key: 'EH 40',
@@ -352,3 +354,250 @@ const get300 = (summe) => ({
         },
     ],
 });
+
+/**
+ * Fenster immer 30-50k
+ *
+ * Sagen wir ein Dach 80-100k
+ *
+ * Heizung WP 45k
+ *
+ * Haustüre 8k
+ *
+ * Kellerdecke 15k
+ *
+ * PV 20k
+ */
+
+export const heating = [
+    {
+        id: 1,
+        name: 'Einbau Wärmepumpe',
+        description: 'Alternativ auch EE-Hybridheizung (auch mit Biomasse)',
+        price: 45_000,
+        percent: [0.3],
+        grant: null,
+    },
+    {
+        id: 2,
+        name: 'Einbau Biomasse Heizung',
+        description: 'Stückgut, Hackschnitzel oder Pelletheizung',
+        price: 55_000,
+        percent: [0.1],
+        grant: null,
+    },
+    {
+        id: 3,
+        name: 'Solarthermie',
+        description: 'Einbau einer Solarthermie Anlage',
+        price: 30_000,
+        percent: [0.25],
+        grant: null,
+    },
+    {
+        id: 4,
+        name: 'Heizungsoptimierung',
+        description: 'Optimierung der bestehenden Anlage',
+        price: 10_000,
+        percent: [0.15],
+        grant: null,
+    },
+];
+
+const envelope = [
+    {
+        id: 1,
+        name: 'Fassade',
+        description: 'Fassadendämmung',
+        price: 40_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 3,
+        name: 'Dach',
+        description: 'Isolierung des Dachs',
+        price: 90_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 3,
+        name: 'Keller',
+        description: 'Isolierung Kellerdecke',
+        price: 15_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 2,
+        name: 'Fenstertausch',
+        description: 'Auswechseln der Fenster',
+        price: 35_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 4,
+        name: 'Haustüre',
+        description: 'Austausch der Haustüre',
+        price: 8_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 4,
+        name: 'Sonnenschutz',
+        description: 'Einbau passender Fenster und Beschattung',
+        price: 15_000,
+        percent: [0.15],
+        grant: null,
+    },
+];
+
+const system = [
+    {
+        id: 1,
+        name: 'Lüftung',
+        description: 'Einbau eines Lüftungssystems für gut isolierte Gebäude',
+        price: 15_000,
+        percent: [0.15],
+        grant: null,
+    },
+    {
+        id: 2,
+        name: 'Smart Home',
+        description: 'Einbau smarter Technologie zum Ressourcen einsparen',
+        price: 50_000,
+        percent: [0.15],
+        grant: null,
+    },
+];
+
+const consulting = [
+    {
+        id: 1,
+        name: 'Energieberatung',
+        description: 'Erstellung eines Sanierungsfahrplans plus Beratung',
+        price: 1_600,
+        percent: [0.8],
+        grant: null,
+    },
+    {
+        id: 2,
+        name: 'Fachplanung/Baubegleitung',
+        description: 'Sämtliche ',
+        price: 10_000,
+        percent: [0.5],
+        grant: null,
+    },
+];
+
+export const filterActions = (
+    constructionYear,
+    ventilation,
+    heatingSystems,
+    renewables,
+    hasIsfp,
+    energyCertificateRating
+) => {
+    const summary = {
+        heating: [],
+        envelope: [],
+        system: [],
+        consulting: [],
+    };
+
+    // Heizungssysteme
+    if (
+        heatingSystems.find(
+            (system) =>
+                system.type === 'Ölheizung' || system.type === 'Gasheizung'
+        )
+    ) {
+        // push Wärmepumpe and EE Hybridheizung
+        summary.heating = structuredClone(
+            heating.filter((heating) => heating.id === 1 || heating.id === 2)
+        );
+    } else if (heatingSystems.find((system) => system.type === 'Holzheizung')) {
+        summary.heating.push(heating.find((heating) => heating.id === 1));
+    }
+
+    if (!renewables.find((renewable) => renewable.type === 'Solarthermie')) {
+        summary.heating.push(heating.find((heating) => heating.id === 3));
+    }
+    // Optimierung immer anbieten
+    summary.heating.push(
+        structuredClone(heating.find((heating) => heating.id === 4))
+    );
+
+    // Gebäudehülle
+    if (dayjs().year() - constructionYear >= 10) {
+        summary.envelope = structuredClone(envelope);
+    }
+
+    // Anlagentechnik
+    if (ventilation === 'Fensterlüftung' || ventilation === 'Schachtlüftung') {
+        summary.system = structuredClone(system);
+    } else {
+        summary.system.push(system.find((system) => system.id === 2));
+    }
+
+    // Energieberatung
+    if (!hasIsfp) {
+        summary.consulting = consulting;
+    } else {
+        summary.consulting.push(consulting.find((entry) => entry.id === 2));
+    }
+
+    // iSFP 5 %
+    if (hasIsfp) {
+        summary.envelope.map((entry) => entry.percent.push(0.05));
+        summary.heating.map((entry) => {
+            if (entry.id === 4) {
+                entry.percent.push(0.05);
+            }
+            return entry;
+        });
+    }
+
+    // Heizungstausch 10 %
+    if (
+        heatingSystems.find(
+            (system) =>
+                system.type === 'Ölheizung' || system.type === 'Gasheizung'
+        )
+    ) {
+        console.log('ADDING');
+        summary.heating.map((entry) => {
+            if (entry.id !== 4 && entry.id !== 3) {
+                entry.percent.push(0.1);
+            }
+            return entry;
+        });
+    }
+
+    // Compute grants
+    summary.heating?.map(
+        (entry) =>
+            (entry.grant =
+                entry.price * entry.percent.reduce((a, b) => a + b, 0))
+    );
+    summary.envelope?.map(
+        (entry) =>
+            (entry.grant =
+                entry.price * entry.percent.reduce((a, b) => a + b, 0))
+    );
+    summary.system?.map(
+        (entry) =>
+            (entry.grant =
+                entry.price * entry.percent.reduce((a, b) => a + b, 0))
+    );
+    summary.consulting?.map(
+        (entry) =>
+            (entry.grant =
+                entry.price * entry.percent.reduce((a, b) => a + b, 0))
+    );
+
+    return summary;
+};

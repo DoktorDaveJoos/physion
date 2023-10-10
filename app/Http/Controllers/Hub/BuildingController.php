@@ -297,4 +297,10 @@ class BuildingController extends Controller
         ]);
     }
 
+    public function showAppraisal(Building $building) {
+        return Inertia::render('Hub/Building/BuildingAppraisal', [
+            'building' => BuildingResource::make($building)
+        ]);
+    }
+
 }

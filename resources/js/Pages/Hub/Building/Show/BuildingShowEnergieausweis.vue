@@ -160,7 +160,7 @@ const vrbrSteps = [
         <title>Energieausweis</title>
     </Head>
 
-    <building-show-wrapper :building="building">
+    <building-show-wrapper :building="building" sub-tabs-products-active>
         <bz-card
             :class="
                 vrbrExists

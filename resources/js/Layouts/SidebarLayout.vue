@@ -537,14 +537,14 @@ const navigation = [
         icon: HomeModernIcon,
         current: route().current('hub.buildings*'),
     },
-    {
-        name: 'Bestellungen',
-        href: route('hub.certificates'),
-        icon: FolderIcon,
-        current:
-            route().current('hub.orders*') ||
-            route().current('hub.certificates*'),
-    },
+    // {
+    //     name: 'Bestellungen',
+    //     href: route('hub.certificates'),
+    //     icon: FolderIcon,
+    //     current:
+    //         route().current('hub.orders*') ||
+    //         route().current('hub.certificates*'),
+    // },
 ];
 
 const jetstreamNavigation = [

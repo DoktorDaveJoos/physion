@@ -145,7 +145,10 @@ watch(target, (value) => {
                 <Link
                     class="text-blue-600 font-bold"
                     :href="
-                        route('hub.buildings.energieausweis', building.data.id)
+                        route(
+                            'hub.products.buildings.energieausweis',
+                            building.data.id
+                        )
                     "
                     >hier</Link
                 >.
@@ -154,10 +157,12 @@ watch(target, (value) => {
                 <bz-button
                     class="w-full"
                     as="link"
-                    :href="route('hub.buildings.isfp', building.data.id)"
+                    :href="
+                        route('hub.products.buildings.isfp', building.data.id)
+                    "
                     >Jetzt iSFP erstellen</bz-button
                 >
-                <span class="px-1 leading-6">
+                <span class="leading-6">
                     Bis zu <span class="font-bold">20% Zuschuss</span> mehr mit
                     einem bekanntem Zielzustand.
                 </span>

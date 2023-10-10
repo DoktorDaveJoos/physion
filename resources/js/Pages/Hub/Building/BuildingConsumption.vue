@@ -182,7 +182,7 @@ const steps = [
                             as="link"
                             :href="
                                 route(
-                                    'hub.buildings.energieausweis',
+                                    'hub.products.buildings.energieausweis',
                                     building.data.id
                                 )
                             "
