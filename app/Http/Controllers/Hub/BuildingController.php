@@ -126,7 +126,7 @@ class BuildingController extends Controller
             'power_of_attorney_path' => $path,
         ]);
 
-        return to_route('hub.buildings.isfp', [
+        return to_route('hub.products.buildings.isfp', [
             'building' => $building->id,
         ]);
     }
@@ -164,7 +164,7 @@ class BuildingController extends Controller
             'power_of_attorney_path' => $path,
         ]);
 
-        return to_route('hub.buildings.bza', [
+        return to_route('hub.products.buildings.bza', [
             'building' => $building->id,
         ]);
     }

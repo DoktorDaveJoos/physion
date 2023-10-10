@@ -206,7 +206,7 @@ const vrbrSteps = [
                             !bdrfHeatingExists ||
                             building.data.status === 'created'
                         "
-                        as="link"
+                        @click="order('bdrf')"
                         >Bestellen</bz-button
                     >
                 </template>

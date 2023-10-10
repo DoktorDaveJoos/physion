@@ -39,7 +39,7 @@ class CertificateController extends Controller
 
         $building->energyCertificates()->create($data);
 
-        return to_route('hub.buildings.energieausweis', [
+        return to_route('hub.products.buildings.energieausweis', [
             'building' => $building->id,
         ]);
     }
