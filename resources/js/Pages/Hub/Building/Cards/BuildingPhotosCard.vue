@@ -93,7 +93,7 @@ const removePicture = (index) => {
 </script>
 
 <template>
-    <div class="rounded-lg shadow bg-white mt-6 flex flex-col">
+    <div class="rounded-lg shadow bg-white mt-4 flex flex-col">
         <div class="flex px-6 py-4 justify-between items-center">
             <div>
                 <h3 class="text-base font-semibold leading-7 text-gray-900">

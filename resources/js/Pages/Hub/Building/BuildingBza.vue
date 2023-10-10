@@ -109,7 +109,7 @@ const steps = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-products-active>
-        <bz-card>
+        <bz-card class="mt-4">
             <template #title>Bestätigung zum Antrag</template>
             <template #subtitle>BzA für Wohngebäude erstellen</template>
             <template #button>

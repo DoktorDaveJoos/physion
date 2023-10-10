@@ -202,7 +202,7 @@ if (!props.building.data.place_id && props.building.data.maps === 'initial') {
             </div>
         </div>
 
-        <bz-card>
+        <bz-card class="mt-4">
             <template #title>Grundriss & Position</template>
             <template #subtitle>Allgemeine Daten zum Gebäude angeben</template>
             <template #button>

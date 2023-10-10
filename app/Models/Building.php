@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Casts\LayoutCast;
-use App\Models\Building\Layout;
+use App\Models\Scopes\TeamScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * @property int $id
@@ -26,7 +25,12 @@ use PhpParser\Node\Scalar\String_;
  */
 class Building extends Model
 {
-    use HasFactory;
+//    use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new TeamScope);
+    }
 
     protected $guarded = ['id'];
 
@@ -101,6 +105,6 @@ class Building extends Model
 
     public function storagePath(): string
     {
-        return 'buildings/' . $this->id;
+        return 'buildings/'.$this->id;
     }
 }

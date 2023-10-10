@@ -82,7 +82,7 @@ const steps = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-products-active>
-        <bz-card>
+        <bz-card class="mt-4">
             <template #title>Sanierungsfahrplan iSFP</template>
             <template #subtitle
                 >Erstellen Sie jetzt einen iSFP für das Gebäude

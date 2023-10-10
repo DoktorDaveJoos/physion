@@ -161,537 +161,578 @@ const vrbrSteps = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-products-active>
-        <bz-card
-            :class="
-                vrbrExists
-                    ? 'opacity-50 hover:opacity-100 transition duration-150'
-                    : null
-            ">
-            <template #title>Bedarfsausweis</template>
-            <template #subtitle>Bedarfsorientierter Energieausweis</template>
-            <template #button>
-                <div class="flex space-x-2">
+        <div class="py-4 space-y-4">
+            <bz-card
+                :class="
+                    vrbrExists
+                        ? 'opacity-50 hover:opacity-100 transition duration-150'
+                        : null
+                ">
+                <template #title>Bedarfsausweis</template>
+                <template #subtitle
+                    >Bedarfsorientierter Energieausweis</template
+                >
+                <template #button>
+                    <div class="flex space-x-2">
+                        <template
+                            v-if="
+                                bdrfExists && building.data.products.bdrf?.file
+                            ">
+                            <bz-button
+                                v-if="bdrfExists"
+                                as="a"
+                                :href="
+                                    route(
+                                        'hub.certificates.download',
+                                        bdrfExists
+                                    )
+                                "
+                                >Download</bz-button
+                            >
+                            <bz-button v-if="bdrfExists" type="secondary"
+                                >Per Mail verschicken
+                            </bz-button>
+                        </template>
+                        <template v-else-if="bdrfExists"
+                            ><span class="text-xs text-gray-500 animate-pulse"
+                                >In Bearbeitung...</span
+                            >
+                        </template>
+                    </div>
+                    <bz-button
+                        v-if="!bdrfExists"
+                        :disabled="
+                            !bdrfThermalExists ||
+                            !bdrfHeatingExists ||
+                            building.data.status === 'created'
+                        "
+                        as="link"
+                        >Bestellen</bz-button
+                    >
+                </template>
+                <template #content>
+                    <nav
+                        aria-label="Progress"
+                        class="mx-auto border-b border-gray-100">
+                        <ol class="overflow-hidden lg:flex" role="list">
+                            <li
+                                v-for="(step, stepIdx) in bdrfSteps"
+                                :key="step.id"
+                                class="relative overflow-hidden lg:flex-1">
+                                <div
+                                    :class="[
+                                        stepIdx === 0
+                                            ? 'rounded-t-md border-b-0'
+                                            : '',
+                                        stepIdx === bdrfSteps.length - 1
+                                            ? 'rounded-b-md border-t-0'
+                                            : '',
+                                        'overflow-hidden border border-gray-200 lg:border-0',
+                                    ]">
+                                    <a
+                                        v-if="step.status === 'complete'"
+                                        :href="step.href"
+                                        class="group">
+                                        <span
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
+                                                <span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                                                    <CheckIcon
+                                                        aria-hidden="true"
+                                                        class="h-4 w-4 text-white" />
+                                                </span>
+                                            </span>
+                                            <span
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
+                                                >
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <a
+                                        v-else-if="step.status === 'current'"
+                                        :href="step.href"
+                                        aria-current="step">
+                                        <span
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
+                                                <span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                    <span
+                                                        class="text-blue-600 mt-0.5"
+                                                        >{{ step.id }}</span
+                                                    >
+                                                </span>
+                                            </span>
+                                            <span
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium text-blue-600"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
+                                                >
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <a v-else :href="step.href" class="group">
+                                        <span
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
+                                                <span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                                    <span
+                                                        class="text-gray-500 mt-0.5"
+                                                        >{{ step.id }}</span
+                                                    >
+                                                </span>
+                                            </span>
+                                            <span
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
+                                                >
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <template v-if="stepIdx !== 0">
+                                        <!-- Separator -->
+                                        <div
+                                            aria-hidden="true"
+                                            class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
+                                            <svg
+                                                class="h-full w-full text-gray-300"
+                                                fill="none"
+                                                preserveAspectRatio="none"
+                                                viewBox="0 0 12 82">
+                                                <path
+                                                    d="M0.5 0V31L10.5 41L0.5 51V82"
+                                                    stroke="currentcolor"
+                                                    vector-effect="non-scaling-stroke" />
+                                            </svg>
+                                        </div>
+                                    </template>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
                     <template
-                        v-if="bdrfExists && building.data.products.bdrf?.file">
-                        <bz-button
-                            v-if="bdrfExists"
-                            as="a"
-                            :href="
-                                route('hub.certificates.download', bdrfExists)
-                            "
-                            >Download</bz-button
-                        >
-                        <bz-button v-if="bdrfExists" type="secondary"
-                            >Per Mail verschicken
-                        </bz-button>
+                        v-if="bdrfExists && !building.data.products.bdrf?.file">
+                        <div class="rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Bestellung in Bearbeitung
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Ihre Bestellung wird gerade bearbeitet.
+                                        Sobald der Energieausweis fertiggestellt
+                                        ist, können Sie ihn hier herunterladen.
+                                        Sie werden zusätzlich per Mail
+                                        benachrichtigt.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </template>
-                    <template v-else-if="bdrfExists"
+                    <template v-else-if="building.data.status === 'created'">
+                        <div class="bg-white rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Lage & Position erfassen
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Für den Energieausweis muss die Lage,
+                                        Position und Grundriss erfasst werden.
+                                        Für den Bedarfsausweis ist es zudem
+                                        erforderlich auch die Heizungsanlage und
+                                        die thermische Hülle zu erfassen.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-3 text-sm leading-6 flex flex-col">
+                                    <Link
+                                        :href="
+                                            route(
+                                                'hub.buildings.show.position',
+                                                building.data.id
+                                            )
+                                        "
+                                        class="font-semibold text-blue-600 hover:text-blue-500">
+                                        Jetzt Position & Lage erfassen
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="!bdrfExists">
+                        <div class="bg-white rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Thermische Hülle & Energieträger erfassen
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Für den bedarfsorientierten
+                                        Energieausweis muss die thermische
+                                        Hülle, der Energieträger und die
+                                        Heizungsanlage erfasst werden.
+                                        Zusätzlich können Sie erneuerbare
+                                        Energien wie Photovoltaik oder
+                                        Solarthermie erfassen, falls diese
+                                        vorhanden sind.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-3 text-sm leading-6 flex flex-col">
+                                    <Link
+                                        :href="
+                                            route(
+                                                'hub.buildings.show.thermal',
+                                                building.data.id
+                                            )
+                                        "
+                                        class="font-semibold text-blue-600 hover:text-blue-500">
+                                        Jetzt thermische Hülle erfassen
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                    <Link
+                                        :href="
+                                            route(
+                                                'hub.buildings.show.energy',
+                                                building.data.id
+                                            )
+                                        "
+                                        class="font-semibold text-blue-600 hover:text-blue-500">
+                                        Jetzt Energieträger und Heizungsanlage
+                                        erfassen
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </bz-card>
+
+            <bz-card
+                :class="
+                    bdrfExists
+                        ? 'opacity-50 hover:opacity-100 transition duration-150'
+                        : null
+                ">
+                <template #title>Verbrauchsausweis</template>
+                <template #subtitle
+                    >Verbrauchsorientierter Energieausweis</template
+                >
+                <template #button>
+                    <template
+                        v-if="vrbrExists && building.data.products.vrbr?.file">
+                        <div class="flex space-x-2">
+                            <bz-button v-if="vrbrExists">Download</bz-button>
+                            <bz-button v-if="vrbrExists" type="secondary"
+                                >Send per Mail
+                            </bz-button>
+                        </div>
+                    </template>
+                    <template v-else-if="vrbrExists"
                         ><span class="text-xs text-gray-500 animate-pulse"
                             >In Bearbeitung...</span
                         >
                     </template>
-                </div>
-                <bz-button
-                    v-if="!bdrfExists"
-                    :disabled="
-                        !bdrfThermalExists ||
-                        !bdrfHeatingExists ||
-                        building.data.status === 'created'
-                    "
-                    as="link"
-                    >Bestellen</bz-button
-                >
-            </template>
-            <template #content>
-                <nav
-                    aria-label="Progress"
-                    class="mx-auto border-b border-gray-100">
-                    <ol class="overflow-hidden lg:flex" role="list">
-                        <li
-                            v-for="(step, stepIdx) in bdrfSteps"
-                            :key="step.id"
-                            class="relative overflow-hidden lg:flex-1">
-                            <div
-                                :class="[
-                                    stepIdx === 0
-                                        ? 'rounded-t-md border-b-0'
-                                        : '',
-                                    stepIdx === bdrfSteps.length - 1
-                                        ? 'rounded-b-md border-t-0'
-                                        : '',
-                                    'overflow-hidden border border-gray-200 lg:border-0',
-                                ]">
-                                <a
-                                    v-if="step.status === 'complete'"
-                                    :href="step.href"
-                                    class="group">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
-                                                <CheckIcon
-                                                    aria-hidden="true"
-                                                    class="h-4 w-4 text-white" />
-                                            </span>
-                                        </span>
-                                        <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                                            <span class="text-sm font-medium">{{
-                                                step.name
-                                            }}</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                                <a
-                                    v-else-if="step.status === 'current'"
-                                    :href="step.href"
-                                    aria-current="step">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
-                                                <span
-                                                    class="text-blue-600 mt-0.5"
-                                                    >{{ step.id }}</span
-                                                >
-                                            </span>
-                                        </span>
-                                        <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                                            <span
-                                                class="text-sm font-medium text-blue-600"
-                                                >{{ step.name }}</span
-                                            >
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                                <a v-else :href="step.href" class="group">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
-                                                <span
-                                                    class="text-gray-500 mt-0.5"
-                                                    >{{ step.id }}</span
-                                                >
-                                            </span>
-                                        </span>
-                                        <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.name }}</span
-                                            >
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                                <template v-if="stepIdx !== 0">
-                                    <!-- Separator -->
-                                    <div
-                                        aria-hidden="true"
-                                        class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
-                                        <svg
-                                            class="h-full w-full text-gray-300"
-                                            fill="none"
-                                            preserveAspectRatio="none"
-                                            viewBox="0 0 12 82">
-                                            <path
-                                                d="M0.5 0V31L10.5 41L0.5 51V82"
-                                                stroke="currentcolor"
-                                                vector-effect="non-scaling-stroke" />
-                                        </svg>
-                                    </div>
-                                </template>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-                <template
-                    v-if="bdrfExists && !building.data.products.bdrf?.file">
-                    <div class="rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Bestellung in Bearbeitung
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Ihre Bestellung wird gerade bearbeitet.
-                                    Sobald der Energieausweis fertiggestellt
-                                    ist, können Sie ihn hier herunterladen. Sie
-                                    werden zusätzlich per Mail benachrichtigt.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else-if="building.data.status === 'created'">
-                    <div class="bg-white rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Lage & Position erfassen
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Für den Energieausweis muss die Lage,
-                                    Position und Grundriss erfasst werden. Für
-                                    den Bedarfsausweis ist es zudem erforderlich
-                                    auch die Heizungsanlage und die thermische
-                                    Hülle zu erfassen.
-                                </p>
-                            </div>
-                            <div class="mt-3 text-sm leading-6 flex flex-col">
-                                <Link
-                                    :href="
-                                        route(
-                                            'hub.buildings.show.position',
-                                            building.data.id
-                                        )
-                                    "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
-                                    Jetzt Position & Lage erfassen
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else-if="!bdrfExists">
-                    <div class="bg-white rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Thermische Hülle & Energieträger erfassen
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Für den bedarfsorientierten Energieausweis
-                                    muss die thermische Hülle, der Energieträger
-                                    und die Heizungsanlage erfasst werden.
-                                    Zusätzlich können Sie erneuerbare Energien
-                                    wie Photovoltaik oder Solarthermie erfassen,
-                                    falls diese vorhanden sind.
-                                </p>
-                            </div>
-                            <div class="mt-3 text-sm leading-6 flex flex-col">
-                                <Link
-                                    :href="
-                                        route(
-                                            'hub.buildings.show.thermal',
-                                            building.data.id
-                                        )
-                                    "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
-                                    Jetzt thermische Hülle erfassen
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
-                                <Link
-                                    :href="
-                                        route(
-                                            'hub.buildings.show.energy',
-                                            building.data.id
-                                        )
-                                    "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
-                                    Jetzt Energieträger und Heizungsanlage
-                                    erfassen
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </template>
-        </bz-card>
-
-        <bz-card
-            :class="
-                bdrfExists
-                    ? 'opacity-50 hover:opacity-100 transition duration-150'
-                    : null
-            ">
-            <template #title>Verbrauchsausweis</template>
-            <template #subtitle>Verbrauchsorientierter Energieausweis</template>
-            <template #button>
-                <template
-                    v-if="vrbrExists && building.data.products.vrbr?.file">
-                    <div class="flex space-x-2">
-                        <bz-button v-if="vrbrExists">Download</bz-button>
-                        <bz-button v-if="vrbrExists" type="secondary"
-                            >Send per Mail
-                        </bz-button>
-                    </div>
-                </template>
-                <template v-else-if="vrbrExists"
-                    ><span class="text-xs text-gray-500 animate-pulse"
-                        >In Bearbeitung...</span
+                    <bz-button
+                        v-if="!vrbrExists"
+                        :disabled="
+                            !vrbrConsumptionExists ||
+                            building.data.status === 'created'
+                        "
+                        @click="order('vrbr')"
+                        >Bestellen</bz-button
                     >
                 </template>
-                <bz-button
-                    v-if="!vrbrExists"
-                    :disabled="
-                        !vrbrConsumptionExists ||
-                        building.data.status === 'created'
-                    "
-                    @click="order('vrbr')"
-                    >Bestellen</bz-button
-                >
-            </template>
-            <template #content>
-                <nav
-                    aria-label="Progress"
-                    class="mx-auto border-b border-gray-100">
-                    <ol class="overflow-hidden lg:flex" role="list">
-                        <li
-                            v-for="(step, stepIdx) in vrbrSteps"
-                            :key="step.id"
-                            class="relative overflow-hidden lg:flex-1">
-                            <div
-                                :class="[
-                                    stepIdx === 0
-                                        ? 'rounded-t-md border-b-0'
-                                        : '',
-                                    stepIdx === vrbrSteps.length - 1
-                                        ? 'rounded-b-md border-t-0'
-                                        : '',
-                                    'overflow-hidden border border-gray-200 lg:border-0',
-                                ]">
-                                <a
-                                    v-if="step.status === 'complete'"
-                                    :href="step.href"
-                                    class="group">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
-                                                <CheckIcon
-                                                    aria-hidden="true"
-                                                    class="h-4 w-4 text-white" />
-                                            </span>
-                                        </span>
+                <template #content>
+                    <nav
+                        aria-label="Progress"
+                        class="mx-auto border-b border-gray-100">
+                        <ol class="overflow-hidden lg:flex" role="list">
+                            <li
+                                v-for="(step, stepIdx) in vrbrSteps"
+                                :key="step.id"
+                                class="relative overflow-hidden lg:flex-1">
+                                <div
+                                    :class="[
+                                        stepIdx === 0
+                                            ? 'rounded-t-md border-b-0'
+                                            : '',
+                                        stepIdx === vrbrSteps.length - 1
+                                            ? 'rounded-b-md border-t-0'
+                                            : '',
+                                        'overflow-hidden border border-gray-200 lg:border-0',
+                                    ]">
+                                    <a
+                                        v-if="step.status === 'complete'"
+                                        :href="step.href"
+                                        class="group">
                                         <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                                            <span class="text-sm font-medium">{{
-                                                step.name
-                                            }}</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                                <a
-                                    v-else-if="step.status === 'current'"
-                                    :href="step.href"
-                                    aria-current="step">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
                                                 <span
-                                                    class="text-blue-600 mt-0.5"
-                                                    >{{ step.id }}</span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                                                    <CheckIcon
+                                                        aria-hidden="true"
+                                                        class="h-4 w-4 text-white" />
+                                                </span>
+                                            </span>
+                                            <span
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
                                                 >
                                             </span>
                                         </span>
+                                    </a>
+                                    <a
+                                        v-else-if="step.status === 'current'"
+                                        :href="step.href"
+                                        aria-current="step">
                                         <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                                            <span
-                                                class="text-sm font-medium text-blue-600"
-                                                >{{ step.name }}</span
-                                            >
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                                <a v-else :href="step.href" class="group">
-                                    <span
-                                        aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
-                                    <span
-                                        :class="[
-                                            stepIdx !== 0 ? 'lg:pl-9' : '',
-                                            'flex items-start px-6 py-5 text-sm font-medium',
-                                        ]">
-                                        <span class="flex-shrink-0">
-                                            <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
                                                 <span
-                                                    class="text-gray-500 mt-0.5"
-                                                    >{{ step.id }}</span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                    <span
+                                                        class="text-blue-600 mt-0.5"
+                                                        >{{ step.id }}</span
+                                                    >
+                                                </span>
+                                            </span>
+                                            <span
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium text-blue-600"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
                                                 >
                                             </span>
                                         </span>
+                                    </a>
+                                    <a v-else :href="step.href" class="group">
                                         <span
-                                            class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                            aria-hidden="true"
+                                            class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        <span
+                                            :class="[
+                                                stepIdx !== 0 ? 'lg:pl-9' : '',
+                                                'flex items-start px-6 py-5 text-sm font-medium',
+                                            ]">
+                                            <span class="flex-shrink-0">
+                                                <span
+                                                    class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                                    <span
+                                                        class="text-gray-500 mt-0.5"
+                                                        >{{ step.id }}</span
+                                                    >
+                                                </span>
+                                            </span>
                                             <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.name }}</span
-                                            >
-                                            <span
-                                                class="text-sm font-medium text-gray-500"
-                                                >{{ step.description }}</span
-                                            >
+                                                class="ml-4 mt-0.5 flex min-w-0 flex-col">
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{ step.name }}</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-gray-500"
+                                                    >{{
+                                                        step.description
+                                                    }}</span
+                                                >
+                                            </span>
                                         </span>
-                                    </span>
-                                </a>
-                                <template v-if="stepIdx !== 0">
-                                    <!-- Separator -->
-                                    <div
-                                        aria-hidden="true"
-                                        class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
-                                        <svg
-                                            class="h-full w-full text-gray-300"
-                                            fill="none"
-                                            preserveAspectRatio="none"
-                                            viewBox="0 0 12 82">
-                                            <path
-                                                d="M0.5 0V31L10.5 41L0.5 51V82"
-                                                stroke="currentcolor"
-                                                vector-effect="non-scaling-stroke" />
-                                        </svg>
-                                    </div>
-                                </template>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-                <template
-                    v-if="vrbrExists && !building.data.products.vrbr?.file">
-                    <div class="rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Bestellung in Bearbeitung
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Ihre Bestellung wird gerade bearbeitet.
-                                    Sobald der Energieausweis fertiggestellt
-                                    ist, können Sie ihn hier herunterladen. Sie
-                                    werden zusätzlich per Mail benachrichtigt.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else-if="building.data.status === 'created'">
-                    <div class="bg-white rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Lage & Position erfassen
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Für den Energieausweis muss die Lage,
-                                    Position und Grundriss erfasst werden. Für
-                                    den Verbrauchsausweis muss zusätzlich noch
-                                    der Verbrauch des Gebäudes erfasst werden.
-                                </p>
-                            </div>
-                            <div class="mt-3 text-sm leading-6 flex flex-col">
-                                <Link
-                                    :href="
-                                        route(
-                                            'hub.buildings.show.position',
-                                            building.data.id
-                                        )
-                                    "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
-                                    Jetzt Position & Lage erfassen
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
+                                    </a>
+                                    <template v-if="stepIdx !== 0">
+                                        <!-- Separator -->
+                                        <div
+                                            aria-hidden="true"
+                                            class="absolute inset-0 left-0 top-0 hidden w-3 lg:block">
+                                            <svg
+                                                class="h-full w-full text-gray-300"
+                                                fill="none"
+                                                preserveAspectRatio="none"
+                                                viewBox="0 0 12 82">
+                                                <path
+                                                    d="M0.5 0V31L10.5 41L0.5 51V82"
+                                                    stroke="currentcolor"
+                                                    vector-effect="non-scaling-stroke" />
+                                            </svg>
+                                        </div>
+                                    </template>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                    <template
+                        v-if="vrbrExists && !building.data.products.vrbr?.file">
+                        <div class="rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Bestellung in Bearbeitung
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Ihre Bestellung wird gerade bearbeitet.
+                                        Sobald der Energieausweis fertiggestellt
+                                        ist, können Sie ihn hier herunterladen.
+                                        Sie werden zusätzlich per Mail
+                                        benachrichtigt.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </template>
-                <template v-else-if="!vrbrExists && !vrbrConsumptionExists">
-                    <div class="bg-white rounded-b-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3
-                                class="text-base font-semibold leading-6 text-gray-900">
-                                Verbrauch erfassen
-                            </h3>
-                            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                                <p>
-                                    Für den verbrauchsorientierten
-                                    Energieausweis müssen die Verbrauchsdaten
-                                    von mindestens 3 Jahren (36 Monate) erfasst
-                                    werden. Zusätzlich können Sie Leerstand,
-                                    falls vorhanden, erfassen.
-                                </p>
-                            </div>
-                            <div class="mt-3 text-sm leading-6 flex flex-col">
-                                <Link
-                                    :href="
-                                        route(
-                                            'hub.buildings.show.consumption',
-                                            building.data.id
-                                        )
-                                    "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
-                                    Jetzt Verbrauch erfassen
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
+                    </template>
+                    <template v-else-if="building.data.status === 'created'">
+                        <div class="bg-white rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Lage & Position erfassen
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Für den Energieausweis muss die Lage,
+                                        Position und Grundriss erfasst werden.
+                                        Für den Verbrauchsausweis muss
+                                        zusätzlich noch der Verbrauch des
+                                        Gebäudes erfasst werden.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-3 text-sm leading-6 flex flex-col">
+                                    <Link
+                                        :href="
+                                            route(
+                                                'hub.buildings.show.position',
+                                                building.data.id
+                                            )
+                                        "
+                                        class="font-semibold text-blue-600 hover:text-blue-500">
+                                        Jetzt Position & Lage erfassen
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
+                    <template v-else-if="!vrbrExists && !vrbrConsumptionExists">
+                        <div class="bg-white rounded-b-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3
+                                    class="text-base font-semibold leading-6 text-gray-900">
+                                    Verbrauch erfassen
+                                </h3>
+                                <div
+                                    class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>
+                                        Für den verbrauchsorientierten
+                                        Energieausweis müssen die
+                                        Verbrauchsdaten von mindestens 3 Jahren
+                                        (36 Monate) erfasst werden. Zusätzlich
+                                        können Sie Leerstand, falls vorhanden,
+                                        erfassen.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-3 text-sm leading-6 flex flex-col">
+                                    <Link
+                                        :href="
+                                            route(
+                                                'hub.buildings.show.consumption',
+                                                building.data.id
+                                            )
+                                        "
+                                        class="font-semibold text-blue-600 hover:text-blue-500">
+                                        Jetzt Verbrauch erfassen
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </template>
-            </template>
-        </bz-card>
+            </bz-card>
+        </div>
     </building-show-wrapper>
 
     <dialog-modal :closeable="true" :show="modal" @close="cancel">

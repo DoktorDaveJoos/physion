@@ -23,7 +23,7 @@ defineProps({
             class="rounded-lg shadow bg-white px-6 py-4 flex items-center justify-between">
             <div class="flex space-x-2">
                 <h3
-                    class="text-lg font-display font-semibold leading-6 text-gray-900">
+                    class="text-lg font-display font-semibold leading-6 text-gray-700">
                     Gebäude
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
@@ -104,5 +104,47 @@ defineProps({
                     </div> </Link
             ></template>
         </ul>
+
+        <div
+            v-if="buildings.data.length > 0"
+            class="rounded-lg mt-6 shadow bg-white px-6 py-3 flex items-center justify-center">
+            <div class="hidden sm:block">
+                <nav aria-label="Pagination" class="flex space-x-4">
+                    <Link
+                        :href="buildings.links.prev"
+                        :disabled="!buildings.links.prev"
+                        :class="[
+                            !buildings.links.prev
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-gray-500 hover:text-gray-700',
+                            'rounded-md px-3 py-2 text-xs font-bold tracking-wider uppercase',
+                        ]">
+                        Vorherige
+                    </Link>
+
+                    <div class="flex items-center">
+                        <span class="text-blue-500 text-sm font-bold mr-1"
+                            >{{ buildings.meta.current_page }} </span
+                        ><span class="text-gray-500 text-xs font-bold">
+                            / {{ buildings.meta.last_page }}</span
+                        >
+                    </div>
+                    <Link
+                        :href="buildings.links.next"
+                        :disabled="!buildings.links.next"
+                        :class="[
+                            !buildings.links.next
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-gray-500 hover:text-gray-700',
+                            'rounded-md px-3 py-2 text-xs font-bold tracking-wider uppercase',
+                        ]">
+                        nächste
+                    </Link>
+                </nav>
+            </div>
+        </div>
+        <el-empty v-else description="Noch keine Gebäude angelegt">
+            <bz-button>Jetzt Gebäude anlegen</bz-button>
+        </el-empty>
     </SidebarLayout>
 </template>

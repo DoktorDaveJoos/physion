@@ -20,7 +20,7 @@ defineProps({
 
     <building-show-wrapper :building="building" sub-tabs-active>
         <suspense>
-            <bz-card>
+            <bz-card class="mt-4">
                 <template #title>Allgemeine Daten</template>
                 <template #subtitle
                     >Erfassen Sie allgemeine Daten zum Gebäude</template

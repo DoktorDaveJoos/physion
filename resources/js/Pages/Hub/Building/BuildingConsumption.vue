@@ -102,7 +102,7 @@ const steps = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-active>
-        <bz-card>
+        <bz-card class="mt-4">
             <template #title>Verbrauch</template>
             <template #subtitle>Angaben zum Verbrauch des Gebäudes</template>
             <template #button>

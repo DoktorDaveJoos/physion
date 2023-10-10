@@ -345,156 +345,165 @@ const options = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-active>
-        <bz-card>
-            <template #title>Heizungsanlage</template>
-            <template #subtitle>Angaben zur Heizung und Warmwasser</template>
-            <template #content>
-                <template v-if="building.data.heatingSystems?.length === 0">
-                    <el-empty description="Noch keine Heizungsanlage angelegt">
-                        <bz-button @click="drawer.energy_systems = true"
-                            >Heizungsanlage anlegen
-                        </bz-button>
-                    </el-empty>
-                </template>
-                <template v-else>
-                    <div
-                        class="space-y-2 px-6 py-4 bg-gray-50 shadow-inner border-t border-gray-200">
-                        <span class="text-gray-500 text-xs font-semibold"
-                            >Heizungsanlage(n)</span
-                        >
+        <div class="py-4 space-y-4">
+            <bz-card>
+                <template #title>Heizungsanlage</template>
+                <template #subtitle
+                    >Angaben zur Heizung und Warmwasser</template
+                >
+                <template #content>
+                    <template v-if="building.data.heatingSystems?.length === 0">
+                        <el-empty
+                            description="Noch keine Heizungsanlage angelegt">
+                            <bz-button @click="drawer.energy_systems = true"
+                                >Heizungsanlage anlegen
+                            </bz-button>
+                        </el-empty>
+                    </template>
+                    <template v-else>
                         <div
-                            v-for="heatingSystem in building.data
-                                .heatingSystems"
-                            class="flex rounded-lg bg-white border border-gray-200 p-2 items-center">
+                            class="space-y-2 px-6 py-4 bg-gray-50 shadow-inner border-t border-gray-200">
+                            <span class="text-gray-500 text-xs font-semibold"
+                                >Heizungsanlage(n)</span
+                            >
                             <div
-                                class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
-                                <FireIcon class="h-6 w-6 text-gray-500" />
-                            </div>
-
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-2">
-                                    <h3 class="text-gray-800 text-sm font-bold">
-                                        {{ heatingSystem.type }}
-                                    </h3>
-                                    <Badge
-                                        v-if="heatingSystem.is_main"
-                                        label="Hauptenergieträger"
-                                        size="sm" />
-
-                                    <Badge
-                                        v-if="heatingSystem.water_included"
-                                        label="Warmwasser"
-                                        size="sm" />
+                                v-for="heatingSystem in building.data
+                                    .heatingSystems"
+                                class="flex rounded-lg bg-white border border-gray-200 p-2 items-center">
+                                <div
+                                    class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
+                                    <FireIcon class="h-6 w-6 text-gray-500" />
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">
-                                    {{ heatingSystem.system }} - Bj.
-                                    {{ heatingSystem.construction_year }}
-                                </p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <el-button
-                                    size="small"
-                                    text
-                                    @click="
-                                        deleteHeatingSystem(heatingSystem.id)
-                                    ">
-                                    <trash-icon class="h-4 w-4" />
-                                </el-button>
+
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h3
+                                            class="text-gray-800 text-sm font-bold">
+                                            {{ heatingSystem.type }}
+                                        </h3>
+                                        <Badge
+                                            v-if="heatingSystem.is_main"
+                                            label="Hauptenergieträger"
+                                            size="sm" />
+
+                                        <Badge
+                                            v-if="heatingSystem.water_included"
+                                            label="Warmwasser"
+                                            size="sm" />
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ heatingSystem.system }} - Bj.
+                                        {{ heatingSystem.construction_year }}
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <el-button
+                                        size="small"
+                                        text
+                                        @click="
+                                            deleteHeatingSystem(
+                                                heatingSystem.id
+                                            )
+                                        ">
+                                        <trash-icon class="h-4 w-4" />
+                                    </el-button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div
-                        class="flex justify-end items-center px-6 py-4 border-t border-gray-100">
-                        <bz-button
-                            type="secondary"
-                            @click="drawer.energy_systems = true">
-                            + Heizungsanlage hinzufügen
-                        </bz-button>
-                    </div>
-                </template>
-            </template>
-        </bz-card>
-
-        <bz-card>
-            <template #title>Erneuerbare Energien</template>
-            <template #subtitle
-                >Angaben zur Energiegewinnung aus regenerativen
-                Ressourcen</template
-            >
-            <template #content>
-                <template
-                    v-if="
-                        building.data.renewableEnergyInstallations?.length === 0
-                    ">
-                    <el-empty
-                        description="Noch keine erneuerbaren Energieträger angelegt">
-                        <bz-button
-                            type="secondary"
-                            @click="drawer.renewables = true">
-                            + Erneuerbaren Energieträger anlegen
-                        </bz-button>
-                    </el-empty>
-                </template>
-                <template v-else>
-                    <div
-                        class="space-y-2 px-6 py-4 bg-gray-50 shadow-inner border-t border-gray-200">
-                        <span class="text-gray-500 text-xs font-semibold"
-                            >Erneuerbare Energie(en)</span
-                        >
                         <div
-                            v-for="renewable in building.data
-                                .renewableEnergyInstallations"
-                            class="flex rounded-lg bg-white border border-gray-200 p-2 items-center">
-                            <div
-                                class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
-                                <BoltIcon class="h-6 w-6 text-gray-500" />
-                            </div>
+                            class="flex justify-end items-center px-6 py-4 border-t border-gray-100">
+                            <bz-button
+                                type="secondary"
+                                @click="drawer.energy_systems = true">
+                                + Heizungsanlage hinzufügen
+                            </bz-button>
+                        </div>
+                    </template>
+                </template>
+            </bz-card>
 
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-2">
-                                    <h3 class="text-gray-800 text-sm font-bold">
-                                        {{ renewable.type }}
-                                    </h3>
-                                    <Badge
-                                        v-if="renewable.electricity"
-                                        label="Strom"
-                                        size="sm" />
-                                    <Badge
-                                        v-if="renewable.heating"
-                                        label="Heizung"
-                                        size="sm" />
-                                    <Badge
-                                        v-if="renewable.water"
-                                        label="Warmwasser"
-                                        size="sm" />
+            <bz-card>
+                <template #title>Erneuerbare Energien</template>
+                <template #subtitle
+                    >Angaben zur Energiegewinnung aus regenerativen
+                    Ressourcen</template
+                >
+                <template #content>
+                    <template
+                        v-if="
+                            building.data.renewableEnergyInstallations
+                                ?.length === 0
+                        ">
+                        <el-empty
+                            description="Noch keine erneuerbaren Energieträger angelegt">
+                            <bz-button
+                                type="secondary"
+                                @click="drawer.renewables = true">
+                                + Erneuerbaren Energieträger anlegen
+                            </bz-button>
+                        </el-empty>
+                    </template>
+                    <template v-else>
+                        <div
+                            class="space-y-2 px-6 py-4 bg-gray-50 shadow-inner border-t border-gray-200">
+                            <span class="text-gray-500 text-xs font-semibold"
+                                >Erneuerbare Energie(en)</span
+                            >
+                            <div
+                                v-for="renewable in building.data
+                                    .renewableEnergyInstallations"
+                                class="flex rounded-lg bg-white border border-gray-200 p-2 items-center">
+                                <div
+                                    class="h-12 w-12 mr-4 bg-gray-100 rounded flex justify-center items-center">
+                                    <BoltIcon class="h-6 w-6 text-gray-500" />
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">
-                                    {{ renewable.area }} m² - Bj.
-                                    {{ renewable.construction_year }}
-                                </p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <el-button
-                                    size="small"
-                                    text
-                                    @click="deleteRenewable(renewable.id)">
-                                    <trash-icon class="h-4 w-4" />
-                                </el-button>
+
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h3
+                                            class="text-gray-800 text-sm font-bold">
+                                            {{ renewable.type }}
+                                        </h3>
+                                        <Badge
+                                            v-if="renewable.electricity"
+                                            label="Strom"
+                                            size="sm" />
+                                        <Badge
+                                            v-if="renewable.heating"
+                                            label="Heizung"
+                                            size="sm" />
+                                        <Badge
+                                            v-if="renewable.water"
+                                            label="Warmwasser"
+                                            size="sm" />
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        {{ renewable.area }} m² - Bj.
+                                        {{ renewable.construction_year }}
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <el-button
+                                        size="small"
+                                        text
+                                        @click="deleteRenewable(renewable.id)">
+                                        <trash-icon class="h-4 w-4" />
+                                    </el-button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div
-                        class="flex justify-end items-center px-6 py-4 border-t border-gray-100">
-                        <bz-button
-                            type="secondary"
-                            @click="drawer.renewables = true">
-                            + Erneuerbaren Energieträger hinzufügen
-                        </bz-button>
-                    </div>
+                        <div
+                            class="flex justify-end items-center px-6 py-4 border-t border-gray-100">
+                            <bz-button
+                                type="secondary"
+                                @click="drawer.renewables = true">
+                                + Erneuerbaren Energieträger hinzufügen
+                            </bz-button>
+                        </div>
+                    </template>
                 </template>
-            </template>
-        </bz-card>
-
+            </bz-card>
+        </div>
         <el-drawer
             v-model="drawer.energy_systems"
             :before-close="(e) => cancelSource()"

@@ -14,6 +14,10 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         return Inertia::render('Hub/Dashboard', [
+            'activities' => $request->user()->currentTeam?->activities()->with('user')->latest()->limit(10)->get(),
+
+
+
             'products' => Product::where('recurring', true)->where('type', 'certificate')->get(),
             'stats' => [
                 'orders' => [

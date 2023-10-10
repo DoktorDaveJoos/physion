@@ -54,40 +54,42 @@ const steps = [
     </Head>
 
     <building-show-wrapper :building="building" sub-tabs-active>
-        <bz-card>
-            <template #title>Wandaufbau</template>
-            <template #subtitle
-                >Angaben zur Außenwand, Fenster und Dämmung</template
-            >
-            <template #content>
-                <wall-form
-                    :building-id="building.data.id"
-                    :wall="building.data.wall" />
-            </template>
-        </bz-card>
+        <div class="py-4 space-y-4">
+            <bz-card>
+                <template #title>Wandaufbau</template>
+                <template #subtitle
+                    >Angaben zur Außenwand, Fenster und Dämmung</template
+                >
+                <template #content>
+                    <wall-form
+                        :building-id="building.data.id"
+                        :wall="building.data.wall" />
+                </template>
+            </bz-card>
 
-        <bz-card>
-            <template #title>Dachaufbau</template>
-            <template #subtitle
-                >Angaben zum Dach, Dachfenster und Dämmung</template
-            >
-            <template #content>
-                <roof-form
-                    :building-id="building.data.id"
-                    :roof="building.data.roof" />
-            </template>
-        </bz-card>
+            <bz-card>
+                <template #title>Dachaufbau</template>
+                <template #subtitle
+                    >Angaben zum Dach, Dachfenster und Dämmung</template
+                >
+                <template #content>
+                    <roof-form
+                        :building-id="building.data.id"
+                        :roof="building.data.roof" />
+                </template>
+            </bz-card>
 
-        <bz-card>
-            <template #title>Keller</template>
-            <template #subtitle
-                >Angaben zum Keller, Kellerdecke und Dämmung</template
-            >
-            <template #content>
-                <cellar-form
-                    :building-id="building.data.id"
-                    :cellar="building.data.cellarModel" />
-            </template>
-        </bz-card>
+            <bz-card>
+                <template #title>Keller</template>
+                <template #subtitle
+                    >Angaben zum Keller, Kellerdecke und Dämmung</template
+                >
+                <template #content>
+                    <cellar-form
+                        :building-id="building.data.id"
+                        :cellar="building.data.cellarModel" />
+                </template>
+            </bz-card>
+        </div>
     </building-show-wrapper>
 </template>

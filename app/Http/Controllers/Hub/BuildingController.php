@@ -13,6 +13,7 @@ use App\Http\Resources\Building\BuildingResourceDocs;
 use App\Http\Resources\Building\BuildingResourceEnergieausweis;
 use App\Http\Resources\Building\BuildingResourcePosition;
 use App\Http\Resources\Building\BuildingThermalResource;
+use App\Models\Activity;
 use App\Models\Attachment;
 use App\Models\Building;
 use App\Models\Bza;
@@ -257,7 +258,14 @@ class BuildingController extends Controller
             'published' => true,
         ]);
 
-        return to_route('hub.buildings.show.docs', [
+        Activity::create([
+            'team_id' => $building->team_id,
+            'user_id' => $request->user()->id,
+            'type' => Activity::ADDED,
+            'subject' => 'ein Dokument',
+        ]);
+
+        return to_route('hub.buildings.docs', [
             'building' => $building->id,
         ]);
     }
@@ -266,7 +274,7 @@ class BuildingController extends Controller
     {
         Storage::delete($attachment->path);
         $attachment->delete();
-        return to_route('hub.buildings.show.docs', [
+        return to_route('hub.buildings.docs', [
             'building' => $building->id,
         ]);
     }
@@ -292,7 +300,7 @@ class BuildingController extends Controller
             ]);
         }
 
-        return to_route('hub.buildings.show.docs', [
+        return to_route('hub.buildings.docs', [
             'building' => $building->id,
         ]);
     }

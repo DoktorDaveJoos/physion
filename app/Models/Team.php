@@ -51,6 +51,11 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function resources(): BelongsToMany
     {
         return $this->belongsToMany(Resource::class, 'team_has_resources');

@@ -69,9 +69,9 @@ const mapping = {
     </Head>
 
     <building-show-wrapper :building="building">
-        <kfw-card :building="building" />
+        <kfw-card class="mt-4" :building="building" />
 
-        <bz-card>
+        <bz-card class="mt-4">
             <template #title
                 >Bafa
                 <badge
