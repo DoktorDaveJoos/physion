@@ -157,7 +157,7 @@ const mapping = {
                         </div>
 
                         <div v-for="(cluster, idx) in getActions" :key="idx">
-                            <div class="px-4 pb-1">
+                            <div v-if="cluster.length > 0" class="px-4 pb-1">
                                 <span
                                     class="text-sm font-semibold text-gray-700"
                                     >{{ mapping[idx] }}</span

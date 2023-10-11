@@ -19,6 +19,8 @@ use App\Http\Controllers\Find\FindByController;
 use App\Http\Controllers\Hub\BillingController;
 use App\Http\Controllers\Hub\BuildingController;
 use App\Http\Controllers\Hub\DashboardController;
+use App\Http\Controllers\Hub\NoteController;
+use App\Http\Controllers\Hub\NotesController;
 use App\Http\Controllers\Hub\SearchController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\OrderController;
@@ -267,9 +269,11 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::prefix('/hub')->name('hub.')->group(function () {
+
+        Route::post('/notes', [NotesController::class, 'store'])->name('notes.store');
+
         Route::get('search', SearchController::class)->name('search');
 
-        Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::get('/buildings/create', [BuildingController::class, 'create'])->name('buildings.create');

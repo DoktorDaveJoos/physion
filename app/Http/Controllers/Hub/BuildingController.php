@@ -126,6 +126,13 @@ class BuildingController extends Controller
             'power_of_attorney_path' => $path,
         ]);
 
+        Activity::create([
+            'team_id' => $building->team_id,
+            'user_id' => $request->user()->id,
+            'type' => Activity::ORDERED,
+            'subject' => 'einen iSFP',
+        ]);
+
         return to_route('hub.products.buildings.isfp', [
             'building' => $building->id,
         ]);
@@ -162,6 +169,13 @@ class BuildingController extends Controller
             'customer_id' => $customer->id,
             'product_id' => $bzaProduct->id,
             'power_of_attorney_path' => $path,
+        ]);
+
+        Activity::create([
+            'team_id' => $building->team_id,
+            'user_id' => $request->user()->id,
+            'type' => Activity::ORDERED,
+            'subject' => 'eine BzA',
         ]);
 
         return to_route('hub.products.buildings.bza', [
@@ -224,6 +238,13 @@ class BuildingController extends Controller
             'cooling' => $request->get('cooling'),
             'cooling_count' => $request->get('cooling_count'),
             'cooling_service' => $request->get('cooling_service'),
+        ]);
+
+        Activity::create([
+            'team_id' => $building->team_id,
+            'user_id' => $request->user()->id,
+            'type' => Activity::CREATED,
+            'subject' => 'ein Gebäude',
         ]);
 
         return to_route('hub.buildings.show.position', [
@@ -299,6 +320,13 @@ class BuildingController extends Controller
                 'published' => true,
             ]);
         }
+
+        Activity::create([
+            'team_id' => $building->team_id,
+            'user_id' => $request->user()->id,
+            'type' => Activity::ADDED,
+            'subject' => count($request->file('pictures')).' Bilder',
+        ]);
 
         return to_route('hub.buildings.docs', [
             'building' => $building->id,

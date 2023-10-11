@@ -17,6 +17,7 @@ class Activity extends Model
     public const ADDED = 'hinzugefügt';
     public const DELETED = 'gelöscht';
     public const COMMENTED = 'kommentiert';
+    public const ORDERED = 'bestellt';
 
 
     public function user(): BelongsTo

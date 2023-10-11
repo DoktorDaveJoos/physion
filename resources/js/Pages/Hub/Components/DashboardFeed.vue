@@ -14,10 +14,8 @@
                 <div class="w-px bg-gray-200" />
             </div>
             <template v-if="activityItem.type === 'kommentiert'">
-                <img
-                    :src="activityItem.user.profile_photo_url"
-                    alt=""
-                    class="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-200" />
+                <div
+                    class="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-300"></div>
                 <div
                     class="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
                     <div class="flex justify-between gap-x-4">
@@ -25,12 +23,14 @@
                             <span class="font-medium text-gray-900">{{
                                 activityItem.user.first_name
                             }}</span>
-                            hat
+                            hat kommentiert.
                         </div>
                         <time
                             :datetime="activityItem.dateTime"
                             class="flex-none py-0.5 text-xs leading-5 text-gray-500"
-                            >{{ activityItem.date }}</time
+                            >{{
+                                dayjs(activityItem.created_at).fromNow()
+                            }}</time
                         >
                     </div>
                     <p class="text-sm leading-6 text-gray-500">
@@ -66,13 +66,14 @@
 
     <!-- New comment form -->
     <div class="mt-6 flex gap-x-3">
-        <form action="#" class="relative flex-auto">
+        <el-form class="relative flex-auto">
             <div
                 class="overflow-hidden rounded-lg pb-12 ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-blue-600">
                 <label for="comment" class="sr-only"
                     >Füge deine Notiz hinzu</label
                 >
                 <textarea
+                    v-model="note.comment"
                     rows="2"
                     name="comment"
                     id="comment"
@@ -85,28 +86,22 @@
                 <div class="flex items-center space-x-5">
                     <div class="flex items-center"></div>
                 </div>
-                <bz-button type="secondary"> Notiz anhängen </bz-button>
+                <bz-button type="secondary" @click="addNote">
+                    Notiz anhängen
+                </bz-button>
             </div>
-        </form>
+        </el-form>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { CheckCircleIcon } from '@heroicons/vue/24/solid';
-import {
-    FaceFrownIcon,
-    FaceSmileIcon,
-    FireIcon,
-    HandThumbUpIcon,
-    HeartIcon,
-    PaperClipIcon,
-    XMarkIcon,
-} from '@heroicons/vue/20/solid';
+
 import dayjs from 'dayjs';
 // import relativeTime plugin
 import relativeTime from 'dayjs/plugin/relativeTime';
 import BzButton from '../../../Components/BzButton.vue';
+import { useForm } from '@inertiajs/vue3';
 
 // extend dayjs with relativeTime plugin
 dayjs.extend(relativeTime);
@@ -115,5 +110,16 @@ const props = defineProps({
     activities: Array,
 });
 
-console.log(props.activities);
+const note = useForm({
+    comment: '',
+});
+
+const addNote = () => {
+    note.post(route('hub.notes.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            note.reset();
+        },
+    });
+};
 </script>
