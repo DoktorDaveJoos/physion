@@ -101,7 +101,11 @@ const types = [
         </div>
         <div class="border-t border-gray-100">
             <ul
-                v-if="building.data.attachments?.length > 0"
+                v-if="
+                    building.data.attachments.filter(
+                        (file) => file.data.type !== 'picture'
+                    ).length > 0
+                "
                 class="divide-y divide-gray-100"
                 role="list">
                 <li
