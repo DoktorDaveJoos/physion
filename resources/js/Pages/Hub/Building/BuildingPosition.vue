@@ -177,7 +177,7 @@ if (!props.building.data.place_id && props.building.data.maps === 'initial') {
             <div class="flex">
                 <div class="flex-shrink-0">
                     <InformationCircleIcon
-                        class="h-5 w-5 text-blue-600"
+                        class="h-5 w-5 text-primary"
                         aria-hidden="true" />
                 </div>
                 <div class="ml-3 flex-1 md:flex md:justify-between">
@@ -193,7 +193,7 @@ if (!props.building.data.place_id && props.building.data.maps === 'initial') {
                                     building.data.id
                                 )
                             "
-                            class="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600">
+                            class="whitespace-nowrap font-medium text-blue-700 hover:text-primary">
                             Vielleicht später
                             <span aria-hidden="true"> &rarr;</span>
                         </Link>
@@ -295,7 +295,7 @@ if (!props.building.data.place_id && props.building.data.maps === 'initial') {
                                             <CheckCircleIcon
                                                 :class="[
                                                     !checked ? 'invisible' : '',
-                                                    'h-5 w-5 text-blue-600',
+                                                    'h-5 w-5 text-primary',
                                                 ]"
                                                 aria-hidden="true" />
                                             <span

@@ -430,7 +430,7 @@ const hasAdditional = computed(() => {
                         <CheckCircleIcon
                             :class="[
                                 !checked ? 'invisible' : '',
-                                'h-5 w-5 text-blue-600',
+                                'h-5 w-5 text-primary',
                             ]"
                             aria-hidden="true" />
                         <span

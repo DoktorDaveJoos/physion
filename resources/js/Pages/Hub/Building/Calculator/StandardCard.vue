@@ -75,7 +75,7 @@ const _qng = computed({
                             :class="[
                                 active ? '' : '',
                                 checked
-                                    ? 'bg-white border-2 border-blue-600'
+                                    ? 'bg-white border-2 border-primary'
                                     : 'bg-white text-gray-900 hover:bg-gray-50',
                                 'flex items-center cursor-pointer justify-center rounded-lg py-3 px-3 text-sm font-semibold uppercase sm:flex-1',
                             ]">
@@ -106,7 +106,7 @@ const _qng = computed({
                                 :class="[
                                     active ? '' : '',
                                     checked
-                                        ? 'bg-white border-2 border-blue-600'
+                                        ? 'bg-white border-2 border-primary'
                                         : 'bg-white text-gray-900 hover:bg-gray-50',
                                     'flex items-center cursor-pointer justify-center rounded-lg py-3 px-3 text-sm font-semibold uppercase sm:flex-1',
                                 ]">
@@ -138,7 +138,7 @@ const _qng = computed({
                                 :class="[
                                     active ? '' : '',
                                     checked
-                                        ? 'bg-white border-2 border-blue-600'
+                                        ? 'bg-white border-2 border-primary'
                                         : 'bg-white text-gray-900 hover:bg-gray-50',
                                     'flex items-center cursor-pointer justify-center rounded-lg py-3 px-3 text-sm font-semibold uppercase sm:flex-1',
                                 ]">

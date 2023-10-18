@@ -93,7 +93,7 @@ watch(energyCertificate, (value) => {
                             :class="[
                                 active ? '' : '',
                                 checked
-                                    ? 'bg-white border-2 border-blue-600'
+                                    ? 'bg-white border-2 border-primary'
                                     : 'bg-white text-gray-900 hover:bg-gray-50',
                                 'flex items-center cursor-pointer justify-center rounded-lg py-3 px-3 text-sm font-semibold uppercase sm:flex-1',
                             ]">
@@ -141,7 +141,7 @@ watch(energyCertificate, (value) => {
             v-else-if="
                 _hasEnergyCertificate?.value && existingEnergyCertificate
             "
-            class="rounded-lg mt-4 bg-white flex justify-center items-center py-4 px-6 border-2 border-blue-600">
+            class="rounded-lg mt-4 bg-white flex justify-center items-center py-4 px-6 border-2 border-primary">
             <span class="text-xs text-gray-700 font-bold uppercase"
                 >Energieausweisklasse {{ existingEnergyCertificate }}</span
             >
@@ -158,7 +158,7 @@ watch(energyCertificate, (value) => {
                 auf dem Energieausweis. Oder erstellen Sie einen Energieausweis
                 über Bauzertifikate.de
                 <Link
-                    class="text-blue-600 font-bold"
+                    class="text-primary font-bold"
                     :href="
                         route(
                             'hub.products.buildings.energieausweis',

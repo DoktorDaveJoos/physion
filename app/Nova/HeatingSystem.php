@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\Heating;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -17,7 +18,7 @@ class HeatingSystem extends Resource
      *
      * @var class-string<\App\Models\EnergySource>
      */
-    public static $model = \App\Models\HeatingSystem::class;
+    public static $model = Heating::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

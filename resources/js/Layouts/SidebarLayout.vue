@@ -96,8 +96,8 @@
                                                     <Link
                                                         :class="[
                                                             item.current
-                                                                ? 'bg-gray-50 text-blue-600'
-                                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                                ? 'bg-gray-50 text-primary'
+                                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                                         ]"
                                                         :href="item.href">
@@ -105,8 +105,8 @@
                                                         <!--                                                            :is="item.icon"-->
                                                         <!--                                                            :class="[-->
                                                         <!--                                                                1 === 0-->
-                                                        <!--                                                                    ? 'text-blue-600'-->
-                                                        <!--                                                                    : 'text-gray-400 group-hover:text-blue-600',-->
+                                                        <!--                                                                    ? 'text-primary'-->
+                                                        <!--                                                                    : 'text-gray-400 group-hover:text-primary',-->
                                                         <!--                                                                'h-6 w-6 shrink-0',-->
                                                         <!--                                                            ]"-->
                                                         <!--                                                            aria-hidden="true" />-->
@@ -132,8 +132,8 @@
                                                 <button
                                                     :class="[
                                                         team.current
-                                                            ? 'bg-gray-50 text-blue-600'
-                                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                            ? 'bg-gray-50 text-primary'
+                                                            : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                                     ]"
                                                     @click="
@@ -142,8 +142,8 @@
                                                     <span
                                                         :class="[
                                                             team.current
-                                                                ? 'text-blue-600 border-blue-600'
-                                                                : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
+                                                                ? 'text-primary border-primary'
+                                                                : 'text-gray-400 border-gray-200 group-hover:border-primary group-hover:text-primary',
                                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
                                                         ]"
                                                         >{{
@@ -160,9 +160,9 @@
                                     <!--                                    <li class="mt-auto">-->
                                     <!--                                        <a-->
                                     <!--                                            href="#"-->
-                                    <!--                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                                    <!--                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-primary">-->
                                     <!--                                            <Cog6ToothIcon-->
-                                    <!--                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                                    <!--                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-primary"-->
                                     <!--                                                aria-hidden="true" />-->
                                     <!--                                            Settings-->
                                     <!--                                        </a>-->
@@ -185,14 +185,15 @@
             <div class="flex h-16 shrink-0 items-center">
                 <NavLink
                     :href="route('hub.dashboard')"
-                    class="hover:border-none">
-                    <ApplicationMark />
-                    <div class="ml-1 hidden lg:flex items-baseline">
+                    class="hover:border-none flex w-full justify-between">
+                    <application-mark class="!w-6" />
+                    <div class="mx-2 hidden lg:flex items-baseline">
                         <span
                             class="font-display font-black text-gray-800 text-xl tracking-tight">
                             EnergieHub
                         </span>
                     </div>
+                    <div class="w-6" />
                 </NavLink>
             </div>
             <nav class="flex flex-1 flex-col">
@@ -206,8 +207,8 @@
                                     <Link
                                         :class="[
                                             item.current
-                                                ? 'bg-gray-50 text-blue-600'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                ? 'bg-gray-50 text-primary'
+                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                         ]"
                                         :href="item.href">
@@ -215,8 +216,8 @@
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -240,8 +241,8 @@
                                     <a
                                         :class="[
                                             item.current
-                                                ? 'bg-gray-50 text-blue-600'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                ? 'bg-gray-50 text-primary'
+                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                         ]"
                                         :href="item.href">
@@ -249,8 +250,8 @@
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -273,13 +274,13 @@
                                 <li>
                                     <a
                                         :href="item.href"
-                                        class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                        class="text-gray-700 hover:text-primary hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <component
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -302,8 +303,8 @@
                                 <button
                                     :class="[
                                         team.current
-                                            ? 'bg-gray-50 text-blue-600'
-                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                            ? 'bg-gray-50 text-primary'
+                                            : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                     ]"
                                     @click="switchToTeam(team.id)">
@@ -311,8 +312,8 @@
                                         :class="[
                                             team.id ===
                                             $page.props.user.current_team_id
-                                                ? 'text-blue-600 border-blue-600'
-                                                : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
+                                                ? 'text-primary border-primary'
+                                                : 'text-gray-400 border-gray-200 group-hover:border-primary group-hover:text-primary',
                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
                                         ]"
                                         >{{ team.name.charAt(0) }}</span
@@ -327,9 +328,9 @@
                     <!--                    <li class="mt-auto">-->
                     <!--                        <a-->
                     <!--                            href="#"-->
-                    <!--                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                    <!--                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-primary">-->
                     <!--                            <Cog6ToothIcon-->
-                    <!--                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                    <!--                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-primary"-->
                     <!--                                aria-hidden="true" />-->
                     <!--                            Settings-->
                     <!--                        </a>-->

@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $additional_info
  * @property string $place_id
  * @property string $image
+ * @property Roof $roof
+ * @property Wall $wall
+ * @property Cellar $cellarObject
  */
 class Building extends Model
 {
@@ -85,12 +88,12 @@ class Building extends Model
 
     public function heatingSystems(): HasMany
     {
-        return $this->hasMany(HeatingSystem::class);
+        return $this->hasMany(Heating::class);
     }
 
     public function renewableEnergyInstallations(): HasMany
     {
-        return $this->hasMany(RenewableEnergyInstallation::class);
+        return $this->hasMany(Renewable::class);
     }
 
     public function consumptions(): HasMany

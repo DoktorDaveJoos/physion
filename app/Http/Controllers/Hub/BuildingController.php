@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Hub;
 
+use App\Actions\Building\CreateBuilding;
+use App\Actions\Building\UpdateBuilding;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Certificate\Bdrf\UpdatePositionRequest;
 use App\Http\Requests\CreateBuildingRequest;
@@ -27,10 +29,12 @@ use Inertia\Inertia;
 class BuildingController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
         return Inertia::render('Hub/Building/BuildingIndex', [
-            'buildings' => BuildingResource::collection(Building::where('team_id', $request->user()->currentTeam->id)->orderBy('id', 'desc')->paginate(10)),
+            'buildings' => BuildingResource::collection(
+                Building::orderByDesc('created_at')->paginate(10)
+            ),
         ]);
     }
 
@@ -48,11 +52,30 @@ class BuildingController extends Controller
         ]);
     }
 
-    public function update(Building $building, CreateBuildingRequest $request) {
+    public function update(Building $building, CreateBuildingRequest $request)
+    {
+        $buildingId = UpdateBuilding::run(
+            building: $building,
+            placeId: $request->validated('place_id'),
+            street: $request->validated('street'),
+            houseNumber: $request->validated('house_number'),
+            postalCode: $request->validated('postal_code'),
+            city: $request->validated('city'),
+            type: $request->validated('type'),
+            additionalType: $request->validated('additional_type'),
+            constructionYear: $request->validated('construction_year'),
+            constructionYearHeating: $request->validated('construction_year_heating'),
+            floorArea: $request->validated('floor_area'),
+            floors: $request->validated('floors'),
+            housingUnits: $request->validated('housing_units'),
+            ventilation: $request->validated('ventilation'),
+            cellar: $request->validated('cellar'),
+            cooling: $request->validated('cooling'),
+            coolingCount: $request->validated('cooling_count'),
+            coolingService: $request->validated('cooling_service'),
+        );
 
-        $building->update($request->all());
-
-        return to_route('hub.buildings.show.general', $building->id);
+        return to_route('buildings.show', $buildingId);
     }
 
     public function position(Building $building)
@@ -64,10 +87,11 @@ class BuildingController extends Controller
 
     public function updatePosition(Building $building, UpdatePositionRequest $request)
     {
-
-        $building->update([
-            'status' => 'finished'
-        ] + $request->all());
+        $building->update(
+            [
+                'status' => 'finished',
+            ] + $request->all()
+        );
 
         return to_route('hub.buildings.show.position', [
             'building' => $building->id,
@@ -97,7 +121,6 @@ class BuildingController extends Controller
 
     public function storeIsfp(Building $building, CreateIsfpRequest $request)
     {
-
         $isfpProduct = Product::where('short_name', 'isfp')->firstOrFail();
 
         $path = $request->file('vollmacht')->store($building->storagePath().'/attachments');
@@ -211,49 +234,41 @@ class BuildingController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
         return Inertia::render('Hub/Building/BuildingCreate');
     }
 
     public function store(CreateBuildingRequest $request)
     {
-        $building = Building::create([
-            'team_id' => $request->user()->currentTeam->id,
-            'created_by' => $request->user()->id,
-            'place_id' => $request->get('place_id'),
-            'street' => $request->get('street'),
-            'house_number' => $request->get('house_number'),
-            'postal_code' => $request->get('postal_code'),
-            'city' => $request->get('city'),
-            'type' => $request->get('type'),
-            'additional_type' => $request->get('additional_type'),
-            'construction_year' => $request->get('construction_year'),
-            'construction_year_heating' => $request->get('construction_year_heating'),
-            'floor_area' => $request->get('floor_area'),
-            'floors' => $request->get('floors'),
-            'housing_units' => $request->get('housing_units'),
-            'ventilation' => $request->get('ventilation'),
-            'cellar' => $request->get('cellar'),
-            'cooling' => $request->get('cooling'),
-            'cooling_count' => $request->get('cooling_count'),
-            'cooling_service' => $request->get('cooling_service'),
-        ]);
+        $buildingId = CreateBuilding::run(
+            teamId: $request->user()->currentTeam->id,
+            userId: $request->user()->id,
+            placeId: $request->validated('place_id'),
+            street: $request->validated('street'),
+            houseNumber: $request->validated('house_number'),
+            postalCode: $request->validated('postal_code'),
+            city: $request->validated('city'),
+            type: $request->validated('type'),
+            additionalType: $request->validated('additional_type'),
+            constructionYear: $request->validated('construction_year'),
+            constructionYearHeating: $request->validated('construction_year_heating'),
+            floorArea: $request->validated('floor_area'),
+            floors: $request->validated('floors'),
+            housingUnits: $request->validated('housing_units'),
+            ventilation: $request->validated('ventilation'),
+            cellar: $request->validated('cellar'),
+            cooling: $request->validated('cooling'),
+            coolingCount: $request->validated('cooling_count'),
+            coolingService: $request->validated('cooling_service'),
+        );
 
-        Activity::create([
-            'team_id' => $building->team_id,
-            'user_id' => $request->user()->id,
-            'type' => Activity::CREATED,
-            'subject' => 'ein Gebäude',
-        ]);
-
-        return to_route('hub.buildings.show.position', [
-            'building' => $building->id,
-        ]);
+        return to_route('buildings.position.show', $buildingId);
     }
 
     public function destroy(Building $building)
     {
+        // TODO: Implement destroy() method.
     }
 
     public function storeDocument(Building $building, Request $request)
@@ -333,9 +348,10 @@ class BuildingController extends Controller
         ]);
     }
 
-    public function showAppraisal(Building $building) {
+    public function showAppraisal(Building $building)
+    {
         return Inertia::render('Hub/Building/BuildingAppraisal', [
-            'building' => BuildingResource::make($building)
+            'building' => BuildingResource::make($building),
         ]);
     }
 

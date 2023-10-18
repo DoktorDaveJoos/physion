@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Cellar;
-use App\Models\HeatingSystem;
-use App\Models\RenewableEnergyInstallation;
+use App\Models\Heating;
+use App\Models\Renewable;
 use App\Models\Roof;
 use App\Models\Wall;
 use Illuminate\Database\Migrations\Migration;
@@ -53,7 +53,7 @@ return new class extends Migration {
             $table->foreign('building_id')->references('id')->on('buildings')->cascadeOnDelete();
         });
 
-        RenewableEnergyInstallation::all()->each(function ($renewableEnergyInstallation) {
+        Renewable::all()->each(function ($renewableEnergyInstallation) {
             $renewableEnergyInstallation->building_id = $renewableEnergyInstallation->bedarfsausweis->building_id;
             $renewableEnergyInstallation->save();
         });
@@ -85,7 +85,7 @@ return new class extends Migration {
             $table->foreign('building_id')->references('id')->on('buildings')->cascadeOnDelete();
         });
 
-        HeatingSystem::all()->each(function ($heatingSystem) {
+        Heating::all()->each(function ($heatingSystem) {
             $heatingSystem->building_id = $heatingSystem->bedarfsausweis->building_id;
             $heatingSystem->save();
         });
@@ -139,7 +139,7 @@ return new class extends Migration {
             $table->foreign('bdrf_id')->references('id')->on('bdrfs')->cascadeOnDelete();
         });
 
-        RenewableEnergyInstallation::all()->each(function ($renewableEnergyInstallation) {
+        Renewable::all()->each(function ($renewableEnergyInstallation) {
             $renewableEnergyInstallation->bdrf_id = $renewableEnergyInstallation->building->id;
             $renewableEnergyInstallation->save();
         });
@@ -171,7 +171,7 @@ return new class extends Migration {
             $table->foreign('bdrf_id')->references('id')->on('bdrfs')->cascadeOnDelete();
         });
 
-        HeatingSystem::all()->each(function ($heatingSystem) {
+        Heating::all()->each(function ($heatingSystem) {
             $heatingSystem->bdrf_id = $heatingSystem->building->id;
             $heatingSystem->save();
         });

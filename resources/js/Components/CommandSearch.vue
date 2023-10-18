@@ -140,7 +140,7 @@ const quickActions = [
                                             :class="[
                                                 'cursor-pointer select-none rounded-md px-4 py-2 group',
                                                 active &&
-                                                    'bg-blue-600 text-white',
+                                                    'bg-primary text-white',
                                             ]">
                                             <div class="flex justify-between">
                                                 <div>

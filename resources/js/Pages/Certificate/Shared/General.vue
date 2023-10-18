@@ -57,11 +57,11 @@ const saferEmailAddress = computed(() => {
                                     class="flex items-center group"
                                     @click="copyId">
                                     <span
-                                        class="text-xs text-blue-600 font-light mr-0.5 group-hover:text-blue-800"
+                                        class="text-xs text-primary font-light mr-0.5 group-hover:text-blue-800"
                                         >copy</span
                                     >
                                     <ClipboardIcon
-                                        class="h-4 w-4 text-blue-600 group-hover:text-blue-800" />
+                                        class="h-4 w-4 text-primary group-hover:text-blue-800" />
                                 </button>
                             </template>
                         </Badge>

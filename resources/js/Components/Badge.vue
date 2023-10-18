@@ -63,7 +63,7 @@ const types = {
         <svg
             v-if="dot"
             :class="types[type].icon"
-            class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-600"
+            class="-ml-0.5 mr-1.5 h-2 w-2 text-primary"
             fill="currentColor"
             viewBox="0 0 8 8">
             <circle cx="4" cy="4" r="3" />

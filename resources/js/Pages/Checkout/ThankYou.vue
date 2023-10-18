@@ -2,9 +2,7 @@
     <div class="bg-white">
         <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="max-w-xl">
-                <h1 class="text-base font-medium text-blue-600">
-                    Danke schön!
-                </h1>
+                <h1 class="text-base font-medium text-primary">Danke schön!</h1>
                 <p
                     class="mt-2 text-4xl font-black font-display tracking-tight sm:text-5xl">
                     Auftrag in Bearbeitung!

@@ -36,7 +36,7 @@ const statuses = {
                                             #{{ result.data.slug }}
                                         </p>
                                         <p
-                                            class="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-600">
+                                            class="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-primary">
                                             {{ statuses[result.data.status] }}
                                         </p>
                                     </div>

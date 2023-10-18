@@ -32,7 +32,7 @@
                                     <div
                                         class="space-y-1 text-lg font-medium leading-6">
                                         <h3>{{ person.name }}</h3>
-                                        <p class="text-blue-600">
+                                        <p class="text-primary">
                                             {{ person.role }}
                                         </p>
                                     </div>

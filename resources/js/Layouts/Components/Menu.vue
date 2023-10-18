@@ -15,7 +15,7 @@ import {
     XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import ApplicationMark from '../../Jetstream/ApplicationMark.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
 import NavLink from '../../Jetstream/NavLink.vue';
 import { Link, router } from '@inertiajs/vue3';
 import DropdownLink from '../../Jetstream/DropdownLink.vue';
@@ -111,14 +111,14 @@ const logout = () => {
             class="flex border-b border-gray-200 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             <div class="flex justify-start">
                 <NavLink href="/">
-                    <ApplicationMark />
+                    <!--                    <ApplicationMark class="!w-12 !h-12" />-->
                     <div class="ml-1 hidden lg:flex items-baseline">
                         <span
                             class="text-lg tracking-tight font-light text-gray-800">
                             bauzertifikate
                         </span>
                         <span
-                            class="hidden text-lg text-blue-600 font-semibold md:block">
+                            class="hidden text-lg text-primary font-semibold md:block">
                             .de
                         </span>
                     </div>

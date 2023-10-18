@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Window extends Model
 {
-    use HasFactory;
+
+    const SKYLIGHT = 'dachfenster';
 
     protected $guarded = ['id'];
 

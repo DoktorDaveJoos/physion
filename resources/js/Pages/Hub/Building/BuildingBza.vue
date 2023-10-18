@@ -170,7 +170,7 @@ const steps = [
                                         ]">
                                         <span class="flex-shrink-0">
                                             <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                                                class="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
                                                 <CheckIcon
                                                     aria-hidden="true"
                                                     class="h-4 w-4 text-white" />
@@ -194,7 +194,7 @@ const steps = [
                                     aria-current="step">
                                     <span
                                         aria-hidden="true"
-                                        class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
+                                        class="absolute left-0 top-0 h-full w-1 bg-primary lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" />
                                     <span
                                         :class="[
                                             stepIdx !== 0 ? 'lg:pl-9' : '',
@@ -202,9 +202,9 @@ const steps = [
                                         ]">
                                         <span class="flex-shrink-0">
                                             <span
-                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary">
                                                 <span
-                                                    class="text-blue-600 mt-0.5"
+                                                    class="text-primary mt-0.5"
                                                     >{{ step.id }}</span
                                                 >
                                             </span>
@@ -212,7 +212,7 @@ const steps = [
                                         <span
                                             class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                             <span
-                                                class="text-sm font-medium text-blue-600"
+                                                class="text-sm font-medium text-primary"
                                                 >{{ step.name }}</span
                                             >
                                             <span
@@ -304,7 +304,7 @@ const steps = [
                                             <button
                                                 type="button"
                                                 @click="showTip = false"
-                                                class="inline-flex rounded-md bg-blue-50 p-1.5 text-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-blue-50">
+                                                class="inline-flex rounded-md bg-blue-50 p-1.5 text-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-blue-50">
                                                 <span class="sr-only"
                                                     >Dismiss</span
                                                 >
@@ -535,7 +535,7 @@ const steps = [
                                             building.data.id
                                         )
                                     "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    class="font-semibold text-primary hover:text-blue-500">
                                     Jetzt Position & Lage erfassen
                                     <span aria-hidden="true"> &rarr;</span>
                                 </Link>
@@ -568,7 +568,7 @@ const steps = [
                                             building.data.id
                                         )
                                     "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    class="font-semibold text-primary hover:text-blue-500">
                                     Jetzt thermische Hülle erfassen
                                     <span aria-hidden="true"> &rarr;</span>
                                 </Link>
@@ -579,7 +579,7 @@ const steps = [
                                             building.data.id
                                         )
                                     "
-                                    class="font-semibold text-blue-600 hover:text-blue-500">
+                                    class="font-semibold text-primary hover:text-blue-500">
                                     Jetzt Energieträger und Heizungsanlage
                                     erfassen
                                     <span aria-hidden="true"> &rarr;</span>

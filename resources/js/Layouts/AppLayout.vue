@@ -54,7 +54,7 @@ const logout = () => {
                                     energie
                                 </span>
                                 <span
-                                    class="hidden ml-0.5 text-lg text-blue-600 font-semibold md:block">
+                                    class="hidden ml-0.5 text-lg text-primary font-semibold md:block">
                                     HUB
                                 </span>
                                 <span class="text-xs text-slate-400 ml-2"

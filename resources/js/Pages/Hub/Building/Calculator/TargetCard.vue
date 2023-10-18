@@ -79,7 +79,7 @@ watch(target, (value) => {
                             :class="[
                                 active ? '' : '',
                                 checked
-                                    ? 'bg-white border-2 border-blue-600'
+                                    ? 'bg-white border-2 border-primary'
                                     : 'bg-white text-gray-900 hover:bg-gray-50',
                                 'flex items-center cursor-pointer justify-center rounded-lg py-3 px-3 text-sm font-semibold uppercase sm:flex-1',
                             ]">
@@ -126,7 +126,7 @@ watch(target, (value) => {
 
         <div
             v-else-if="_targetKnown?.value && existingTarget"
-            class="rounded-lg mt-4 bg-white flex justify-center items-center py-4 px-6 border-2 border-blue-600">
+            class="rounded-lg mt-4 bg-white flex justify-center items-center py-4 px-6 border-2 border-primary">
             <span class="text-xs text-gray-700 font-bold uppercase"
                 >Zielzustand {{ existingTarget }}</span
             >
@@ -143,7 +143,7 @@ watch(target, (value) => {
                 den iSFP, den Energieberater, Bausachverständigen oder
                 Architekten. Erstellen Sie jetzt einen iSFP
                 <Link
-                    class="text-blue-600 font-bold"
+                    class="text-primary font-bold"
                     :href="
                         route(
                             'hub.products.buildings.energieausweis',

@@ -119,7 +119,7 @@ const download = () => {
                     </p>
                     <!--                    <a-->
                     <!--                        href="#"-->
-                    <!--                        class="text-sm font-medium text-blue-600 hover:text-blue-500 sm:hidden">-->
+                    <!--                        class="text-sm font-medium text-primary hover:text-blue-500 sm:hidden">-->
                     <!--                        View invoice-->
                     <!--                        <span aria-hidden="true"> &rarr;</span>-->
                     <!--                    </a>-->
@@ -336,17 +336,17 @@ const download = () => {
                                                 :style="{
                                                     width: `calc((${mapStatus.step} * 2 + 1) / 8 * 100%)`,
                                                 }"
-                                                class="h-2 rounded-full bg-blue-600" />
+                                                class="h-2 rounded-full bg-primary" />
                                         </div>
                                         <div
                                             class="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
-                                            <div class="text-blue-600">
+                                            <div class="text-primary">
                                                 Beantragt
                                             </div>
                                             <div
                                                 :class="[
                                                     mapStatus.step > 0
-                                                        ? 'text-blue-600'
+                                                        ? 'text-primary'
                                                         : '',
                                                     'text-center',
                                                 ]">
@@ -355,7 +355,7 @@ const download = () => {
                                             <div
                                                 :class="[
                                                     mapStatus.step > 1
-                                                        ? 'text-blue-600'
+                                                        ? 'text-primary'
                                                         : '',
                                                     'text-center',
                                                 ]">
@@ -364,7 +364,7 @@ const download = () => {
                                             <div
                                                 :class="[
                                                     mapStatus.step > 2
-                                                        ? 'text-blue-600'
+                                                        ? 'text-primary'
                                                         : '',
                                                     'text-right',
                                                 ]">
@@ -383,7 +383,7 @@ const download = () => {
                                             :href="attachment.links?.self"
                                             target="_blank">
                                             <span
-                                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                class="inline-flex items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                                 <ArrowDownTrayIcon
                                                     class="inline-block mr-2 w-4 h-4 text-white"
                                                     aria-hidden="true" />
@@ -399,7 +399,7 @@ const download = () => {
                                     <!--                                                order.data.id-->
                                     <!--                                            )-->
                                     <!--                                        "-->
-                                    <!--                                        class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"-->
+                                    <!--                                        class="inline-flex items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"-->
                                     <!--                                        >Energieausweis herunterladen</a-->
                                     <!--                                    >-->
                                 </div>

@@ -50,7 +50,7 @@ const getClass = computed(() => {
                 classes.push(
                     'bg-transparent',
                     'hover:bg-transparent',
-                    'text-blue-600',
+                    'text-primary',
                     'hover:text-blue-500'
                 );
             }
@@ -62,7 +62,7 @@ const getClass = computed(() => {
             classes.push(
                 'opacity-50',
                 'bg-blue-200',
-                'text-blue-600',
+                'text-primary',
                 'px-5',
                 'rounded-md',
                 'cursor-not-allowed',
@@ -76,7 +76,7 @@ const getClass = computed(() => {
         classes.push(
             'rounded-md',
             'px-5',
-            'bg-blue-600',
+            'bg-primary',
             'hover:bg-blue-500',
             'text-white',
             'py-2.5'

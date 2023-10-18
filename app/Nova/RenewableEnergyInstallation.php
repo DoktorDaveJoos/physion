@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\Renewable;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -18,7 +19,7 @@ class RenewableEnergyInstallation extends Resource
      *
      * @var class-string<\App\Models\EnergySource>
      */
-    public static $model = \App\Models\RenewableEnergyInstallation::class;
+    public static $model = Renewable::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

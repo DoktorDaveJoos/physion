@@ -179,7 +179,7 @@ const computeNeubau = () => {
                                             :label="'ab ' + program.zins + '%'"
                                             size="sm" />
                                         <a
-                                            class="text-blue-600 flex text-xs hover:underline ml-2"
+                                            class="text-primary flex text-xs hover:underline ml-2"
                                             :href="program.link"
                                             target="_blank">
                                             KFW {{ program.key }}
@@ -293,7 +293,7 @@ const computeNeubau = () => {
                                 <p class="mt-3 text-sm md:ml-6 md:mt-0">
                                     <a
                                         href="#"
-                                        class="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600">
+                                        class="whitespace-nowrap font-medium text-blue-700 hover:text-primary">
                                         Jetzt Termin vereinbaren
                                         <span aria-hidden="true"> &rarr;</span>
                                     </a>

@@ -70,7 +70,7 @@ if (props.reason === null) {
                     <div
                         :class="[
                             active
-                                ? 'border-blue-600 ring-2 ring-blue-600'
+                                ? 'border-primary ring-2 ring-primary'
                                 : 'border-gray-300',
                             disabled
                                 ? 'cursor-not-allowed opacity-70'
@@ -98,7 +98,7 @@ if (props.reason === null) {
                             :class="[
                                 active ? 'border' : 'border-2',
                                 checked
-                                    ? 'border-blue-600'
+                                    ? 'border-primary'
                                     : 'border-transparent',
                                 'pointer-events-none absolute -inset-px rounded-lg',
                             ]"

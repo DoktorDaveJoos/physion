@@ -8,7 +8,7 @@
     <!--            fill="#6875F5" />-->
     <!--    </svg>-->
 
-    <application-logo />
+    <application-logo class="w-8" />
 </template>
 <script setup>
 import ApplicationLogo from './ApplicationLogo.vue';

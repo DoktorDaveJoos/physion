@@ -153,7 +153,7 @@ const subTabsProducts = [
                             :aria-current="tab.active ? 'page' : undefined"
                             :class="[
                                 tab.active
-                                    ? 'bg-blue-100 text-blue-700'
+                                    ? 'bg-primary-50 text-primary-600'
                                     : 'text-gray-500 hover:text-gray-700',
                                 'rounded-md px-3 py-2 text-xs font-bold tracking-wider uppercase',
                             ]">
