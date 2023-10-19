@@ -43,6 +43,4 @@ class ConsumptionController extends Controller
 
         return to_route('hub.buildings.show.consumption', $building->id);
     }
-
-
 }

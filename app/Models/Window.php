@@ -10,6 +10,7 @@ class Window extends Model
 {
 
     const SKYLIGHT = 'dachfenster';
+    const WINDOW = 'fenster';
 
     protected $guarded = ['id'];
 

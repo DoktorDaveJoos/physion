@@ -1,19 +1,18 @@
 <?php
 
-use App\Http\Controllers\Bdrf\CellarController;
-use App\Http\Controllers\Bdrf\HeatingController;
-use App\Http\Controllers\Bdrf\PositionController;
-use App\Http\Controllers\Bdrf\RenewableController;
-use App\Http\Controllers\Bdrf\RoofController;
-use App\Http\Controllers\Bdrf\WallController;
-use App\Http\Controllers\Blog\SubscriptionController;
 use App\Http\Controllers\Building\AttachmentController;
 use App\Http\Controllers\Building\CalculatorController;
+use App\Http\Controllers\Building\CellarController;
 use App\Http\Controllers\Building\ConsumptionController;
 use App\Http\Controllers\Building\EnergyController;
 use App\Http\Controllers\Building\GeneralController;
+use App\Http\Controllers\Building\HeatingController;
+use App\Http\Controllers\Building\PositionController;
 use App\Http\Controllers\Building\ProductController;
+use App\Http\Controllers\Building\RenewableController;
+use App\Http\Controllers\Building\RoofController;
 use App\Http\Controllers\Building\ThermalController;
+use App\Http\Controllers\Building\WallController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Hub\BuildingController;
 use App\Http\Controllers\Hub\DashboardController;
@@ -45,12 +44,6 @@ Route::get('/datenschutz', function () {
     return Inertia::render('PrivacyPolicy');
 })->name('datenschutz');
 
-
-Route::post('/newsletter', [SubscriptionController::class, 'store'])
-    ->name('newsletter.store');
-
-Route::post('/business', [SubscriptionController::class, 'storeBusiness'])
-    ->name('business.store');
 
 Route::get('/about', function () {
     return Inertia::render('About/About');
