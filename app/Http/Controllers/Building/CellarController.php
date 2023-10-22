@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateInsulationRequest;
 use App\Http\Requests\CreateOrUpdateCellarRequest;
 use App\Models\Building;
+use App\Models\Cellar;
 use App\Models\Insulation;
 use Illuminate\Http\RedirectResponse;
 
@@ -38,7 +39,7 @@ class CellarController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyInsulation(Building $building, Insulation $insulation)
+    public function destroyInsulation(Building $building, Cellar $cellar, Insulation $insulation)
     {
         $insulation->delete();
 

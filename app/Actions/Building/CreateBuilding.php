@@ -29,9 +29,9 @@ class CreateBuilding
         int $housingUnits,
         string $ventilation,
         string $cellar,
-        string $cooling,
-        int $coolingCount,
-        string $coolingService
+        ?string $cooling,
+        ?int $coolingCount,
+        ?string $coolingService
     ): int {
         $building = Building::create([
             'team_id' => $teamId,

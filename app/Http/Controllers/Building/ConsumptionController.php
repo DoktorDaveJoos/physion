@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Building;
 use App\Actions\Building\CreateConsumption;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateConsumptionRequest;
+use App\Http\Resources\Building\BuildingResourceConsumption;
 use App\Models\Building;
 use App\Models\Consumption;
 use Inertia\Inertia;
@@ -15,8 +16,11 @@ class ConsumptionController extends Controller
 
     public function show(Building $building): Response
     {
-        return Inertia::render('Hub/Building/BuildingConsumption', [
-            'building' => $building->load('consumptions'),
+
+        $building->load('consumptions');
+
+        return Inertia::render('Hub/Buildings/Consumptions/Show', [
+            'building' => BuildingResourceConsumption::make($building),
         ]);
     }
 
@@ -33,7 +37,7 @@ class ConsumptionController extends Controller
             comment: $request->validated('comment'),
         );
 
-        return to_route('hub.buildings.show.consumption', $building->id);
+        return to_route('buildings.consumptions.show', $building->id);
     }
 
     public function destroy(Building $building, Consumption $consumption)
@@ -41,6 +45,6 @@ class ConsumptionController extends Controller
 
         $consumption->delete();
 
-        return to_route('hub.buildings.show.consumption', $building->id);
+        return to_route('buildings.consumptions.show', $building->id);
     }
 }

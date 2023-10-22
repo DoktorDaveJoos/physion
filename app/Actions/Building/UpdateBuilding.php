@@ -14,23 +14,31 @@ class UpdateBuilding
 
     public function handle(
         Building $building,
-        string $placeId = null,
-        string $street = null,
-        string $houseNumber = null,
-        string $postalCode = null,
-        string $city = null,
-        string $type = null,
-        string $additionalType = null,
-        int $constructionYear = null,
-        int $constructionYearHeating = null,
-        int $floorArea = null,
-        int $floors = null,
-        int $housingUnits = null,
-        string $ventilation = null,
-        string $cellar = null,
-        string $cooling = null,
-        int $coolingCount = null,
-        string $coolingService = null
+        ?string $placeId = null,
+        ?string $street = null,
+        ?string $houseNumber = null,
+        ?string $postalCode = null,
+        ?string $city = null,
+        ?string $type = null,
+        ?string $additionalType = null,
+        ?int $constructionYear = null,
+        ?int $constructionYearHeating = null,
+        ?int $floorArea = null,
+        ?int $floors = null,
+        ?int $housingUnits = null,
+        ?string $ventilation = null,
+        ?string $cellar = null,
+        ?string $cooling = null,
+        ?int $coolingCount = null,
+        ?string $coolingService = null,
+        ?string $layout = null,
+        ?int $sideA = null,
+        ?int $sideB = null,
+        ?int $sideC = null,
+        ?int $sideD = null,
+        ?int $sideE = null,
+        ?string $maps = null,
+        ?string $orientation = null,
     ): int {
         if ($placeId) {
             $building->place_id = $placeId;
@@ -82,6 +90,30 @@ class UpdateBuilding
         }
         if ($coolingService) {
             $building->cooling_service = $coolingService;
+        }
+        if ($layout) {
+            $building->layout = $layout;
+        }
+        if ($sideA) {
+            $building->side_a = $sideA;
+        }
+        if ($sideB) {
+            $building->side_b = $sideB;
+        }
+        if ($sideC) {
+            $building->side_c = $sideC;
+        }
+        if ($sideD) {
+            $building->side_d = $sideD;
+        }
+        if ($sideE) {
+            $building->side_e = $sideE;
+        }
+        if ($maps) {
+            $building->maps = $maps;
+        }
+        if ($orientation) {
+            $building->orientation = $orientation;
         }
 
         $building->save();

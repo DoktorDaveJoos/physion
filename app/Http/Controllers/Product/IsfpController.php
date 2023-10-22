@@ -19,7 +19,7 @@ class IsfpController extends Controller
 
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/BuildingIsfp', [
+        return Inertia::render('Hub/Buildings/Isfp/Show', [
             'building' => new BuildingResource($building),
         ]);
     }

@@ -18,7 +18,7 @@ class BzaController extends Controller
 {
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/BuildingBza', [
+        return Inertia::render('Hub/Buildings/Bza/Show', [
             'building' => new BuildingResource($building),
         ]);
     }

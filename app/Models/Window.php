@@ -14,7 +14,7 @@ class Window extends Model
 
     protected $guarded = ['id'];
 
-    public function windoweable(): MorphTo
+    public function windowable(): MorphTo
     {
         return $this->morphTo();
     }

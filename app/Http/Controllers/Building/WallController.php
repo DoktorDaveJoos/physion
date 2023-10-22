@@ -11,8 +11,8 @@ use App\Http\Requests\CreateOrUpdateWallRequest;
 use App\Http\Requests\CreateWindowRequest;
 use App\Models\Building;
 use App\Models\Insulation;
+use App\Models\Wall;
 use App\Models\Window;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Http\RedirectResponse;
 
 class WallController extends Controller
@@ -43,7 +43,7 @@ class WallController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyInsulation(Building $building, Insulation $insulation)
+    public function destroyInsulation(Building $building, Wall $wall, Insulation $insulation)
     {
         $insulation->delete();
 
@@ -64,7 +64,7 @@ class WallController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyWindow(Building $building, Window $window)
+    public function destroyWindow(Building $building, Wall $wall, Window $window)
     {
         $window->delete();
 

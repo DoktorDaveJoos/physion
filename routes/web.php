@@ -5,6 +5,7 @@ use App\Http\Controllers\Building\CalculatorController;
 use App\Http\Controllers\Building\CellarController;
 use App\Http\Controllers\Building\ConsumptionController;
 use App\Http\Controllers\Building\EnergyController;
+use App\Http\Controllers\Building\ExposeController;
 use App\Http\Controllers\Building\GeneralController;
 use App\Http\Controllers\Building\HeatingController;
 use App\Http\Controllers\Building\PositionController;
@@ -73,7 +74,7 @@ Route::middleware([
     'verified',
 ])->prefix('/hub')->group(function () {
     // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])
+    Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
     // Buildings
@@ -108,9 +109,6 @@ Route::middleware([
     Route::get('/buildings/{building}/energy', [EnergyController::class, 'show'])
         ->name('buildings.energy.show');
 
-    Route::get('/buildings/{building}/consumption', [ConsumptionController::class, 'show'])
-        ->name('buildings.consumption.show');
-
     Route::get('/buildings/{building}/attachments', [AttachmentController::class, 'show'])
         ->name('buildings.attachments.show');
 
@@ -120,7 +118,7 @@ Route::middleware([
     Route::delete('/buildings/{building}/documents/{attachment}', [AttachmentController::class, 'destroy'])
         ->name('buildings.attachments.destroy');
 
-    Route::put('/buildings/{building}/roofs', RoofController::class)
+    Route::put('/buildings/{building}/roofs', [RoofController::class, 'update'])
         ->name('buildings.roofs.update');
 
     Route::post('/buildings/{building}/roofs/{roof}/insulations', [RoofController::class, 'storeInsulation'])
@@ -144,8 +142,8 @@ Route::middleware([
     Route::delete('/buildings/{building}/roofs/{roof}/dormers/{dormer}', [RoofController::class, 'destroyDormer'])
         ->name('buildings.roofs.dormers.destroy');
 
-    Route::post('/buildings/{building}/walls', WallController::class)
-        ->name('buildings.walls.store');
+    Route::put('/buildings/{building}/walls', [WallController::class, 'update'])
+        ->name('buildings.walls.update');
 
     Route::post('/buildings/{building}/walls/{wall}/insulations', [WallController::class, 'storeInsulation'])
         ->name('buildings.walls.insulations.store');
@@ -162,7 +160,7 @@ Route::middleware([
     Route::delete('/buildings/{building}/walls/{wall}/windows/{window}', [WallController::class, 'destroyWindow'])
         ->name('buildings.walls.windows.destroy');
 
-    Route::put('/buildings/{building}/cellars', CellarController::class)
+    Route::put('/buildings/{building}/cellars', [CellarController::class, 'update'])
         ->name('buildings.cellars.update');
 
     Route::post('/buildings/{building}/cellars/{cellar}/insulations', [CellarController::class, 'storeInsulation'])
@@ -175,20 +173,23 @@ Route::middleware([
         ->name('buildings.cellars.insulations.destroy');
 
     // heating system
-    Route::post('/buildings/{building}/heating-systems', HeatingController::class)
+    Route::post('/buildings/{building}/heating-systems', [HeatingController::class, 'store'])
         ->name('buildings.heating-systems.store');
 
-    Route::delete('/buildings/{building}/heating-systems/{heatingSystem}', [HeatingController::class, 'destroy'])
+    Route::delete('/buildings/{building}/heating-systems/{heating}', [HeatingController::class, 'destroy'])
         ->name('buildings.heating-systems.destroy');
 
     // renewable energy
-    Route::post('/buildings/{building}/renewables', RenewableController::class)
+    Route::post('/buildings/{building}/renewables', [RenewableController::class, 'store'])
         ->name('buildings.renewables.store');
 
     Route::delete('/buildings/{building}/renewables/{renewable}', [RenewableController::class, 'destroy'])
         ->name('buildings.renewables.destroy');
 
     // consumptions
+    Route::get('/buildings/{building}/consumptions', [ConsumptionController::class, 'show'])
+        ->name('buildings.consumptions.show');
+
     Route::post('/buildings/{building}/consumptions', [ConsumptionController::class, 'store'])
         ->name('buildings.consumptions.store');
 
@@ -199,12 +200,18 @@ Route::middleware([
     Route::put('/buildings/{building}/maps', [PositionController::class, 'updateMaps'])
         ->name('buildings.maps.update');
 
-    Route::put('/buildings/{building}/position', [PositionController::class, 'updatePosition'])
+    Route::put('/buildings/{building}/position', [PositionController::class, 'update'])
         ->name('buildings.position.update');
 
     // Building features
     Route::get('/buildings/{building}/calculator', [CalculatorController::class, 'show'])
         ->name('buildings.calculator.show');
+
+    Route::get('/buildings/{building}/expose', [ExposeController::class, 'show'])
+        ->name('buildings.expose.show');
+
+    Route::post('/buildings/{building}/expose', [ExposeController::class, 'store'])
+        ->name('buildings.expose.store');
 
     // Products
     Route::get('/buildings/{building}/products', [ProductController::class, 'index'])

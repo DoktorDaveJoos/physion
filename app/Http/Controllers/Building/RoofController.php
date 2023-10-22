@@ -14,11 +14,12 @@ use App\Http\Requests\CreateDormerRequest;
 use App\Http\Requests\CreateInsulationRequest;
 use App\Http\Requests\CreateOrUpdateRoofRequest;
 use App\Http\Requests\CreateWindowRequest;
-use App\Http\Resources\Building\BuildingResourceDocs;
+use App\Http\Resources\Building\BuildingResourceAttachments;
 use App\Models\Attachment;
 use App\Models\Building;
 use App\Models\Dormer;
 use App\Models\Insulation;
+use App\Models\Roof;
 use App\Models\Window;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -30,10 +31,13 @@ class RoofController extends Controller
     {
         CreateOrUpdateRoof::run(
             building: $building,
+            heated: $request->validated('heated'),
+            roofShape: $request->validated('roof_shape'),
+            construction: $request->validated('construction'),
             uValue: $request->validated('u_value'),
-            type: $request->validated('type'),
+            pitch: $request->validated('pitch'),
+            kneeWall: $request->validated('knee_wall'),
             ceiling: $request->validated('ceiling'),
-            height: $request->validated('height'),
         );
 
         return to_route('buildings.thermal.show', $building->id);
@@ -50,7 +54,7 @@ class RoofController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyInsulation(Building $building, Insulation $insulation)
+    public function destroyInsulation(Building $building, Roof $roof, Insulation $insulation)
     {
         $insulation->delete();
 
@@ -71,7 +75,7 @@ class RoofController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyWindow(Building $building, Window $window)
+    public function destroyWindow(Building $building, Roof $roof, Window $window)
     {
         $window->delete();
 
@@ -91,7 +95,7 @@ class RoofController extends Controller
         return to_route('buildings.thermal.show', $building->id);
     }
 
-    public function destroyDormer(Building $building, Dormer $dormer)
+    public function destroyDormer(Building $building, Roof $roof, Dormer $dormer)
     {
         $dormer->delete();
 

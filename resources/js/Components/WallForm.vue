@@ -67,7 +67,7 @@ const prepareForm = (form) =>
 
 const safe = () => {
     prepareForm(form).put(
-        route('building.wall', {
+        route('buildings.walls.update', {
             building: props.buildingId,
         }),
         {
@@ -84,8 +84,9 @@ const safe = () => {
 };
 
 const addInsulation = () => {
-    insulationForm.put(
-        route('building.wall.insulation', {
+    insulationForm.post(
+        route('buildings.walls.insulations.store', {
+            wall: props.wall.id,
             building: props.buildingId,
         }),
         {
@@ -99,8 +100,9 @@ const addInsulation = () => {
 };
 
 const addWindow = () => {
-    windowForm.put(
-        route('building.wall.window', {
+    windowForm.post(
+        route('buildings.walls.windows.store', {
+            wall: props.wall.id,
             building: props.buildingId,
         }),
         {
@@ -115,7 +117,8 @@ const addWindow = () => {
 
 const deleteInsulation = (id) => {
     router.delete(
-        route('building.wall.insulation.delete', {
+        route('buildings.walls.insulations.destroy', {
+            wall: props.wall.id,
             building: props.buildingId,
             insulation: id,
         }),
@@ -127,7 +130,8 @@ const deleteInsulation = (id) => {
 
 const deleteWindow = (id) => {
     router.delete(
-        route('building.wall.window.delete', {
+        route('buildings.walls.windows.destroy', {
+            wall: props.wall.id,
             building: props.buildingId,
             window: id,
         }),

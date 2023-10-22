@@ -11,8 +11,8 @@ use App\Http\Requests\CreateBzaRequest;
 use App\Http\Requests\CreateIsfpRequest;
 use App\Http\Resources\Building\BuildingResource;
 use App\Http\Resources\Building\BuildingResourceConsumption;
-use App\Http\Resources\Building\BuildingResourceDocs;
-use App\Http\Resources\Building\BuildingResourceEnergieausweis;
+use App\Http\Resources\Building\BuildingResourceAttachments;
+use App\Http\Resources\Building\BuildingResourceEcert;
 use App\Http\Resources\Building\BuildingResourcePosition;
 use App\Http\Resources\Building\BuildingThermalResource;
 use App\Models\Activity;
@@ -31,7 +31,7 @@ class BuildingController extends Controller
 
     public function index()
     {
-        return Inertia::render('Hub/Building/BuildingIndex', [
+        return Inertia::render('Hub/Buildings/Index', [
             'buildings' => BuildingResource::collection(
                 Building::orderByDesc('created_at')->paginate(10)
             ),
@@ -40,14 +40,7 @@ class BuildingController extends Controller
 
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingShowIndex', [
-            'building' => new BuildingResource($building),
-        ]);
-    }
-
-    public function general(Building $building)
-    {
-        return Inertia::render('Hub/Building/Show/BuildingShowData', [
+        return Inertia::render('Hub/Buildings/Show', [
             'building' => new BuildingResource($building),
         ]);
     }
@@ -80,163 +73,14 @@ class BuildingController extends Controller
 
     public function position(Building $building)
     {
-        return Inertia::render('Hub/Building/BuildingPosition', [
+        return Inertia::render('Hub/Buildings/', [
             'building' => new BuildingResourcePosition($building),
-        ]);
-    }
-
-    public function updatePosition(Building $building, UpdatePositionRequest $request)
-    {
-        $building->update(
-            [
-                'status' => 'finished',
-            ] + $request->all()
-        );
-
-        return to_route('hub.buildings.show.position', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function showDocs(Building $building)
-    {
-        return Inertia::render('Hub/Building/Show/BuildingShowDocs', [
-            'building' => new BuildingResourceDocs($building),
-        ]);
-    }
-
-    public function showEnergieausweis(Building $building)
-    {
-        return Inertia::render('Hub/Building/Show/BuildingShowEnergieausweis', [
-            'building' => new BuildingResourceEnergieausweis($building),
-        ]);
-    }
-
-    public function showIsfp(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingIsfp', [
-            'building' => new BuildingResource($building),
-        ]);
-    }
-
-    public function storeIsfp(Building $building, CreateIsfpRequest $request)
-    {
-        $isfpProduct = Product::where('short_name', 'isfp')->firstOrFail();
-
-        $path = $request->file('vollmacht')->store($building->storagePath().'/attachments');
-
-        $customer = Customer::create([
-            'type' => $request->get('type'),
-            'title' => $request->get('title'),
-            'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('last_name'),
-            'address_line_1' => $request->get('street').' '.$request->get('house_number'),
-            'zip' => $request->get('postal_code'),
-            'city' => $request->get('city'),
-            'country' => $request->get('country'),
-            'phone' => $request->get('phone'),
-            'email' => $request->get('email'),
-        ]);
-
-        $building->update([
-            'bauantrag_date' => $request->get('bauantrag_date'),
-        ]);
-
-        Isfp::create([
-            'building_id' => $building->id,
-            'customer_id' => $customer->id,
-            'product_id' => $isfpProduct->id,
-            'power_of_attorney_path' => $path,
-        ]);
-
-        Activity::create([
-            'team_id' => $building->team_id,
-            'user_id' => $request->user()->id,
-            'type' => Activity::ORDERED,
-            'subject' => 'einen iSFP',
-        ]);
-
-        return to_route('hub.products.buildings.isfp', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function showBza(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingBza', [
-            'building' => new BuildingResource($building),
-        ]);
-    }
-
-    public function storeBza(Building $building, CreateBzaRequest $request)
-    {
-        $bzaProduct = Product::where('short_name', 'bza')->firstOrFail();
-
-        $path = $request->file('vollmacht')->store($building->storagePath().'/attachments');
-
-        $customer = Customer::create([
-            'type' => $request->get('type'),
-            'title' => $request->get('title'),
-            'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('last_name'),
-            'address_line_1' => $request->get('street').' '.$request->get('house_number'),
-            'zip' => $request->get('postal_code'),
-            'city' => $request->get('city'),
-            'country' => $request->get('country'),
-            'phone' => $request->get('phone'),
-            'email' => $request->get('email'),
-        ]);
-
-        Bza::create([
-            'building_id' => $building->id,
-            'customer_id' => $customer->id,
-            'product_id' => $bzaProduct->id,
-            'power_of_attorney_path' => $path,
-        ]);
-
-        Activity::create([
-            'team_id' => $building->team_id,
-            'user_id' => $request->user()->id,
-            'type' => Activity::ORDERED,
-            'subject' => 'eine BzA',
-        ]);
-
-        return to_route('hub.products.buildings.bza', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function showCalculator(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingCalculator', [
-            'building' => new BuildingResource($building),
-        ]);
-    }
-
-    public function thermal(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingThermal', [
-            'building' => new BuildingThermalResource($building),
-        ]);
-    }
-
-    public function energy(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingEnergy', [
-            'building' => new BuildingResource($building),
-        ]);
-    }
-
-    public function consumption(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingConsumption', [
-            'building' => new BuildingResourceConsumption($building),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Hub/Building/BuildingCreate');
+        return Inertia::render('Hub/Buildings/Create');
     }
 
     public function store(CreateBuildingRequest $request)
@@ -271,88 +115,5 @@ class BuildingController extends Controller
         // TODO: Implement destroy() method.
     }
 
-    public function storeDocument(Building $building, Request $request)
-    {
-        $request->validate([
-            'type' => 'required|string',
-            'document' => 'required|file|mimes:pdf|max:10000',
-        ], [
-            'type.required' => 'Bitte wählen Sie einen Dokumenttypen aus.',
-            'type.string' => 'Bitte wählen Sie einen Dokumenttypen aus.',
-            'document.required' => 'Bitte laden Sie ein Dokument hoch.',
-            'document.file' => 'Bitte laden Sie ein Dokument hoch.',
-            'document.mimes' => 'Bitte laden Sie ein Dokument hoch.',
-            'document.max' => 'Dokument zu groß.',
-        ]);
-
-        $path = $request->file('document')->store($building->storagePath().'/attachments');
-
-        $building->attachments()->create([
-            'type' => $request->get('type'),
-            'path' => $path,
-            'name' => $request->file('document')->getClientOriginalName(),
-            'published' => true,
-        ]);
-
-        Activity::create([
-            'team_id' => $building->team_id,
-            'user_id' => $request->user()->id,
-            'type' => Activity::ADDED,
-            'subject' => 'ein Dokument',
-        ]);
-
-        return to_route('hub.buildings.docs', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function deleteDocument(Building $building, Attachment $attachment)
-    {
-        Storage::delete($attachment->path);
-        $attachment->delete();
-        return to_route('hub.buildings.docs', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function storeImages(Building $building, Request $request)
-    {
-        $request->validate([
-            'pictures' => 'required|array',
-            'pictures.*' => 'required|file|image|max:10000',
-        ], [
-            'picture.required' => 'Bitte laden Sie ein Dokument hoch.',
-            'picture.file' => 'Bitte laden Sie ein Bild hoch.',
-            'picture.max' => 'Bild zu groß.',
-        ]);
-
-        foreach ($request->file('pictures') as $picture) {
-            $path = $picture->store($building->storagePath().'/attachments');
-            $building->attachments()->create([
-                'type' => 'picture',
-                'path' => $path,
-                'name' => $picture->getClientOriginalName(),
-                'published' => true,
-            ]);
-        }
-
-        Activity::create([
-            'team_id' => $building->team_id,
-            'user_id' => $request->user()->id,
-            'type' => Activity::ADDED,
-            'subject' => count($request->file('pictures')).' Bilder',
-        ]);
-
-        return to_route('hub.buildings.docs', [
-            'building' => $building->id,
-        ]);
-    }
-
-    public function showAppraisal(Building $building)
-    {
-        return Inertia::render('Hub/Building/BuildingAppraisal', [
-            'building' => BuildingResource::make($building),
-        ]);
-    }
 
 }

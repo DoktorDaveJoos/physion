@@ -15,11 +15,11 @@ class CreateOrUpdateWall
 
     public function handle(
         Building $building,
-        float $uValue,
-        string $construction,
-        string $variant,
-        int $thickness,
-        int $height,
+        ?float $uValue = null,
+        ?string $construction = null,
+        ?string $variant = null,
+        ?int $thickness = null,
+        ?float $height = null,
     ): int {
         Wall::updateOrCreate(
             ['building_id' => $building->id],

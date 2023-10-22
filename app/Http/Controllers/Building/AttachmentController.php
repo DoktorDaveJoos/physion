@@ -6,7 +6,7 @@ use App\Actions\Building\CreateAttachment;
 use App\Actions\Building\DestroyAttachment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAttachmentRequest;
-use App\Http\Resources\Building\BuildingResourceDocs;
+use App\Http\Resources\Building\BuildingResourceAttachments;
 use App\Models\Attachment;
 use App\Models\Building;
 use Inertia\Inertia;
@@ -16,8 +16,8 @@ class AttachmentController extends Controller
 
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingShowDocs', [
-            'building' => new BuildingResourceDocs($building),
+        return Inertia::render('Hub/Buildings/Attachments/Show', [
+            'building' => new BuildingResourceAttachments($building),
         ]);
     }
 

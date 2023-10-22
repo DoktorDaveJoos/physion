@@ -32,27 +32,6 @@ defineProps({
 const products = [
     [
         {
-            name: 'Verbrauchsausweis',
-            description:
-                'Energieausweis, der die Energieeffizienz eines Gebäudes über den Energieverbrauch ermittelt.',
-            href: route('order.create', 'vrbr'),
-            icon: FireIcon,
-            theme: 'bg-sky-500',
-            active: true,
-            availableFrom: null,
-        },
-        {
-            name: 'Bedarfsausweis',
-            description:
-                'Energieausweis, der die Energieeffizienz eines Gebäudes rechnerisch ermittelt.',
-            href: route('order.create', 'bdrf'),
-            icon: CalculatorIcon,
-            theme: 'bg-sky-500',
-            active: true,
-        },
-    ],
-    [
-        {
             name: 'QNG Zertifikat',
             description:
                 'Bescheinigung über die Einhaltung von Niedrigenergiehaus-Anforderungen.',
@@ -87,12 +66,6 @@ const products = [
     ],
 ];
 const resources = [
-    {
-        name: 'Find my Energieausweis',
-        description:
-            'Link verloren? Finden Sie Ihren Energieausweis mit Ihrer E-Mail Adresse und der Postleitzahl.',
-        href: route('find.show'),
-    },
     {
         name: 'Kontakt',
         description: 'Sie haben ein unlösbares Problem - melden Sie sich.',
@@ -138,11 +111,6 @@ const logout = () => {
                 <div class="flex items-center space-x-10">
                     <fly-out title="Produkte" :items="products" />
 
-                    <a
-                        :href="route('blog.show')"
-                        class="text-base px-2 font-medium text-gray-500 hover:text-gray-900"
-                        >Blog
-                    </a>
                     <Link
                         :href="route('about')"
                         class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">

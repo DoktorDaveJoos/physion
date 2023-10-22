@@ -9,8 +9,8 @@ use App\Http\Requests\CreateBzaRequest;
 use App\Http\Requests\CreateIsfpRequest;
 use App\Http\Resources\Building\BuildingResource;
 use App\Http\Resources\Building\BuildingResourceConsumption;
-use App\Http\Resources\Building\BuildingResourceDocs;
-use App\Http\Resources\Building\BuildingResourceEnergieausweis;
+use App\Http\Resources\Building\BuildingResourceAttachments;
+use App\Http\Resources\Building\BuildingResourceEcert;
 use App\Http\Resources\Building\BuildingResourcePosition;
 use App\Http\Resources\Building\BuildingThermalResource;
 use App\Models\Activity;
@@ -28,7 +28,7 @@ class GeneralController extends Controller
 {
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingShowData', [
+        return Inertia::render('Hub/Buildings/General/Show', [
             'building' => new BuildingResource($building),
         ]);
     }

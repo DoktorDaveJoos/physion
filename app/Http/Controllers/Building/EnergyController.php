@@ -11,7 +11,7 @@ class EnergyController extends Controller
 {
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/BuildingEnergy', [
+        return Inertia::render('Hub/Buildings/Energy/Show', [
             'building' => new BuildingResource($building),
         ]);
     }

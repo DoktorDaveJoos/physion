@@ -20,7 +20,7 @@ class CreateHeating
         int $constructionYear,
         bool $waterIncluded,
         bool $isMain,
-        string $comment,
+        ?string $comment,
     ): int {
         Heating::create([
             'building_id' => $building->id,

@@ -21,7 +21,7 @@ class CreateRenewable
         bool $electricity,
         bool $heating,
         bool $water,
-        string $comment,
+        ?string $comment,
     ): int {
         Renewable::create([
             'building_id' => $building->id,

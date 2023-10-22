@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Renewable extends Model
 {
-    use HasFactory;
+
+    protected $table = 'renewable_energy_installations';
 
     protected $guarded = ['id'];
 

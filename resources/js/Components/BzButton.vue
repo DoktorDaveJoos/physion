@@ -43,15 +43,16 @@ const getClass = computed(() => {
                 classes.push(
                     'bg-transparent',
                     'hover:bg-transparent',
-                    'text-blue-400',
-                    'hover:text-blue-400'
+                    'text-primary-400',
+                    'hover:text-primary-400',
+                    'cursor-not-allowed'
                 );
             } else {
                 classes.push(
                     'bg-transparent',
                     'hover:bg-transparent',
                     'text-primary',
-                    'hover:text-blue-500'
+                    'hover:text-primary-500'
                 );
             }
 
@@ -61,12 +62,12 @@ const getClass = computed(() => {
         if (props.disabled) {
             classes.push(
                 'opacity-50',
-                'bg-blue-200',
+                'bg-primary-200',
                 'text-primary',
                 'px-5',
                 'rounded-md',
                 'cursor-not-allowed',
-                'hover:bg-blue-200',
+                'hover:bg-primary-200',
                 'py-2.5'
             );
 
@@ -77,7 +78,7 @@ const getClass = computed(() => {
             'rounded-md',
             'px-5',
             'bg-primary',
-            'hover:bg-blue-500',
+            'hover:bg-primary-500',
             'text-white',
             'py-2.5'
         );
@@ -160,7 +161,7 @@ const getClass = computed(() => {
                 <slot />
             </a>
         </template>
-        <div v-else class="opacity-50" :class="getClass">
+        <div v-else class="opacity-50 cursor-not-allowed" :class="getClass">
             <span class="animate-spin mr-3">
                 <svg
                     class="h-3 w-3"

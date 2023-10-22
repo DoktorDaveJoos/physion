@@ -35,6 +35,8 @@
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@vueup/vue-quill": "^1.0.1",
         "element-plus": "^2.2.26",
+        "markdown-it": "^13.0.2",
+        "markdown-it-style": "^1.0.0",
         "notiwind": "^1.2.6",
         "vue3-google-map": "^0.15.0"
     }

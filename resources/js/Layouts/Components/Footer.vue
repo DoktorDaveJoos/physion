@@ -161,25 +161,10 @@ const subscribe = () => {
 };
 
 const navigation = {
-    solutions: [
-        {
-            name: 'Verbrauchsausweis',
-            href: route('order.create', { category: 'vrbr' }),
-        },
-        {
-            name: 'Bedarfsausweis',
-            href: route('order.create', { category: 'bdrf' }),
-        },
-        // { name: 'BIRN Zertifikat', href: '#' },
-        // { name: 'Ratgeber', href: '#' },
-    ],
-    support: [
-        { name: 'Find my Energieausweis', href: route('find.show') },
-        { name: 'FAQ', href: '/#faq' },
-    ],
+    solutions: [],
+    support: [],
     company: [
         { name: 'About', href: route('about') },
-        { name: 'Blog', href: route('blog.show') },
         { name: 'Kontakt', href: route('contact.show') },
     ],
     legal: [

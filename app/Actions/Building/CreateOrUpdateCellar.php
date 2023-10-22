@@ -16,10 +16,10 @@ class CreateOrUpdateCellar
 
     public function handle(
         Building $building,
-        float $uValue,
-        string $type,
-        int $ceiling,
-        int $height,
+        ?float $uValue = null,
+        ?string $type = null,
+        ?int $ceiling = null,
+        ?float $height = null,
 
     ): int {
         Cellar::updateOrCreate(

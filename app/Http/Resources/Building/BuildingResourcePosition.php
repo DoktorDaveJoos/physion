@@ -49,7 +49,7 @@ class BuildingResourcePosition extends JsonResource
                 'created_by' => 'David Joos', //@todo
             ],
             'links' => [
-                'self' => route('hub.buildings.show.index', $this->id),
+                'self' => null,
             ],
         ];
     }

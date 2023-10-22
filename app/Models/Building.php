@@ -86,12 +86,12 @@ class Building extends Model
         return $this->hasOne(Cellar::class);
     }
 
-    public function heatingSystems(): HasMany
+    public function heatings(): HasMany
     {
         return $this->hasMany(Heating::class);
     }
 
-    public function renewableEnergyInstallations(): HasMany
+    public function renewables(): HasMany
     {
         return $this->hasMany(Renewable::class);
     }
@@ -104,6 +104,11 @@ class Building extends Model
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
+    }
+
+    public function predictions(): HasMany
+    {
+        return $this->hasMany(Prediction::class);
     }
 
     public function storagePath(): string

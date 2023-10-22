@@ -25,7 +25,7 @@ class BuildingResourceConsumption extends JsonResource
                 'consumptions' => $this->consumptions
             ],
             'links' => [
-                'self' => route('hub.buildings.show.index', $this->id),
+                'self' => null,
             ],
         ];
     }

@@ -22,8 +22,8 @@ class CreateConsumption
         string $energySource,
         bool $waterIncluded,
         float $consumption,
-        int $vacancy,
-        string $comment
+        ?int $vacancy,
+        ?string $comment
     ) {
 
         $period = floor(

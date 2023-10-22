@@ -91,11 +91,11 @@ onMounted(() => {
 });
 
 const submit = () => {
-    form.post(route('hub.buildings.store'));
+    form.post(route('buildings.store'));
 };
 
 const update = () => {
-    form.put(route('hub.buildings.general.update', props.building?.data.id));
+    form.put(route('buildings.update', props.building?.data.id));
 };
 </script>
 

@@ -184,7 +184,7 @@
             class="flex grow flex-col gap-y-16 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
             <div class="flex h-16 shrink-0 items-center">
                 <NavLink
-                    :href="route('hub.dashboard')"
+                    :href="route('dashboard')"
                     class="hover:border-none flex w-full justify-between">
                     <application-mark class="!w-6" />
                     <div class="mx-2 hidden lg:flex items-baseline">
@@ -528,24 +528,16 @@ const showSearch = () => {
 const navigation = [
     {
         name: 'Dashboard',
-        href: route('hub.dashboard'),
+        href: route('dashboard'),
         icon: RectangleGroupIcon,
-        current: route().current('hub.dashboard'),
+        current: route().current('dashboard'),
     },
     {
         name: 'Gebäude',
-        href: route('hub.buildings.index'),
+        href: route('buildings.index'),
         icon: HomeModernIcon,
-        current: route().current('hub.buildings*'),
+        current: route().current('buildings*'),
     },
-    // {
-    //     name: 'Bestellungen',
-    //     href: route('hub.certificates'),
-    //     icon: FolderIcon,
-    //     current:
-    //         route().current('hub.orders*') ||
-    //         route().current('hub.certificates*'),
-    // },
 ];
 
 const jetstreamNavigation = [
@@ -559,12 +551,12 @@ const jetstreamNavigation = [
         icon: UsersIcon,
         current: route().current('teams.show'),
     },
-    {
-        name: 'Billing',
-        href: route('hub.billing'),
-        icon: CreditCardIcon,
-        current: route().current('hub.billing'),
-    },
+    // {
+    //     name: 'Billing',
+    //     href: route('hub.billing'),
+    //     icon: CreditCardIcon,
+    //     current: route().current('hub.billing'),
+    // },
 ];
 
 const adminNavigation = [

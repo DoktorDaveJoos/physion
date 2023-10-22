@@ -15,9 +15,9 @@ class CreateOrUpdateRoof
 
     public function handle(
         Building $building,
-        bool $heated,
-        string $roofShape,
-        string $construction,
+        ?bool $heated,
+        ?string $roofShape,
+        ?string $construction,
         ?float $uValue,
         ?int $pitch,
         ?int $kneeWall,

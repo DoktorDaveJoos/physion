@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Resources\Building\BuildingResourceEnergieausweis;
+use App\Http\Resources\Building\BuildingResourceEcert;
 use App\Models\Building;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
@@ -13,8 +13,8 @@ class EnergyCertificateController extends Controller
 {
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/Show/BuildingShowEnergieausweis', [
-            'building' => new BuildingResourceEnergieausweis($building),
+        return Inertia::render('Hub/Buildings/Ecert/Show', [
+            'building' => new BuildingResourceEcert($building),
         ]);
     }
 

@@ -12,7 +12,7 @@ class CalculatorController extends Controller
 
     public function show(Building $building)
     {
-        return Inertia::render('Hub/Building/BuildingCalculator', [
+        return Inertia::render('Hub/Buildings/Calculator/Show', [
             'building' => new BuildingResource($building),
         ]);
     }

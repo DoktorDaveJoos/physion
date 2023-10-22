@@ -2,47 +2,36 @@
 
 namespace App\Http\Controllers\Building;
 
+use App\Actions\Building\CreateHeating;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateHeatingRequest;
 use App\Models\Building;
-use App\Models\Insulation;
-use App\Models\Window;
+use App\Models\Heating;
 use Illuminate\Http\RedirectResponse;
 
 class HeatingController extends Controller
 {
 
-    public function update(Building $building): RedirectResponse
+    public function store(Building $building, CreateHeatingRequest $request): RedirectResponse
     {
-        // @todo implement
+        CreateHeating::run(
+            building: $building,
+            type: $request->validated('type'),
+            system: $request->validated('system'),
+            constructionYear: $request->validated('construction_year'),
+            waterIncluded: $request->validated('water_included'),
+            isMain: $request->validated('is_main'),
+            comment: $request->validated('comment'),
+        );
 
-        return to_route('buildings.thermal.show', $building->id);
+        return to_route('buildings.energy.show', $building->id);
     }
 
-    public function storeInsulation(Building $building)
+    public function destroy(Building $building, Heating $heating)
     {
-        // @todo implement
+        $heating->delete();
 
-        return to_route('buildings.thermal.show', $building->id);
+        return to_route('buildings.energy.show', $building->id);
     }
 
-    public function destroyInsulation(Building $building, Insulation $insulation)
-    {
-        $insulation->delete();
-
-        return to_route('buildings.thermal.show', $building->id);
-    }
-
-    public function storeWindow(Building $building)
-    {
-        // @todo implement
-
-        return to_route('buildings.thermal.show', $building->id);
-    }
-
-    public function destroyWindow(Building $building, Window $window)
-    {
-        $window->delete();
-
-        return to_route('buildings.thermal.show', $building->id);
-    }
 }
