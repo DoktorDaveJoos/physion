@@ -5,12 +5,13 @@ namespace Tests\Feature;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class DeleteTeamTest extends TestCase
 {
     use RefreshDatabase;
-
+    use WithoutMiddleware;
     public function test_teams_can_be_deleted(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());

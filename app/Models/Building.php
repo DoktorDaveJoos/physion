@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Casts\LayoutCast;
 use App\Models\Scopes\TeamScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,22 +12,33 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @property int $id
  * @property int $team_id
+ * @property int $created_by
+ * @property bool $new_building
  * @property string $street
  * @property string $house_number
  * @property string $postal_code
  * @property string $city
  * @property string $state
  * @property string $country
+ * @property string $type
+ * @property string $additional_type
+ * @property int $construction_year
+ * @property int $floor_area
+ * @property int $land_area
+ * @property int $floors
+ * @property int $floor
+ * @property int $rooms
  * @property string $additional_info
  * @property string $place_id
- * @property string $image
  * @property Roof $roof
  * @property Wall $wall
- * @property Cellar $cellarObject
+ * @property Cellar $cellar
  */
 class Building extends Model
 {
-//    use HasFactory;
+
+    const FLAT = 'Wohnung';
+
 
     protected static function booted(): void
     {
@@ -44,16 +54,6 @@ class Building extends Model
     public function createdBy(): belongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function vrbr(): HasOne
-    {
-        return $this->hasOne(Vrbr::class);
-    }
-
-    public function bdrf(): HasOne
-    {
-        return $this->hasOne(Bdrf::class);
     }
 
     public function energyCertificates(): HasMany
@@ -81,7 +81,7 @@ class Building extends Model
         return $this->hasOne(Roof::class);
     }
 
-    public function cellarObject(): HasOne
+    public function cellar(): HasOne
     {
         return $this->hasOne(Cellar::class);
     }
@@ -114,5 +114,10 @@ class Building extends Model
     public function storagePath(): string
     {
         return 'buildings/'.$this->id;
+    }
+
+    public function isHouse(): bool
+    {
+        return $this->type !== self::FLAT;
     }
 }

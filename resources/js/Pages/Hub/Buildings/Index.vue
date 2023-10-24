@@ -7,6 +7,7 @@ import {
     PhotoIcon,
 } from '@heroicons/vue/24/outline';
 import BzButton from '../../../Components/BzButton.vue';
+import Badge from '../../../Components/Badge.vue';
 
 defineProps({
     buildings: Object,
@@ -49,32 +50,28 @@ defineProps({
                 :key="building.data.id">
                 <Link
                     :href="building.links.self"
-                    class="relative flex items-center justify-between gap-x-6 p-4 hover:bg-gray-50">
+                    class="relative flex items-center justify-between gap-x-6 p-4 group hover:bg-gray-50 transition duration-150">
                     <div class="flex min-w-0 gap-x-4">
                         <div
-                            class="bg-gray-100 rounded-md h-16 w-16 flex items-center justify-center"
+                            class="bg-gray-100 rounded-md h-16 w-16 flex items-center justify-center group-hover:shadow-lg transition duration-150"
                             v-if="!building.links.image">
                             <photo-icon class="h-6 w-6 text-gray-400" />
                         </div>
                         <img
                             v-else
-                            class="h-16 w-16 flex-none rounded-md bg-gray-50"
+                            class="h-16 w-16 flex-none rounded-md bg-gray-50 group-hover:shadow-lg"
                             :src="building.links.image"
                             alt="" />
                         <div class="min-w-0 flex-auto items-center">
                             <p class="text-sm font-semibold text-gray-900">
-                                <a href="#">
-                                    <span
-                                        class="absolute inset-x-0 -top-px bottom-0" />
-                                    {{ building.data.address }}
-                                </a>
+                                <span
+                                    class="absolute inset-x-0 -top-px bottom-0" />
+                                {{ building.data.address }}
                             </p>
                             <p class="flex text-xs leading-5 text-gray-500">
-                                <a
-                                    href="#"
-                                    class="relative truncate hover:underline"
+                                <span class="relative truncate hover:underline"
                                     >{{ building.data.postal_code }}
-                                    {{ building.data.city }}</a
+                                    {{ building.data.city }}</span
                                 >
                             </p>
                             <p class="flex text-xs leading-5 text-gray-500">
@@ -84,22 +81,33 @@ defineProps({
                                 >
                             </p>
                         </div>
+                        <div class="flex items-start space-x-2">
+                            <badge
+                                type="info"
+                                size="sm"
+                                :label="building.data.type" />
+                            <badge
+                                v-if="building.data.additional_type"
+                                type="info"
+                                size="sm"
+                                :label="building.data.additional_type" />
+                        </div>
                     </div>
                     <div class="flex shrink-0 items-center gap-x-4">
                         <div class="hidden sm:flex sm:flex-col sm:items-end">
-                            <!--                        <div v-else class="mt-1 flex items-center gap-x-1.5">-->
-                            <!--                            <div-->
-                            <!--                                class="flex-none rounded-full bg-emerald-500/20 p-1">-->
+                            <!--                            <div class="flex items-center gap-x-1.5">-->
                             <!--                                <div-->
-                            <!--                                    class="h-1.5 w-1.5 rounded-full bg-emerald-500" />-->
+                            <!--                                    class="flex-none rounded-full bg-emerald-500/20 p-1">-->
+                            <!--                                    <div-->
+                            <!--                                        class="h-1.5 w-1.5 rounded-full bg-emerald-500" />-->
+                            <!--                                </div>-->
+                            <!--                                <p class="text-xs leading-5 text-gray-500">-->
+                            <!--                                    Online-->
+                            <!--                                </p>-->
                             <!--                            </div>-->
-                            <!--                            <p class="text-xs leading-5 text-gray-500">-->
-                            <!--                                Online-->
-                            <!--                            </p>-->
-                            <!--                        </div>-->
                         </div>
                         <ChevronRightIcon
-                            class="h-5 w-5 flex-none text-gray-400"
+                            class="h-5 w-5 flex-none text-gray-400 group-hover:text-primary-600"
                             aria-hidden="true" />
                     </div> </Link
             ></template>

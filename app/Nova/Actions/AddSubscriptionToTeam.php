@@ -20,7 +20,6 @@ class AddSubscriptionToTeam extends Action
 {
     use InteractsWithQueue, Queueable;
 
-
     /**
      * Perform the action on the given models.
      *

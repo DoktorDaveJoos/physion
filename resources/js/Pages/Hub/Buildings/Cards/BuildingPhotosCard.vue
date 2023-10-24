@@ -35,7 +35,7 @@ const handleSelect = (e) => {
 };
 
 const submit = () => {
-    form.post(route('hub.buildings.images.store', props.building.data.id), {
+    form.post(route('buildings.attachments.store', props.building.data.id), {
         onStart: () => {
             loading.value = true;
         },
@@ -51,7 +51,7 @@ const submit = () => {
 const destroy = (id) => {
     router.delete(
         route(
-            'hub.buildings.documents.destroy',
+            'buildings.attachments.destroy',
             {
                 building: props.building.data.id,
                 attachment: id,

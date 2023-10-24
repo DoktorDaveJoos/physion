@@ -9,6 +9,8 @@ const props = defineProps({
 });
 
 const form = useForm({
+    new_building: props.building?.data.new_building ?? false,
+    building_type: props.building?.data.building_type ?? null,
     street: props.building?.data.street ?? null,
     house_number: props.building?.data.house_number ?? null,
     postal_code: props.building?.data.postal_code ?? null,
@@ -20,7 +22,10 @@ const form = useForm({
     construction_year_heating:
         props.building?.data.construction_year_heating ?? null,
     floor_area: props.building?.data.floor_area ?? null,
+    land_area: props.building?.data.land_area ?? null,
     floors: props.building?.data.floors ?? null,
+    floor: props.building?.data.floor ?? null,
+    rooms: props.building?.data.rooms ?? null,
     housing_units: props.building?.data.housing_units ?? null,
     ventilation: props.building?.data.ventilation ?? null,
     cellar: props.building?.data.cellar ?? null,
@@ -30,7 +35,7 @@ const form = useForm({
 });
 
 const street = ref(null);
-
+const searchActive = ref(true);
 const hasCooling = ref(form.cooling !== null);
 
 watch(hasCooling, (value) => {
@@ -69,9 +74,9 @@ onMounted(() => {
 
             switch (addressType) {
                 case 'street_number':
-                    form.house_number = parseInt(
-                        `${address1}${' ' + component.long_name}`
-                    );
+                    form.house_number = `${address1}${
+                        ' ' + component.long_name
+                    }`;
                     break;
                 case 'route':
                     address1 = `${component.long_name}${address1}`;
@@ -87,6 +92,7 @@ onMounted(() => {
 
         street.value.input.value = address1;
         form.street = address1;
+        searchActive.value = false;
     });
 });
 
@@ -97,6 +103,20 @@ const submit = () => {
 const update = () => {
     form.put(route('buildings.update', props.building?.data.id));
 };
+
+watch(
+    () => form.type,
+    (value) => {
+        if (value === 'Wohnung') {
+            form.floors = null;
+            form.housing_units = null;
+            form.land_area = null;
+            form.additional_type = null;
+        } else {
+            form.floor = null;
+        }
+    }
+);
 </script>
 
 <template>
@@ -106,42 +126,64 @@ const update = () => {
         size="large"
         @submit.prevent="submit">
         <div
+            class="flex flex-col items-center py-4 sm:col-span-2 border-b border-gray-100">
+            <span class="text-gray-900 font-semibold">Neues Gebäude</span>
+            <el-switch
+                v-model="form.new_building"
+                active-text="Neubau"
+                inactive-text="Bestand"
+                size="large" />
+        </div>
+        <div
             class="grid sm:grid-cols-2 sm:gap-x-8 px-6 py-4 border-b border-gray-100">
             <el-form-item
-                :error="form.errors.street"
-                :required="true"
-                label="Straße">
-                <el-input ref="street" v-model="form.street" />
-            </el-form-item>
-
-            <!-- Spacer-->
-            <el-form-item
-                :error="form.errors.house_number"
-                required
-                label="Hausnummer">
-                <el-input-number
-                    v-model="form.house_number"
-                    :controls="false" />
-            </el-form-item>
-
-            <el-form-item
-                id="postal_code"
-                :error="form.errors.postal_code"
-                required
-                label="Postleitzahl">
+                v-if="searchActive"
+                label="Adresse suchen"
+                class="col-span-2">
                 <el-input
-                    ref="zip"
-                    v-model="form.postal_code"
-                    autocomplete="zip" />
+                    ref="street"
+                    placeholder="Suchen Sie Ihre Adresse"
+                    v-model="form.street" />
             </el-form-item>
 
-            <el-form-item
-                id="city"
-                :error="form.errors.city"
-                required
-                label="Stadt / Gemeinde">
-                <el-input ref="city" v-model="form.city" autocomplete="city" />
-            </el-form-item>
+            <template v-else>
+                <el-form-item
+                    :error="form.errors.street"
+                    :required="true"
+                    label="Straße">
+                    <el-input ref="street" v-model="form.street" />
+                </el-form-item>
+
+                <!-- Spacer-->
+                <el-form-item
+                    :error="form.errors.house_number"
+                    label="Hausnummer"
+                    required>
+                    <el-input v-model="form.house_number" />
+                </el-form-item>
+
+                <el-form-item
+                    id="postal_code"
+                    :error="form.errors.postal_code"
+                    label="Postleitzahl"
+                    required>
+                    <el-input
+                        ref="zip"
+                        v-model="form.postal_code"
+                        autocomplete="zip" />
+                </el-form-item>
+
+                <el-form-item
+                    id="city"
+                    :error="form.errors.city"
+                    label="Stadt / Gemeinde"
+                    required>
+                    <el-input
+                        ref="city"
+                        v-model="form.city"
+                        autocomplete="city" />
+                </el-form-item>
+            </template>
 
             <el-form-item
                 :error="form.errors.type"
@@ -161,12 +203,17 @@ const update = () => {
                         value="Mehrfamilienhaus" />
                     <el-option
                         default-first-option
+                        label="Wohnung"
+                        value="Wohnung" />
+                    <el-option
+                        default-first-option
                         label="Bürogebäude"
                         value="Bürogebäude" />
                 </el-select>
             </el-form-item>
 
             <el-form-item
+                v-if="form.type !== 'Wohnung'"
                 :error="form.errors.additional_type"
                 :required="true"
                 label="Gebäudeart">
@@ -192,6 +239,13 @@ const update = () => {
                         value="Reihenmittelhaus" />
                 </el-select>
             </el-form-item>
+            <el-form-item
+                v-else
+                :error="form.errors.floor"
+                :required="true"
+                label="Etage">
+                <el-input-number v-model="form.floor" :controls="false" />
+            </el-form-item>
         </div>
 
         <div
@@ -205,12 +259,9 @@ const update = () => {
                     :controls="false"></el-input-number>
             </el-form-item>
 
-            <el-form-item
-                required
-                :error="form.errors.construction_year_heating"
-                label="Baujahr Wärmeerzeuger">
+            <el-form-item :error="form.errors.rooms" label="Anzahl Zimmer">
                 <el-input-number
-                    v-model="form.construction_year_heating"
+                    v-model="form.rooms"
                     :controls="false"></el-input-number>
             </el-form-item>
 
@@ -224,6 +275,16 @@ const update = () => {
             </el-form-item>
 
             <el-form-item
+                v-if="form.type !== 'Wohnung'"
+                :error="form.errors.land_area"
+                label="Grundstücksfläche">
+                <el-input v-model="form.land_area">
+                    <template #append>m²</template>
+                </el-input>
+            </el-form-item>
+
+            <el-form-item
+                v-if="form.type !== 'Wohnung'"
                 :error="form.errors.floors"
                 label="Stockwerke"
                 required>
@@ -231,9 +292,10 @@ const update = () => {
             </el-form-item>
 
             <el-form-item
-                required
+                v-if="form.type !== 'Wohnung'"
                 :error="form.errors.housing_units"
-                label="Anzahl Wohneinheiten">
+                label="Anzahl Wohneinheiten"
+                required>
                 <el-input-number v-model="form.housing_units"></el-input-number>
             </el-form-item>
         </div>
@@ -251,39 +313,13 @@ const update = () => {
                         default-first-option
                         label="Fensterlüftung"
                         value="Fensterlüftung" />
+                    <el-option label="Schachtlüftung" value="Schachtlüftung" />
                     <el-option
-                        default-first-option
-                        label="Schachtlüftung"
-                        value="Schachtlüftung" />
-                    <el-option
-                        default-first-option
                         label="Anlage mit Wärmerückgewinnung"
                         value="Anlage mit Wärmerückgewinnung" />
                     <el-option
-                        default-first-option
                         label="Anlage ohne Wärmerückgewinnung"
                         value="Anlage ohne Wärmerückgewinnung" />
-                </el-select>
-            </el-form-item>
-
-            <el-form-item :error="form.errors.cellar" label="Keller" required>
-                <el-select
-                    v-model="form.cellar"
-                    class="w-full"
-                    placeholder="Bitte auswählen"
-                    :default-first-option="true">
-                    <el-option
-                        default-first-option
-                        label="Kein Keller"
-                        value="Kein Keller" />
-                    <el-option
-                        default-first-option
-                        label="Beheizter Keller"
-                        value="Beheizter Keller" />
-                    <el-option
-                        default-first-option
-                        label="Unbeheizter Keller"
-                        value="Unbeheizter Keller" />
                 </el-select>
             </el-form-item>
         </div>
@@ -294,9 +330,9 @@ const update = () => {
                 <span class="text-gray-900 font-semibold">Gebäudekühlung</span>
                 <el-switch
                     v-model="hasCooling"
-                    size="large"
                     active-text="Vorhanden"
-                    inactive-text="Nicht vorhanden" />
+                    inactive-text="Nicht vorhanden"
+                    size="large" />
             </div>
 
             <template v-if="hasCooling">

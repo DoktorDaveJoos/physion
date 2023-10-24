@@ -21,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string|null $remember_token
  * @property int|null $current_team_id
+ * @property Team $currentTeam
  * @property string|null $profile_photo_path
  * @property string|null $two_factor_secret
  */
@@ -74,10 +75,5 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function orders(): MorphMany
-    {
-        return $this->morphMany(Order::class, 'owner');
-    }
 
 }

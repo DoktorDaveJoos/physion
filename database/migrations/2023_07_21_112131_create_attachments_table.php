@@ -13,13 +13,15 @@ return new class extends Migration {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->foreignId('building_id')->constrained()->cascadeOnDelete();
+
+            $table->string('name');
 
             $table->string('path');
-            $table->enum('type', ['certificate', 'guide']);
-            $table->boolean('published');
+            $table->enum('type', ['certificate', 'guide', 'picture', 'baugesuch', 'grundriss', 'other']);
+
+            $table->boolean('published')->default(true);
+
             $table->timestamps();
         });
     }

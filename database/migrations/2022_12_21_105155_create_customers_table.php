@@ -17,7 +17,11 @@ return new class extends Migration {
 
             $table->string('stripe_customer_id')->nullable();
 
-            $table->string('name');
+            $table->string('title')->nullable();
+            $table->string('type')->nullable();
+
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('address_line_1')->nullable();

@@ -57,7 +57,7 @@ class BuildingResource extends JsonResource
                 ],
                 'wall' => $this->wall?->load('insulations', 'windows'),
                 'roof' => $this->roof?->load('insulations', 'windows', 'dormers'),
-                'cellarModel' => $this->cellarObject?->load('insulations'),
+                'cellarModel' => $this->cellar?->load('insulations'),
                 'heatings' => $this->heatings,
                 'renewables' => $this->renewables,
                 'predictions' => $this->predictions()->orderByDesc('created_at')->get(),

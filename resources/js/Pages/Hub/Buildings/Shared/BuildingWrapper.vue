@@ -91,14 +91,6 @@ const subTabsProducts = [
         active: route().current('buildings.products.bza.show'),
         route: route('buildings.products.bza.show', route().params?.building),
     },
-    // {
-    //     name: 'wertgutachten',
-    //     active: route().current('buildings.prod'),
-    //     route: route(
-    //         'hub.products.buildings.appraisal',
-    //         route().params?.building
-    //     ),
-    // },
 ];
 </script>
 

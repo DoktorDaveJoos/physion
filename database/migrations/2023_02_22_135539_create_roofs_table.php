@@ -17,8 +17,7 @@ return new class extends Migration {
         Schema::create('roofs', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('bdrf_id');
-            $table->foreign('bdrf_id')->references('id')->on('bdrfs')->cascadeOnDelete();
+            $table->foreignId('building_id')->constrained()->cascadeOnDelete();
 
             $table->decimal('u_value', 10)->nullable();
             $table->boolean('heated');

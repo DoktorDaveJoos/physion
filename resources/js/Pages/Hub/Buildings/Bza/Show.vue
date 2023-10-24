@@ -528,7 +528,7 @@ const steps = [
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.show.position',
+                                            'buildings.position.show',
                                             building.data.id
                                         )
                                     "
@@ -561,7 +561,7 @@ const steps = [
                                 <Link
                                     :href="
                                         route(
-                                            'hub.buildings.show.thermal',
+                                            'buildings.thermal.show',
                                             building.data.id
                                         )
                                     "

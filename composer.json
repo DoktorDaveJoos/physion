@@ -16,7 +16,7 @@
     "laravel/cashier": "^14.12",
     "laravel/framework": "^10.0",
     "laravel/horizon": "^5.20",
-    "laravel/jetstream": "^2.10",
+    "laravel/jetstream": "^4.0",
     "laravel/nova": "~4.0",
     "laravel/sanctum": "^3.2",
     "laravel/scout": "^10.2",

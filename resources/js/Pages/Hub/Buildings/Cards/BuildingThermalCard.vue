@@ -66,7 +66,7 @@ defineProps({
                             as="link"
                             :href="
                                 route(
-                                    'hub.buildings.show.thermal',
+                                    'buildings.thermal.show',
                                     building.data.id
                                 )
                             "
@@ -90,7 +90,7 @@ defineProps({
                             as="link"
                             :href="
                                 route(
-                                    'hub.buildings.show.thermal',
+                                    'buildings.thermal.show',
                                     building.data.id
                                 )
                             "
@@ -114,7 +114,7 @@ defineProps({
                             as="link"
                             :href="
                                 route(
-                                    'hub.buildings.show.thermal',
+                                    'buildings.thermal.show',
                                     building.data.id
                                 )
                             "

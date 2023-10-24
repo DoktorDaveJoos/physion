@@ -11,8 +11,6 @@ class Heating extends Model
 {
     protected $guarded = ['id'];
 
-    protected $table = 'heating_systems';
-
     public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class);

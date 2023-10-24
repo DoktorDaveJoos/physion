@@ -4,18 +4,20 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Jetstream\Features;
-use Laravel\Jetstream\Mail\TeamInvitation;
+use Laravel\Jetstream\TeamInvitation;
 use Tests\TestCase;
 
 class InviteTeamMemberTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     public function test_team_members_can_be_invited_to_team(): void
     {
-        if (! Features::sendsTeamInvitations()) {
+        if (!Features::sendsTeamInvitations()) {
             $this->markTestSkipped('Team invitations not enabled.');
 
             return;
@@ -30,14 +32,15 @@ class InviteTeamMemberTest extends TestCase
             'role' => 'admin',
         ]);
 
-        Mail::assertSent(TeamInvitation::class);
+        Mail::assertSent(\App\Mail\TeamInvitation::class);
 
         $this->assertCount(1, $user->currentTeam->fresh()->teamInvitations);
     }
 
     public function test_team_member_invitations_can_be_cancelled(): void
     {
-        if (! Features::sendsTeamInvitations()) {
+        ray()->showRequests();
+        if (!Features::sendsTeamInvitations()) {
             $this->markTestSkipped('Team invitations not enabled.');
 
             return;
@@ -52,7 +55,11 @@ class InviteTeamMemberTest extends TestCase
             'role' => 'admin',
         ]);
 
-        $response = $this->delete('/team-invitations/'.$invitation->id);
+        $this->delete(
+            route('team-invitations.destroy', [
+                'invitation' => $invitation->id,
+            ])
+        );
 
         $this->assertCount(0, $user->currentTeam->fresh()->teamInvitations);
     }

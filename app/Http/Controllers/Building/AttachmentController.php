@@ -30,7 +30,7 @@ class AttachmentController extends Controller
             $request->validated('type')
         );
 
-        return to_route('hub.buildings.docs', [
+        return to_route('buildings.attachments.show', [
             'building' => $buildingId,
         ]);
     }
@@ -39,7 +39,7 @@ class AttachmentController extends Controller
     {
         DestroyAttachment::run($attachment);
 
-        return to_route('hub.buildings.docs', [
+        return to_route('buildings.attachments.show', [
             'building' => $building->id,
         ]);
     }

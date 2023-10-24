@@ -21,9 +21,9 @@ const props = defineProps({
 
 const types = {
     default: {
-        bg: 'bg-blue-100',
-        text: 'text-blue-800',
-        icon: 'text-blue-400',
+        bg: 'bg-primary-100',
+        text: 'text-primary-800',
+        icon: 'text-primary-400',
     },
     success: {
         bg: 'bg-green-100',

@@ -1,5 +1,4 @@
 <script setup>
-import { PaperClipIcon } from '@heroicons/vue/24/outline';
 import BzButton from '../../../../Components/BzButton.vue';
 
 defineProps({
@@ -18,7 +17,12 @@ defineProps({
                     Detaillierte Angaben zum Gebäude
                 </p>
             </div>
-            <bz-button type="secondary">bearbeiten</bz-button>
+            <bz-button
+                as="link"
+                :href="route('buildings.general.show', building.data.id)"
+                type="secondary"
+                >bearbeiten</bz-button
+            >
         </div>
         <div class="border-t border-gray-100">
             <dl class="divide-y divide-gray-100">
@@ -52,7 +56,20 @@ defineProps({
                         {{ building.data.floor_area }} m²
                     </dd>
                 </div>
-                <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div
+                    v-if="building.data.land_area"
+                    class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm leading-6 font-medium text-gray-900">
+                        Grundstücksfläche
+                    </dt>
+                    <dd
+                        class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        {{ building.data.floor_area }} m²
+                    </dd>
+                </div>
+                <div
+                    v-if="building.data.housing_units"
+                    class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm leading-6 font-medium text-gray-900">
                         Wohneinheiten
                     </dt>
@@ -61,7 +78,9 @@ defineProps({
                         {{ building.data.housing_units }}
                     </dd>
                 </div>
-                <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div
+                    v-if="building.data.floors"
+                    class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm leading-6 font-medium text-gray-900">
                         Stockwerke
                     </dt>
@@ -70,24 +89,24 @@ defineProps({
                         {{ building.data.floors }}
                     </dd>
                 </div>
-                <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div
+                    v-if="building.data.floor"
+                    class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm leading-6 font-medium text-gray-900">
-                        Baujahr (Heizung)
+                        Etage
                     </dt>
                     <dd
                         class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {{ building.data.construction_year }} ({{
-                            building.data.construction_year_heating ?? '-'
-                        }})
+                        {{ building.data.floor }}
                     </dd>
                 </div>
                 <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm leading-6 font-medium text-gray-900">
-                        Keller
+                        Baujahr
                     </dt>
                     <dd
                         class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {{ building.data.cellar }}
+                        {{ building.data.construction_year }}
                     </dd>
                 </div>
                 <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

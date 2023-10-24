@@ -27,16 +27,6 @@ class Product extends Model
         'meta' => 'array',
     ];
 
-    public function orders(): BelongsToMany
-    {
-        return $this->belongsToMany(Order::class);
-    }
-
-    public function upsells(): BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'product_product', 'product_id', 'upsell_id');
-    }
-
     public function relatedProducts(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_product', 'upsell_id', 'product_id');

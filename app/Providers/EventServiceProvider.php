@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Events\CustomerUpdatedFromStripe;
 use App\Events\PaymentCreated;
 use App\Listeners\HandleCustomerFromStripe;
-use App\Listeners\HandleOrderPaid;
 use App\Listeners\SendEmailVerificationNotification;
 use App\Models\Customer;
 use App\Models\Product;
@@ -27,9 +26,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         PaymentCreated::class => [
             HandleCustomerFromStripe::class,
-        ],
-        CustomerUpdatedFromStripe::class => [
-            HandleOrderPaid::class,
         ],
     ];
 

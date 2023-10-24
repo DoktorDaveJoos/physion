@@ -2,9 +2,9 @@
 
 namespace App\Nova;
 
+use App\Models\EnergySource;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -14,7 +14,7 @@ class Dormer extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\EnergySource>
+     * @var class-string<EnergySource>
      */
     public static $model = \App\Models\Dormer::class;
 

@@ -22,6 +22,8 @@ use App\Http\Controllers\Product\AppraisalController;
 use App\Http\Controllers\Product\BzaController;
 use App\Http\Controllers\Product\EnergyCertificateController;
 use App\Http\Controllers\Product\IsfpController;
+use App\Models\Bza;
+use App\Models\Isfp;
 use Inertia\Inertia;
 
 
@@ -224,16 +226,20 @@ Route::middleware([
         ->name('buildings.products.ecert.store');
 
     Route::get('/buildings/{building}/products/isfp', [IsfpController::class, 'show'])
-        ->name('buildings.products.isfp.show');
+        ->name('buildings.products.isfp.show')
+        ->can('view', Isfp::class);
 
     Route::post('/buildings/{building}/products/isfp', [IsfpController::class, 'store'])
-        ->name('buildings.products.isfp.store');
+        ->name('buildings.products.isfp.store')
+        ->can('create', Isfp::class);
 
     Route::get('/buildings/{building}/products/bza', [BzaController::class, 'show'])
-        ->name('buildings.products.bza.show');
+        ->name('buildings.products.bza.show')
+        ->can('view', Bza::class);
 
     Route::post('/buildings/{building}/products/bza', [BzaController::class, 'store'])
-        ->name('buildings.products.bza.store');
+        ->name('buildings.products.bza.store')
+        ->can('create', Bza::class);
 
     Route::get('/buildings/{building}/appraisal', [AppraisalController::class, 'show'])
         ->name('buildings.appraisal.show');
