@@ -39,7 +39,6 @@ class InviteTeamMemberTest extends TestCase
 
     public function test_team_member_invitations_can_be_cancelled(): void
     {
-        ray()->showRequests();
         if (!Features::sendsTeamInvitations()) {
             $this->markTestSkipped('Team invitations not enabled.');
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Roof $roof
  * @property Wall $wall
  * @property Cellar $cellar
+ * @property Collection<Heating> $heatings
+ * @property Collection<Renewable> $renewables
  */
 class Building extends Model
 {

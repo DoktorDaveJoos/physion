@@ -125,8 +125,8 @@
                                             class="-mx-2 mt-2 space-y-1"
                                             role="list">
                                             <li
-                                                v-for="team in $page.props.user
-                                                    .all_teams"
+                                                v-for="team in $page.props.auth
+                                                    .user.all_teams"
                                                 :key="team.name">
                                                 <!--                                                        :href="team.href"-->
                                                 <button
@@ -291,14 +291,14 @@
                         </ul>
                     </li>
 
-                    <li v-if="$page.props.user.all_teams?.length > 0">
+                    <li v-if="$page.props.auth.user.all_teams?.length > 0">
                         <div
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Deine Teams
                         </div>
                         <ul class="-mx-2 mt-2 space-y-1" role="list">
                             <li
-                                v-for="team in $page.props.user.all_teams"
+                                v-for="team in $page.props.auth.user.all_teams"
                                 :key="team.name">
                                 <button
                                     :class="[
@@ -311,7 +311,8 @@
                                     <span
                                         :class="[
                                             team.id ===
-                                            $page.props.user.current_team_id
+                                            $page.props.auth.user
+                                                .current_team_id
                                                 ? 'text-primary border-primary'
                                                 : 'text-gray-400 border-gray-200 group-hover:border-primary group-hover:text-primary',
                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
@@ -403,9 +404,10 @@
                                     "
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img
-                                        :alt="$page.props.user.first_name"
+                                        :alt="$page.props.auth.user.first_name"
                                         :src="
-                                            $page.props.user.profile_photo_url
+                                            $page.props.auth.user
+                                                .profile_photo_url
                                         "
                                         class="h-8 w-8 rounded-full object-cover" />
                                 </button>
@@ -414,7 +416,7 @@
                                     <button
                                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
                                         type="button">
-                                        {{ $page.props.user.first_name }}
+                                        {{ $page.props.auth.user.first_name }}
 
                                         <ChevronDownIcon class="ml-2 h-4 w-4" />
                                     </button>
@@ -543,9 +545,9 @@ const navigation = [
 const jetstreamNavigation = [
     {
         name: 'Team',
-        href: usePage().props.user?.current_team_id
+        href: usePage().props.auth.user?.current_team_id
             ? route('teams.show', {
-                  team: usePage().props.user.current_team_id,
+                  team: usePage().props.auth.user.current_team_id,
               })
             : null,
         icon: UsersIcon,

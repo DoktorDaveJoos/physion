@@ -131,7 +131,7 @@ defineProps({
                     </Link>
 
                     <div class="flex items-center">
-                        <span class="text-blue-500 text-sm font-bold mr-1"
+                        <span class="text-primary-500 text-sm font-bold mr-1"
                             >{{ buildings.meta.current_page }} </span
                         ><span class="text-gray-500 text-xs font-bold">
                             / {{ buildings.meta.last_page }}</span

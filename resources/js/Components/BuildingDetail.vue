@@ -361,7 +361,7 @@ watch(hasRenewables, (value) => {
         <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
             <div class="grid sm:block">
                 <bz-button
-                    v-if="$page.props.user"
+                    v-if="$page.props.auth.user"
                     as="link"
                     type="secondary"
                     :href="

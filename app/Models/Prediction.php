@@ -10,6 +10,10 @@ class Prediction extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'tags' => 'array',
+    ];
+
     public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class);

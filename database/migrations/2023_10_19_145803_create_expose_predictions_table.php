@@ -16,8 +16,9 @@ return new class extends Migration
 
             $table->foreignId('building_id')->constrained()->cascadeOnDelete();
             $table->enum('type', ['expose']);
-
+            $table->text('primer');
             $table->text('prompt');
+            $table->json('tags');
             $table->text('response');
             $table->string('model');
 

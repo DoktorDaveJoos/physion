@@ -1,5 +1,5 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import BzCard from '../../Components/BzCard.vue';
 import BuildingWrapper from '../Shared/BuildingWrapper.vue';
 import MarkdownIt from 'markdown-it';
@@ -10,6 +10,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 import { ref, watch } from 'vue';
 import DialogModal from '../../../../Components/DialogModal.vue';
+import Badge from '../../../../Components/Badge.vue';
+import { ClipboardDocumentIcon, CheckIcon } from '@heroicons/vue/24/outline';
 
 dayjs.extend(relativeTime);
 dayjs.locale('de');
@@ -39,43 +41,42 @@ const active = ref(
 );
 
 const timer = ref(null);
-const tags = ref([]);
 const modal = ref(false);
+const copyText = ref('kopieren');
+const form = useForm({
+    tags: [],
+});
 
 const generate = () => {
-    router.post(
-        route('buildings.expose.store', route().params?.building),
-        {
-            tags: tags.value,
-        },
-        {
-            onSuccess: () => {
-                ElNotification({
-                    title: 'Exposè wird generiert',
-                    message: 'Dies kann etwas dauern. Bitte warten Sie.',
-                    type: 'success',
-                });
+    form.post(route('buildings.expose.store', route().params?.building), {
+        onSuccess: () => {
+            modal.value = false;
 
-                timer.value = setInterval(() => {
-                    router.reload({
-                        onFinish: () => {
-                            if (props.generating) {
-                                return;
-                            }
-                            clearTimeout(timer.value);
-                        },
-                    });
-                }, 5000);
-            },
-            onError: () => {
-                ElNotification({
-                    title: 'Exposè konnte nicht generiert werden',
-                    message: 'Bitte versuchen Sie es später erneut.',
-                    type: 'error',
+            ElNotification({
+                title: 'Exposè wird generiert',
+                message: 'Dies kann etwas dauern. Bitte warten Sie.',
+                type: 'success',
+            });
+
+            timer.value = setInterval(() => {
+                router.reload({
+                    onFinish: () => {
+                        if (props.generating) {
+                            return;
+                        }
+                        clearTimeout(timer.value);
+                    },
                 });
-            },
-        }
-    );
+            }, 5000);
+        },
+        onError: () => {
+            ElNotification({
+                title: 'Exposè konnte nicht generiert werden',
+                message: 'Bitte versuchen Sie es später erneut.',
+                type: 'error',
+            });
+        },
+    });
 };
 
 watch(
@@ -91,7 +92,15 @@ const options = ['Charmant', 'Nüchtern', 'Kurz', 'Konservativ', 'Modern'];
 
 const closeModal = () => {
     modal.value = false;
-    tags.value = [];
+    form.reset();
+};
+
+const copyToClipboard = () => {
+    navigator.clipboard.writeText(active.value.response);
+    copyText.value = 'kopiert';
+    setTimeout(() => {
+        copyText.value = 'kopieren';
+    }, 2000);
 };
 </script>
 
@@ -145,9 +154,36 @@ const closeModal = () => {
                         </button>
                     </div>
 
-                    <div
-                        class="col-span-3 px-4 py-6 text-gray-700 rounded-br-lg"
-                        v-html="markdown.render(active.response)"></div>
+                    <div class="col-span-3">
+                        <div class="flex justify-between">
+                            <div
+                                v-if="active.tags?.length > 0"
+                                class="flex space-x-2 px-4 pt-4 items-start">
+                                <badge
+                                    v-for="tag in active.tags"
+                                    :label="tag"
+                                    size="sm"
+                                    :key="tag" />
+                            </div>
+                            <div class="flex pr-4 pt-4">
+                                <bz-button
+                                    type="secondary"
+                                    @click="copyToClipboard">
+                                    {{ copyText }}
+                                    <clipboard-document-icon
+                                        v-if="copyText === 'kopieren'"
+                                        class="w-5 h-5 -m-2 ml-2" />
+                                    <check-icon
+                                        v-else
+                                        class="w-5 h-5 -m-2 ml-2" />
+                                </bz-button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="px-4 pb-6 pt-2 text-gray-700 rounded-br-lg"
+                            v-html="markdown.render(active.response)"></div>
+                    </div>
                 </div>
                 <el-empty
                     v-else
@@ -169,7 +205,7 @@ const closeModal = () => {
             <div class="flex flex-col pt-2">
                 <span class="text-sm text-gray-500">Schlagwörter</span>
                 <el-select
-                    v-model="tags"
+                    v-model="form.tags"
                     size="large"
                     class="w-full"
                     multiple

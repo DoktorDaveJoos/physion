@@ -36,7 +36,7 @@ const tabs = [
         route: route('buildings.calculator.show', route().params?.building),
     },
     {
-        name: 'expose',
+        name: 'exposé',
         active: route().current('buildings.expose.show'),
         route: route('buildings.expose.show', route().params?.building),
     },
