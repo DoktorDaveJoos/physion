@@ -177,6 +177,7 @@ const types = [
                 <bz-dropzone
                     class="w-full"
                     v-if="!form.document"
+                    text="Dokument hochladen"
                     :allowed-mime-types="['application/pdf']"
                     @select="(e) => handleSelect(e)"></bz-dropzone>
 
