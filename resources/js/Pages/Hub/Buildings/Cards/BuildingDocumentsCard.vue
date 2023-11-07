@@ -80,7 +80,7 @@ const destroy = (id) => {
 const types = [
     { label: 'Baugesuch', value: 'baugesuch' },
     { label: 'Grundriss', value: 'grundriss' },
-    { label: 'Sonstiges', value: 'misc' },
+    { label: 'Sonstiges', value: 'other' },
 ];
 </script>
 

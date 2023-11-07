@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\CreateExposePredictionsJob;
+use App\Models\Product\FamilyStrategy;
 use Illuminate\Console\Command;
 
 class MiscCommand extends Command
@@ -26,6 +27,20 @@ class MiscCommand extends Command
      */
     public function handle(): void
     {
-        CreateExposePredictionsJob::dispatch(1);
+
+
+
+
+
+
+    }
+
+
+    public function damnit (...$args) {
+        [$yeah, $bye] = $args;
+
+        ray('yeah', $yeah);
+
+        ray('bye', $bye);
     }
 }

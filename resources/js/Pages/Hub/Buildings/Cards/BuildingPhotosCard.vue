@@ -14,6 +14,7 @@ import { ElNotification } from 'element-plus';
 
 const props = defineProps({
     building: Object,
+    images: Array,
 });
 
 const modal = ref(false);
@@ -22,7 +23,7 @@ const loading = ref(false);
 const detail = ref(null);
 
 const form = useForm({
-    pictures: null,
+    images: null,
 });
 
 const cancel = () => {
@@ -31,11 +32,11 @@ const cancel = () => {
 };
 
 const handleSelect = (e) => {
-    form.pictures = e;
+    form.images = e;
 };
 
 const submit = () => {
-    form.post(route('buildings.attachments.store', props.building.data.id), {
+    form.post(route('buildings.medias.store', props.building.data.id), {
         onStart: () => {
             loading.value = true;
         },
@@ -51,10 +52,10 @@ const submit = () => {
 const destroy = (id) => {
     router.delete(
         route(
-            'buildings.attachments.destroy',
+            'buildings.medias.destroy',
             {
                 building: props.building.data.id,
-                attachment: id,
+                media: id,
             },
             {
                 onStart: () => {
@@ -75,10 +76,8 @@ const destroy = (id) => {
     );
 };
 
-const handleDetail = (id) => {
-    detail.value = props.building.data.attachments.find(
-        (file) => file.data.id === id
-    ).links.self;
+const handleDetail = (link) => {
+    detail.value = link;
     modalDetail.value = true;
 };
 
@@ -109,51 +108,44 @@ const removePicture = (index) => {
         </div>
         <div class="border-t border-gray-100">
             <ul
-                v-if="
-                    building.data.attachments?.filter(
-                        (file) => file.data.type === 'picture'
-                    ).length > 0
-                "
+                v-if="images.data.length > 0"
                 class="grid p-4 grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
                 role="list">
                 <li
-                    v-for="file in building.data.attachments?.filter(
-                        (file) => file.data.type === 'picture'
-                    )"
-                    :key="file.data.id"
+                    v-for="image in images.data"
+                    :key="image.id"
                     class="relative">
                     <div
                         class="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
                         <img
-                            :src="file.links.self"
+                            :src="image.links.preview_url"
                             alt=""
                             class="pointer-events-none object-cover group-hover:opacity-75" />
                         <div
                             class="absolute inset-0 flex justify-end p-1 space-x-1">
                             <button
                                 class="w-8 h-8 bg-gray-100 text-gray-500 flex items-center justify-center rounded opacity-30 group-hover:opacity-100 hover:bg-white hover:text-gray-900 transition duration-75"
-                                @click="handleDetail(file.data.id)">
+                                @click="handleDetail(image.links.original_url)">
                                 <arrow-top-right-on-square-icon
                                     class="h-4 w-4"
                                     aria-hidden="true" />
                             </button>
                             <button
                                 class="w-8 h-8 bg-gray-100 text-gray-500 flex items-center justify-center rounded opacity-30 group-hover:opacity-100 hover:bg-white hover:text-gray-900 transition duration-75"
-                                @click="destroy(file.data.id)">
+                                @click="destroy(image.data.id)">
                                 <trash-icon
                                     class="h-4 w-4"
                                     aria-hidden="true" />
                             </button>
                         </div>
                     </div>
-
                     <p
-                        class="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
-                        {{ file.title }}
+                        class="pointer-events-none mt-2 block truncate text-xs font-medium text-gray-900">
+                        {{ image.data.name }}
                     </p>
                     <p
-                        class="pointer-events-none block text-sm font-medium text-gray-500">
-                        {{ file.size }}
+                        class="pointer-events-none block truncate text-xs font-medium text-gray-500">
+                        {{ image.data.size }}
                     </p>
                 </li>
             </ul>
@@ -169,11 +161,11 @@ const removePicture = (index) => {
         @close="cancel">
         <template #title>Bild hochladen</template>
         <template #content>
-            <el-form-item class="!w-full" :error="form.errors.pictures">
+            <el-form-item class="!w-full" :error="form.errors.images">
                 <bz-dropzone
                     multiple
                     class="w-full"
-                    v-if="!form.pictures"
+                    v-if="!form.images"
                     :allowed-mime-types="[
                         'application/pdf',
                         'image/jpeg',
@@ -182,7 +174,7 @@ const removePicture = (index) => {
                     @select="(e) => handleSelect(e)"></bz-dropzone>
                 <div v-else class="w-full space-y-2">
                     <div
-                        v-for="(picture, index) in form.pictures"
+                        v-for="(picture, index) in form.images"
                         class="flex w-full items-center px-6 py-4 rounded border border-gray-300 justify-between">
                         <div class="flex">
                             <paper-clip-icon

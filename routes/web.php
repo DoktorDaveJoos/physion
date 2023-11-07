@@ -8,6 +8,7 @@ use App\Http\Controllers\Building\EnergyController;
 use App\Http\Controllers\Building\ExposeController;
 use App\Http\Controllers\Building\GeneralController;
 use App\Http\Controllers\Building\HeatingController;
+use App\Http\Controllers\Building\MediaController;
 use App\Http\Controllers\Building\PositionController;
 use App\Http\Controllers\Building\ProductController;
 use App\Http\Controllers\Building\RenewableController;
@@ -22,10 +23,6 @@ use App\Http\Controllers\Product\AppraisalController;
 use App\Http\Controllers\Product\BzaController;
 use App\Http\Controllers\Product\EnergyCertificateController;
 use App\Http\Controllers\Product\IsfpController;
-use App\Models\Building;
-use App\Models\Bza;
-use App\Models\Isfp;
-use App\Models\User;
 use Inertia\Inertia;
 
 
@@ -119,8 +116,14 @@ Route::middleware([
     Route::post('/buildings/{building}/attachments', [AttachmentController::class, 'store'])
         ->name('buildings.attachments.store');
 
-    Route::delete('/buildings/{building}/documents/{attachment}', [AttachmentController::class, 'destroy'])
+    Route::delete('/buildings/{building}/attachments/{attachment}', [AttachmentController::class, 'destroy'])
         ->name('buildings.attachments.destroy');
+
+    Route::post('/buildings/{building}/medias', [MediaController::class, 'store'])
+        ->name('buildings.medias.store');
+
+    Route::delete('/buildings/{building}/medias/{media}', [MediaController::class, 'destroy'])
+        ->name('buildings.medias.destroy');
 
     Route::put('/buildings/{building}/roofs', [RoofController::class, 'update'])
         ->name('buildings.roofs.update');

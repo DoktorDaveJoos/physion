@@ -63,7 +63,7 @@ class BuildingResource extends JsonResource
                 'predictions' => $this->predictions()->orderByDesc('created_at')->get(),
             ],
             'links' => [
-                'image' => $this->image ? Storage::url($this->image) : null,
+                'image' => $this->getMedia('images')->first()->preview_url ?? null,
                 'self' => route('buildings.show', $this->id),
             ],
         ];

@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -37,8 +41,10 @@ use Illuminate\Support\Collection;
  * @property Collection<Heating> $heatings
  * @property Collection<Renewable> $renewables
  */
-class Building extends Model
+class Building extends Model implements HasMedia
 {
+
+    use InteractsWithMedia;
 
     const FLAT = 'Wohnung';
 
@@ -122,5 +128,13 @@ class Building extends Model
     public function isHouse(): bool
     {
         return $this->type !== self::FLAT;
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Manipulations::FIT_CROP, 300, 300)
+            ->nonQueued();
     }
 }

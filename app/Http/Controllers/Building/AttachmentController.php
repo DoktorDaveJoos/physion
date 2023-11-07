@@ -7,6 +7,7 @@ use App\Actions\Building\DestroyAttachment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAttachmentRequest;
 use App\Http\Resources\Building\BuildingResourceAttachments;
+use App\Http\Resources\ImageResource;
 use App\Models\Attachment;
 use App\Models\Building;
 use Inertia\Inertia;
@@ -18,6 +19,7 @@ class AttachmentController extends Controller
     {
         return Inertia::render('Hub/Buildings/Attachments/Show', [
             'building' => new BuildingResourceAttachments($building),
+            'images' => ImageResource::collection($building->getMedia('images')),
         ]);
     }
 

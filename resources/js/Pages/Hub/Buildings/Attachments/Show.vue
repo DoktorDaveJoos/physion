@@ -6,6 +6,7 @@ import BuildingWrapper from '../Shared/BuildingWrapper.vue';
 
 defineProps({
     building: Object,
+    images: Array,
 });
 </script>
 
@@ -16,6 +17,6 @@ defineProps({
 
     <building-wrapper :building="building">
         <building-documents-card :building="building" />
-        <building-photos-card :building="building" />
+        <building-photos-card :building="building" :images="images" />
     </building-wrapper>
 </template>

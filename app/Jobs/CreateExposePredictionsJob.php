@@ -21,8 +21,9 @@ class CreateExposePredictionsJob implements ShouldQueue
 
     public int $tries = 3;
     public int $timeout = 180;
+    public int $backoff = 60;
 
-    private const MODEL = 'gpt-3.5-turbo-16k-0613';
+    private const MODEL = 'gpt-3.5-turbo-16k';
 
     /**
      * Create a new job instance.
