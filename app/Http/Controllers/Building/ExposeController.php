@@ -24,7 +24,7 @@ class ExposeController extends Controller
     {
         cache()->put('building_expose_' . $building->id, true, 3600);
 
-        CreateExposePredictionsJob::dispatch($building->id, $request->get('tags', []));
+        CreateExposePredictionsJob::dispatch($request->user()->current_team_id, $building->id, $request->get('tags', []));
 
         return to_route('buildings.expose.show', $building->id);
     }

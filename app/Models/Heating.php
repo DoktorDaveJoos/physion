@@ -11,6 +11,10 @@ class Heating extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'water_included' => 'boolean',
+    ];
+
     public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class);

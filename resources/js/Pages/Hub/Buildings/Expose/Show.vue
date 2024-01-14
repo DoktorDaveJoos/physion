@@ -1,5 +1,5 @@
 <script setup>
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import BzCard from '../../Components/BzCard.vue';
 import BuildingWrapper from '../Shared/BuildingWrapper.vue';
 import MarkdownIt from 'markdown-it';
@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { ref, watch } from 'vue';
 import DialogModal from '../../../../Components/DialogModal.vue';
 import Badge from '../../../../Components/Badge.vue';
-import { ClipboardDocumentIcon, CheckIcon } from '@heroicons/vue/24/outline';
+import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/vue/24/outline';
 
 dayjs.extend(relativeTime);
 dayjs.locale('de');
@@ -102,6 +102,17 @@ const copyToClipboard = () => {
         copyText.value = 'kopieren';
     }, 2000);
 };
+
+Echo.channel('team.' + usePage().props.auth.user.current_team_id).listen(
+    '.expose.created',
+    (e) => {
+        ElNotification({
+            title: 'Exposè wurde generiert',
+            message: 'Das Exposè wurde erfolgreich generiert.',
+            type: 'success',
+        });
+    }
+);
 </script>
 
 <template>
@@ -117,8 +128,8 @@ const copyToClipboard = () => {
             </template>
             <template #button>
                 <bz-button :loading="generating" @click="modal = true"
-                    >Exposè generieren</bz-button
-                >
+                    >Exposè generieren
+                </bz-button>
             </template>
             <template #content>
                 <div
@@ -132,13 +143,13 @@ const copyToClipboard = () => {
                         <button
                             v-for="prediction in building.data.predictions"
                             :key="prediction.id"
-                            @click="active = prediction"
-                            class="px-4 py-2 border-2 border-gray-200 bg-gray-50 w-full rounded-md line-clamp-1 text-gray-600 text-sm font-semibold flex flex-col"
                             :class="[
                                 active.id === prediction.id
                                     ? 'border-primary-400 text-primary-600'
                                     : 'hover:border-gray-300',
-                            ]">
+                            ]"
+                            class="px-4 py-2 border-2 border-gray-200 bg-gray-50 w-full rounded-md line-clamp-1 text-gray-600 text-sm font-semibold flex flex-col"
+                            @click="active = prediction">
                             {{
                                 prediction.response
                                     .slice(0, 30)
@@ -147,10 +158,8 @@ const copyToClipboard = () => {
                             <time
                                 :datetime="prediction.created_at"
                                 class="flex-none py-0.5 text-xs leading-5 text-gray-500"
-                                >{{
-                                    dayjs(prediction.created_at).fromNow()
-                                }}</time
-                            >
+                                >{{ dayjs(prediction.created_at).fromNow() }}
+                            </time>
                         </button>
                     </div>
 
@@ -161,9 +170,9 @@ const copyToClipboard = () => {
                                 class="flex space-x-2 px-4 pt-4 items-start">
                                 <badge
                                     v-for="tag in active.tags"
+                                    :key="tag"
                                     :label="tag"
-                                    size="sm"
-                                    :key="tag" />
+                                    size="sm" />
                             </div>
                             <div class="flex pr-4 pt-4">
                                 <bz-button
@@ -206,10 +215,10 @@ const copyToClipboard = () => {
                 <span class="text-sm text-gray-500">Schlagwörter</span>
                 <el-select
                     v-model="form.tags"
-                    size="large"
                     class="w-full"
                     multiple
-                    placeholder="Optional auswählen">
+                    placeholder="Optional auswählen"
+                    size="large">
                     <el-option
                         v-for="item in options"
                         :key="item"
@@ -221,11 +230,11 @@ const copyToClipboard = () => {
         <template #footer>
             <div class="flex space-x-2">
                 <bz-button type="primary" @click="generate"
-                    >Exposè generieren</bz-button
-                >
+                    >Exposè generieren
+                </bz-button>
                 <bz-button type="secondary" @click="closeModal"
-                    >Schließen</bz-button
-                >
+                    >Schließen
+                </bz-button>
             </div>
         </template>
     </dialog-modal>

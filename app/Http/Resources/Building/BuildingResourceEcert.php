@@ -19,7 +19,6 @@ class BuildingResourceEcert extends JsonResource
         return [
             'data' => [
                 'id' => $this->id,
-                'status' => $this->status,
                 'address' => $this->street.' '.$this->house_number,
                 'postal_code' => $this->postal_code,
                 'city' => $this->city,
@@ -31,12 +30,10 @@ class BuildingResourceEcert extends JsonResource
                         $this->energyCertificates()->where('type', 'bdrf')->first()
                     ),
                 ],
-                'wall' => (bool) $this->wall,
-                'roof' => (bool) $this->roof,
-                'cellarModel' => (bool) $this->cellarObject,
-                'heatingSystems' => $this->heatings,
-                'renewableEnergyInstallations' => $this->renewables,
-                'consumptionMonths' => $this->consumptions()->sum('period'),
+                'thermal' => $this->thermalDone(),
+                'heating' => $this->heatingDone(),
+                'renewable' => $this->renewableDone(),
+                'consumption' => $this->consumptionDone(),
             ],
             'links' => [
                 'self' => null, //route('hub.buildings.show.index', $this->id),

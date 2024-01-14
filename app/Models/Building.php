@@ -137,4 +137,24 @@ class Building extends Model implements HasMedia
             ->fit(Manipulations::FIT_CROP, 300, 300)
             ->nonQueued();
     }
+
+    public function thermalDone(): bool
+    {
+        return $this->wall && $this->roof && $this->cellar;
+    }
+
+    public function heatingDone(): bool
+    {
+        return $this->heatings->every(fn(Heating $heating) => $heating->water_included === true);
+    }
+
+    public function renewableDone(): bool
+    {
+        return $this->renewables->count() > 0;
+    }
+
+    public function consumptionDone(): bool
+    {
+        return $this->consumptions->count() > 0 && $this->consumptions()->sum('period') >= 36;
+    }
 }

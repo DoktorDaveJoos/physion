@@ -540,6 +540,12 @@ const navigation = [
         icon: HomeModernIcon,
         current: route().current('buildings*'),
     },
+    {
+        name: 'Aufträge',
+        href: route('orders.index'),
+        icon: FolderIcon,
+        current: route().current('orders*'),
+    },
 ];
 
 const jetstreamNavigation = [

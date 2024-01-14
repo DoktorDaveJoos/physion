@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\ExposeCreated;
 use App\Models\Building;
 use App\Models\Heating;
 use App\Models\Prediction;
@@ -29,6 +30,7 @@ class CreateExposePredictionsJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
+        public readonly int $teamId,
         public readonly int $buildingId,
         public readonly array $tags,
     ) {
@@ -83,6 +85,7 @@ class CreateExposePredictionsJob implements ShouldQueue
         ]);
 
         cache()->forget('building_expose_'.$this->buildingId);
+        ExposeCreated::dispatch($this->teamId);
     }
 
     /**

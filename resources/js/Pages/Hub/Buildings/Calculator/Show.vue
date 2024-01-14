@@ -84,11 +84,6 @@ const form = props.building.data.new_building
     </Head>
 
     <building-wrapper :building="building">
-        <bz-card>
-            <template #title>test</template>
-            <template #content> test </template>
-        </bz-card>
-
         <kfw-card :building="building" :credits="credits" class="mt-4" />
 
         <!--        <bz-card class="mt-4">-->

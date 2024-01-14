@@ -2,9 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Resource;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,13 +37,20 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
 
         return array_merge(parent::share($request), [
-//            'resources' => $request->user()?->currentTeam?->resources ?? []
             'permission' => [
-                'view_admin' => Str::contains($request->user()?->email, ['david@bauzertifikate.de', 'hannes@bauzertifikate.de']),
-                'view_management' => $request->user()?->hasTeamPermission($request->user()?->currentTeam, 'team:read'),
-            ]
+
+                // role related permissions
+                'view_admin' => $user?->hasRole(Role::ADMIN),
+                'view_customer' => $user?->hasRole('user'),
+                'view_orders' => $user?->hasRole('user'),
+
+
+                // team related permissions
+                'view_team_management' => $user?->hasTeamPermission($user->currentTeam, 'team:read'),
+            ],
         ]);
     }
 }

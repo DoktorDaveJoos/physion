@@ -23,6 +23,7 @@ class EnergyCertificateResource extends JsonResource
             'id' => $this->id,
             'type' => $this->type,
             'status' => $this->status,
+            'done' => (bool) $this->status === 'done'
         ];
     }
 

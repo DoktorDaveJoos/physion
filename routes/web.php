@@ -18,6 +18,7 @@ use App\Http\Controllers\Building\WallController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Hub\BuildingController;
 use App\Http\Controllers\Hub\DashboardController;
+use App\Http\Controllers\Hub\OrderController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Product\AppraisalController;
 use App\Http\Controllers\Product\BzaController;
@@ -37,6 +38,7 @@ use Inertia\Inertia;
 |
 */
 
+Broadcast::routes();
 
 Route::get('/impressum', function () {
     return Inertia::render('Imprint');
@@ -74,9 +76,26 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->prefix('/hub')->group(function () {
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index'])
+        ->name('orders.index');
+
+    Route::get('/orders/ecert', [OrderController::class, 'indexEcert'])
+        ->name('orders.ecert.index');
+
+    Route::get('/orders/isfp', [OrderController::class, 'indexIsfp'])
+        ->name('orders.isfp.index');
+
+    Route::get('/orders/bza', [OrderController::class, 'indexBza'])
+        ->name('orders.bza.index');
+
+    Route::get('/orders/{order}', [OrderController::class, 'show'])
+        ->name('orders.show');
 
     // Buildings
     Route::get('/buildings/create', [BuildingController::class, 'create'])
