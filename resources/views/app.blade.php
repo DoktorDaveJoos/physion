@@ -19,6 +19,18 @@
             gtag('config', {{ config('tracking.ads') }});
         </script>
 
+        <script>
+            var blackChatScript = document.createElement('script');
+            blackChatScript.type = 'text/javascript';
+            blackChatScript.async = true;
+            blackChatScript.src = "https://cdn.getblackchat.com/chat.js";
+            blackChatScript.onload = function () {
+                window.BlackChat("0845a5a7-275d-4aeb-98ad-cca91ae6a019");
+            };
+            var scriptElement = document.getElementsByTagName('script')[0];
+            scriptElement.parentNode.insertBefore(blackChatScript, scriptElement);
+        </script>
+
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@400;500&display=swap">
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
