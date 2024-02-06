@@ -25,7 +25,7 @@
             blackChatScript.async = true;
             blackChatScript.src = "https://cdn.getblackchat.com/chat.js";
             blackChatScript.onload = function () {
-                window.BlackChat({"team-token":"dc1310e8-1389-41e0-ade5-c15f10176ae3"});
+                window.BlackChat({"team-token":"43359c72-ad2e-42d6-9faf-8c59e3eab840"});
             };
             var scriptElement = document.getElementsByTagName("script")[0];
             scriptElement.parentNode.insertBefore(blackChatScript, scriptElement);
