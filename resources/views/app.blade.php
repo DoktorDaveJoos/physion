@@ -20,14 +20,14 @@
         </script>
 
         <script>
-            var blackChatScript = document.createElement('script');
-            blackChatScript.type = 'text/javascript';
+            var blackChatScript = document.createElement("script");
+            blackChatScript.type = "text/javascript";
             blackChatScript.async = true;
             blackChatScript.src = "https://cdn.getblackchat.com/chat.js";
             blackChatScript.onload = function () {
-                window.BlackChat("0845a5a7-275d-4aeb-98ad-cca91ae6a019");
+                window.BlackChat({"team-token":"dc1310e8-1389-41e0-ade5-c15f10176ae3"});
             };
-            var scriptElement = document.getElementsByTagName('script')[0];
+            var scriptElement = document.getElementsByTagName("script")[0];
             scriptElement.parentNode.insertBefore(blackChatScript, scriptElement);
         </script>
 
