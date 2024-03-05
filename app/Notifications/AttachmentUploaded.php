@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -37,7 +36,6 @@ class AttachmentUploaded extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = URL::signedRoute('order.show', ['order' => $this->order->slug]);
-
 
         return (new MailMessage)
             ->subject('Ihre Bestellung bei Bauzertifikate.de')

@@ -45,6 +45,16 @@ class JetstreamServiceProvider extends ServiceProvider
     {
         Jetstream::defaultApiTokenPermissions(['read']);
 
+        Jetstream::role('owner', 'Owner', [
+            'order:create',
+            'order:read',
+            'order:update',
+            'order:delete',
+            'team:read',
+            'team:update',
+            'removeTeamMember',
+        ])->description('Administratoren können Energieausweise erstellen, bearbeiten und löschen. Sie können Benutzer verwalten.');
+
         Jetstream::role('admin', 'Administrator', [
             'order:create',
             'order:read',
@@ -52,6 +62,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'order:delete',
             'team:read',
             'team:update',
+            'removeTeamMember',
         ])->description('Administratoren können Energieausweise erstellen, bearbeiten und löschen. Sie können Benutzer verwalten.');
 
         Jetstream::role('editor', 'Mitarbeiter', [

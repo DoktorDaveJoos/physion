@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v3.0+ -->
 <template>
-    <section id="prices" class="bg-blue-600">
+    <section id="prices" class="bg-primary">
         <div class="relative overflow-hidden pt-32 pb-96 lg:pt-40">
             <div>
                 <img
@@ -38,7 +38,7 @@
                             <div class="p-8 sm:p-10">
                                 <h3
                                     :id="tier.data.id"
-                                    class="text-lg font-semibold leading-8 tracking-tight text-blue-600">
+                                    class="text-lg font-semibold leading-8 tracking-tight text-primary">
                                     {{ tier.data.name }}
                                 </h3>
                                 <div
@@ -65,7 +65,7 @@
                                             <div class="flex-shrink-0">
                                                 <CheckIcon
                                                     aria-hidden="true"
-                                                    class="h-6 w-6 text-blue-600" />
+                                                    class="h-6 w-6 text-primary" />
                                             </div>
                                             <p
                                                 class="ml-3 text-sm leading-6 text-gray-600">
@@ -77,7 +77,7 @@
                                         <Link
                                             :aria-describedby="tier.data.id"
                                             :href="tier.links.self"
-                                            class="inline-block w-full rounded-lg bg-blue-600 px-4 py-4 text-center text-sm font-semibold cursor-pointer leading-5 text-white shadow-md hover:bg-blue-700"
+                                            class="inline-block w-full rounded-lg bg-primary px-4 py-4 text-center text-sm font-semibold cursor-pointer leading-5 text-white shadow-md hover:bg-blue-700"
                                             >Jetzt erstellen
                                         </Link>
                                     </div>
@@ -93,7 +93,7 @@
                         class="flex flex-col gap-6 rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 lg:flex-row lg:items-center lg:gap-8">
                         <div class="lg:min-w-0 lg:flex-1">
                             <h3
-                                class="text-lg font-semibold leading-8 tracking-tight text-blue-600">
+                                class="text-lg font-semibold leading-8 tracking-tight text-primary">
                                 Unklar?
                             </h3>
                             <div class="mt-2 text-base leading-7 text-gray-600">

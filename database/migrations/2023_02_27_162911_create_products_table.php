@@ -15,34 +15,11 @@ return new class extends Migration {
 
             $table->string('stripe_product_id')->nullable();
 
-            $table->enum('type', ['certificate', 'guide', 'service']);
-
             $table->string('name');
-            $table->string('short_name');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->decimal('price', 10);
-
-            $table->string('image')->nullable();
-            $table->string('image_alt')->nullable();
-
-            $table->timestamps();
-        });
-
-        Schema::create('product_product', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('upsell_id')->constrained('products');
-
-            $table->timestamps();
-        });
-
-        Schema::create('order_product', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('order_id')->constrained();
+            $table->boolean('recurring')->default(false);
 
             $table->timestamps();
         });
@@ -53,8 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_product');
-        Schema::dropIfExists('order_product');
         Schema::dropIfExists('products');
     }
 };

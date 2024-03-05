@@ -15,7 +15,7 @@ import {
     XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import ApplicationMark from '../../Jetstream/ApplicationMark.vue';
+import ApplicationMark from '../../Components/ApplicationMark.vue';
 import NavLink from '../../Jetstream/NavLink.vue';
 import { Link, router } from '@inertiajs/vue3';
 import DropdownLink from '../../Jetstream/DropdownLink.vue';
@@ -30,27 +30,6 @@ defineProps({
 });
 
 const products = [
-    [
-        {
-            name: 'Verbrauchsausweis',
-            description:
-                'Energieausweis, der die Energieeffizienz eines Gebäudes über den Energieverbrauch ermittelt.',
-            href: route('order.create', 'vrbr'),
-            icon: FireIcon,
-            theme: 'bg-sky-500',
-            active: true,
-            availableFrom: null,
-        },
-        {
-            name: 'Bedarfsausweis',
-            description:
-                'Energieausweis, der die Energieeffizienz eines Gebäudes rechnerisch ermittelt.',
-            href: route('order.create', 'bdrf'),
-            icon: CalculatorIcon,
-            theme: 'bg-sky-500',
-            active: true,
-        },
-    ],
     [
         {
             name: 'QNG Zertifikat',
@@ -88,12 +67,6 @@ const products = [
 ];
 const resources = [
     {
-        name: 'Find my Energieausweis',
-        description:
-            'Link verloren? Finden Sie Ihren Energieausweis mit Ihrer E-Mail Adresse und der Postleitzahl.',
-        href: route('find.show'),
-    },
-    {
         name: 'Kontakt',
         description: 'Sie haben ein unlösbares Problem - melden Sie sich.',
         href: route('contact.show'),
@@ -111,14 +84,14 @@ const logout = () => {
             class="flex border-b border-gray-200 shadow-sm items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             <div class="flex justify-start">
                 <NavLink href="/">
-                    <ApplicationMark />
+                    <!--                    <ApplicationMark class="!w-12 !h-12" />-->
                     <div class="ml-1 hidden lg:flex items-baseline">
                         <span
                             class="text-lg tracking-tight font-light text-gray-800">
                             bauzertifikate
                         </span>
                         <span
-                            class="hidden text-lg text-blue-600 font-semibold md:block">
+                            class="hidden text-lg text-primary font-semibold md:block">
                             .de
                         </span>
                     </div>
@@ -138,11 +111,6 @@ const logout = () => {
                 <div class="flex items-center space-x-10">
                     <fly-out title="Produkte" :items="products" />
 
-                    <a
-                        :href="route('blog.show')"
-                        class="text-base px-2 font-medium text-gray-500 hover:text-gray-900"
-                        >Blog
-                    </a>
                     <Link
                         :href="route('about')"
                         class="text-base font-medium px-2 text-gray-500 hover:text-gray-900">
@@ -211,7 +179,7 @@ const logout = () => {
                     </Link>
                 </div>
             </PopoverGroup>
-            <template v-if="!$page.props.user">
+            <template v-if="!$page.props.auth.user">
                 <div
                     v-if="showMenu"
                     class="hidden items-center justify-end md:flex">
@@ -230,15 +198,15 @@ const logout = () => {
                             class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                             <img
                                 class="h-8 w-8 rounded-full object-cover"
-                                :src="$page.props.user.profile_photo_url"
-                                :alt="$page.props.user.first_name" />
+                                :src="$page.props.auth.user.profile_photo_url"
+                                :alt="$page.props.auth.user.first_name" />
                         </button>
 
                         <span v-else class="inline-flex rounded-md">
                             <button
                                 type="button"
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
-                                {{ $page.props.user.first_name }}
+                                {{ $page.props.auth.user.first_name }}
 
                                 <ChevronDownIcon class="ml-2 h-4 w-4" />
                             </button>

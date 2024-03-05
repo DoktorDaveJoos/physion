@@ -3,7 +3,7 @@
         <div class="bg-white py-24 sm:py-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl lg:text-center">
-                    <h2 class="text-base font-semibold leading-7 text-blue-600">
+                    <h2 class="text-base font-semibold leading-7 text-primary">
                         Business Partner Programm
                     </h2>
                     <p
@@ -50,7 +50,7 @@
                                         placeholder="Deine Email Adresse" />
                                 </el-form-item>
                                 <el-form-item>
-                                    <!--                                        class="flex-none rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">-->
+                                    <!--                                        class="flex-none rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">-->
                                     <bz-button
                                         @click="subscribe"
                                         class="flex-none h-full">
@@ -62,7 +62,7 @@
                                 Deine Daten sind uns wichtig. Lies unseren
                                 <Link
                                     :href="route('datenschutz')"
-                                    class="font-semibold text-blue-600 hover:text-blue-500"
+                                    class="font-semibold text-primary hover:text-blue-500"
                                     >Datenschutz&nbsp;</Link
                                 >.
                             </p>
@@ -80,7 +80,7 @@
                             <dt
                                 class="text-base font-semibold leading-7 text-gray-900">
                                 <div
-                                    class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                                    class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                     <component
                                         :is="feature.icon"
                                         class="h-6 w-6 text-white"

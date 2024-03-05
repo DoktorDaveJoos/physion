@@ -19,24 +19,47 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    multiple: {
+        type: Boolean,
+        default: false,
+    },
+    text: {
+        type: String,
+        default: 'Bild hochladen',
+    },
 });
 
 const dragging = ref(false);
 
 const handleFileUpload = (event) => {
-    processFile(event.dataTransfer?.files[0]);
-};
-
-const selectFile = (event) => {
-    processFile(event.target.files[0]);
-};
-
-const processFile = (file) => {
-    if (!file) {
+    if (event.dataTransfer?.files.length > 1 && !props.multiple) {
+        ElNotification({
+            title: 'Mehrere Dateien ausgewählt',
+            message: 'Bitte wählen Sie nur eine Datei aus.',
+            type: 'error',
+        });
         return;
     }
 
-    if (!props.allowedMimeTypes.includes(file.type)) {
+    processFile(event.dataTransfer?.files);
+};
+
+const selectFile = (event) => {
+    processFile(event.target.files);
+};
+
+const processFile = (files) => {
+    if (!files || files.length === 0) {
+        return;
+    }
+    try {
+        Array.from(files).forEach((file) => {
+            if (!props.allowedMimeTypes.includes(file.type)) {
+                throw 'Falscher Dateityp';
+            }
+        });
+        emits('select', props.multiple ? files : files[0]);
+    } catch (e) {
         ElNotification({
             title: 'Falscher Dateityp',
             message:
@@ -46,10 +69,7 @@ const processFile = (file) => {
                     .join(', '),
             type: 'error',
         });
-        return;
     }
-
-    emits('select', file);
 };
 </script>
 
@@ -64,18 +84,18 @@ const processFile = (file) => {
             dragging = false;
             handleFileUpload($event);
         "
-        class="col-span-2 flex justify-center rounded border border-dashed transition duration-75 px-6 py-8 group"
+        class="col-span-2 flex justify-center rounded-lg border-2 border-dashed transition duration-75 px-6 py-8 group"
         :class="dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">
         <div class="text-center">
             <PhotoIcon
                 class="mx-auto h-10 w-10 transition duration-75"
                 :class="[dragging ? 'text-blue-500' : 'text-gray-300']"
                 aria-hidden="true" />
-            <div class="mt-4 flex text-sm leading-6 text-gray-600">
+            <div class="mt-4 flex text-sm leading-6 text-gray-500">
                 <label
                     for="file-upload"
-                    class="relative cursor-pointer rounded-md bg-transparent font-semibold text-blue-600 hover:text-blue-500">
-                    <span>Bild hochladen</span>
+                    class="relative cursor-pointer rounded-md bg-transparent font-bold text-primary hover:text-blue-500">
+                    <slot name="text">{{ text }}</slot>
                     <input
                         id="file-upload"
                         name="file-upload"
@@ -85,12 +105,13 @@ const processFile = (file) => {
                 </label>
                 <p class="pl-1">oder per drag & drop</p>
             </div>
-            <p class="text-xs leading-5 text-gray-600">
+            <p class="text-xs leading-5 text-gray-500 font-bold">
                 <span class="uppercase">{{
                     allowedMimeTypes.map((mime) => mime.split('/')[1]).join(',')
                 }}</span>
                 bis zu 10MB
             </p>
+            <slot name="template"></slot>
         </div>
     </div>
     <div

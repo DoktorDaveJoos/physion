@@ -27,7 +27,7 @@
                         <span
                             :class="[
                                 checked
-                                    ? 'bg-blue-600 border-transparent'
+                                    ? 'bg-primary border-transparent'
                                     : 'bg-white border-gray-300',
                                 active
                                     ? 'ring-2 ring-offset-2 ring-blue-500'
@@ -87,7 +87,7 @@
                         <span
                             :class="[
                                 checked
-                                    ? 'bg-blue-600 border-transparent'
+                                    ? 'bg-primary border-transparent'
                                     : 'bg-white border-gray-300',
                                 active
                                     ? 'ring-2 ring-offset-2 ring-blue-500'

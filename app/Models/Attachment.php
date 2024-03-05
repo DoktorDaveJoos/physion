@@ -9,12 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Attachment extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
-    }
 }

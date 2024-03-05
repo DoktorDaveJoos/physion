@@ -19,7 +19,7 @@ const pages = [
 
 <template>
     <Head title="Erstellen" />
-    <template v-if="$page.props.user">
+    <template v-if="$page.props.auth.user">
         <sidebar-layout>
             <stepper-wrapper-hub>
                 <slot />

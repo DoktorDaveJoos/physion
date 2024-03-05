@@ -90,8 +90,8 @@ const to = (page) => {
                         :href="to(item.key)"
                         :class="[
                             item.key === (page ?? 'general')
-                                ? 'bg-gray-50 text-blue-600'
-                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100',
+                                ? 'bg-gray-50 text-primary'
+                                : 'text-gray-700 hover:text-primary hover:bg-gray-100',
                             'group flex gap-x-3 rounded-md p-2 pl-3 text-sm font-semibold',
                         ]">
                         <div class="flex w-full items-center">
@@ -115,7 +115,7 @@ const to = (page) => {
                         :href="
                             route('hub.orders.create', { category: category })
                         "
-                        class="bg-gray-50 text-blue-600 group flex gap-x-3 rounded-md p-2 pl-3 text-sm leading-6 font-semibold"
+                        class="bg-gray-50 text-primary group flex gap-x-3 rounded-md p-2 pl-3 text-sm leading-6 font-semibold"
                         >{{ item.name }}
                     </Link>
                     <div

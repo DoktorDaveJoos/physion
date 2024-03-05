@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('heating_systems', function (Blueprint $table) {
+        Schema::create('heatings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('bdrf_id');
-            $table->foreign('bdrf_id')->references('id')->on('bdrfs')->cascadeOnDelete();
+            $table->foreignId('building_id')->constrained()->cascadeOnDelete();
 
             $table->string('type');
             $table->string('system');
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('heating_systems');
+        Schema::dropIfExists('heatings');
     }
 };

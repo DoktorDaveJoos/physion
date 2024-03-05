@@ -18,10 +18,12 @@
         "eslint": "^8.22.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-vue": "^9.4.0",
+        "laravel-echo": "^1.15.3",
         "laravel-vite-plugin": "^0.7.8",
         "lodash": "^4.17.19",
         "postcss": "^8.4.14",
         "prettier": "2.7.1",
+        "pusher-js": "^8.3.0",
         "sass": "^1.56.1",
         "tailwindcss": "^3.1.0",
         "vite": "^4.0.0",
@@ -29,12 +31,14 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
-        "@formkit/auto-animate": "^0.7.0",
         "@googlemaps/js-api-loader": "^1.15.1",
         "@headlessui/vue": "^1.7.3",
         "@heroicons/vue": "^2.0.12",
+        "@tailwindcss/aspect-ratio": "^0.4.2",
         "@vueup/vue-quill": "^1.0.1",
         "element-plus": "^2.2.26",
+        "markdown-it": "^13.0.2",
+        "markdown-it-style": "^1.0.0",
         "notiwind": "^1.2.6",
         "vue3-google-map": "^0.15.0"
     }

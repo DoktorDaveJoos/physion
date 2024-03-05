@@ -17,6 +17,7 @@ const form = useForm({
     construction_year: null,
     construction_year_heating: null,
     floor_area: null,
+    floors: null,
     housing_units: null,
     ventilation: null,
     cellar: null,
@@ -40,7 +41,10 @@ if (props.order) {
     form.construction_year = certificate.construction_year;
     form.construction_year_heating = certificate.construction_year_heating;
     form.floor_area = certificate.floor_area;
-    form.housing_units = parseInt(certificate.housing_units);
+    form.floors = parseInt(certificate.floors);
+    form.housing_units = certificate.floors
+        ? parseInt(certificate.housing_units)
+        : null;
     form.ventilation = certificate.ventilation;
     form.cellar = certificate.cellar ?? 'Kein Keller';
     form.renewables = certificate.renewables;
@@ -129,6 +133,15 @@ watch(hasRenewables, (value) => {
                 <template #append>m²</template>
             </el-input>
         </el-form-item>
+
+        <template v-if="order.certificate_type?.includes('Bdrf')">
+            <el-form-item
+                :error="form.errors.floors"
+                label="Stockwerke"
+                required>
+                <el-input-number v-model="form.floors"></el-input-number>
+            </el-form-item>
+        </template>
 
         <el-form-item
             required
@@ -348,7 +361,7 @@ watch(hasRenewables, (value) => {
         <div class="grid sm:flex sm:justify-between sm:col-span-2 gap-4">
             <div class="grid sm:block">
                 <bz-button
-                    v-if="$page.props.user"
+                    v-if="$page.props.auth.user"
                     as="link"
                     type="secondary"
                     :href="

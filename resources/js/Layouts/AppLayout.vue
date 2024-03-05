@@ -54,7 +54,7 @@ const logout = () => {
                                     energie
                                 </span>
                                 <span
-                                    class="hidden ml-0.5 text-lg text-blue-600 font-semibold md:block">
+                                    class="hidden ml-0.5 text-lg text-primary font-semibold md:block">
                                     HUB
                                 </span>
                                 <span class="text-xs text-slate-400 ml-2"
@@ -75,8 +75,8 @@ const logout = () => {
                                             type="button"
                                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
                                             {{
-                                                $page.props.user.current_team
-                                                    .name
+                                                $page.props.auth.user
+                                                    .current_team.name
                                             }}
 
                                             <svg
@@ -122,8 +122,8 @@ const logout = () => {
                                             <DropdownLink
                                                 :href="
                                                     route('teams.show', {
-                                                        team: $page.props.user
-                                                            .current_team,
+                                                        team: $page.props.auth
+                                                            .user.current_team,
                                                     })
                                                 ">
                                                 Team Settings
@@ -134,8 +134,8 @@ const logout = () => {
                                                 Team wechseln
                                             </div>
                                             <template
-                                                v-for="team in $page.props.user
-                                                    .all_teams"
+                                                v-for="team in $page.props.auth
+                                                    .user.all_teams"
                                                 :key="team.id">
                                                 <form
                                                     @submit.prevent="
@@ -189,17 +189,17 @@ const logout = () => {
                                         <img
                                             class="h-8 w-8 rounded-full object-cover"
                                             :src="
-                                                $page.props.user
+                                                $page.props.auth.user
                                                     .profile_photo_url
                                             "
-                                            :alt="$page.props.user.name" />
+                                            :alt="$page.props.auth.user.name" />
                                     </button>
 
                                     <span v-else class="inline-flex rounded-md">
                                         <button
                                             type="button"
                                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
-                                            {{ $page.props.user.name }}
+                                            {{ $page.props.auth.user.name }}
 
                                             <ChevronDownIcon
                                                 class="ml-2 h-4 w-4" />
@@ -302,17 +302,19 @@ const logout = () => {
                                 class="shrink-0 mr-3">
                                 <img
                                     class="h-10 w-10 rounded-full object-cover"
-                                    :src="$page.props.user.profile_photo_url"
-                                    :alt="$page.props.user.name" />
+                                    :src="
+                                        $page.props.auth.user.profile_photo_url
+                                    "
+                                    :alt="$page.props.auth.user.name" />
                             </div>
 
                             <div>
                                 <div
                                     class="font-medium text-base text-gray-800">
-                                    {{ $page.props.user.name }}
+                                    {{ $page.props.auth.user.name }}
                                 </div>
                                 <div class="font-medium text-sm text-gray-500">
-                                    {{ $page.props.user.email }}
+                                    {{ $page.props.auth.user.email }}
                                 </div>
                             </div>
                         </div>
@@ -352,7 +354,8 @@ const logout = () => {
                                 <ResponsiveNavLink
                                     :href="
                                         route('teams.show', {
-                                            team: $page.props.user.current_team,
+                                            team: $page.props.auth.user
+                                                .current_team,
                                         })
                                     "
                                     :active="route().current('teams.show')">
@@ -375,7 +378,8 @@ const logout = () => {
                                 </div>
 
                                 <template
-                                    v-for="team in $page.props.user.all_teams"
+                                    v-for="team in $page.props.auth.user
+                                        .all_teams"
                                     :key="team.id">
                                     <form @submit.prevent="switchToTeam(team)">
                                         <ResponsiveNavLink as="button">
@@ -383,7 +387,7 @@ const logout = () => {
                                                 <svg
                                                     v-if="
                                                         team.id ===
-                                                        $page.props.user
+                                                        $page.props.auth.user
                                                             .current_team_id
                                                     "
                                                     class="mr-2 h-5 w-5 text-green-400"
