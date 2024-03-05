@@ -15,14 +15,12 @@ class TeamSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $team = Team::create([
+        Team::create([
             'name' => 'ABC Immobilien',
             'personal_team' => false,
             'user_id' => User::where('email', 'david@bauzertifikate.de')->first()->id,
         ]);
-
-        $team->resources()->attach(Resource::all());
     }
 }

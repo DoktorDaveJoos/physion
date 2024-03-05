@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Bdrf;
-use App\Models\Order;
-use App\Models\Vrbr;
+use App\Models\Building;
 
 return [
 
@@ -137,34 +135,15 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
-            Order::class => [
+            Building::class => [
                 'filterableAttributes' => [
-                    'id',
-                    'slug',
-                    'status',
-                    'team_id'
-                ],
-                'sortableAttributes' => ['created_at'],
-            ],
-            Bdrf::class => [
-                'filterableAttributes' => [
-                    'street_address',
-                    'zip',
+                    'street',
+                    'house_number',
+                    'postal_code',
                     'city',
                 ],
                 'sortableAttributes' => ['created_at'],
             ],
-            Vrbr::class => [
-                'filterableAttributes' => [
-                    'street_address',
-                    'zip',
-                    'city',
-                ],
-                'sortableAttributes' => ['created_at'],
-            ],
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
         ],
     ],
 

@@ -2,79 +2,52 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Actions\CreateOrderForPartner;
-use App\Enums\Category;
+use App\Actions\Building\CreateBuilding;
+use App\Actions\Building\UpdateBuilding;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateOrderRequest;
-use App\Http\Resources\OrderHubResource;
-use App\Http\Resources\OrderResource;
-use App\Models\Order;
+use App\Http\Requests\CreateBuildingRequest;
+use App\Http\Resources\Building\BuildingResource;
+use App\Http\Resources\Building\BuildingResourcePosition;
+use App\Http\Resources\Building\OrderResource;
+use App\Models\Building;
+use App\Models\EnergyCertificate;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class OrderController extends Controller
 {
 
-    public function index(Request $request): Response|RedirectResponse
+    public function index(): RedirectResponse
     {
-        $orders = Order::where('team_id', $request->user()?->current_team_id)
-            ->when($request->get('filter'), function ($query, $filter) {
-                return $query->where('status', $filter);
-            })
-            ->when($request->get('query'), function ($query) use ($request) {
-                $type = Category::fromValue($request->get('type'))->getModel();
+        return to_route('orders.ecert.index');
+    }
 
-                return $query->where('certificate_id', $request->get('query'))
-                    ->where('certificate_type', $type::class);
-            })
-            ->paginate(15);
-
-        return Inertia::render('Hub/Certificates/Index', [
-            'orders' => OrderHubResource::collection($orders),
+    public function indexEcert()
+    {
+        return Inertia::render('Hub/Order/Ecert/Index', [
+            'orders' => EnergyCertificate::all(),
         ]);
     }
 
-    public function show(Order $order): Response
+    public function indexIsfp()
     {
-        $order->load('attachments');
-        return Inertia::render('Order/Index', [
-            'order' => OrderResource::make($order),
+        return Inertia::render('Hub/Buildings/IndexEcert', [
+            'orders' => EnergyCertificate::all(),
         ]);
     }
 
-    public function create(Category $category): Response
+    public function indexBza()
     {
-        return Inertia::render('Hub/Certificates/Order/Create', [
-            'category' => $category->value,
+        return Inertia::render('Hub/Buildings/IndexEcert', [
+            'orders' => EnergyCertificate::all(),
         ]);
     }
 
-    public function store(Category $category, CreateOrderRequest $request): RedirectResponse
+    public function show(Building $building)
     {
-        $order = CreateOrderForPartner::run(
-            $category,
-            $request->validated()
-        );
-
-        return redirect()->to(
-            route('hub.certificates.show', [
-                'order' => $order->slug,
-            ])
-        );
-    }
-
-    public function destroy(Order $order, Request $request): RedirectResponse
-    {
-        if ($request->user()->hasTeamPermission($order->team, 'order:delete') === false) {
-            abort(403);
-        }
-
-        $order->products()->detach($order->products->pluck('id'));
-        $order->delete();
-
-        return redirect()->route('hub.certificates');
+        return Inertia::render('Hub/Buildings/Show', [
+            'building' => new BuildingResource($building),
+        ]);
     }
 
 }

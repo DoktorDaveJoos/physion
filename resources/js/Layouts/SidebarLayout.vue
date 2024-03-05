@@ -96,8 +96,8 @@
                                                     <Link
                                                         :class="[
                                                             item.current
-                                                                ? 'bg-gray-50 text-blue-600'
-                                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                                ? 'bg-gray-50 text-primary'
+                                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                                         ]"
                                                         :href="item.href">
@@ -105,8 +105,8 @@
                                                         <!--                                                            :is="item.icon"-->
                                                         <!--                                                            :class="[-->
                                                         <!--                                                                1 === 0-->
-                                                        <!--                                                                    ? 'text-blue-600'-->
-                                                        <!--                                                                    : 'text-gray-400 group-hover:text-blue-600',-->
+                                                        <!--                                                                    ? 'text-primary'-->
+                                                        <!--                                                                    : 'text-gray-400 group-hover:text-primary',-->
                                                         <!--                                                                'h-6 w-6 shrink-0',-->
                                                         <!--                                                            ]"-->
                                                         <!--                                                            aria-hidden="true" />-->
@@ -125,15 +125,15 @@
                                             class="-mx-2 mt-2 space-y-1"
                                             role="list">
                                             <li
-                                                v-for="team in $page.props.user
-                                                    .all_teams"
+                                                v-for="team in $page.props.auth
+                                                    .user.all_teams"
                                                 :key="team.name">
                                                 <!--                                                        :href="team.href"-->
                                                 <button
                                                     :class="[
                                                         team.current
-                                                            ? 'bg-gray-50 text-blue-600'
-                                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                            ? 'bg-gray-50 text-primary'
+                                                            : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                                     ]"
                                                     @click="
@@ -142,8 +142,8 @@
                                                     <span
                                                         :class="[
                                                             team.current
-                                                                ? 'text-blue-600 border-blue-600'
-                                                                : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
+                                                                ? 'text-primary border-primary'
+                                                                : 'text-gray-400 border-gray-200 group-hover:border-primary group-hover:text-primary',
                                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
                                                         ]"
                                                         >{{
@@ -160,9 +160,9 @@
                                     <!--                                    <li class="mt-auto">-->
                                     <!--                                        <a-->
                                     <!--                                            href="#"-->
-                                    <!--                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                                    <!--                                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-primary">-->
                                     <!--                                            <Cog6ToothIcon-->
-                                    <!--                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                                    <!--                                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-primary"-->
                                     <!--                                                aria-hidden="true" />-->
                                     <!--                                            Settings-->
                                     <!--                                        </a>-->
@@ -184,15 +184,16 @@
             class="flex grow flex-col gap-y-16 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
             <div class="flex h-16 shrink-0 items-center">
                 <NavLink
-                    :href="route('hub.dashboard')"
-                    class="hover:border-none">
-                    <ApplicationMark />
-                    <div class="ml-1 hidden lg:flex items-baseline">
+                    :href="route('dashboard')"
+                    class="hover:border-none flex w-full justify-between">
+                    <application-mark class="!w-6" />
+                    <div class="mx-2 hidden lg:flex items-baseline">
                         <span
                             class="font-display font-black text-gray-800 text-xl tracking-tight">
                             EnergieHub
                         </span>
                     </div>
+                    <div class="w-6" />
                 </NavLink>
             </div>
             <nav class="flex flex-1 flex-col">
@@ -206,8 +207,8 @@
                                     <Link
                                         :class="[
                                             item.current
-                                                ? 'bg-gray-50 text-blue-600'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                ? 'bg-gray-50 text-primary'
+                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                         ]"
                                         :href="item.href">
@@ -215,8 +216,8 @@
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -240,8 +241,8 @@
                                     <a
                                         :class="[
                                             item.current
-                                                ? 'bg-gray-50 text-blue-600'
-                                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                                ? 'bg-gray-50 text-primary'
+                                                : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                                         ]"
                                         :href="item.href">
@@ -249,8 +250,8 @@
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -273,13 +274,13 @@
                                 <li>
                                     <a
                                         :href="item.href"
-                                        class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                        class="text-gray-700 hover:text-primary hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <component
                                             :is="item.icon"
                                             :class="[
                                                 item.current
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-400 group-hover:text-blue-600',
+                                                    ? 'text-primary'
+                                                    : 'text-gray-400 group-hover:text-primary',
                                                 'h-6 w-6 shrink-0',
                                             ]"
                                             aria-hidden="true" />
@@ -290,29 +291,30 @@
                         </ul>
                     </li>
 
-                    <li v-if="$page.props.user.all_teams?.length > 0">
+                    <li v-if="$page.props.auth.user.all_teams?.length > 0">
                         <div
                             class="text-xs font-semibold leading-6 text-gray-400">
                             Deine Teams
                         </div>
                         <ul class="-mx-2 mt-2 space-y-1" role="list">
                             <li
-                                v-for="team in $page.props.user.all_teams"
+                                v-for="team in $page.props.auth.user.all_teams"
                                 :key="team.name">
                                 <button
                                     :class="[
                                         team.current
-                                            ? 'bg-gray-50 text-blue-600'
-                                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50',
+                                            ? 'bg-gray-50 text-primary'
+                                            : 'text-gray-700 hover:text-primary hover:bg-gray-50',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full',
                                     ]"
                                     @click="switchToTeam(team.id)">
                                     <span
                                         :class="[
                                             team.id ===
-                                            $page.props.user.current_team_id
-                                                ? 'text-blue-600 border-blue-600'
-                                                : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
+                                            $page.props.auth.user
+                                                .current_team_id
+                                                ? 'text-primary border-primary'
+                                                : 'text-gray-400 border-gray-200 group-hover:border-primary group-hover:text-primary',
                                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
                                         ]"
                                         >{{ team.name.charAt(0) }}</span
@@ -327,9 +329,9 @@
                     <!--                    <li class="mt-auto">-->
                     <!--                        <a-->
                     <!--                            href="#"-->
-                    <!--                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-blue-600">-->
+                    <!--                            class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-primary">-->
                     <!--                            <Cog6ToothIcon-->
-                    <!--                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-blue-600"-->
+                    <!--                                class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-primary"-->
                     <!--                                aria-hidden="true" />-->
                     <!--                            Settings-->
                     <!--                        </a>-->
@@ -402,9 +404,10 @@
                                     "
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img
-                                        :alt="$page.props.user.first_name"
+                                        :alt="$page.props.auth.user.first_name"
                                         :src="
-                                            $page.props.user.profile_photo_url
+                                            $page.props.auth.user
+                                                .profile_photo_url
                                         "
                                         class="h-8 w-8 rounded-full object-cover" />
                                 </button>
@@ -413,7 +416,7 @@
                                     <button
                                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
                                         type="button">
-                                        {{ $page.props.user.first_name }}
+                                        {{ $page.props.auth.user.first_name }}
 
                                         <ChevronDownIcon class="ml-2 h-4 w-4" />
                                     </button>
@@ -527,43 +530,41 @@ const showSearch = () => {
 const navigation = [
     {
         name: 'Dashboard',
-        href: route('hub.dashboard'),
+        href: route('dashboard'),
         icon: RectangleGroupIcon,
-        current: route().current('hub.dashboard'),
+        current: route().current('dashboard'),
     },
     {
         name: 'Gebäude',
-        href: route('hub.buildings.index'),
+        href: route('buildings.index'),
         icon: HomeModernIcon,
-        current: route().current('hub.buildings*'),
+        current: route().current('buildings*'),
     },
-    // {
-    //     name: 'Bestellungen',
-    //     href: route('hub.certificates'),
-    //     icon: FolderIcon,
-    //     current:
-    //         route().current('hub.orders*') ||
-    //         route().current('hub.certificates*'),
-    // },
+    {
+        name: 'Aufträge',
+        href: route('orders.index'),
+        icon: FolderIcon,
+        current: route().current('orders*'),
+    },
 ];
 
 const jetstreamNavigation = [
     {
         name: 'Team',
-        href: usePage().props.user?.current_team_id
+        href: usePage().props.auth.user?.current_team_id
             ? route('teams.show', {
-                  team: usePage().props.user.current_team_id,
+                  team: usePage().props.auth.user.current_team_id,
               })
             : null,
         icon: UsersIcon,
         current: route().current('teams.show'),
     },
-    {
-        name: 'Billing',
-        href: route('hub.billing'),
-        icon: CreditCardIcon,
-        current: route().current('hub.billing'),
-    },
+    // {
+    //     name: 'Billing',
+    //     href: route('hub.billing'),
+    //     icon: CreditCardIcon,
+    //     current: route().current('hub.billing'),
+    // },
 ];
 
 const adminNavigation = [

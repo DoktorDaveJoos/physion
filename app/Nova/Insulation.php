@@ -2,8 +2,7 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
+use App\Models\EnergySource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
@@ -14,7 +13,7 @@ class Insulation extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\EnergySource>
+     * @var class-string<EnergySource>
      */
     public static string $model = \App\Models\Insulation::class;
 
@@ -48,7 +47,7 @@ class Insulation extends Resource
             MorphTo::make('Zu dämmendes', 'insulationable')->types([
                 Roof::class,
                 Wall::class,
-                Cellar::class
+                Cellar::class,
             ]),
 
             Text::make('Type', 'type'),

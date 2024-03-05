@@ -21,9 +21,9 @@ const props = defineProps({
 
 const types = {
     default: {
-        bg: 'bg-blue-100',
-        text: 'text-blue-800',
-        icon: 'text-blue-400',
+        bg: 'bg-primary-100',
+        text: 'text-primary-800',
+        icon: 'text-primary-400',
     },
     success: {
         bg: 'bg-green-100',
@@ -63,7 +63,7 @@ const types = {
         <svg
             v-if="dot"
             :class="types[type].icon"
-            class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-600"
+            class="-ml-0.5 mr-1.5 h-2 w-2 text-primary"
             fill="currentColor"
             viewBox="0 0 8 8">
             <circle cx="4" cy="4" r="3" />

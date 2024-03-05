@@ -24,7 +24,7 @@ class ProductResource extends JsonResource
                 'features' => $this->meta['features'] ?? [],
             ],
             'links' => [
-                'self' => route('order.create', ['category' => $this->short_name]),
+                'self' => null,
             ],
         ];
     }

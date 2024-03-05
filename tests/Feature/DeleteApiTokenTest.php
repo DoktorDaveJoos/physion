@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 use Tests\TestCase;
@@ -11,7 +12,7 @@ use Tests\TestCase;
 class DeleteApiTokenTest extends TestCase
 {
     use RefreshDatabase;
-
+    use WithoutMiddleware;
     public function test_api_tokens_can_be_deleted(): void
     {
         if (! Features::hasApiFeatures()) {

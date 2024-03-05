@@ -23,7 +23,6 @@ use Illuminate\Support\Collection;
  * @property string city
  * @property string state
  * @property string country
- * @property Collection<Order> orders
  */
 class Customer extends Model
 {
@@ -35,10 +34,5 @@ class Customer extends Model
     public function getNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
-    }
-
-    public function orders(): MorphMany
-    {
-        return $this->morphMany(Order::class, 'owner');
     }
 }

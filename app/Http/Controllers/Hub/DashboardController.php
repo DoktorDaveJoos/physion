@@ -3,35 +3,16 @@
 namespace App\Http\Controllers\Hub;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
 
-    public function __invoke(Request $request)
+    public function index(): Response
     {
         return Inertia::render('Hub/Dashboard', [
-            'activities' => $request->user()->currentTeam?->activities()->with('user')->latest()->limit(10)->get(),
-
-
-
-            'products' => Product::where('recurring', true)->where('type', 'certificate')->get(),
-            'stats' => [
-                'orders' => [
-                    'open' => Order::where('status', 'open')->where(
-                        'team_id',
-                        $request->user()?->current_team_id
-                    )->count(),
-                    'all' => Order::where('team_id', $request->user()->current_team_id)->count(),
-                ],
-                'team' => [
-                    'members' => $request->user()->currentTeam?->allUsers()?->count(),
-                ],
-                'subscription' => $request->user()->currentTeam?->subscribed('default'),
-            ],
+            'activities' => [],
         ]);
     }
 

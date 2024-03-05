@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -21,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string|null $remember_token
  * @property int|null $current_team_id
+ * @property Team $currentTeam
  * @property string|null $profile_photo_path
  * @property string|null $two_factor_secret
  */
@@ -75,9 +76,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
-    public function orders(): MorphMany
+    public function roles(): BelongsToMany
     {
-        return $this->morphMany(Order::class, 'owner');
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole(string $role): bool
+    {
+        // return true if contains 'admin'
+        if ($this->roles()->where('name', Role::ADMIN)->exists()) {
+            return true;
+        }
+
+        return $this->roles()->where('name', $role)->exists();
     }
 
 }

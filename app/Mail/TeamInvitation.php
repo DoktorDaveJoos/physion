@@ -3,11 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
 use Laravel\Jetstream\TeamInvitation as TeamInvitationModel;
@@ -36,8 +32,10 @@ class TeamInvitation extends Mailable
      */
     public function build(): static
     {
-        return $this->markdown('emails.team-invitation', ['acceptUrl' => URL::signedRoute('team-invitations.accept', [
-            'invitation' => $this->invitation,
-        ])])->subject(__('Team Einladung'));
+        return $this->markdown('emails.team-invitation', [
+            'acceptUrl' => URL::signedRoute('team-invitations.accept', [
+                'invitation' => $this->invitation,
+            ]),
+        ])->subject(__('Team Einladung'));
     }
 }

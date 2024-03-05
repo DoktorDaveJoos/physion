@@ -16,9 +16,11 @@ return new class extends Migration
 
             $table->foreignId('building_id')->constrained();
             $table->foreignId('product_id')->constrained();
+            $table->foreignId('customer_id')->constrained();
 
             $table->string('power_of_attorney_path')->nullable();
             $table->string('isfp_path')->nullable();
+            $table->string('target')->nullable();
 
             $table->enum('status', ['created', 'open', 'finished', 'cancelled'])->default('created');
             $table->json('meta')->nullable();

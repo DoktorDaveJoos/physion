@@ -43,7 +43,7 @@
                     class="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
                     <CheckCircleIcon
                         v-if="activityItem.type === 'bestellt'"
-                        class="h-6 w-6 text-blue-600"
+                        class="h-6 w-6 text-primary"
                         aria-hidden="true" />
                     <div
                         v-else
@@ -68,7 +68,7 @@
     <div class="mt-6 flex gap-x-3">
         <el-form class="relative flex-auto">
             <div
-                class="overflow-hidden rounded-lg pb-12 ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-blue-600">
+                class="overflow-hidden rounded-lg pb-12 ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-primary">
                 <label for="comment" class="sr-only"
                     >Füge deine Notiz hinzu</label
                 >

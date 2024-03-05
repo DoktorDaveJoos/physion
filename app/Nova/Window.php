@@ -44,7 +44,7 @@ class Window extends Resource
         return [
             ID::make()->sortable(),
 
-            MorphTo::make('Zu beglasendes', 'windoweable')->types([
+            MorphTo::make('Zu beglasendes', 'windowable')->types([
                 Roof::class
             ]),
 

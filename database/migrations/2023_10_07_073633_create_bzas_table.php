@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('bzas', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('building_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('building_id')->constrained();
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('customer_id')->constrained();
 
             $table->enum('status', ['created', 'open', 'finished', 'cancelled'])->default('created');
 

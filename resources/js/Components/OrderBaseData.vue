@@ -296,7 +296,7 @@ const submit = () => {
             <div class="sm:col-span-2 mt-8">
                 <button
                     :disabled="form.processing || !agreed"
-                    class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400"
+                    class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400"
                     @click="submit">
                     <span v-if="form.processing" class="animate-spin mr-3">
                         <svg

@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Window extends Model
 {
-    use HasFactory;
+
+    const SKYLIGHT = 'dachfenster';
+    const WINDOW = 'fenster';
 
     protected $guarded = ['id'];
 
-    public function windoweable(): MorphTo
+    public function windowable(): MorphTo
     {
         return $this->morphTo();
     }

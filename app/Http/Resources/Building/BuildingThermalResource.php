@@ -51,7 +51,7 @@ class BuildingThermalResource extends JsonResource
                 'cellarModel' => $this->cellarObject?->load('insulations'),
             ],
             'links' => [
-                'self' => route('hub.buildings.show.index', $this->id),
+                'self' => null,
             ],
         ];
     }

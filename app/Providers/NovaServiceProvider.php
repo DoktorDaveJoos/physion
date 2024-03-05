@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Nova\Bdrf;
-use App\Nova\Customer;
 use App\Nova\Dashboards\Main;
-use App\Nova\Order;
 use App\Nova\Product;
 use App\Nova\Team;
 use App\Nova\User;
@@ -32,13 +29,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuSection::dashboard(Main::class)->icon('chart-bar'),
 
-                MenuSection::make('Bestellungen', [
-                    MenuItem::resource(Order::class),
-                    MenuItem::resource(Vrbr::class),
-                    MenuItem::resource(Bdrf::class),
-                    MenuItem::resource(Customer::class),
-
-                ])->collapsable(),
 
                 MenuSection::make('Admin', [
                     MenuItem::resource(Product::class),
@@ -63,9 +53,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**
@@ -80,7 +70,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Gate::define('viewNova', function ($user) {
             return in_array($user->email, [
                 'david@bauzertifikate.de',
-                'hannes@bauzertifikate.de'
+                'hannes@bauzertifikate.de',
             ]);
         });
     }

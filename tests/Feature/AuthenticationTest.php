@@ -5,11 +5,13 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     public function test_login_screen_can_be_rendered(): void
     {
@@ -23,10 +25,13 @@ class AuthenticationTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->post('/login', [
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'email' => $user->email,
             'password' => 'password',
         ]);
 
+        dump($response->status());
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
     }

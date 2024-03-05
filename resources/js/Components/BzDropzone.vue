@@ -94,7 +94,7 @@ const processFile = (files) => {
             <div class="mt-4 flex text-sm leading-6 text-gray-500">
                 <label
                     for="file-upload"
-                    class="relative cursor-pointer rounded-md bg-transparent font-bold text-blue-600 hover:text-blue-500">
+                    class="relative cursor-pointer rounded-md bg-transparent font-bold text-primary hover:text-blue-500">
                     <slot name="text">{{ text }}</slot>
                     <input
                         id="file-upload"

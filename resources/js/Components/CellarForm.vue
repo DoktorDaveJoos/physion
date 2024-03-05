@@ -49,7 +49,7 @@ const state = reactive({
 
 const safe = () => {
     form.put(
-        route('building.cellar', {
+        route('buildings.cellars.update', {
             building: props.buildingId,
         }),
         {
@@ -66,8 +66,9 @@ const safe = () => {
 };
 
 const addInsulation = () => {
-    insulationForm.put(
-        route('building.cellar.insulation', {
+    insulationForm.post(
+        route('buildings.cellars.insulations.store', {
+            cellar: props.cellar,
             building: props.buildingId,
         }),
         {
@@ -82,7 +83,8 @@ const addInsulation = () => {
 
 const deleteInsulation = (id) => {
     router.delete(
-        route('building.cellar.insulation.delete', {
+        route('buildings.cellars.insulations.destroy', {
+            cellar: props.cellar,
             building: props.buildingId,
             insulation: id,
         }),

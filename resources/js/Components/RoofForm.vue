@@ -167,8 +167,9 @@ watch(
                     roof.dormers?.forEach((dormer) => {
                         router.delete(
                             route(
-                                'building.roof.dormer.delete',
+                                'buildings.roofs.dormers.destroy',
                                 {
+                                    roof: props.roof.id,
                                     building: props.buildingId,
                                     dormer: dormer.id,
                                 },
@@ -259,7 +260,7 @@ const prepareForm = (form) =>
 
 const safe = () => {
     prepareForm(form).put(
-        route('building.roof', {
+        route('buildings.roofs.update', {
             building: props.buildingId,
         }),
         {
@@ -276,8 +277,9 @@ const safe = () => {
 };
 
 const addInsulation = () => {
-    insulationForm.put(
-        route('building.roof.insulation', {
+    insulationForm.post(
+        route('buildings.roofs.insulations.store', {
+            roof: props.roof.id,
             building: props.buildingId,
         }),
         {
@@ -291,8 +293,9 @@ const addInsulation = () => {
 };
 
 const addSkylight = () => {
-    skylightForm.put(
-        route('building.roof.skylight', {
+    skylightForm.post(
+        route('buildings.roofs.windows.store', {
+            roof: props.roof.id,
             building: props.buildingId,
         }),
         {
@@ -306,8 +309,9 @@ const addSkylight = () => {
 };
 
 const addDormer = () => {
-    dormerForm.put(
-        route('building.roof.dormer', {
+    dormerForm.post(
+        route('buildings.roofs.dormers.store', {
+            roof: props.roof.id,
             building: props.buildingId,
         }),
         {
@@ -322,7 +326,8 @@ const addDormer = () => {
 
 const deleteInsulation = (id) => {
     router.delete(
-        route('building.roof.insulation.delete', {
+        route('buildings.roofs.insulations.destroy', {
+            roof: props.roof?.id,
             building: props.buildingId,
             insulation: id,
         }),
@@ -334,7 +339,8 @@ const deleteInsulation = (id) => {
 
 const deleteSkylight = (id) => {
     router.delete(
-        route('building.roof.skylight.delete', {
+        route('buildings.roofs.windows.destroy', {
+            roof: props.roof?.id,
             building: props.buildingId,
             window: id,
         }),
@@ -346,7 +352,8 @@ const deleteSkylight = (id) => {
 
 const deleteDormer = (id) => {
     router.delete(
-        route('building.roof.dormer.delete', {
+        route('buildings.roofs.dormers.destroy', {
+            roof: props.roof?.id,
             building: props.buildingId,
             dormer: id,
         }),
@@ -357,23 +364,23 @@ const deleteDormer = (id) => {
 };
 
 const openDrawer = async (drawer) => {
-    if (!props.roof || form.isDirty) {
-        prepareForm(form).put(route('building.roof', props.buildingId), {
-            preserveScroll: true,
-            onSuccess: () => {
-                state[drawer] = true;
-            },
-            onError: () => {
-                ElNotification({
-                    title: 'Fehler',
-                    message: 'Behebe bitte zuerst alle Fehler.',
-                    type: 'error',
-                });
-            },
-        });
-
-        return;
-    }
+    // if (!props.roof || form.isDirty) {
+    //     prepareForm(form).put(route('building.roof', props.buildingId), {
+    //         preserveScroll: true,
+    //         onSuccess: () => {
+    //             state[drawer] = true;
+    //         },
+    //         onError: () => {
+    //             ElNotification({
+    //                 title: 'Fehler',
+    //                 message: 'Behebe bitte zuerst alle Fehler.',
+    //                 type: 'error',
+    //             });
+    //         },
+    //     });
+    //
+    //     return;
+    // }
 
     state[drawer] = true;
 };
@@ -430,7 +437,7 @@ const hasAdditional = computed(() => {
                         <CheckCircleIcon
                             :class="[
                                 !checked ? 'invisible' : '',
-                                'h-5 w-5 text-blue-600',
+                                'h-5 w-5 text-primary',
                             ]"
                             aria-hidden="true" />
                         <span

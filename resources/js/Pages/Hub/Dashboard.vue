@@ -24,7 +24,7 @@ const showWarning = ref(true);
 <template>
     <Head title="Dashboard"></Head>
     <SidebarLayout>
-        <template v-if="!$page.props.user?.current_team_id">
+        <template v-if="!$page.props.auth.user?.current_team_id">
             <el-empty
                 description="Sie müssen zuerst einem Team beitreten!"></el-empty>
 

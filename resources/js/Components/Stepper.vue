@@ -101,13 +101,13 @@ const to = (page) => {
                             <div
                                 v-if="stepIdx !== steps[category].length - 1"
                                 aria-hidden="true"
-                                class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-blue-600" />
+                                class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-primary" />
                             <Link
                                 :href="to(step.key)"
                                 class="group relative flex items-start">
                                 <span class="flex h-9 items-center">
                                     <span
-                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
+                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-primary group-hover:bg-blue-800">
                                         <EyeIcon
                                             aria-hidden="true"
                                             class="h-4 w-4 text-white" />
@@ -115,7 +115,7 @@ const to = (page) => {
                                 </span>
                                 <span class="ml-4 flex min-w-0 flex-col">
                                     <span
-                                        class="text-sm font-medium text-blue-600"
+                                        class="text-sm font-medium text-primary"
                                         >{{ step.name }}</span
                                     >
                                     <span class="text-sm text-gray-500">{{
@@ -130,13 +130,13 @@ const to = (page) => {
                             <div
                                 v-if="stepIdx !== steps[category].length - 1"
                                 aria-hidden="true"
-                                class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-blue-600" />
+                                class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-primary" />
                             <Link
                                 :href="to(step.key)"
                                 class="group relative flex items-start">
                                 <span class="flex h-9 items-center">
                                     <span
-                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
+                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-primary group-hover:bg-blue-800">
                                         <CheckIcon
                                             aria-hidden="true"
                                             class="h-4 w-4 text-white" />
@@ -166,14 +166,14 @@ const to = (page) => {
                                     aria-hidden="true"
                                     class="flex h-9 items-center">
                                     <span
-                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white">
+                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-white">
                                         <span
-                                            class="h-2.5 w-2.5 rounded-full bg-blue-600" />
+                                            class="h-2.5 w-2.5 rounded-full bg-primary" />
                                     </span>
                                 </span>
                                 <span class="ml-4 flex min-w-0 flex-col">
                                     <span
-                                        class="text-sm font-medium text-blue-600"
+                                        class="text-sm font-medium text-primary"
                                         >{{ step.name }}</span
                                     >
                                     <span class="text-sm text-gray-500">{{
@@ -227,14 +227,14 @@ const to = (page) => {
                                     aria-hidden="true"
                                     class="flex h-9 items-center">
                                     <span
-                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white">
+                                        class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-white">
                                         <span
-                                            class="h-2.5 w-2.5 rounded-full bg-blue-600" />
+                                            class="h-2.5 w-2.5 rounded-full bg-primary" />
                                     </span>
                                 </span>
                                 <span class="ml-4 flex min-w-0 flex-col">
                                     <span
-                                        class="text-sm font-medium text-blue-600"
+                                        class="text-sm font-medium text-primary"
                                         >{{ step.name }}</span
                                     >
                                     <span class="text-sm text-gray-500">{{

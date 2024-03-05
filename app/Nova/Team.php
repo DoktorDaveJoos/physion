@@ -50,8 +50,6 @@ class Team extends Resource
             BelongsTo::make('User', 'owner', User::class),
             Text::make('Name'),
             Boolean::make('Personal Team'),
-
-            BelongsToMany::make('Resources', 'resources', TeamResource::class),
         ];
     }
 
