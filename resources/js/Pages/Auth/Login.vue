@@ -102,14 +102,14 @@ const submit = () => {
                     Einloggen
                 </PrimaryButton>
 
-                <bz-button
-                    type="secondary"
-                    class="ml-4"
-                    as="link"
-                    :disabled="form.processing"
-                    :href="route('register')">
-                    Registrieren
-                </bz-button>
+<!--                <bz-button-->
+<!--                    type="secondary"-->
+<!--                    class="ml-4"-->
+<!--                    as="link"-->
+<!--                    :disabled="form.processing"-->
+<!--                    :href="route('register')">-->
+<!--                    Registrieren-->
+<!--                </bz-button>-->
             </div>
         </form>
     </AuthenticationCard>
