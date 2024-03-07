@@ -17,11 +17,11 @@ const subTabsProducts = [
         active: false,
         route: route('orders.isfp.index'),
     },
-    {
-        name: 'bza',
-        active: false,
-        route: route('orders.bza.index'),
-    },
+    // {
+    //     name: 'bza',
+    //     active: false,
+    //     route: route('orders.bza.index'),
+    // },
 ];
 </script>
 
