@@ -3,107 +3,87 @@ import BzButton from '../../../../../Components/BzButton.vue';
 import { Link } from '@inertiajs/vue3';
 import BzCard from '../../../Components/BzCard.vue';
 import { CheckIcon } from '@heroicons/vue/24/outline';
-import { computed } from 'vue';
 
 const props = defineProps({
-    building: Object,
+    vrbr: Object,
+    consumptionDone: Boolean,
 });
 
-const buildingData = computed(() => props.building.data);
-
-const steps = [
+const vrbrSteps = [
     {
         id: '01',
         name: 'Gebäudedaten',
         description: 'Allgemeine Daten vollständig erfassen',
         href: '#',
-        status: buildingData.value.general && buildingData.value.position ? 'complete' : 'current',
-        links: [
-            {
-                show: !buildingData.value.general,
-                name: 'Jetzt Gebäudedaten erfassen',
-                href: route('buildings.general.show', buildingData.value.id),
-            },
-            {
-                show: !buildingData.value.position,
-                name: 'Jetzt Lage & Position erfassen',
-                href: route('buildings.position.show', buildingData.value.id),
-            },
-        ],
+        status: 'current'
     },
     {
         id: '02',
-        name: 'Verbrauchsdaten',
-        description: 'Verbrauchsdaten über min. 3 Jahre & Energieträger erfassen',
+        name: 'Gebäudedaten',
+        description: 'Verbrauchsdaten über min. 3 Jahre erfassen',
         href: '#',
-        status: buildingData.value.consumption && buildingData.value.heating
+        status: props.vrbr
             ? 'complete'
-            : buildingData.value.general && buildingData.value.position ? 'current' : 'upcoming',
-        links: [
-            {
-                show: !buildingData.value.consumption,
-                name: 'Jetzt Verbrauchsdaten erfassen',
-                href: route('buildings.consumptions.show', buildingData.value.id),
-            },
-            {
-                show: !buildingData.value.heating,
-                name: 'Jetzt Energieträger erfassen',
-                href: route('buildings.energy.show', buildingData.value.id),
-            },
-        ],
+            : true
+                ? 'upcoming'
+                : props.consumptionDone
+                    ? 'complete'
+                    : 'current',
     },
     {
         id: '03',
         name: 'Verbrauchsausweis',
         description: 'Daten prüfen und Bestellung abschließen',
         href: '#',
-        status: buildingData.value.vrbr?.done
+        status: props.vrbr?.done
             ? 'complete'
-            : buildingData.value.vrbr
+            : props.vrbr
                 ? 'current'
                 : 'upcoming',
     },
 ];
-
-const orderReady = computed(() => {
-    return buildingData.value.general && buildingData.value.position && buildingData.value.consumption && buildingData.value.heating;
-});
 </script>
 
 <template>
+    <!--    <bz-card-->
+    <!--        :class="-->
+    <!--                    bdrfExists-->
+    <!--                        ? 'opacity-50 hover:opacity-100 transition duration-150'-->
+    <!--                        : null-->
+    <!--                ">-->
     <bz-card>
         <template #title>Verbrauchsausweis</template>
         <template #subtitle>Verbrauchsorientierter Energieausweis</template>
         <template #button>
-            <template v-if="buildingData.vrbr?.done">
+            <template v-if="vrbr?.done">
                 <div class="flex space-x-2">
                     <bz-button>Download</bz-button>
-                    <bz-button type="secondary">Send per Mail</bz-button>
+                    <bz-button type="secondary">Send per Mail </bz-button>
                 </div>
             </template>
-            <template v-else-if="buildingData.vrbr && !buildingData.vrbr?.done"
-            ><span class="text-xs text-gray-500 animate-pulse"
-            >In Bearbeitung...</span
-            >
+            <template v-else-if="vrbr && !vrbr?.done"
+                ><span class="text-xs text-gray-500 animate-pulse"
+                    >In Bearbeitung...</span
+                >
             </template>
             <bz-button
                 v-else
-                :disabled="!orderReady"
-                @click="() => $emit('create-vrbr')">Bestellen
-            </bz-button
+                :disabled="!consumptionDone"
+                @click="() => $emit('create-vrbr')"
+                >Bestellen</bz-button
             >
         </template>
         <template #content>
             <nav aria-label="Progress" class="mx-auto border-b border-gray-100">
                 <ol class="overflow-hidden lg:flex" role="list">
                     <li
-                        v-for="(step, stepIdx) in steps"
+                        v-for="(step, stepIdx) in vrbrSteps"
                         :key="step.id"
                         class="relative overflow-hidden lg:flex-1">
                         <div
                             :class="[
                                 stepIdx === 0 ? 'rounded-t-md border-b-0' : '',
-                                stepIdx === steps.length - 1
+                                stepIdx === vrbrSteps.length - 1
                                     ? 'rounded-b-md border-t-0'
                                     : '',
                                 'overflow-hidden border border-gray-200 lg:border-0',
@@ -131,11 +111,11 @@ const orderReady = computed(() => {
                                     <span
                                         class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                         <span class="text-sm font-medium">{{
-                                                step.name
-                                            }}</span>
+                                            step.name
+                                        }}</span>
                                         <span
                                             class="text-sm font-medium text-gray-500"
-                                        >{{ step.description }}</span
+                                            >{{ step.description }}</span
                                         >
                                     </span>
                                 </span>
@@ -156,19 +136,19 @@ const orderReady = computed(() => {
                                         <span
                                             class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary">
                                             <span class="text-primary mt-0.5">{{
-                                                    step.id
-                                                }}</span>
+                                                step.id
+                                            }}</span>
                                         </span>
                                     </span>
                                     <span
                                         class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                         <span
                                             class="text-sm font-medium text-primary"
-                                        >{{ step.name }}</span
+                                            >{{ step.name }}</span
                                         >
                                         <span
                                             class="text-sm font-medium text-gray-500"
-                                        >{{ step.description }}</span
+                                            >{{ step.description }}</span
                                         >
                                     </span>
                                 </span>
@@ -187,7 +167,7 @@ const orderReady = computed(() => {
                                             class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
                                             <span
                                                 class="text-gray-500 mt-0.5"
-                                            >{{ step.id }}</span
+                                                >{{ step.id }}</span
                                             >
                                         </span>
                                     </span>
@@ -195,11 +175,11 @@ const orderReady = computed(() => {
                                         class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                         <span
                                             class="text-sm font-medium text-gray-500"
-                                        >{{ step.name }}</span
+                                            >{{ step.name }}</span
                                         >
                                         <span
                                             class="text-sm font-medium text-gray-500"
-                                        >{{ step.description }}</span
+                                            >{{ step.description }}</span
                                         >
                                     </span>
                                 </span>
@@ -225,32 +205,14 @@ const orderReady = computed(() => {
                     </li>
                 </ol>
             </nav>
-
-            <template v-if="buildingData.vrbr?.done">
-                <div class="rounded-b-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3
-                            class="text-base font-semibold leading-6 text-gray-900">
-                            Bestellung abgeschlossen
-                        </h3>
-                        <div class="mt-2 text-sm text-gray-500">
-                            <p>
-                                Ihr Energieausweis ist fertiggestellt und kann
-                                unter <strong>Aufträge</strong> heruntergeladen werden.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <template v-else-if="buildingData.vrbr && !buildingData.vrbr?.done">
+            <template v-if="vrbr && !vrbr?.done">
                 <div class="rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3
                             class="text-base font-semibold leading-6 text-gray-900">
                             Bestellung in Bearbeitung
                         </h3>
-                        <div class="mt-2 text-sm text-gray-500">
+                        <div class="mt-2 max-w-xl text-sm text-gray-500">
                             <p>
                                 Ihre Bestellung wird gerade bearbeitet. Sobald
                                 der Energieausweis fertiggestellt ist, können
@@ -261,40 +223,58 @@ const orderReady = computed(() => {
                     </div>
                 </div>
             </template>
-
-            <template v-else>
+            <template v-else-if="!vrbr?.done">
                 <div class="bg-white rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3
                             class="text-base font-semibold leading-6 text-gray-900">
-                            Hinweis zum Verbrauchsausweis
+                            Lage & Position erfassen
                         </h3>
-                        <div class="mt-2 max-w text-sm text-gray-500">
+                        <div class="mt-2 max-w-xl text-sm text-gray-500">
                             <p>
-                                Für einen verbrauchsorientierten Energieausweis werden Daten wie der Energieverbrauch
-                                der letzten 36 Monate, die Gebäudegröße, das Heizsystem, die Warmwasserversorgung, die
-                                Belüftung und die Bauweise benötigt.
+                                Für den Energieausweis muss die Lage, Position
+                                und Grundriss erfasst werden. Für den
+                                Verbrauchsausweis muss zusätzlich noch der
+                                Verbrauch des Gebäudes erfasst werden.
                             </p>
                         </div>
                         <div class="mt-3 text-sm leading-6 flex flex-col">
-
-                            <template v-for="step in steps">
-                                <template v-for="link in step.links">
-                                    <Link
-                                        v-if="link.show"
-                                        :href="link.href"
-                                        class="font-semibold text-primary hover:text-blue-500">
-                                        {{ link.name }}
-                                        <span aria-hidden="true"> &rarr;</span>
-                                    </Link>
-                                </template>
-                            </template>
-
+                            <Link
+                                href="#"
+                                class="font-semibold text-primary hover:text-blue-500">
+                                Jetzt Position & Lage erfassen
+                                <span aria-hidden="true"> &rarr;</span>
+                            </Link>
                         </div>
                     </div>
                 </div>
             </template>
-
+            <template v-else-if="!vrbr && !consumptionDone">
+                <div class="bg-white rounded-b-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3
+                            class="text-base font-semibold leading-6 text-gray-900">
+                            Verbrauch erfassen
+                        </h3>
+                        <div class="mt-2 max-w-xl text-sm text-gray-500">
+                            <p>
+                                Für den verbrauchsorientierten Energieausweis
+                                müssen die Verbrauchsdaten von mindestens 3
+                                Jahren (36 Monate) erfasst werden. Zusätzlich
+                                können Sie Leerstand, falls vorhanden, erfassen.
+                            </p>
+                        </div>
+                        <div class="mt-3 text-sm leading-6 flex flex-col">
+                            <Link
+                                href="#"
+                                class="font-semibold text-primary hover:text-blue-500">
+                                Jetzt Verbrauch erfassen
+                                <span aria-hidden="true"> &rarr;</span>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </template>
     </bz-card>
 </template>

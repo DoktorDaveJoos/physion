@@ -7,6 +7,7 @@ import { computed, ref } from 'vue';
 import DialogModal from '../../../../Components/DialogModal.vue';
 import { ElNotification } from 'element-plus';
 import BuildingWrapper from '../Shared/BuildingWrapper.vue';
+import VrbrCard from './Cards/VrbrCard.vue';
 
 const props = defineProps({
     building: Object,
@@ -50,7 +51,7 @@ const bdrfHeatingExists = computed(() => {
     return (
         props.building.data.heatings?.length > 0 &&
         props.building.data.heatings.filter(
-            (heatingSystem) => heatingSystem.water_included
+            (heatingSystem) => heatingSystem.water_included,
         ).length > 0
     );
 });
@@ -80,7 +81,7 @@ const submitOrder = () => {
                 });
                 modal.value = false;
             },
-        }
+        },
     );
 };
 
@@ -91,7 +92,7 @@ const bdrfSteps = [
         description: 'Allgemeine Daten vollständig erfassen',
         href: '#',
         status:
-            props.building.data.status === 'created' ? 'current' : 'complete',
+            props.building.general ? 'complete' : 'current',
     },
     {
         id: '02',
@@ -101,10 +102,10 @@ const bdrfSteps = [
         status: bdrfThermalExists.value
             ? 'complete'
             : props.building.data.status === 'created'
-            ? 'upcoming'
-            : bdrfThermalExists.value && bdrfHeatingExists.value
-            ? 'complete'
-            : 'current',
+                ? 'upcoming'
+                : bdrfThermalExists.value && bdrfHeatingExists.value
+                    ? 'complete'
+                    : 'current',
     },
     {
         id: '03',
@@ -114,45 +115,12 @@ const bdrfSteps = [
         status: bdrfExists.value
             ? 'complete'
             : bdrfThermalExists.value && bdrfHeatingExists.value
-            ? 'current'
-            : 'upcoming',
+                ? 'current'
+                : 'upcoming',
     },
 ];
 
-const vrbrSteps = [
-    {
-        id: '01',
-        name: 'Gebäudedaten',
-        description: 'Allgemeine Daten vollständig erfassen',
-        href: '#',
-        status:
-            props.building.data.status === 'created' ? 'current' : 'complete',
-    },
-    {
-        id: '02',
-        name: 'Gebäudedaten',
-        description: 'Verbrauchsdaten über min. 3 Jahre erfassen',
-        href: '#',
-        status: vrbrExists.value
-            ? 'complete'
-            : props.building.data.status === 'created'
-            ? 'upcoming'
-            : vrbrConsumptionExists.value
-            ? 'complete'
-            : 'current',
-    },
-    {
-        id: '03',
-        name: 'Verbrauchsausweis',
-        description: 'Daten prüfen und Bestellung abschließen',
-        href: '#',
-        status: vrbrExists.value
-            ? 'complete'
-            : vrbrConsumptionExists.value
-            ? 'current'
-            : 'upcoming',
-    },
-];
+
 </script>
 
 <template>
@@ -162,6 +130,14 @@ const vrbrSteps = [
 
     <building-wrapper :building="building" sub-tabs-products-active>
         <div class="py-4 space-y-4">
+
+            <vrbr-card
+                :building="building"
+                :consumption-done="false"
+                :vrbr="building.data.products.vrbr"
+            />
+
+
             <bz-card
                 :class="
                     vrbrExists
@@ -170,7 +146,8 @@ const vrbrSteps = [
                 ">
                 <template #title>Bedarfsausweis</template>
                 <template #subtitle
-                    >Bedarfsorientierter Energieausweis</template
+                >Bedarfsorientierter Energieausweis
+                </template
                 >
                 <template #button>
                     <div class="flex space-x-2">
@@ -190,13 +167,13 @@ const vrbrSteps = [
                             <!--                                >Download</bz-button-->
                             <!--                            >-->
                             <bz-button v-if="bdrfExists" type="secondary"
-                                >Per Mail verschicken
+                            >Per Mail verschicken
                             </bz-button>
                         </template>
                         <template v-else-if="bdrfExists"
-                            ><span class="text-xs text-gray-500 animate-pulse"
-                                >In Bearbeitung...</span
-                            >
+                        ><span class="text-xs text-gray-500 animate-pulse"
+                        >In Bearbeitung...</span
+                        >
                         </template>
                     </div>
                     <bz-button
@@ -207,7 +184,8 @@ const vrbrSteps = [
                             building.data.status === 'created'
                         "
                         @click="order('bdrf')"
-                        >Bestellen</bz-button
+                    >Bestellen
+                    </bz-button
                     >
                 </template>
                 <template #content>
@@ -253,11 +231,11 @@ const vrbrSteps = [
                                                 class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                                 <span
                                                     class="text-sm font-medium"
-                                                    >{{ step.name }}</span
+                                                >{{ step.name }}</span
                                                 >
                                                 <span
                                                     class="text-sm font-medium text-gray-500"
-                                                    >{{
+                                                >{{
                                                         step.description
                                                     }}</span
                                                 >
@@ -281,7 +259,7 @@ const vrbrSteps = [
                                                     class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary">
                                                     <span
                                                         class="text-primary mt-0.5"
-                                                        >{{ step.id }}</span
+                                                    >{{ step.id }}</span
                                                     >
                                                 </span>
                                             </span>
@@ -289,11 +267,11 @@ const vrbrSteps = [
                                                 class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                                 <span
                                                     class="text-sm font-medium text-primary"
-                                                    >{{ step.name }}</span
+                                                >{{ step.name }}</span
                                                 >
                                                 <span
                                                     class="text-sm font-medium text-gray-500"
-                                                    >{{
+                                                >{{
                                                         step.description
                                                     }}</span
                                                 >
@@ -314,7 +292,7 @@ const vrbrSteps = [
                                                     class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
                                                     <span
                                                         class="text-gray-500 mt-0.5"
-                                                        >{{ step.id }}</span
+                                                    >{{ step.id }}</span
                                                     >
                                                 </span>
                                             </span>
@@ -322,11 +300,11 @@ const vrbrSteps = [
                                                 class="ml-4 mt-0.5 flex min-w-0 flex-col">
                                                 <span
                                                     class="text-sm font-medium text-gray-500"
-                                                    >{{ step.name }}</span
+                                                >{{ step.name }}</span
                                                 >
                                                 <span
                                                     class="text-sm font-medium text-gray-500"
-                                                    >{{
+                                                >{{
                                                         step.description
                                                     }}</span
                                                 >
@@ -465,14 +443,14 @@ const vrbrSteps = [
 
     <dialog-modal :closeable="true" :show="modal" @close="cancel">
         <template #title
-            ><span class=""
-                >{{
-                    form.type === 'vrbr'
-                        ? 'Verbrauchsausweis'
-                        : 'Bedarfsausweis'
-                }}
+        ><span class=""
+        >{{
+                form.type === 'vrbr'
+                    ? 'Verbrauchsausweis'
+                    : 'Bedarfsausweis'
+            }}
                 - Bestellung abschließen</span
-            ></template
+        ></template
         >
         <template #content>
             <el-form
@@ -525,10 +503,12 @@ const vrbrSteps = [
         <template #footer>
             <div class="flex justify-end space-x-2">
                 <bz-button type="secondary" @click="cancel"
-                    >Abbrechen</bz-button
+                >Abbrechen
+                </bz-button
                 >
                 <bz-button @click="submitOrder"
-                    >Kostenpflichtig bestellen</bz-button
+                >Kostenpflichtig bestellen
+                </bz-button
                 >
             </div>
         </template>

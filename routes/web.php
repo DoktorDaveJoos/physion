@@ -112,7 +112,7 @@ Route::middleware([
     Route::get('/buildings/{building}', [BuildingController::class, 'show'])
         ->name('buildings.show');
 
-    Route::put('/buildings/{building}', [BuildingController::class, 'update'])
+    Route::put('/buildings/{building}', [BuildingController::class, 'upda#te'])
         ->name('buildings.update');
 
     Route::delete('/buildings/{building}', [BuildingController::class, 'destroy'])
