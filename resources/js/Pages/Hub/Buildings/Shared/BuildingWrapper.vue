@@ -30,7 +30,7 @@ const tabs = [
         active: route().current('buildings.products*'),
         route: route('buildings.products.ecert.show', route().params?.building),
     },
-    {
+    /**{
         name: 'förderrechner',
         active: route().current('buildings.calculator.show'),
         route: route('buildings.calculator.show', route().params?.building),
@@ -39,7 +39,7 @@ const tabs = [
         name: 'exposé',
         active: route().current('buildings.expose.show'),
         route: route('buildings.expose.show', route().params?.building),
-    },
+    },*/
 ];
 
 const subTabs = [

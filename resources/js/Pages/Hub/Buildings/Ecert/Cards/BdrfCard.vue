@@ -89,11 +89,18 @@ const orderReady = computed(() => {
             >
             </template>
             <bz-button
-                v-else
+                v-else-if="!buildingData.has_building_application"
                 :disabled="!orderReady"
                 @click="() => $emit('create-bdrf')">Bestellen
-            </bz-button
-            >
+            </bz-button>
+            <template v-else>
+                <div class="flex items-end space-x-2">
+                    <span class="text-xs text-gray-500">Je nach Aufwand können zusätzliche Kosten für diese Option anfallen.</span>
+                    <bz-button
+                        @click="() => $emit('create-bdrf')">Mit Baugesuch bestellen
+                    </bz-button>
+                </div>
+            </template>
         </template>
         <template #content>
             <nav aria-label="Progress" class="mx-auto border-b border-gray-100">

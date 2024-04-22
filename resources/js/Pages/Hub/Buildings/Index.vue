@@ -29,7 +29,7 @@ defineProps({
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
                     - Hier findest Du alle Gebäude, die Du angelegt hast.
-                </p>w
+                </p>
             </div>
             <div class="flex items-center space-x-4">
                 <bz-button
@@ -70,13 +70,13 @@ defineProps({
                             </p>
                             <p class="flex text-xs leading-5 text-gray-500">
                                 <span class="relative truncate hover:underline"
-                                    >{{ building.data.postal_code }}
+                                >{{ building.data.postal_code }}
                                     {{ building.data.city }}</span
                                 >
                             </p>
                             <p class="flex text-xs leading-5 text-gray-500">
                                 <span class="relative truncate hover:underline"
-                                    >Erstellt von
+                                >Erstellt von
                                     {{ building.data.created_by }}</span
                                 >
                             </p>
@@ -109,8 +109,10 @@ defineProps({
                         <ChevronRightIcon
                             class="h-5 w-5 flex-none text-gray-400 group-hover:text-primary-600"
                             aria-hidden="true" />
-                    </div> </Link
-            ></template>
+                    </div>
+                </Link
+                >
+            </template>
         </ul>
 
         <div
@@ -132,10 +134,10 @@ defineProps({
 
                     <div class="flex items-center">
                         <span class="text-primary-500 text-sm font-bold mr-1"
-                            >{{ buildings.meta.current_page }} </span
+                        >{{ buildings.meta.current_page }} </span
                         ><span class="text-gray-500 text-xs font-bold">
                             / {{ buildings.meta.last_page }}</span
-                        >
+                    >
                     </div>
                     <Link
                         :href="buildings.links.next"
@@ -152,7 +154,10 @@ defineProps({
             </div>
         </div>
         <el-empty v-else description="Noch keine Gebäude angelegt">
-            <bz-button>Jetzt Gebäude anlegen</bz-button>
+            <bz-button
+                :href="route('buildings.create')"
+                as="link"
+            >Jetzt Gebäude anlegen</bz-button>
         </el-empty>
     </SidebarLayout>
 </template>

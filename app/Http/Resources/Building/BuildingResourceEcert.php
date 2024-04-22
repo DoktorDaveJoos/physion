@@ -16,7 +16,6 @@ class BuildingResourceEcert extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        ray('hey');
         return [
             'data' => [
                 'id' => $this->id,
@@ -37,6 +36,7 @@ class BuildingResourceEcert extends JsonResource
                 'heating' => $this->heatingDone(),
                 'renewable' => $this->renewableDone(),
                 'consumption' => $this->consumptionDone(),
+                'has_building_application' => $this->attachments()->where('type', 'baugesuch')->exists(),
             ],
             'links' => [
                 'self' => null, //route('hub.buildings.show.index', $this->id),
