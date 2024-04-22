@@ -17,7 +17,7 @@ import Badge from '../../../../Components/Badge.vue';
 
 const props = defineProps({
     building: Object,
-    credits: Array,
+    credits: Object,
 });
 
 const reason = ref(null);
@@ -44,7 +44,7 @@ watch(reason, (value) => {
         result.value = sanierung(
             target.value,
             energyClass.value,
-            props.building.data.housing_units
+            props.building.data.housing_units,
         );
     }
     if (value && value.name === 'Neubau') {
@@ -55,7 +55,7 @@ watch(reason, (value) => {
             eh.value,
             la.value,
             qng.value,
-            props.building.data.housing_units
+            props.building.data.housing_units,
         );
     }
 });
@@ -64,7 +64,7 @@ watch(energyClass, (value) => {
     result.value = sanierung(
         target.value,
         value,
-        props.building.data.housing_units
+        props.building.data.housing_units,
     );
 });
 
@@ -72,7 +72,7 @@ watch(target, (value) => {
     result.value = sanierung(
         value,
         energyClass.value,
-        props.building.data.housing_units
+        props.building.data.housing_units,
     );
 });
 
@@ -108,7 +108,7 @@ const computeNeubau = () => {
         eh.value,
         la.value,
         qng.value,
-        props.building.data.housing_units
+        props.building.data.housing_units,
     );
 };
 
@@ -154,7 +154,7 @@ const foo = 1000;
                 <div class="flex px-6 py-4 justify-between">
                     <div class="flex flex-col">
                         <span class="text-gray-900 font-semibold"
-                            >Mögliche Förderungen</span
+                        >Mögliche Förderungen</span
                         >
                         <p class="text-xs text-gray-500">
                             Kontaktieren Sie und bzgl. einer BzA. In diesem Zuge
@@ -164,7 +164,8 @@ const foo = 1000;
                     </div>
                     <bz-button type="secondary">
                         <arrow-down-tray-icon class="w-4 h-4 mr-2" />
-                        PDF Ausdruck</bz-button
+                        PDF Ausdruck
+                    </bz-button
                     >
                 </div>
                 <div class="px-6 pb-4">
@@ -198,7 +199,7 @@ const foo = 1000;
                                     <dd class="font-medium text-gray-900">
                                         {{
                                             parseFloat(
-                                                program.amount
+                                                program.amount,
                                             ).toLocaleString('de-DE', {
                                                 style: 'currency',
                                                 currency: 'EUR',
@@ -206,28 +207,28 @@ const foo = 1000;
                                         }}
                                     </dd>
                                 </div>
-                                <!--                                <div-->
-                                <!--                                    v-for="grant in result.grants"-->
-                                <!--                                    class="flex items-center justify-between py-4">-->
-                                <!--                                    <dt class="text-gray-600 font-semibold">-->
-                                <!--                                        Zuschuss-->
-                                <!--                                        <badge-->
-                                <!--                                            class="ml-2"-->
-                                <!--                                            :label="grant.tag"-->
-                                <!--                                            size="sm" />-->
-                                <!--                                    </dt>-->
-                                <!--                                    <dd class="font-medium text-gray-900">-->
-                                <!--                                        {{-->
-                                <!--                                            grant.summe.toLocaleString(-->
-                                <!--                                                'de-DE',-->
-                                <!--                                                {-->
-                                <!--                                                    style: 'currency',-->
-                                <!--                                                    currency: 'EUR',-->
-                                <!--                                                }-->
-                                <!--                                            )-->
-                                <!--                                        }}-->
-                                <!--                                    </dd>-->
-                                <!--                                </div>-->
+                                <div
+                                    v-for="grant in result.grants"
+                                    class="flex items-center justify-between py-4">
+                                    <dt class="text-gray-600 font-semibold">
+                                        Zuschuss
+                                        <badge
+                                            class="ml-2"
+                                            :label="grant.tag"
+                                            size="sm" />
+                                    </dt>
+                                    <dd class="font-medium text-gray-900">
+                                        {{
+                                            grant.summe.toLocaleString(
+                                                'de-DE',
+                                                {
+                                                    style: 'currency',
+                                                    currency: 'EUR',
+                                                },
+                                            )
+                                        }}
+                                    </dd>
+                                </div>
                                 <div
                                     class="flex items-center justify-between py-4">
                                     <dt
@@ -241,7 +242,7 @@ const foo = 1000;
                                                 .reduce(
                                                     (acc, cur) =>
                                                         (acc += cur.summe),
-                                                    0
+                                                    0,
                                                 )
                                                 .toLocaleString('de-DE', {
                                                     style: 'currency',
@@ -250,28 +251,28 @@ const foo = 1000;
                                         }}
                                     </dd>
                                 </div>
-                                <!--                                <div-->
-                                <!--                                    class="flex items-center justify-between py-4">-->
-                                <!--                                    <dt-->
-                                <!--                                        class="text-base font-bold text-gray-900">-->
-                                <!--                                        Davon Zuschuss-->
-                                <!--                                    </dt>-->
-                                <!--                                    <dd-->
-                                <!--                                        class="text-base font-bold text-gray-900">-->
-                                <!--                                        {{-->
-                                <!--                                            result.grants-->
-                                <!--                                                .reduce(-->
-                                <!--                                                    (acc, cur) =>-->
-                                <!--                                                        (acc += cur.summe),-->
-                                <!--                                                    0-->
-                                <!--                                                )-->
-                                <!--                                                .toLocaleString('de-DE', {-->
-                                <!--                                                    style: 'currency',-->
-                                <!--                                                    currency: 'EUR',-->
-                                <!--                                                })-->
-                                <!--                                        }}-->
-                                <!--                                    </dd>-->
-                                <!--                                </div>-->
+                                <div
+                                    class="flex items-center justify-between py-4">
+                                    <dt
+                                        class="text-base font-bold text-gray-900">
+                                        Davon Zuschuss
+                                    </dt>
+                                    <dd
+                                        class="text-base font-bold text-gray-900">
+                                        {{
+                                            result.grants
+                                                .reduce(
+                                                    (acc, cur) =>
+                                                        (acc += cur.summe),
+                                                    0,
+                                                )
+                                                .toLocaleString('de-DE', {
+                                                    style: 'currency',
+                                                    currency: 'EUR',
+                                                })
+                                        }}
+                                    </dd>
+                                </div>
                             </dl>
                         </div>
                     </div>
@@ -310,30 +311,28 @@ const foo = 1000;
                     </div>
                 </div>
 
-                <div v-for="program in credits" :key="program.key">
+                <div v-for="program in result.programs" :key="program.key">
                     <span class="text-gray-500 text-xs px-6"
-                        >Kreditkonditionen {{ program.key }}</span
+                    >Kreditkonditionen {{ program.key }}</span
                     >
                     <div class="px-6 pb-4 flex flex-col space-y-1">
                         <div
-                            v-for="condition in program.credit_conditions"
+                            v-for="condition in program.conditions"
                             class="px-6 py-2 rounded-lg bg-gray-50 flex items-center justify-between">
                             <badge
                                 size="sm"
-                                :label="condition.interest + '%'"
+                                :label="condition.zins + '%'"
                                 type="success" />
                             <span class="text-xs text-gray-500"
-                                >Laufzeit {{ condition.duration_from }} -
-                                {{ condition.duration_to }} Jahre</span
+                            >Laufzeit {{ condition.laufzeit }}</span
                             >
                             <span class="text-xs text-gray-500"
-                                >Zinsbindung
-                                {{ condition.interest_rate_fixation }}</span
+                            >Zinsbindung
+                                {{ condition.zinsbindung }}</span
                             >
                             <span class="text-xs text-gray-500"
-                                >Tilgungsfreie Zeit
-                                {{ condition.waiting_period_from }} -
-                                {{ condition.waiting_period_to }} Jahre
+                            >Tilgungsfreie Zeit
+                                {{ condition.tilgungsfrei }}
                             </span>
                         </div>
                     </div>

@@ -18,7 +18,8 @@ class BuildingController extends Controller
     {
         return Inertia::render('Hub/Buildings/Index', [
             'buildings' => BuildingResource::collection(
-                Building::query()->orderByDesc('created_at')->paginate(10)
+                auth()->user()->currentTeam->buildings()->orderByDesc('created_at')->paginate(10)
+                // Building::query()->orderByDesc('created_at')->paginate(10)
             ),
         ]);
     }

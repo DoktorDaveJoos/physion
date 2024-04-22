@@ -24,6 +24,8 @@ use App\Http\Controllers\Product\AppraisalController;
 use App\Http\Controllers\Product\BzaController;
 use App\Http\Controllers\Product\EnergyCertificateController;
 use App\Http\Controllers\Product\IsfpController;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
@@ -110,7 +112,7 @@ Route::middleware([
     Route::get('/buildings/{building}', [BuildingController::class, 'show'])
         ->name('buildings.show');
 
-    Route::put('/buildings/{building}', [BuildingController::class, 'update'])
+    Route::put('/buildings/{building}', [BuildingController::class, 'upda#te'])
         ->name('buildings.update');
 
     Route::delete('/buildings/{building}', [BuildingController::class, 'destroy'])

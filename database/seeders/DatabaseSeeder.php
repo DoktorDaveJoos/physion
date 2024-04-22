@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('test'),
         ]);
 
-//        $this->call([
+        $this->call([
 //            ProductSeeder::class,
 //            ResourcesSeeder::class,
-//            TeamSeeder::class,
-//        ]);
+            TeamSeeder::class,
+        ]);
     }
 }

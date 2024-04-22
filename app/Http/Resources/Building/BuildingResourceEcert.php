@@ -30,10 +30,13 @@ class BuildingResourceEcert extends JsonResource
                         $this->energyCertificates()->where('type', 'bdrf')->first()
                     ),
                 ],
+                'general' => $this->generalDone(),
+                'position' => $this->positionDone(),
                 'thermal' => $this->thermalDone(),
                 'heating' => $this->heatingDone(),
                 'renewable' => $this->renewableDone(),
                 'consumption' => $this->consumptionDone(),
+                'has_building_application' => $this->attachments()->where('type', 'baugesuch')->exists(),
             ],
             'links' => [
                 'self' => null, //route('hub.buildings.show.index', $this->id),

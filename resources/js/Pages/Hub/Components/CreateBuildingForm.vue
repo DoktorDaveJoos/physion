@@ -10,7 +10,6 @@ const props = defineProps({
 
 const form = useForm({
     new_building: props.building?.data.new_building ?? false,
-    building_type: props.building?.data.building_type ?? null,
     street: props.building?.data.street ?? null,
     house_number: props.building?.data.house_number ?? null,
     postal_code: props.building?.data.postal_code ?? null,

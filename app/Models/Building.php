@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\LayoutCast;
+use App\Models\Building\Layout;
 use App\Models\Scopes\TeamScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,6 +49,10 @@ class Building extends Model implements HasMedia
 
     const FLAT = 'Wohnung';
 
+    const MAPS_INITIAL = 'initial';
+    const MAPS_AGREED = 'agreed';
+
+
 
     protected static function booted(): void
     {
@@ -63,6 +68,11 @@ class Building extends Model implements HasMedia
     public function createdBy(): belongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function team(): belongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function energyCertificates(): HasMany
@@ -122,7 +132,7 @@ class Building extends Model implements HasMedia
 
     public function storagePath(): string
     {
-        return 'buildings/'.$this->id;
+        return 'buildings/' . $this->id;
     }
 
     public function isHouse(): bool
@@ -138,6 +148,48 @@ class Building extends Model implements HasMedia
             ->nonQueued();
     }
 
+    public function generalDone(): bool
+    {
+        // Check if general data is set
+        $base = $this->street &&
+            $this->postal_code &&
+            $this->city &&
+            $this->type &&
+            $this->construction_year &&
+            $this->floor_area &&
+            $this->floors &&
+            $this->ventilation;
+
+        if ($this->type === self::FLAT) {
+            return $base && $this->floor && $this->rooms;
+        }
+
+        return $base &&
+            $this->land_area &&
+            $this->housing_units;
+    }
+
+    public function positionDone(): bool
+    {
+        if ($this->maps === self::MAPS_INITIAL) {
+            return false;
+        }
+
+        $base = $this->layout
+            && $this->side_a
+            && $this->side_b;
+
+        if ($this->layout !== Layout::Rectangle) {
+            $base = $base && $this->side_c && $this->side_d;
+        }
+
+        if ($this->maps === self::MAPS_AGREED) {
+            return $base;
+        }
+
+        return $base && $this->orientation;
+    }
+
     public function thermalDone(): bool
     {
         return $this->wall && $this->roof && $this->cellar;
@@ -145,6 +197,11 @@ class Building extends Model implements HasMedia
 
     public function heatingDone(): bool
     {
+        // Return false if no heating is set
+        if ($this->heatings->count() === 0) {
+            return false;
+        }
+
         return $this->heatings->every(fn(Heating $heating) => $heating->water_included === true);
     }
 

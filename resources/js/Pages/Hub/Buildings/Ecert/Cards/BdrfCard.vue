@@ -9,7 +9,7 @@ const props = defineProps({
     building: Object,
 });
 
-defineEmits(['create-vrbr']);
+defineEmits(['create-bdrf']);
 
 const buildingData = computed(() => props.building.data);
 
@@ -35,17 +35,17 @@ const steps = [
     },
     {
         id: '02',
-        name: 'Verbrauchsdaten',
-        description: 'Verbrauchsdaten über min. 3 Jahre & Energieträger erfassen',
+        name: 'Thermische Hülle & Energieträger',
+        description: 'Dach, Wand, Keller & Energieträger erfassen',
         href: '#',
-        status: buildingData.value.consumption && buildingData.value.heating
+        status: buildingData.value.thermal && buildingData.value.heating
             ? 'complete'
             : buildingData.value.general && buildingData.value.position ? 'current' : 'upcoming',
         links: [
             {
-                show: !buildingData.value.consumption,
-                name: 'Jetzt Verbrauchsdaten erfassen',
-                href: route('buildings.consumptions.show', buildingData.value.id),
+                show: !buildingData.value.thermal,
+                name: 'Jetzt thermische Hülle erfassen',
+                href: route('buildings.thermal.show', buildingData.value.id),
             },
             {
                 show: !buildingData.value.heating,
@@ -56,45 +56,51 @@ const steps = [
     },
     {
         id: '03',
-        name: 'Verbrauchsausweis',
+        name: 'Bedarfsausweis',
         description: 'Daten prüfen und Bestellung abschließen',
         href: '#',
-        status: buildingData.value.products.vrbr?.done
+        status: buildingData.value.products.bdrf?.done
             ? 'complete'
-            : buildingData.value.products.vrbr
+            : buildingData.value.products.bdrf
                 ? 'current'
                 : 'upcoming',
     },
 ];
 
 const orderReady = computed(() => {
-    return buildingData.value.general && buildingData.value.position && buildingData.value.consumption && buildingData.value.heating;
+    return buildingData.value.general && buildingData.value.position && buildingData.value.thermal && buildingData.value.heating;
 });
-
 </script>
 
 <template>
     <bz-card>
-        <template #title>Verbrauchsausweis</template>
-        <template #subtitle>Verbrauchsorientierter Energieausweis</template>
+        <template #title>Bedarfsausweis</template>
+        <template #subtitle>Bedarfsorientierter Energieausweis</template>
         <template #button>
-            <template v-if="buildingData.products.vrbr?.done">
+            <template v-if="buildingData.products.bdrf?.done">
                 <div class="flex space-x-2">
                     <bz-button>Download</bz-button>
                     <bz-button type="secondary">Send per Mail</bz-button>
                 </div>
             </template>
-            <template v-else-if="buildingData.products.vrbr && !buildingData.products.vrbr?.done"
+            <template v-else-if="buildingData.products.bdrf && !buildingData.products.bdrf?.done"
             ><span class="text-xs text-gray-500 animate-pulse"
             >In Bearbeitung...</span
             >
             </template>
             <bz-button
-                v-else
+                v-else-if="!buildingData.has_building_application"
                 :disabled="!orderReady"
-                @click="() => $emit('create-vrbr')">Bestellen
-            </bz-button
-            >
+                @click="() => $emit('create-bdrf')">Bestellen
+            </bz-button>
+            <template v-else>
+                <div class="flex items-end space-x-2">
+                    <span class="text-xs text-gray-500">Je nach Aufwand können zusätzliche Kosten für diese Option anfallen.</span>
+                    <bz-button
+                        @click="() => $emit('create-bdrf')">Mit Baugesuch bestellen
+                    </bz-button>
+                </div>
+            </template>
         </template>
         <template #content>
             <nav aria-label="Progress" class="mx-auto border-b border-gray-100">
@@ -229,7 +235,7 @@ const orderReady = computed(() => {
                 </ol>
             </nav>
 
-            <template v-if="buildingData.products.vrbr?.done">
+            <template v-if="buildingData.products.bdrf?.done">
                 <div class="rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3
@@ -246,7 +252,7 @@ const orderReady = computed(() => {
                 </div>
             </template>
 
-            <template v-else-if="buildingData.products.vrbr && !buildingData.products.vrbr?.done">
+            <template v-else-if="buildingData.products.bdrf && !buildingData.products.bdrf?.done">
                 <div class="rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3
@@ -270,13 +276,14 @@ const orderReady = computed(() => {
                     <div class="px-4 py-5 sm:p-6">
                         <h3
                             class="text-base font-semibold leading-6 text-gray-900">
-                            Hinweis zum Verbrauchsausweis
+                            Hinweis zum Bedarfsausweis
                         </h3>
                         <div class="mt-2 max-w text-sm text-gray-500">
                             <p>
-                                Für einen verbrauchsorientierten Energieausweis werden Daten wie der Energieverbrauch
-                                der letzten 36 Monate, die Gebäudegröße, das Heizsystem, die Warmwasserversorgung, die
-                                Belüftung und die Bauweise benötigt.
+
+                                Für einen Bedarfsausweis werden Daten wie die Gebäudegröße, die Bauweise, das
+                                Dämmmaterial, die Heizungsanlage, die Fenster und Türen, die Belüftung und die
+                                Warmwasserversorgung benötigt.
                             </p>
                         </div>
                         <div class="mt-3 text-sm leading-6 flex flex-col">

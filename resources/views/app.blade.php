@@ -19,17 +19,17 @@
             gtag('config', {{ config('tracking.ads') }});
         </script>
 
-        <script>
-            var blackChatScript = document.createElement("script");
-            blackChatScript.type = "text/javascript";
-            blackChatScript.async = true;
-            blackChatScript.src = "https://cdn.getblackchat.com/chat.js";
-            blackChatScript.onload = function () {
-                window.BlackChat({"team-token":"43359c72-ad2e-42d6-9faf-8c59e3eab840"});
-            };
-            var scriptElement = document.getElementsByTagName("script")[0];
-            scriptElement.parentNode.insertBefore(blackChatScript, scriptElement);
-        </script>
+{{--        <script>--}}
+{{--            var blackChatScript = document.createElement("script");--}}
+{{--            blackChatScript.type = "text/javascript";--}}
+{{--            blackChatScript.async = true;--}}
+{{--            blackChatScript.src = "https://cdn.getblackchat.com/chat.js";--}}
+{{--            blackChatScript.onload = function () {--}}
+{{--                window.BlackChat({"team-token":"43359c72-ad2e-42d6-9faf-8c59e3eab840"});--}}
+{{--            };--}}
+{{--            var scriptElement = document.getElementsByTagName("script")[0];--}}
+{{--            scriptElement.parentNode.insertBefore(blackChatScript, scriptElement);--}}
+{{--        </script>--}}
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lexend:wght@400;500&display=swap">
