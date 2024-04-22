@@ -9,6 +9,8 @@ const props = defineProps({
     building: Object,
 });
 
+defineEmits(['create-vrbr']);
+
 const buildingData = computed(() => props.building.data);
 
 const steps = [
@@ -57,9 +59,9 @@ const steps = [
         name: 'Verbrauchsausweis',
         description: 'Daten prüfen und Bestellung abschließen',
         href: '#',
-        status: buildingData.value.vrbr?.done
+        status: buildingData.value.products.vrbr?.done
             ? 'complete'
-            : buildingData.value.vrbr
+            : buildingData.value.products.vrbr
                 ? 'current'
                 : 'upcoming',
     },
@@ -68,6 +70,7 @@ const steps = [
 const orderReady = computed(() => {
     return buildingData.value.general && buildingData.value.position && buildingData.value.consumption && buildingData.value.heating;
 });
+
 </script>
 
 <template>
@@ -75,13 +78,13 @@ const orderReady = computed(() => {
         <template #title>Verbrauchsausweis</template>
         <template #subtitle>Verbrauchsorientierter Energieausweis</template>
         <template #button>
-            <template v-if="buildingData.vrbr?.done">
+            <template v-if="buildingData.products.vrbr?.done">
                 <div class="flex space-x-2">
                     <bz-button>Download</bz-button>
                     <bz-button type="secondary">Send per Mail</bz-button>
                 </div>
             </template>
-            <template v-else-if="buildingData.vrbr && !buildingData.vrbr?.done"
+            <template v-else-if="buildingData.products.vrbr && !buildingData.products.vrbr?.done"
             ><span class="text-xs text-gray-500 animate-pulse"
             >In Bearbeitung...</span
             >
@@ -226,7 +229,7 @@ const orderReady = computed(() => {
                 </ol>
             </nav>
 
-            <template v-if="buildingData.vrbr?.done">
+            <template v-if="buildingData.products.vrbr?.done">
                 <div class="rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3
@@ -243,7 +246,7 @@ const orderReady = computed(() => {
                 </div>
             </template>
 
-            <template v-else-if="buildingData.vrbr && !buildingData.vrbr?.done">
+            <template v-else-if="buildingData.products.vrbr && !buildingData.products.vrbr?.done">
                 <div class="rounded-b-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <h3

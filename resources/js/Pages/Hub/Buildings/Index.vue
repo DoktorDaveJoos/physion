@@ -29,7 +29,7 @@ defineProps({
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
                     - Hier findest Du alle Gebäude, die Du angelegt hast.
-                </p>
+                </p>w
             </div>
             <div class="flex items-center space-x-4">
                 <bz-button

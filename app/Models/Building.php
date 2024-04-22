@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\LayoutCast;
+use App\Models\Building\Layout;
 use App\Models\Scopes\TeamScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,6 +49,10 @@ class Building extends Model implements HasMedia
 
     const FLAT = 'Wohnung';
 
+    const MAPS_INITIAL = 'initial';
+    const MAPS_AGREED = 'agreed';
+
+
 
     protected static function booted(): void
     {
@@ -63,6 +68,11 @@ class Building extends Model implements HasMedia
     public function createdBy(): belongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function team(): belongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function energyCertificates(): HasMany
@@ -122,7 +132,7 @@ class Building extends Model implements HasMedia
 
     public function storagePath(): string
     {
-        return 'buildings/'.$this->id;
+        return 'buildings/' . $this->id;
     }
 
     public function isHouse(): bool
@@ -161,21 +171,19 @@ class Building extends Model implements HasMedia
 
     public function positionDone(): bool
     {
-        ray('in here');
-        if ($this->maps === 'initial') {
+        if ($this->maps === self::MAPS_INITIAL) {
             return false;
         }
 
-        $base =  $this->layout
+        $base = $this->layout
             && $this->side_a
             && $this->side_b;
 
-        if ($this->layout !== 'rectangle') {
+        if ($this->layout !== Layout::Rectangle) {
             $base = $base && $this->side_c && $this->side_d;
         }
 
-        if ($this->maps === 'agreed') {
-            ray('ecptected');
+        if ($this->maps === self::MAPS_AGREED) {
             return $base;
         }
 

@@ -19,15 +19,11 @@ class OrderController extends Controller
 
     public function index(): RedirectResponse
     {
-        ray('HEY');
         return to_route('orders.ecert.index');
     }
 
     public function indexEcert()
     {
-
-        ray('HEY THERE');
-
         return Inertia::render('Hub/Order/Ecert/Index', [
             'orders' => EnergyCertificate::all(),
         ]);
