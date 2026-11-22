@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Zähler</title>
+  <meta name="description" content="Minimalistischer Zähler – ein Tipp, +1.">
+
+  <!-- PWA / iOS Home-Bildschirm -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Zähler">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f4f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="bar">
+      <button id="settingsBtn" class="ghost" type="button" aria-label="Einstellungen">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+      </button>
+      <button id="undoBtn" class="ghost undo" type="button" disabled>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Rückgängig</span>
+      </button>
+    </header>
+
+    <button id="tap" class="tap" type="button" aria-label="Zählen: plus eins">
+      <span class="tap-inner">
+        <span id="todayCount" class="count">0</span>
+        <span class="count-label">heute</span>
+      </span>
+    </button>
+
+    <section class="stats" aria-label="Statistik">
+      <div class="stat"><span class="stat-value" id="todayStat">0</span><span class="stat-label">Heute</span></div>
+      <div class="stat"><span class="stat-value" id="totalStat">0</span><span class="stat-label">Gesamt</span></div>
+      <div class="stat"><span class="stat-value" id="avgStat">0</span><span class="stat-label">Ø 14 Tage</span></div>
+    </section>
+
+    <section class="history" aria-label="Verlauf der letzten 14 Tage">
+      <div id="chart" class="chart"></div>
+    </section>
+  </main>
+
+  <dialog id="settings" class="sheet">
+    <form method="dialog" class="sheet-inner">
+      <div class="sheet-head">
+        <h2>Einstellungen</h2>
+        <button class="ghost link" value="close" type="submit">Fertig</button>
+      </div>
+      <p id="dataInfo" class="muted"></p>
+
+      <button id="exportBtn" class="row-btn" type="button">Als CSV exportieren</button>
+
+      <div id="resetArea">
+        <button id="resetBtn" class="row-btn danger" type="button">Alle Daten löschen …</button>
+      </div>
+      <div id="resetConfirm" class="confirm" hidden>
+        <p id="resetText">Wirklich alle Einträge löschen? Das kann nicht rückgängig gemacht werden.</p>
+        <div class="confirm-actions">
+          <button id="resetCancel" class="row-btn" type="button">Abbrechen</button>
+          <button id="resetYes" class="row-btn danger solid" type="button">Löschen</button>
+        </div>
+      </div>
+
+      <p class="muted small">Alle Daten bleiben nur auf diesem Gerät (localStorage). Kein Konto, kein Server.</p>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- iOS-Haptik-Fallback: Safari (iOS 18+) erzeugt beim Umschalten eines Switches ein haptisches Feedback -->
+  <label id="hapticLabel" class="visually-hidden" aria-hidden="true"><input type="checkbox" switch tabindex="-1"></label>
+
+  <script src="app.js"></script>
+</body>
+</html>
